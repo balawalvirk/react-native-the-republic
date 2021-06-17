@@ -8,8 +8,8 @@ const statusBarHeight = Platform.select({
   android: StatusBar.currentHeight
 })
 const headerHeight = Platform.select({
-  ios: height*0.08,
-  android: height*0.1
+  ios: height*0.12,
+  android: height*0.12
 })
 const tabBarHeight= Platform.select({
   ios: height*0.07,

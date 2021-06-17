@@ -8,9 +8,8 @@ import CountryPicker from 'react-native-country-picker-modal'
 import { Icon } from 'react-native-elements';
 import moment from 'moment';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import { PopupPrimary } from '..';
-import { MediumText } from '../../text';
-
+import { check, PERMISSIONS, RESULTS, request } from 'react-native-permissions';
+import { Platform } from 'react-native';
 const options = {
     title: 'Select Photo',
     quality: 1,
@@ -134,6 +133,58 @@ const EditProfile = React.forwardRef((props, ref) => {
                 setImageFile(tempFile)
             }
         });
+    }
+    const checkCameraPermission = () => {
+        check(Platform.OS === 'android' ? PERMISSIONS.ANDROID.CAMERA : PERMISSIONS.IOS.CAMERA)
+            .then((result) => {
+                switch (result) {
+                    case RESULTS.UNAVAILABLE:
+                        console.log('This feature is not available (on this device / in this context)');
+                        break;
+                    case RESULTS.DENIED:
+                        //console.log('The permission has not been requested / is denied but requestable');
+                        requestCameraPermission()
+                        break;
+                    case RESULTS.LIMITED:
+                        console.log('The permission is limited: some actions are possible');
+                        break;
+                    case RESULTS.GRANTED:
+                        //console.log('The permission is granted');
+                        launchCamera()
+                        break;
+                    case RESULTS.BLOCKED:
+                        console.log('The permission is denied and not requestable anymore');
+                        break;
+                }
+            })
+            .catch((error) => {
+                // …
+            });
+    }
+
+    const requestCameraPermission = () => {
+        request(Platform.OS === 'android' ? PERMISSIONS.ANDROID.CAMERA : PERMISSIONS.IOS.CAMERA)
+            .then((result) => {
+                switch (result) {
+                    case RESULTS.UNAVAILABLE:
+                        console.log('This feature is not available (on this device / in this context)');
+                        break;
+                    case RESULTS.DENIED:
+                        //console.log('The permission has not been requested / is denied but requestable');
+                        //requestCameraPermission()
+                        break;
+                    case RESULTS.LIMITED:
+                        console.log('The permission is limited: some actions are possible');
+                        break;
+                    case RESULTS.GRANTED:
+                        //console.log('The permission is granted');
+                        launchCamera()
+                        break;
+                    case RESULTS.BLOCKED:
+                        console.log('The permission is denied and not requestable anymore');
+                        break;
+                }
+            });
     }
 
     const validate = () => {
@@ -311,7 +362,7 @@ const EditProfile = React.forwardRef((props, ref) => {
             <ImagePickerPopup
                 visible={isImagePickerPopupVisible}
                 toggle={toggleImagePickerPopup}
-                onPressTakePhoto={launchCamera}
+                onPressTakePhoto={checkCameraPermission}
                 onPressSelectFromGalary={launchImagePicker}
             />
         </Wrapper>

@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native'
 import { totalSize, height, width } from 'react-native-dimension'
 import  {colors}  from '../colors'
 import { fontFamily,fontSize } from '../fonts'
+import { sizes } from '../sizes'
 
 export const appStyles= StyleSheet.create({
   bgContainer: {
@@ -298,7 +299,7 @@ export const appStyles= StyleSheet.create({
       elevation: 0,
       shadowColor: 'transparent',
       borderBottomWidth: 0,
-      height: height(12.5),
+      height:sizes.headerHeight
       //marginTop:sizes.statusBarHeight
     },
     headerSecondaryStyle: {
@@ -307,7 +308,7 @@ export const appStyles= StyleSheet.create({
       shadowColor: 'transparent',
       borderBottomWidth: 1,
       borderBottomColor: colors.appBgColor4,
-      height: height(12.5)
+      height: sizes.headerHeight
     },
     headerTitleStyle: {
       fontSize: totalSize(2),
