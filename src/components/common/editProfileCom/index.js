@@ -1,15 +1,27 @@
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { View, Text } from 'react-native';
-import { MainWrapper, IconButton, Wrapper, Spacer, ImageProfile, RowWrapperBasic, RowWrapper, TextInputUnderlined, KeyboardAvoidingScrollView, ComponentWrapper, ButtonColored, PickerPrimary, IconWithText } from '../..';
+import { MainWrapper, IconButton, Wrapper, Spacer, ImageProfile, RowWrapperBasic, RowWrapper, TextInputUnderlined, KeyboardAvoidingScrollView, ComponentWrapper, ButtonColored, PickerPrimary, IconWithText, ImagePickerPopup } from '../..';
 import { height, totalSize, width } from 'react-native-dimension';
 import { colors, appStyles, sizes, HelpingMethods, appIcons, routes } from '../../../services';
-import ImagePicker from 'react-native-image-picker';
+import * as ImagePicker from 'react-native-image-picker';
 import CountryPicker from 'react-native-country-picker-modal'
 import { Icon } from 'react-native-elements';
 import moment from 'moment';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { PopupPrimary } from '..';
 import { MediumText } from '../../text';
+
+const options = {
+    title: 'Select Photo',
+    quality: 1,
+    maxWidth: 500,
+    maxHeight: 500,
+    // customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+    storageOptions: {
+        skipBackup: true,
+        path: 'images',
+    },
+};
 
 const dummyGenders = [
     {
@@ -48,6 +60,7 @@ const EditProfile = React.forwardRef((props, ref) => {
     const [countryCode, setCountryCode] = useState('US')
     const [countryPhoneCode, setCountryPhoneCode] = useState('+1')
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [isImagePickerPopupVisible, setImagePickerPopupVisibility] = useState(false);
     //Error messages
     const [firstNameError, setFirstNameError] = useState('')
     const [lastNameError, setLastNameError] = useState('')
@@ -61,6 +74,9 @@ const EditProfile = React.forwardRef((props, ref) => {
     useEffect(() => {
         setAllData()
     }, [])
+
+    const toggleImagePickerPopup = () => setImagePickerPopupVisibility(!isImagePickerPopupVisible)
+
     const onSelect = (gender) => {
         setCountryCode(gender.cca2)
         setCountryPhoneCode(gender.callingCode)
@@ -81,25 +97,7 @@ const EditProfile = React.forwardRef((props, ref) => {
         }
     }
     const launchImagePicker = () => {
-        const options = {
-            title: 'Select Photo',
-            quality: 1,
-            maxWidth: 500,
-            maxHeight: 500,
-            // customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
-            storageOptions: {
-                skipBackup: true,
-                path: 'images',
-            },
-        };
-
-        /**
-         * The first arg is the options object for customization (it can also be null or omitted for default options),
-         * The second arg is the callback which sends object: response (more info in the API Reference)
-         */
-        ImagePicker.showImagePicker(options, (response) => {
-            //console.log('Response = ', response);
-
+        ImagePicker.launchImageLibrary(options, (response) => {
             if (response.didCancel) {
                 //console.log('User cancelled image picker');
             } else if (response.error) {
@@ -107,15 +105,27 @@ const EditProfile = React.forwardRef((props, ref) => {
             } else if (response.customButton) {
                 //console.log('User tapped custom button: ', response.customButton);
             } else {
-                const source = { uri: response.uri };
-
-                // You can also display the image using data:
-                // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-                let path = response.uri;
-                if (Platform.OS === "ios") {
-                    path = "~" + path.substring(path.indexOf("/Documents"));
+                if (!response.fileName) response.fileName = 'profile_image';
+                const tempFile = {
+                    uri: response.uri,
+                    name: response.fileName,
+                    type: response.type
                 }
-                if (!response.fileName) response.fileName = path.split("/").pop();
+                setImageFile(tempFile)
+            }
+        });
+    }
+    const launchCamera = () => {
+
+        ImagePicker.launchCamera(options, (response) => {
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            } else {
+                if (!response.fileName) response.fileName = 'profile_image';
                 const tempFile = {
                     uri: response.uri,
                     name: response.fileName,
@@ -176,7 +186,7 @@ const EditProfile = React.forwardRef((props, ref) => {
                         imageFile || imageUri ?
                             <ImageProfile
                                 source={{ uri: imageFile ? imageFile.uri : imageUri }}
-                                onPressCamera={launchImagePicker}
+                                onPressCamera={toggleImagePickerPopup}
                             />
                             :
                             <IconButton
@@ -187,7 +197,7 @@ const EditProfile = React.forwardRef((props, ref) => {
                                 buttonColor={colors.appBgColor2}
                                 buttonStyle={{ borderRadius: 100 }}
                                 iconColor={colors.appTextColor1}
-                                onPress={launchImagePicker}
+                                onPress={toggleImagePickerPopup}
                             />
                     }
                 </Wrapper>
@@ -298,7 +308,12 @@ const EditProfile = React.forwardRef((props, ref) => {
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
             />
-
+            <ImagePickerPopup
+                visible={isImagePickerPopupVisible}
+                toggle={toggleImagePickerPopup}
+                onPressTakePhoto={launchCamera}
+                onPressSelectFromGalary={launchImagePicker}
+            />
         </Wrapper>
     );
 })

@@ -238,7 +238,7 @@ PODS:
     - React-cxxreact (= 0.63.4)
     - React-jsi (= 0.63.4)
   - React-jsinspector (0.63.4)
-  - react-native-image-picker (2.3.4):
+  - react-native-image-picker (3.5.0):
     - React-Core
   - react-native-safe-area-context (3.1.9):
     - React-Core
@@ -502,7 +502,7 @@ SPEC CHECKSUMS:
   React-jsi: a0418934cf48f25b485631deb27c64dc40fb4c31
   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
-  react-native-image-picker: c6d75c4ab2cf46f9289f341242b219cb3c1180d3
+  react-native-image-picker: 05eefd9232123c5ebde7979c3eefb890b57a87ff
   react-native-safe-area-context: b6e0e284002381d2ff29fa4fff42b4d8282e3c94
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
   React-RCTAnimation: 1bde3ecc0c104c55df246eda516e0deb03c4e49b
@@ -527,4 +527,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 4d84738948ff0be81aa6e09620da509b47ca2669
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.1

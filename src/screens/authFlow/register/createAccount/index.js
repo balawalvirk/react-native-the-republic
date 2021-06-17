@@ -129,7 +129,7 @@ function CreateAccount(props) {
           <ButtonGradient
             text="Register"
             shadow
-            isLoading={loading}
+            loading={loading}
             onPress={handleRegister}
           />
         <Spacer height={sizes.doubleBaseMargin} />

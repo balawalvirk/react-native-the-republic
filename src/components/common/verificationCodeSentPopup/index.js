@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import React  from 'react';
 import { height } from 'react-native-dimension';
 import { PopupPrimary } from '..';
 import { appStyles, sizes } from '../../../services';

@@ -11,6 +11,7 @@ import { TextInputUnderlined } from '../textInput'
 import { ComponentWrapper, RowWrapper, Wrapper } from '../wrappers'
 import EditProfileComp from './editProfileCom'
 import VerificationCodeSentPopup from './verificationCodeSentPopup'
+import ImagePickerPopup from './imagePickerPopup'
 
 export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, topMargin, children }) => {
     return (
@@ -129,4 +130,4 @@ export const SwitchPrimary = ({ value, onPress }) => {
     )
 }
 
-export {EditProfileComp,VerificationCodeSentPopup}
+export {EditProfileComp,VerificationCodeSentPopup,ImagePickerPopup}
