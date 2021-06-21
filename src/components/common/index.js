@@ -1,10 +1,10 @@
 import React from 'react'
-import { Platform } from 'react-native'
+import { Platform ,TouchableOpacity} from 'react-native'
 import { height, totalSize } from 'react-native-dimension'
 import { ModalSwipeablePrimary } from '..'
-import { appStyles, colors, HelpingMethods, sizes } from '../../services'
+import { appIcons, appStyles, colors, HelpingMethods, sizes } from '../../services'
 import { ButtonColored, ButtonGradient } from '../buttons'
-import { IconButton, IconWithText } from '../icons'
+import { CustomIcon, IconButton, IconWithText } from '../icons'
 import { Spacer } from '../spacers'
 import { MediumText, SmallTitle } from '../text'
 import { TextInputUnderlined } from '../textInput'
@@ -12,6 +12,7 @@ import { ComponentWrapper, RowWrapper, Wrapper } from '../wrappers'
 import EditProfileComp from './editProfileCom'
 import VerificationCodeSentPopup from './verificationCodeSentPopup'
 import ImagePickerPopup from './imagePickerPopup'
+import Posts from './posts'
 
 export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, topMargin, children }) => {
     return (
@@ -19,7 +20,7 @@ export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType,
             visible={visible}
             toggle={toggle}
             hideHeader
-            topMargin={topMargin ? Platform.OS==='ios' ? topMargin : topMargin - height(5) : height(50)}
+            topMargin={topMargin ? Platform.OS === 'ios' ? topMargin : topMargin - height(5) : height(50)}
         >
             <Wrapper flex={1}>
                 <Spacer height={sizes.baseMargin * 1.5} />
@@ -130,4 +131,25 @@ export const SwitchPrimary = ({ value, onPress }) => {
     )
 }
 
-export {EditProfileComp,VerificationCodeSentPopup,ImagePickerPopup}
+export const LocationPickerButton = ({ text,onPress }) => {
+    return (
+       <TouchableOpacity disabled={!onPress} onPress={onPress} activeOpacity={1}>
+            <RowWrapper style={{padding: sizes.smallMargin,backgroundColor: colors.appBgColor3,borderRadius:100}}>
+            <IconWithText
+                customIcon={appIcons.map_pin_outline}
+                text={text.slice(0,12)+'..'}
+                tintColor={colors.appTextColor1}
+                iconSize={totalSize(2)}
+                textStyle={[appStyles.textRegular]}
+            />
+            <Spacer width={sizes.marginHorizontalSmall} />
+            <CustomIcon
+                icon={appIcons.drop_down}
+                size={totalSize(1)}
+            />
+        </RowWrapper>
+       </TouchableOpacity>
+    )
+}
+
+export { EditProfileComp, VerificationCodeSentPopup, ImagePickerPopup ,Posts}

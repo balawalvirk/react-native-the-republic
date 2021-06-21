@@ -9,6 +9,7 @@ import { CustomIcon } from '../icons';
 import { Wrapper, RowWrapperBasic, RowWrapper, ComponentWrapper } from '../wrappers';
 import LinearGradient from 'react-native-linear-gradient';
 import { MaterialIndicator } from 'react-native-indicators';
+import ButtonGroupAnimated from './animatedButtonGroup'
 
 export const ButtonColored = ({
     text, isLoading, activityColor, animation, onPress, disabled, buttonStyle,
@@ -197,3 +198,5 @@ export const ButtonSocial = ({ text ,onPress,logo}) => {
         />
     )
 }
+
+export {ButtonGroupAnimated}

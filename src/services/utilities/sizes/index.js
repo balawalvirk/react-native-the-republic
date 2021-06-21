@@ -4,16 +4,16 @@ import { totalSize } from 'react-native-dimension'
 const { width, height } = Dimensions.get('window')
 
 const statusBarHeight = Platform.select({
-  ios: 40,
+  ios: 30,
   android: StatusBar.currentHeight
 })
 const headerHeight = Platform.select({
-  ios: height*0.12,
-  android: height*0.12
+  ios: height*0.125,
+  android: height*0.125
 })
 const tabBarHeight= Platform.select({
-  ios: height*0.07,
-  android: height*0.07
+  ios: height*0.09,
+  android: height*0.09
 })
 
 // Used via Metrics.baseMargin

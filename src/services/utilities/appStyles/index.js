@@ -300,6 +300,7 @@ export const appStyles= StyleSheet.create({
       shadowColor: 'transparent',
       borderBottomWidth: 0,
       height:sizes.headerHeight
+     // height: height(12.5),
       //marginTop:sizes.statusBarHeight
     },
     headerSecondaryStyle: {
@@ -308,11 +309,39 @@ export const appStyles= StyleSheet.create({
       shadowColor: 'transparent',
       borderBottomWidth: 1,
       borderBottomColor: colors.appBgColor4,
-      height: sizes.headerHeight
+      height:sizes.headerHeight,
     },
     headerTitleStyle: {
       fontSize: totalSize(2),
       color: colors.appTextColor2,
       fontFamily: fontFamily.appTextBold
+    },
+    tabBarStyle: {
+      height: sizes.tabBarHeight,
+      borderTopWidth: 0,
+      //justifyContent: 'center',
+      // borderTopLeftRadius: sizes.cardRadius,
+      //borderTopRightRadius: sizes.cardRadius,
+      // paddingTop: height(1),
+      //borderRadius: sizes.buttonRadius,
+      backgroundColor: colors.appBgColor1,
+      //paddingVertical:sizes.tabBarHeight/5,
+      //position: 'absolute',
+      //left: 0,
+      //right: 0,
+      //bottom: 0,
+      //marginHorizontal: sizes.marginHorizontal,
+      //marginBottom: Platform.OS === 'ios' ? height(2.5) : height(1.5),
+      //paddingTop: sizes.tabBarHeight / 7,
+      paddingBottom: sizes.tabBarHeight / 4,
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 5,
+      },
+      shadowOpacity: 0.425,
+      shadowRadius: 8.27,
+  
+      elevation: 10,
     },
 })

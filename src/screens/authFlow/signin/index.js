@@ -65,6 +65,7 @@ function Signin(props) {
       setLoginLoading(true)
       setTimeout(() => {
         setLoginLoading(false)
+        navigate(routes.app)
       }, 2000);
     }
   }

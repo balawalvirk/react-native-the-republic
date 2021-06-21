@@ -2,8 +2,9 @@ import React from 'react'
 import { appStyles, colors } from "../../services"
 import { BackIcon, ComponentWrapper } from "../../components"
 import { Platform } from 'react-native'
-import { sizes } from '../utilities'
-
+import { fontFamily, sizes } from '../utilities'
+import { totalSize } from 'react-native-dimension'
+import DummyPosts from './dummyData'
 
 export const baseURL = ''
 export const endPoints = {
@@ -19,8 +20,27 @@ export const routes = {
     resetPassword: 'resetPassword',
     createAccount: 'createAccount',
     completeYourProfil: 'completeYourProfil',
-    verifyPhone:'verifyPhone',
-    home: 'home'
+    verifyPhone: 'verifyPhone',
+    mainBottomTab:'mainBottomTab',
+    mainDrawer:'mainDrawer',
+    home: 'home',
+    community: 'community',
+    explore: 'explore',
+    marketPlace: 'marketPlace',
+    account: 'account',
+    followRequests: 'followRequests',
+    dealers: 'dealers',
+    trainings: 'trainings',
+    comments: 'comments',
+    theRepublicNews: 'theRepublicNews',
+    contactUs: 'contactUs',
+    subscriptionPlan: 'subscriptionPlan',
+    shareApost:'shareApost',
+    notifications:'notifications',
+    search:'search',
+    chats:'chats',
+    yourLocation:'yourLocation',
+    myLocation:'myLocation'
 }
 export const headers = {
     screenOptionsPrimary: {
@@ -47,12 +67,13 @@ export const headers = {
 export const tabs = {
     tabBarOptions: {
         //showLabel: false,
-        activeTintColor: colors.appTextColor6,
-        inactiveTintColor: colors.appTextColor6,
+        activeTintColor: colors.appColor1,
+        inactiveTintColor: colors.appTextColor5,
         allowFontScaling: true,
         style: appStyles.tabBarStyle,
-        activeBackgroundColor: '#FFFFFF40',
-        tabStyle: { borderRadius: 20, marginHorizontal: 7.5, marginVertical: 2 }
+        labelStyle:{fontSize:totalSize(1.1),fontFamily:fontFamily.appTextBold}
+        //activeBackgroundColor: '#FFFFFF40',
+        //tabStyle: { borderRadius: 20, marginHorizontal: 7.5, marginVertical: 2 }
     },
     topTabBarOptions: {
         //showLabel: false,
@@ -68,3 +89,5 @@ export const tabs = {
         //tabStyle:{borderRadius:20,marginHorizontal:7.5,marginVertical:2}
     }
 }
+
+export {DummyPosts}
