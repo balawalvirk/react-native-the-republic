@@ -6,16 +6,16 @@ import AuthNavigation from './authNavigation';
 import AppNavigation from './appNavigation';
 import { routes } from '../constants';
 import { Splash } from '../../screens/authFlow';
-
+import { navigationRef } from './rootNavigation';
 
 const MainStack = createStackNavigator();
 
 export function Navigation() {
     return (
-        <NavigationContainer>
+        <NavigationContainer ref={navigationRef}>
             <MainStack.Navigator
                 screenOptions={{ headerShown: false }}
-                initialRouteName={routes.auth}
+                initialRouteName={routes.app}
             >
                 <MainStack.Screen
                     name={routes.auth}

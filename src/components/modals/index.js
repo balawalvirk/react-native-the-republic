@@ -13,10 +13,12 @@ import { ButtonColored, ButtonGradiantColored, ButtonBordered } from '../buttons
 import { SearchIcon, CloseIcon } from '../icons';
 import { styles } from './styles';
 import { LineHorizontal } from '../lines';
+import { Platform } from 'react-native';
 
 
 
 export const ModalSwipeablePrimary = ({ visible, toggle, disableSwipe, topMargin, headerTitle, headerRight, headerLeft, hideHeader, children }) => {
+    const defaultTopMargin = topMargin ? (Platform.OS === 'ios' ? topMargin : topMargin + height(5)) : height(12)
     return (
         <Modal
             isVisible={visible} // Comment on video User
@@ -30,7 +32,7 @@ export const ModalSwipeablePrimary = ({ visible, toggle, disableSwipe, topMargin
             <View
                 style={{
                     flex: 1,
-                    marginTop: topMargin ? topMargin : height(12),
+                    marginTop: defaultTopMargin,
                     backgroundColor: colors.appBgColor1,
                     borderTopRightRadius: 25,
                     borderTopLeftRadius: 25,
@@ -67,34 +69,34 @@ export const ModalSwipeablePrimary = ({ visible, toggle, disableSwipe, topMargin
 }
 
 
-export const AddValueModal = ({ children, placeholder, title, value, onChangeText, isVisible, toggleModal, buttonText, onPressButton,autoFocus }) => {
+export const AddValueModal = ({ children, placeholder, title, value, onChangeText, isVisible, toggleModal, buttonText, onPressButton, autoFocus }) => {
     return (
         <Modal
             isVisible={isVisible}
             //swipeDirection="down"
             //onSwipeComplete={toggleModal}
-            style={{ flex:1,margin: 0,justifyContent:'center' }}
+            style={{ flex: 1, margin: 0, justifyContent: 'center' }}
             onBackdropPress={toggleModal}
             backdropOpacity={0.5}
         >
-                <CardWrapper style={[styles.enterValueModalPrimaryCard]}>
-                    <TinyTitle >{title ? title : 'Title'}</TinyTitle>
-                    <Spacer height={sizes.baseMargin} />
-                    <TextInputBordered
-                        placeholder={placeholder}
-                        value={value}
-                        autoFocus={autoFocus}
-                        onChangeText={onChangeText}
-                        inputContainerStyle={{ marginHorizontal: 0 }}
-                    />
-                    <Spacer height={sizes.baseMargin} />
-                    <ButtonColored
-                        text={buttonText ? buttonText : 'ADD'}
-                        onPress={onPressButton}
-                        buttonStyle={{ marginHorizontal: 0 }}
-                    />
-                    {children}
-                </CardWrapper>
+            <CardWrapper style={[styles.enterValueModalPrimaryCard]}>
+                <TinyTitle >{title ? title : 'Title'}</TinyTitle>
+                <Spacer height={sizes.baseMargin} />
+                <TextInputBordered
+                    placeholder={placeholder}
+                    value={value}
+                    autoFocus={autoFocus}
+                    onChangeText={onChangeText}
+                    inputContainerStyle={{ marginHorizontal: 0 }}
+                />
+                <Spacer height={sizes.baseMargin} />
+                <ButtonColored
+                    text={buttonText ? buttonText : 'ADD'}
+                    onPress={onPressButton}
+                    buttonStyle={{ marginHorizontal: 0 }}
+                />
+                {children}
+            </CardWrapper>
         </Modal>
     );
 }

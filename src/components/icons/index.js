@@ -95,7 +95,7 @@ export const TouchableCustomIcon = ({ icon, size, animation, duration, color, on
     );
 }
 
-export const IconWithText = ({ text, containerStyle, title, customIcon, onPress, tintColor, iconName, iconType, iconSize, textStyle, titleStyle, direction, iconStyle }) => {
+export const IconWithText = ({ text, containerStyle, title, customIcon, onPress, tintColor, iconName, iconType, iconSize, textStyle, titleStyle, direction, iconStyle, textContainerStyle }) => {
     return (
         <TouchableOpacity disabled={!onPress} activeOpacity={1} onPress={onPress} style={[{ flexDirection: direction ? direction : 'row', alignItems: 'center', }, containerStyle]}>
             {
@@ -104,7 +104,7 @@ export const IconWithText = ({ text, containerStyle, title, customIcon, onPress,
                     :
                     <Icon name={iconName ? iconName : 'email'} type={iconType ? iconType : 'material-community'} size={iconSize ? iconSize : totalSize(2)} color={tintColor ? tintColor : colors.appTextColor1} iconStyle={iconStyle} />
             }
-            <View style={direction === 'column' ? { marginVertical: height(1.5) } : { marginHorizontal: width(2) }}>
+            <View style={[direction === 'column' ? { marginVertical: height(1.5) } : { marginHorizontal: width(2) }, textContainerStyle]}>
                 {
                     title ?
                         <Text style={[appStyles.textRegular, { color: tintColor ? tintColor : colors.appTextColor1, fontFamily: FontFamily.appTextBold, marginBottom: 5 }, titleStyle]}>{title}</Text>
@@ -115,6 +115,18 @@ export const IconWithText = ({ text, containerStyle, title, customIcon, onPress,
             </View>
         </TouchableOpacity>
     );
+}
+
+export const IconHeart = ({value,onPress,size}) => {
+    return (
+        <Icon
+            name={value ? 'heart' : 'hearto'}
+            color={value ? colors.error : colors.appTextColor1}
+            type="antdesign"
+            size={size?size:totalSize(2.5)}
+            onPress={onPress}
+        />
+    )
 }
 
 const styles = StyleSheet.create({

@@ -1,4 +1,5 @@
 import { UIManager, LayoutAnimation, Platform } from "react-native";
+import dummyData from "../constants/dummyData";
 
 const HelpingMethods = {
     handleAnimation: () => {
@@ -35,6 +36,24 @@ const HelpingMethods = {
             return false
         }
     },
+    checkIsProductFavourite: (productId) => {
+        let isFavourite = false
+        const favouritProducts = dummyData.userData.favourite_products
+        const favProduct = favouritProducts.find(item => {
+            return item === productId
+        })
+        if (favProduct) isFavourite = true
+        return isFavourite
+    },
+    checkIsPostLiked: (postId) => {
+        let isLiked = false
+        const likedPosts = dummyData.userData.liked_posts
+        const likedPost = likedPosts.find(item => {
+            return item === postId
+        })
+        if (likedPost) isLiked = true
+        return isLiked
+    }
 }
 
 

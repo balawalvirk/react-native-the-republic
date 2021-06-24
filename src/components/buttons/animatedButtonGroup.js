@@ -11,8 +11,10 @@ import {
 } from 'react-native';
 import { MediumText, RegularText } from '../text';
 import { StyleSheet } from 'react-native';
-import { height, width } from 'react-native-dimension';
+import { height, totalSize, width } from 'react-native-dimension';
 import { appStyles, colors, sizes } from '../../services';
+import { Icon } from 'react-native-elements';
+import { CustomIcon } from '../icons';
 
 
 export default class AnimatedGroupButton extends React.Component {
@@ -30,7 +32,7 @@ export default class AnimatedGroupButton extends React.Component {
   handleTabSlide = (x, height, width) => {
     let { activeTabTranslateX, activeTabHeight, activeTabWidth } = this.state;
     console.log(x, height, width);
-    Animated.spring(activeTabTranslateX, {
+    Animated.timing(activeTabTranslateX, {
       toValue: x,
       duration: 250,
       useNativeDriver: false,
@@ -40,7 +42,7 @@ export default class AnimatedGroupButton extends React.Component {
       duration: 100,
       useNativeDriver: false,
     }).start();
-    Animated.spring(activeTabWidth, {
+    Animated.timing(activeTabWidth, {
       toValue: width,
       duration: 100,
       useNativeDriver: false,
@@ -71,10 +73,11 @@ export default class AnimatedGroupButton extends React.Component {
       text,
       scrollViewRef,
       containerStyle,
+      iconSize
     } = this.props;
     return (
       <View style={[styles.animatedGroupButtonMainContainer, containerStyle]}>
-        <View>
+        <View >
           <ScrollView
             ref={this.scrollViewRef}
             horizontal
@@ -108,14 +111,24 @@ export default class AnimatedGroupButton extends React.Component {
                   onPress={() =>
                     onPressButton(item, key, this.handleOnPress(item, key))
                   }>
-                  <RegularText
-                    style={[
-                      styles.animatedGroupButtonInactivatedButtonTxt,
-                      inactiveTextStyle,
-                    ]}>
-                    {item[text]}
-                    {/* {text} */}
-                  </RegularText>
+                  {
+                    !item.icon ?
+                      <RegularText
+                        style={[
+                          styles.animatedGroupButtonInactivatedButtonTxt,
+                          inactiveTextStyle,
+                        ]}>
+                        {item[text]}
+                        {/* {text} */}
+                      </RegularText>
+                      :
+                      <CustomIcon
+                        icon={item.icon}
+                        color={appStyles.textPrimaryColor.color}
+                        size={iconSize?iconSize:totalSize(1.5)}
+                      />
+
+                  }
                 </TouchableHighlight>
               );
             })}
@@ -133,13 +146,23 @@ export default class AnimatedGroupButton extends React.Component {
                 },
                 activeButtonStyle,
               ]}>
-              <RegularText
-                style={[
-                  styles.animatedGroupButtonActivatedButtonTxt,
-                  inactiveTextStyle,
-                ]}>
-                {data[selectedTabIndex][text]}
-              </RegularText>
+              {
+                !data[selectedTabIndex].icon ?
+                  <RegularText
+                    style={[
+                      styles.animatedGroupButtonActivatedButtonTxt,
+                      inactiveTextStyle,
+                    ]}>
+                    {data[selectedTabIndex][text]}
+                  </RegularText>
+                  :
+                  <CustomIcon
+                    icon={data[selectedTabIndex].icon}
+                    color={appStyles.textWhite.color}
+                    size={iconSize?iconSize:totalSize(1.5)}
+                  />
+              }
+
             </Animated.View>
           </ScrollView>
         </View>
@@ -152,7 +175,7 @@ export default class AnimatedGroupButton extends React.Component {
 const styles = StyleSheet.create({
   // Animated Button Group styles
   animatedGroupButtonMainContainer: {
-    flex: 1
+
   },
   animatedGroupButtonInactivatedButton: {
     borderRadius: 100,

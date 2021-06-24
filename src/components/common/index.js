@@ -1,5 +1,5 @@
 import React from 'react'
-import { Platform ,TouchableOpacity} from 'react-native'
+import { Platform, TouchableOpacity } from 'react-native'
 import { height, totalSize } from 'react-native-dimension'
 import { ModalSwipeablePrimary } from '..'
 import { appIcons, appStyles, colors, HelpingMethods, sizes } from '../../services'
@@ -13,6 +13,10 @@ import EditProfileComp from './editProfileCom'
 import VerificationCodeSentPopup from './verificationCodeSentPopup'
 import ImagePickerPopup from './imagePickerPopup'
 import Posts from './posts'
+import MenuPopup from './menuPopup'
+import RenderComments from './renderComments'
+import Products from './products'
+import { LineHorizontal } from '..'
 
 export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, topMargin, children }) => {
     return (
@@ -131,25 +135,38 @@ export const SwitchPrimary = ({ value, onPress }) => {
     )
 }
 
-export const LocationPickerButton = ({ text,onPress }) => {
+export const LocationPickerButton = ({ text, onPress }) => {
     return (
-       <TouchableOpacity disabled={!onPress} onPress={onPress} activeOpacity={1}>
-            <RowWrapper style={{padding: sizes.smallMargin,backgroundColor: colors.appBgColor3,borderRadius:100}}>
-            <IconWithText
-                customIcon={appIcons.map_pin_outline}
-                text={text.slice(0,12)+'..'}
-                tintColor={colors.appTextColor1}
-                iconSize={totalSize(2)}
-                textStyle={[appStyles.textRegular]}
+        <TouchableOpacity disabled={!onPress} onPress={onPress} activeOpacity={1}>
+            <RowWrapper style={{ padding: sizes.smallMargin, backgroundColor: colors.appBgColor3, borderRadius: 100 }}>
+                <IconWithText
+                    customIcon={appIcons.map_pin_outline}
+                    text={text.slice(0, 12) + '..'}
+                    tintColor={colors.appTextColor1}
+                    iconSize={totalSize(2)}
+                    textStyle={[appStyles.textRegular]}
+                />
+                <Spacer width={sizes.marginHorizontalSmall} />
+                <CustomIcon
+                    icon={appIcons.drop_down}
+                    size={totalSize(1)}
+                />
+            </RowWrapper>
+        </TouchableOpacity>
+    )
+}
+export const MenuOption = ({ title, onPress }) => {
+    return (
+        <TouchableOpacity onPress={onPress}>
+            <Spacer height={sizes.marginVertical} />
+            <ComponentWrapper>
+                <MediumText>{title}</MediumText>
+            </ComponentWrapper>
+            <Spacer height={sizes.marginVertical} />
+            <LineHorizontal
             />
-            <Spacer width={sizes.marginHorizontalSmall} />
-            <CustomIcon
-                icon={appIcons.drop_down}
-                size={totalSize(1)}
-            />
-        </RowWrapper>
-       </TouchableOpacity>
+        </TouchableOpacity>
     )
 }
 
-export { EditProfileComp, VerificationCodeSentPopup, ImagePickerPopup ,Posts}
+export { EditProfileComp, VerificationCodeSentPopup, ImagePickerPopup, Posts,MenuPopup,RenderComments,Products }

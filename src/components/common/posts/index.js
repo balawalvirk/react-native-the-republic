@@ -1,26 +1,324 @@
-import React, { Component } from 'react';
-import { View, Text, FlatList } from 'react-native';
-import { Wrapper } from '../../wrappers';
+import React, { Component, useState } from 'react';
+import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native';
+import { appIcons, appStyles, HelpingMethods, routes, sizes } from '../../../services';
+import { ImageRound } from '../../images';
+import { LineHorizontal } from '../../lines';
+import { Spacer } from '../../spacers';
+import { MediumText, RegularText, TinyText } from '../../text';
+import { colors } from '../../../services';
+import { RowWrapper, Wrapper, ComponentWrapper, RowWrapperBasic, AbsoluteWrapper } from '../../wrappers';
+import styles from './styles'
+import { IconWithText, IconHeart } from '../../icons';
+import { TextInputColored } from '../../textInput';
+import { ModalSwipeablePrimary } from '../../modals';
+import { height, totalSize, width } from 'react-native-dimension';
+import { Icon } from 'react-native-elements';
+import * as RootNavigation from '../../../services/navigation/rootNavigation'
+import { MenuOption, MenuPopup,RenderComments } from '..';
 
-function Posts({ data }) {
 
+function Comments({ data, onPress }) {
+    return (
+        <Wrapper>
+            <FlatList
+                data={data}
+                key="key"
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item, index }) => {
+                    const { user } = item
+                    return (
+                        <TouchableOpacity activeOpacity={1} onPress={() => onPress(item, index)} style={[styles.commentContainer]}>
+                            <RowWrapperBasic style={{ alignItems: null, }}>
+                                <ImageRound
+                                    source={{ uri: user.image }}
+                                    size={totalSize(4)}
+                                />
+                                <Spacer width={sizes.marginHorizontalSmall} />
+                                <Wrapper flex={1}>
+                                    <RowWrapperBasic>
+                                        <RegularText style={[appStyles.fontBold, appStyles.textPrimaryColor]}>{user.name}
+                                            <TinyText style={[appStyles.textGray]}>  {item.created_at}</TinyText>
+                                        </RegularText>
+                                    </RowWrapperBasic>
+                                    <Spacer height={sizes.TinyMargin} />
+                                    <MediumText>{item.comment}</MediumText>
+                                </Wrapper>
+                            </RowWrapperBasic>
+                        </TouchableOpacity>
+                    )
+                }}
+            />
+        </Wrapper>
+    )
+}
+
+function RenderPosts({ data, onPressDotsHorizontal, onPressComment,onPressSendComment,onPressLike }) {
+    const [commentText, setCommentText] = useState('')
 
     return (
         <Wrapper flex={1}>
             <FlatList
                 data={data}
                 key={'key'}
+                showsVerticalScrollIndicator={false}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item, index }) => {
+                    const { user, product, group, images, } = item
                     return (
                         <Wrapper>
+                            <Spacer height={sizes.smallMargin} />
+                            <ComponentWrapper style={[styles.smallMarginHorizontal]}>
+                                <RowWrapperBasic style={{ alignItems: null, }}>
+                                    <Wrapper flex={1}>
+                                        <RowWrapperBasic>
+                                            <ImageRound
+                                                source={{ uri: user.image }}
+                                                size={totalSize(5)}
+                                            />
+                                            <Spacer width={sizes.marginHorizontalSmall} />
+                                            <Wrapper flex={1}>
+                                                <RowWrapperBasic>
+                                                    <RegularText style={[appStyles.fontBold]}>{user.name}</RegularText>
+                                                    {
+                                                        group ?
+                                                            <IconWithText
+                                                                text={group.name}
+                                                                iconName="caretright"
+                                                                iconType="antdesign"
+                                                                iconSize={totalSize(1)}
+                                                                textContainerStyle={{ marginHorizontal: 0 }}
+                                                                iconStyle={{ marginHorizontal: sizes.marginHorizontalSmall / 2 }}
+                                                                textStyle={[appStyles.textRegular, appStyles.fontBold]}
+                                                            />
+                                                            :
+                                                            null
+                                                    }
+                                                </RowWrapperBasic>
+                                                <Spacer height={sizes.smallMargin} />
+                                                <TinyText style={[appStyles.textGray]}>{item.created_at}</TinyText>
+                                            </Wrapper>
+                                        </RowWrapperBasic>
+                                    </Wrapper>
+                                    <Wrapper>
+                                        <Icon
+                                            name="dots-three-horizontal"
+                                            type="entypo"
+                                            size={totalSize(2.25)}
+                                            color={colors.appTextColor5}
+                                            onPress={() => onPressDotsHorizontal(item, index)}
+                                        />
+                                    </Wrapper>
+                                </RowWrapperBasic>
+                                <Spacer height={sizes.smallMargin} />
+                                <Wrapper>
+                                    <MediumText>{item.description}</MediumText>
+                                </Wrapper>
+                                <Spacer height={sizes.smallMargin} />
+                            </ComponentWrapper>
+                            {
+                                product ?
+                                    <Wrapper>
+                                        <Wrapper style={styles.productContainer}>
+                                            <Wrapper flex={1}>
+                                                <Image
+                                                    source={{ uri: product.image }}
+                                                    style={{ height: height(45), width: null, marginHorizontal: sizes.marginHorizontalSmall }}
+                                                    resizeMode="contain"
+                                                />
+                                                <AbsoluteWrapper style={{ top: sizes.baseMargin, right: sizes.baseMargin }}>
+                                                    <IconHeart
+                                                        value={HelpingMethods.checkIsProductFavourite(product.id)}
+                                                        onPress={() => { }}
+                                                    />
+                                                </AbsoluteWrapper>
+                                            </Wrapper>
+                                            <LineHorizontal />
+                                            <Spacer height={sizes.smallMargin} />
+                                            <ComponentWrapper style={[styles.smallMarginHorizontal]}>
+                                                <MediumText>{product.description}</MediumText>
+                                                <Spacer height={sizes.smallMargin} />
+                                                <RowWrapperBasic>
+                                                    <Wrapper flex={1}>
+                                                        <RowWrapperBasic>
+                                                            <RegularText style={[appStyles.fontBold, appStyles.textPrimaryColor]}>${product.new_price}</RegularText>
+                                                            <Spacer width={sizes.smallMargin} />
+                                                            <TinyText style={[appStyles.textColorError, appStyles.textLineThrough]}>${product.old_price}</TinyText>
+                                                        </RowWrapperBasic>
+                                                    </Wrapper>
+                                                    <Wrapper>
+                                                        <IconWithText
+                                                            customIcon={appIcons.map_pin_outline}
+                                                            text={product.location}
+                                                            textStyle={[appStyles.textRegular, appStyles.textLightGray]}
+                                                            iconSize={totalSize(1.25)}
+                                                            tintColor={appStyles.textLightGray.color}
+                                                        />
+                                                    </Wrapper>
+                                                </RowWrapperBasic>
+                                            </ComponentWrapper>
+                                            <Spacer height={sizes.smallMargin} />
+                                        </Wrapper>
+                                        <Spacer height={sizes.smallMargin} />
+                                        <LineHorizontal height={0.5} />
+                                    </Wrapper>
+                                    :
+                                    null
+                            }
 
+                            {
+                                images.length ?
+                                    <Wrapper>
+                                        <FlatList
+                                            data={images}
+                                            horizontal
+                                            nestedScrollEnabled
+                                            scrollEnabled={true}
+                                            keyExtractor={(item, index) => index?.toString()}
+                                            contentContainerStyle={{ flexGrow: 1 }}
+                                            // onViewableItemsChanged={this.onViewableItemsChanged}
+                                            viewabilityConfig={{
+                                                itemVisiblePercentThreshold: 50,
+                                            }}
+                                            pagingEnabled={true}
+                                            // onScroll={(index) => { console.log('current index is ===>', index) }}
+                                            showsHorizontalScrollIndicator={false}
+                                            renderItem={({ item, index }) => {
+                                                let imageHieght
+                                                let imageWidth
+                                                let isPortraitImage = false
+                                                imageHieght = Image.getSize(item, (width, height) => { return height })
+                                                imageWidth = Image.getSize(item, (width, height) => { return width })
+                                                // console.log('Image height: ',imageHieght,' width : ',imageWidth)
+                                                if (imageHieght > imageWidth) { isPortraitImage = true }
+                                                return (
+                                                    <TouchableOpacity
+                                                        style={{ backgroundColor: 'transparent', width: width(100) }}
+                                                        onPress={() => { }}
+                                                        activeOpacity={1}>
+                                                        <Image
+                                                            source={{ uri: item }}
+                                                            style={{ flex: 1, height: height(35), width: null }}
+                                                            resizeMode='contain'
+                                                        />
+                                                    </TouchableOpacity>
+                                                );
+                                            }}
+                                        />
+                                    </Wrapper>
+                                    : null
+                            }
+
+                            <Spacer height={sizes.smallMargin} />
+                            <RowWrapper style={{ marginHorizontal: sizes.marginHorizontalXLarge }}>
+                                <IconWithText
+                                    iconName="thumb-up"
+                                    text={item.like_counts}
+                                    tintColor={HelpingMethods.checkIsPostLiked(item.id) ? appStyles.textLightGray.color : appStyles.textPrimaryColor.color}
+                                    onPress={()=>onPressLike(item,index)}
+                                />
+                                <IconWithText
+                                    customIcon={appIcons.comment}
+                                    text={item.comment_counts}
+                                    tintColor={appStyles.textLightGray.color}
+                                />
+                                <IconWithText
+                                    customIcon={appIcons.share}
+                                    text={'Share'}
+                                    tintColor={appStyles.textLightGray.color}
+                                />
+                            </RowWrapper>
+                            <Spacer height={sizes.smallMargin} />
+                            <LineHorizontal height={0.5} />
+                            <Spacer height={sizes.smallMargin} />
+                            <RenderComments
+                                data={item.comments}
+                                onPress={(item, index) => onPressComment(item, index)}
+                            />
+                            <Spacer height={sizes.smallMargin} />
+                            <TextInputColored
+                                placeholder="Write a comment"
+                                iconName="send"
+                                iconType="feather"
+                                value={commentText}
+                                onChangeText={text => setCommentText(text)}
+                                iconColor={commentText.length ? colors.appColor1 : colors.appTextColor4}
+                                containerStyle={styles.smallMarginHorizontal}
+                                onPressIcon={() => onPressSendComment(commentText)}
+                            />
+                            <Spacer height={sizes.smallMargin} />
+                            <LineHorizontal color={colors.appBgColor3} height={sizes.smallMargin} />
                         </Wrapper>
                     )
                 }}
             />
         </Wrapper>
     );
+}
+
+function Posts({ data }) {
+    const { navigate } = RootNavigation
+    //Menu Options
+    const commentMenuOptions = ['View User Profile', 'Delete Comment', 'Report Comment']
+    const postMenuOptions = ['View User Profile', 'Delete Post', 'Report Post']
+    //manage objects
+    const [selectedPostForMenu, setPostForMenu] = useState({})
+    const [selectedCommentForMenu, setCommentForMenu] = useState({})
+
+    //manage menues
+    const [isCommentMenuVisible, setCommentMenuVisibility] = useState(false)
+    const [isPostMenuVisible, setPostMenuVisibility] = useState(false)
+
+    const toggleCommentMenu = () => setCommentMenuVisibility(!isCommentMenuVisible)
+    const togglePostMenu = () => setPostMenuVisibility(!isPostMenuVisible)
+    return (
+        <>
+            <RenderPosts
+                data={data}
+                onPressComment={(item, index) => {
+                    setCommentForMenu(item)
+                    toggleCommentMenu()
+                }}
+                onPressDotsHorizontal={(item, index) => {
+                    setPostForMenu(item)
+                    togglePostMenu()
+                }}
+                onPressLike={(item,index)=>{}}
+                onPressSendComment={(item,index)=>{}}
+            />
+            <MenuPopup
+                options={postMenuOptions}
+                visible={isPostMenuVisible}
+                toggle={togglePostMenu}
+                onPressOption={(title, index) => {
+                    //Your logic here base on item or index
+                    togglePostMenu()
+                    if (index === 0) {
+                        navigate(routes.notifications, { item: selectedPostForMenu })
+                    } else if (index === 1) {
+                        navigate(routes.notifications, { item: selectedPostForMenu })
+                    } else if (index === 2) {
+                        navigate(routes.notifications, { item: selectedPostForMenu })
+                    }
+                }}
+            />
+            <MenuPopup
+                options={commentMenuOptions}
+                visible={isCommentMenuVisible}
+                toggle={toggleCommentMenu}
+                onPressOption={(title, index) => {
+                    //Your logic here base on item or index
+                    toggleCommentMenu()
+                    if (index === 0) {
+                        navigate(routes.notifications, { item: selectedCommentForMenu })
+                    } else if (index === 1) {
+                        navigate(routes.notifications, { item: selectedCommentForMenu })
+                    } else if (index === 2) {
+                        navigate(routes.notifications, { item: selectedCommentForMenu })
+                    }
+                }}
+            />
+        </>
+    )
 }
 
 export default Posts;

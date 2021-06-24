@@ -4,32 +4,81 @@ import { Icon } from 'react-native-elements';
 import { height, totalSize, width } from 'react-native-dimension';
 import { colors, appStyles, fontFamily, sizes, fontSize } from '../../services';
 import { AbsoluteWrapper, ComponentWrapper, Wrapper } from '../wrappers';
-import { InputTitle, MediumText } from '../text';
+import { InputTitle, MediumText, RegularText, SmallText } from '../text';
 import { CustomIcon, IconWithText } from '../icons';
 import { Spacer } from '../spacers';
 import { Platform } from 'react-native';
 import { Animated } from 'react-native';
-const TextInputColored = ({iconName, iconType, placeholder, onFocus, onBlur, onChangeText, secureTextEntry, value, containerStyle}) => {
+const TextInputColored = ({ iconName, inputRef, iconType, returnKeyLabel, returnKeyType, onSubmitEditing, onPress, maxLength, autoFocus, title, isButton, duration, titleStyle, placeholder, editable, animation, multiline, onFocus, onBlur, onChangeText, secureTextEntry, value, iconColor, iconSize, containerStyle, inputContainerStyle, onPressIcon, inputStyle, right, keyboardType, iconStyle, error }) => {
     return (
-        <View style={[appStyles.inputContainerColored, {
-            borderRadius: 10,
-            backgroundColor: colors.appBgColor2
-        }, appStyles.shadow, containerStyle]}>
-            <View style={{ flex: 2, alignItems: 'center' }}>
-                <Icon name={iconName} type={iconType} size={totalSize(2.5)} color={colors.appTextColor5} iconStyle={{}} />
-            </View>
-            <View style={{ flex: 8 }}>
-                <TextInput
-                    onChangeText={onChangeText}
-                    value={value}
-                    placeholder={placeholder}
-                    onFocus={onFocus}
-                    onBlur={onBlur}
-                    secureTextEntry={secureTextEntry}
-                    style={[appStyles.inputField, { width: null, height: height(7) }]}
-                />
-            </View>
-        </View>
+        <TouchableOpacity activeOpacity={1} onPress={onPress} style={[{ marginHorizontal: sizes.marginHorizontal }, containerStyle]}>
+            {
+                title ?
+                    <ComponentWrapper style={{ marginHorizontal: 0 }}>
+                        <InputTitle style={[{}, titleStyle]}>{title}</InputTitle>
+                        <Spacer height={sizes.TinyMargin} />
+                    </ComponentWrapper>
+                    :
+                    null
+            }
+            <Wrapper  style={[appStyles.inputContainerColored, {
+                borderRadius: sizes.inputRadius,
+                backgroundColor: colors.appBgColor3,
+                marginHorizontal: 0
+            }, inputContainerStyle]}>
+
+                <View style={{ flex: 8.5 }}>
+                    {
+                        isButton ?
+                            <ComponentWrapper>
+                                <Spacer height={sizes.baseMargin} />
+                                <RegularText style={value ? null : appStyles.textGray}>{value ? value : placeholder}</RegularText>
+                                <Spacer height={sizes.baseMargin} />
+                            </ComponentWrapper>
+                            :
+                            <TextInput
+                                ref={inputRef}
+                                onChangeText={onChangeText}
+                                value={value}
+                                placeholder={placeholder}
+                                editable={editable}
+                                autoFocus={autoFocus}
+                                returnKeyLabel={returnKeyLabel}
+                                returnKeyType={returnKeyType}
+                                onSubmitEditing={onSubmitEditing}
+                                multiline={multiline}
+                                placeholderTextColor={'#21212180'}
+                                keyboardType={keyboardType}
+                                onFocus={onFocus}
+                                onBlur={onBlur}
+                                secureTextEntry={secureTextEntry}
+                                maxLength={maxLength}
+                                style={[appStyles.inputField, { width: null, height: height(7), paddingHorizontal: width(5) }, inputStyle]}
+                            />
+                    }
+                </View>
+                <View style={{ flex: 1.5, alignItems: 'center' }}>
+                    {
+                        right ?
+                            right
+                            :
+                            iconName ?
+                                <Icon name={iconName} type={iconType} size={iconSize ? iconSize : sizes.icons.medium} color={iconColor ? iconColor : colors.appTextColor5} iconStyle={iconStyle} onPress={onPressIcon} />
+                                :
+                                null
+                    }
+                </View>
+            </Wrapper>
+            {
+                error ?
+                    <Wrapper animation="shake">
+                        <Spacer height={sizes.TinyMargin} />
+                        <SmallText style={[{ color: colors.error, textAlign: 'right' }]}>{error}</SmallText>
+                    </Wrapper>
+                    :
+                    null
+            }
+        </TouchableOpacity>
     );
 }
 const TextInputBordered = ({iconName, iconType, placeholder, placeholderTextColor, onFocus, onChangeText, secureTextEntry, value, containerStyle, inputStyle}) => {

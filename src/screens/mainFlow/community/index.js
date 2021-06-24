@@ -1,7 +1,10 @@
 import React, { Component, useState } from 'react';
 import { View, Text } from 'react-native';
-import { MainWrapper, ButtonGroupAnimated, Spacer, Posts } from '../../../components'
-import { DummyPosts, sizes } from '../../../services';
+import { height } from 'react-native-dimension';
+import { MainWrapper, ButtonGroupAnimated, Spacer, Posts, Wrapper } from '../../../components'
+import { DummyData, sizes, tabs } from '../../../services';
+import dummyData from '../../../services/constants/dummyData';
+import NoDataView from './noDataView';
 const topTabs = [
     {
         title: 'Subscribed'
@@ -19,19 +22,62 @@ const topTabs = [
 function Community() {
     //local states
     const [selectedTabIndex, setSelectedTabIndex] = useState(0)
-    const posts = DummyPosts.posts
+    const allPosts = DummyData.posts
+    let posts = []
+    const getDealerPosts = () => {
+        let tempPosts = []
+        tempPosts = allPosts.filter(item => {
+            return !item.group
+
+        })
+        return tempPosts
+    }
+    const getGroups = () => {
+        let tempPosts = []
+        tempPosts = allPosts.filter(item => {
+            return item.group
+        })
+        return tempPosts
+
+    }
+    const getMyGroups = () => {
+        let tempPosts = []
+        tempPosts = allPosts.filter(item => {
+            return item.user.id === dummyData.userData.id
+        })
+        return tempPosts
+
+    }
+    if (selectedTabIndex === 0) {
+        posts = allPosts
+    } else if (selectedTabIndex === 1) {
+        posts = getDealerPosts()
+    } else if (selectedTabIndex === 2) {
+        posts = getGroups()
+    } else if (selectedTabIndex === 3) {
+        posts = getMyGroups()
+    }
     return (
         <MainWrapper>
-            <Spacer height={sizes.baseMargin} />
-            <ButtonGroupAnimated
-                data={topTabs}
-                text='title'
-                onPressButton={(item, index) => setSelectedTabIndex(index)}
-            />
-            <Spacer height={sizes.baseMargin} />
-            <Posts
-                data={posts}
-            />
+            <Spacer height={sizes.smallMargin} />
+            <Wrapper >
+                <ButtonGroupAnimated
+                    data={topTabs}
+                    text='title'
+                    onPressButton={(item, index) => setSelectedTabIndex(index)}
+                />
+            </Wrapper>
+            <Spacer height={sizes.smallMargin} />
+            {
+                posts.length ?
+                    <Posts
+                        data={posts}
+                    />
+                    :
+                    <NoDataView
+                        tab={topTabs[selectedTabIndex].title}
+                    />
+            }
         </MainWrapper>
     );
 }

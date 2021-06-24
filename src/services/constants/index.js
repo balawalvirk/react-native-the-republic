@@ -4,7 +4,7 @@ import { BackIcon, ComponentWrapper } from "../../components"
 import { Platform } from 'react-native'
 import { fontFamily, sizes } from '../utilities'
 import { totalSize } from 'react-native-dimension'
-import DummyPosts from './dummyData'
+import DummyData from './dummyData'
 
 export const baseURL = ''
 export const endPoints = {
@@ -90,4 +90,4 @@ export const tabs = {
     }
 }
 
-export {DummyPosts}
+export {DummyData}
