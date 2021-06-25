@@ -117,14 +117,19 @@ export const IconWithText = ({ text, containerStyle, title, customIcon, onPress,
     );
 }
 
-export const IconHeart = ({value,onPress,size}) => {
+export const IconHeart = ({value,onPress,size,containerColor,containerSize,containerStyle,shadow,shadowColored}) => {
     return (
-        <Icon
-            name={value ? 'heart' : 'hearto'}
-            color={value ? colors.error : colors.appTextColor1}
-            type="antdesign"
-            size={size?size:totalSize(2.5)}
+        <IconButton
+            iconName={value ? 'heart' : 'hearto'}
+            iconColor={value ? colors.error : colors.appTextColor1}
+            iconType="antdesign"
+            iconSize={size?size:totalSize(2.5)}
+            buttonSize={containerSize?containerSize:totalSize(4)}
             onPress={onPress}
+            buttonColor={containerColor?containerColor:'transparent'}
+            buttonStyle={containerStyle}
+            shadow={shadow}
+            shadowColored={shadowColored}
         />
     )
 }
@@ -134,7 +139,7 @@ const styles = StyleSheet.create({
         height: totalSize(5),
         width: totalSize(5),
         backgroundColor: colors.appColor1,
-        borderRadius: 10,
+        borderRadius: 100,
         ...appStyles.center,
         //  ...appStyles.shadow
     }

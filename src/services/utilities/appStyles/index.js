@@ -37,7 +37,7 @@ export const appStyles = StyleSheet.create({
   h5: {
     fontSize: fontSize.h5,
     color: colors.appTextColor1,
-    fontFamily: fontFamily.appTextMedium
+    fontFamily: fontFamily.appTextBold
   },
   h6: {
     fontSize: fontSize.h6,

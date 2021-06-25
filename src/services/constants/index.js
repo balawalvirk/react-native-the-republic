@@ -40,7 +40,8 @@ export const routes = {
     search:'search',
     chats:'chats',
     yourLocation:'yourLocation',
-    myLocation:'myLocation'
+    myLocation:'myLocation',
+    productDetail:'productDetail'
 }
 export const headers = {
     screenOptionsPrimary: {

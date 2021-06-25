@@ -4,9 +4,11 @@ import { HelpingMethods } from '../../../services';
 import { ProductCardPrimary } from "../../cards";
 import { Wrapper } from '../../wrappers';
 import styles from './styles'
-export default function Products({ data, viewType,ListHeaderComponent,ListFooterComponent }) {
+import * as RootNavigation from '../../../services/navigation/rootNavigation'
+export default function Products({ data, viewType, ListHeaderComponent, ListFooterComponent,onPressProduct }) {
     const isGridView = viewType === 'grid'
     const isListView = viewType === 'list'
+    const { navigate } = RootNavigation
     return (
         <FlatList
             data={data}
@@ -20,8 +22,9 @@ export default function Products({ data, viewType,ListHeaderComponent,ListFooter
                 const { user } = item
                 return (
                     <ProductCardPrimary
+                        onPress={()=>onPressProduct(item,index)}
                         animation={index <= 5 && isGridView ? 'fadeInUp' : 'fadeInRight'}
-                        duration={300 + (50*(index + 1))}
+                        duration={300 + (50 * (index + 1))}
                         containerstyle={
                             isGridView ? [styles.productContainerGrid, { marginRight: (index + 1) % 2 ? 0 : null, marginleft: !(index + 1) % 2 ? 0 : null }] :
                                 isListView ? [styles.productContainerList] : null

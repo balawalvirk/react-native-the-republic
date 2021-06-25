@@ -12,13 +12,21 @@ export default StyleSheet.create({
         marginHorizontal: sizes.marginHorizontal
     },
     productContainerList: {
-        flex:1,
+       // flex:1,
         borderWidth: 1,
         borderColor: colors.appBgColor4,
         borderRadius: sizes.cardRadius,
         marginHorizontal: sizes.marginHorizontal,
         flexDirection:'row',
        // alignItems:'center'
+    },
+    reviewContainer: {
+        borderWidth: 1,
+        borderColor: colors.appBgColor4,
+        borderRadius: sizes.cardRadius,
+        marginHorizontal: sizes.marginHorizontal,
+        paddingHorizontal:sizes.marginHorizontalSmall,
+        paddingVertical:sizes.marginVertical/2
     },
    
 })

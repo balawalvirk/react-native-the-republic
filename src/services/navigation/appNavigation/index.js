@@ -278,6 +278,12 @@ const AppNavigation = () => {
                     title: 'Chats'
                 }}
             />
+              <AppStack.Screen name={routes.productDetail} component={MainApp.ProductDetail}
+                options={{
+                     headerShown: false,
+                    //title: 'Chats'
+                }}
+            />
         </AppStack.Navigator>
     )
 }

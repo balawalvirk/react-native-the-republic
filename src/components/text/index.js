@@ -1,14 +1,14 @@
 import React from 'react'
 import { StyleSheet, Text } from 'react-native'
 import { appStyles, colors, fontFamily, sizes, appIcons } from '../../services';
-import { RowWrapperBasic, Wrapper } from '../wrappers';
+import { ComponentWrapper, RowWrapperBasic, Wrapper, RowWrapper } from '../wrappers';
 import { Spacer } from '../spacers';
 import { LineHorizontal } from '../lines';
 import { width, height, totalSize } from 'react-native-dimension';
 import { CustomIcon } from '../icons';
 
 // Title Texts
-export const XXLTitle = ({style,onPress,children}) => {
+export const XXLTitle = ({ style, onPress, children }) => {
     return (
         <Text
             style={[styles.xxlTitleStyle, style]}
@@ -18,7 +18,7 @@ export const XXLTitle = ({style,onPress,children}) => {
         </Text>
     );
 }
-export const XLTitle = ({style,onPress,children}) => {
+export const XLTitle = ({ style, onPress, children }) => {
     return (
         <Text
             style={[styles.xlTitleStyle, style]}
@@ -28,7 +28,7 @@ export const XLTitle = ({style,onPress,children}) => {
         </Text>
     );
 }
-export const LargeTitle = ({style,onPress,children}) => {
+export const LargeTitle = ({ style, onPress, children }) => {
     return (
         <Text
             style={[styles.largeTitleStyle, style]}
@@ -38,7 +38,7 @@ export const LargeTitle = ({style,onPress,children}) => {
         </Text>
     );
 }
-export const MediumTitle = ({style,onPress,children}) => {
+export const MediumTitle = ({ style, onPress, children }) => {
     return (
         <Text
             style={[styles.mediumTitleStyle, style]}
@@ -48,7 +48,7 @@ export const MediumTitle = ({style,onPress,children}) => {
         </Text>
     );
 }
-export const SmallTitle = ({style,onPress,children}) => {
+export const SmallTitle = ({ style, onPress, children }) => {
     return (
         <Text
             style={[styles.smallTitleStyle, style]}
@@ -58,7 +58,7 @@ export const SmallTitle = ({style,onPress,children}) => {
         </Text>
     );
 }
-export const TinyTitle = ({style,onPress,children}) => {
+export const TinyTitle = ({ style, onPress, children }) => {
     return (
         <Text
             style={[styles.tinyTitleStyle, style]}
@@ -69,7 +69,7 @@ export const TinyTitle = ({style,onPress,children}) => {
     );
 }
 // Normal Texts
-export const LargeText = ({style,onPress,children}) => {
+export const LargeText = ({ style, onPress, children }) => {
     return (
         <Text
             style={[styles.largeTextStyle, style]}
@@ -79,7 +79,7 @@ export const LargeText = ({style,onPress,children}) => {
         </Text>
     );
 }
-export const MediumText = ({style,onPress,children}) => {
+export const MediumText = ({ style, onPress, children }) => {
     return (
         <Text
             style={[styles.mediumTextStyle, style]}
@@ -89,7 +89,7 @@ export const MediumText = ({style,onPress,children}) => {
         </Text>
     );
 }
-export const RegularText = ({style,onPress,children,numberOfLines}) => {
+export const RegularText = ({ style, onPress, children, numberOfLines }) => {
     return (
         <Text
             numberOfLines={numberOfLines}
@@ -100,7 +100,7 @@ export const RegularText = ({style,onPress,children,numberOfLines}) => {
         </Text>
     );
 }
-export const SmallText = ({style,onPress,children}) => {
+export const SmallText = ({ style, onPress, children }) => {
     return (
         <Text
             style={[styles.smallTextStyle, style]}
@@ -110,7 +110,7 @@ export const SmallText = ({style,onPress,children}) => {
         </Text>
     );
 }
-export const TinyText = ({style,onPress,children}) => {
+export const TinyText = ({ style, onPress, children }) => {
     return (
         <Text
             style={[styles.tinyTextStyle, style]}
@@ -120,7 +120,7 @@ export const TinyText = ({style,onPress,children}) => {
         </Text>
     );
 }
-export const InputTitle = ({style,children}) => {
+export const InputTitle = ({ style, children }) => {
     return (
         <Text
             style={[styles.inputTitleStyle, style]}
@@ -130,7 +130,7 @@ export const InputTitle = ({style,children}) => {
     );
 }
 
-export const ButtonTextRegular = ({style,children}) => {
+export const ButtonTextRegular = ({ style, children }) => {
     return (
         <Text
             style={[styles.ButtonTextRegularStyle, style]}
@@ -139,7 +139,7 @@ export const ButtonTextRegular = ({style,children}) => {
         </Text>
     );
 }
-export const ButtonTextMedium = ({style,children}) => {
+export const ButtonTextMedium = ({ style, children }) => {
     return (
         <Text
             style={[styles.ButtonTextMediumStyle, style]}
@@ -147,6 +147,21 @@ export const ButtonTextMedium = ({style,children}) => {
             {children}
         </Text>
     );
+}
+
+export const TitleInfoPrimary = ({ title, info, grayBg, bgColor }) => {
+    return (
+        <ComponentWrapper style={{ paddingVertical: sizes.smallMargin, backgroundColor: bgColor ? bgColor : grayBg ? colors.appBgColor2 : 'transparent' }}>
+            <RowWrapper style={{ marginHorizontal: sizes.marginHorizontalSmall }}>
+                <Wrapper flex={1}>
+                    <RegularText style={[appStyles.fontBold]}>{title}</RegularText>
+                </Wrapper>
+                <Wrapper flex={2}>
+                    <RegularText>{info}</RegularText>
+                </Wrapper>
+            </RowWrapper>
+        </ComponentWrapper>
+    )
 }
 
 
@@ -196,7 +211,7 @@ const styles = StyleSheet.create({
         ...appStyles.ButtonTextRegular,
         //color: colors.appColor1
     },
-    ButtonTextMediumStyle:{
+    ButtonTextMediumStyle: {
         ...appStyles.ButtonTextMedium,
         //color: colors.appColor1
     },

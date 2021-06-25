@@ -52,7 +52,7 @@ function Comments({ data, onPress }) {
     )
 }
 
-function RenderPosts({ data, onPressDotsHorizontal, onPressComment,onPressSendComment,onPressLike }) {
+function RenderPosts({ data, onPressDotsHorizontal, onPressComment,onPressSendComment,onPressLike ,onPressProduct,onPressHeart}) {
     const [commentText, setCommentText] = useState('')
 
     return (
@@ -117,7 +117,7 @@ function RenderPosts({ data, onPressDotsHorizontal, onPressComment,onPressSendCo
                             </ComponentWrapper>
                             {
                                 product ?
-                                    <Wrapper>
+                                    <TouchableOpacity activeOpacity={1} onPress={()=>onPressProduct(item,index)}>
                                         <Wrapper style={styles.productContainer}>
                                             <Wrapper flex={1}>
                                                 <Image
@@ -125,10 +125,11 @@ function RenderPosts({ data, onPressDotsHorizontal, onPressComment,onPressSendCo
                                                     style={{ height: height(45), width: null, marginHorizontal: sizes.marginHorizontalSmall }}
                                                     resizeMode="contain"
                                                 />
-                                                <AbsoluteWrapper style={{ top: sizes.baseMargin, right: sizes.baseMargin }}>
+                                                <AbsoluteWrapper style={{ top: 0, right: 0 }}>
                                                     <IconHeart
                                                         value={HelpingMethods.checkIsProductFavourite(product.id)}
-                                                        onPress={() => { }}
+                                                        onPress={() => onPressHeart(item,index)}
+                                                        containerSize={totalSize(6)}
                                                     />
                                                 </AbsoluteWrapper>
                                             </Wrapper>
@@ -160,7 +161,7 @@ function RenderPosts({ data, onPressDotsHorizontal, onPressComment,onPressSendCo
                                         </Wrapper>
                                         <Spacer height={sizes.smallMargin} />
                                         <LineHorizontal height={0.5} />
-                                    </Wrapper>
+                                    </TouchableOpacity>
                                     :
                                     null
                             }
@@ -243,7 +244,7 @@ function RenderPosts({ data, onPressDotsHorizontal, onPressComment,onPressSendCo
                                 onChangeText={text => setCommentText(text)}
                                 iconColor={commentText.length ? colors.appColor1 : colors.appTextColor4}
                                 containerStyle={styles.smallMarginHorizontal}
-                                onPressIcon={() => onPressSendComment(commentText)}
+                                onPressIcon={() => onPressSendComment(item,index,commentText)}
                             />
                             <Spacer height={sizes.smallMargin} />
                             <LineHorizontal color={colors.appBgColor3} height={sizes.smallMargin} />
@@ -283,7 +284,9 @@ function Posts({ data }) {
                     togglePostMenu()
                 }}
                 onPressLike={(item,index)=>{}}
-                onPressSendComment={(item,index)=>{}}
+                onPressSendComment={(item,index,commentText)=>{}}
+                onPressProduct={(item,index)=>navigate(routes.productDetail,{product:item.product})}
+                onPressHeart={(item,index)=>{}}
             />
             <MenuPopup
                 options={postMenuOptions}

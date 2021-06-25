@@ -87,9 +87,9 @@ export const CardWrapper = ({ children, style, animation }) => {
         </Animatable.View>
     );
 }
-export const AbsoluteWrapper = ({ children, style, animation }) => {
+export const AbsoluteWrapper = ({ children, style, animation,duration }) => {
     return (
-        <Animatable.View animation={animation} style={[{ position: 'absolute', }, style]}>
+        <Animatable.View animation={animation} duration={duration} style={[{ position: 'absolute', }, style]}>
             {children}
         </Animatable.View>
     );

@@ -156,7 +156,7 @@ export const ButtonArrowColored = ({ text, onPress, animation, buttonStyle, text
 }
 
 
-export function ButtonGradient({ text, animation, onPress, buttonStyle, textStyle, iconName, iconType, iconSize, buttonColor, iconStyle, tintColor, loading, shadow }) {
+export function ButtonGradient({ text, animation, onPress, buttonStyle, textStyle, iconName, iconType, iconSize, buttonColor, iconStyle, tintColor, loading, shadow ,gradiantContainerStyle}) {
 
     return (
         <TouchableOpacity disabled={loading} onPress={onPress} style={[{ backgroundColor: 'white', height: height(7), borderRadius: sizes.buttonRadius, marginHorizontal: sizes.marginHorizontalXLarge }, shadow && appStyles.shadow, buttonStyle]}>
@@ -164,7 +164,7 @@ export function ButtonGradient({ text, animation, onPress, buttonStyle, textStyl
                 colors={colors.appGradiantColors}
                 start={{ x: 0.0, y: 0.25 }} end={{ x: 0.5, y: 1.0 }}
                 locations={[0, 0.9]}
-                style={[{ flex: 1, borderRadius: sizes.buttonRadius, }, appStyles.center,]}>
+                style={[{ flex: 1, borderRadius: sizes.buttonRadius, }, appStyles.center,gradiantContainerStyle]}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     {
                         iconName ?

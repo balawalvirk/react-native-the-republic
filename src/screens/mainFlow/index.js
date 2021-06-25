@@ -14,10 +14,12 @@ import MyLocation from './myLocation'
 import Search from './search'
 import Notifications from './notifications'
 import Chats from './chats'
+import ProductDetail from './productDetail'
 
 export {
     Community, Explore, MarketPlace, Account,
     FollowRequests, Dealers, Trainings, Comments,
     TheRepublicNews, ContactUs, SubscriptionPlan,
-    Chats,Notifications,ShareAPost,MyLocation,Search
+    Chats,Notifications,ShareAPost,MyLocation,Search,
+    ProductDetail
 }

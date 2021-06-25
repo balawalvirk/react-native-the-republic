@@ -3,12 +3,12 @@ import { Platform, TouchableOpacity } from 'react-native'
 import { height, totalSize } from 'react-native-dimension'
 import { ModalSwipeablePrimary } from '..'
 import { appIcons, appStyles, colors, HelpingMethods, sizes } from '../../services'
-import { ButtonColored, ButtonGradient } from '../buttons'
+import { ButtonColored, ButtonColoredSmall, ButtonGradient } from '../buttons'
 import { CustomIcon, IconButton, IconWithText } from '../icons'
 import { Spacer } from '../spacers'
-import { MediumText, SmallTitle } from '../text'
+import { MediumText, RegularText, SmallTitle, TinyTitle } from '../text'
 import { TextInputUnderlined } from '../textInput'
-import { ComponentWrapper, RowWrapper, Wrapper } from '../wrappers'
+import { ComponentWrapper, RowWrapper, Wrapper, RowWrapperBasic } from '../wrappers'
 import EditProfileComp from './editProfileCom'
 import VerificationCodeSentPopup from './verificationCodeSentPopup'
 import ImagePickerPopup from './imagePickerPopup'
@@ -16,6 +16,8 @@ import Posts from './posts'
 import MenuPopup from './menuPopup'
 import RenderComments from './renderComments'
 import Products from './products'
+import ArmerInfo from './armerInfo'
+import Reviews from './reviews'
 import { LineHorizontal } from '..'
 
 export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, topMargin, children }) => {
@@ -169,4 +171,61 @@ export const MenuOption = ({ title, onPress }) => {
     )
 }
 
-export { EditProfileComp, VerificationCodeSentPopup, ImagePickerPopup, Posts,MenuPopup,RenderComments,Products }
+export const RenderTags = ({ tags }) => {
+    return (
+        <RowWrapperBasic>
+            {
+                tags.map((item, index) => {
+                    return (
+                        <ButtonColoredSmall
+                            text={item}
+                            buttonStyle={{ backgroundColor: colors.appBgColor3, paddingHorizontal: sizes.TinyMargin, marginRight: sizes.marginHorizontalSmall, paddingVertical: sizes.TinyMargin }}
+                            textStyle={[appStyles.textSmall, appStyles.textDarkGray]}
+                        />
+                    )
+                })
+            }
+        </RowWrapperBasic>
+    )
+}
+
+export const RenderKeyPoints = ({ keyPoints }) => {
+    return (
+        <ComponentWrapper>
+            {
+                keyPoints.map((item, index) => {
+                    return (
+                        <>
+                            <RegularText>
+                                <RegularText style={[appStyles.fontBold]}>{item.title}</RegularText>
+                                <RegularText>{item.description}</RegularText>
+                            </RegularText>
+                            <Spacer height={sizes.baseMargin} />
+                        </>
+                    )
+                })
+            }
+        </ComponentWrapper>
+    )
+}
+
+export const TitlePrimary = ({ title, onPressRight, rightText }) => {
+    return (
+        <RowWrapper>
+            <TinyTitle>{title}</TinyTitle>
+            {
+                onPressRight ?
+                    <MediumText
+                    style={[appStyles.textPrimaryColor]}
+                        onPress={onPressRight}
+                    >
+                        {rightText ? rightText : 'View All'}
+                    </MediumText>
+                    :
+                    null
+            }
+        </RowWrapper>
+    )
+}
+
+export { EditProfileComp, VerificationCodeSentPopup, ImagePickerPopup, Posts, MenuPopup, RenderComments, Products, ArmerInfo ,Reviews}
