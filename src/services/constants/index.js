@@ -41,7 +41,9 @@ export const routes = {
     chats:'chats',
     yourLocation:'yourLocation',
     myLocation:'myLocation',
-    productDetail:'productDetail'
+    productDetail:'productDetail',
+    reviews:'reviews',
+    userProfile:'userProfile'
 }
 export const headers = {
     screenOptionsPrimary: {

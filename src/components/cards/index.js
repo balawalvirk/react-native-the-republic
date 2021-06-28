@@ -10,8 +10,9 @@ import StarRating from 'react-native-star-rating';
 import LinearGradient from 'react-native-linear-gradient';
 import { SmallText, TinyTitle } from '../text';
 import { ButtonColoredSmall } from '../buttons';
+import { ImageThumbnailGrid } from '../images';
 
-export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, image, containerstyle, description, onPressHeart, newPrice, oldPrice, userName, userImage, viewType, rating, reviewCount }) => {
+export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, image, images, containerstyle, description, onPressHeart, newPrice, oldPrice, userName, userImage, viewType, rating, reviewCount }) => {
     const defaultViewType = viewType ? viewType : 'grid'
     const isGridView = defaultViewType === 'grid'
     const isListView = defaultViewType === 'list'
@@ -19,11 +20,25 @@ export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, 
         <Wrapper animation={animation} duration={duration} style={[isGridView ? styles.productContainerGrid : isListView ? styles.productContainerList : null, containerstyle]}>
             <Wrapper style={{ justifyContent: 'center' }}>
                 <TouchableOpacity activeOpacity={1} onPress={onPress}>
-                    <Image
-                        source={{ uri: image }}
-                        style={{ height: isGridView ? height(20) : height(10), width: isListView ? width(25) : null }}
-                        resizeMode="contain"
-                    />
+                    {
+                        images ?
+                            <Wrapper style={{ height: height(45) }}>
+                                <ImageThumbnailGrid
+                                    images={images}
+                                />
+                            </Wrapper>
+                            :
+                            image ?
+                                <Image
+                                    source={{ uri: image }}
+                                    style={{ height: isGridView ? height(20) : height(10), width: isListView ? width(25) : null }}
+                                    resizeMode="contain"
+                                />
+                                :
+                                null
+                    }
+
+
                 </TouchableOpacity>
             </Wrapper>
             {
@@ -75,14 +90,20 @@ export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, 
                     <Spacer height={sizes.smallMargin} />
                 </TouchableOpacity>
             </Wrapper>
+            {
+                onPressHeart ?
+                    <AbsoluteWrapper style={[{ right: 0 }, isGridView ? { top: 0, } : isListView ? { bottom: 0 } : null]}>
+                        <IconHeart
+                            value={isFavourite}
+                            onPress={onPressHeart}
+                            size={totalSize(1.75)}
+                        />
+                    </AbsoluteWrapper>
+                    :
+                    null
 
-            <AbsoluteWrapper style={[{ right: 0 }, isGridView ? { top: 0, } : isListView ? { bottom: 0 } : null]}>
-                <IconHeart
-                    value={isFavourite}
-                    onPress={onPressHeart}
-                    size={totalSize(1.75)}
-                />
-            </AbsoluteWrapper>
+            }
+
         </Wrapper>
     );
 }
@@ -128,7 +149,7 @@ export const UserCardGradiant = ({ containerStyle, imageUri, name, distance, onP
 export const ReviewCardPrimary = ({ containerStyle, imageUrl, name, rating, reviewCount, comment, date }) => {
     return (
         <Wrapper style={[styles.reviewContainer, containerStyle]}>
-            <RowWrapperBasic style={{alignItems: 'flex-start',}}>
+            <RowWrapperBasic style={{ alignItems: 'flex-start', }}>
                 <ImageRound
                     source={{ uri: imageUrl }}
                 />

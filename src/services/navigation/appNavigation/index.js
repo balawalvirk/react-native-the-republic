@@ -284,6 +284,18 @@ const AppNavigation = () => {
                     //title: 'Chats'
                 }}
             />
+              <AppStack.Screen name={routes.reviews} component={MainApp.Reviews}
+                options={{
+                    // headerShown: false,
+                    title: 'Reviews'
+                }}
+            />
+             <AppStack.Screen name={routes.userProfile} component={MainApp.UserProfile}
+                options={{
+                     headerShown: false,
+                   // title: 'Reviews'
+                }}
+            />
         </AppStack.Navigator>
     )
 }

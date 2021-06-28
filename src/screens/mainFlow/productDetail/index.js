@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, View, Image } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
-import { AbsoluteWrapper, RenderTags, MainWrapper, Spacer, ButtonGradient, Wrapper, IconHeart, ComponentWrapper, SmallTitle, RowWrapperBasic, MediumText, RegularText, TinyText, SmallText, TinyTitle, RenderKeyPoints, UserCardGradiant, ArmerInfo, KeyboardAvoidingScrollView, Reviews, Products, TitlePrimary, IconButton } from '../../../components';
-import { appIcons, appStyles, colors, HelpingMethods, routes, sizes } from '../../../services';
+import { AbsoluteWrapper, RenderTags, MainWrapper, Spacer, ButtonGradient, Wrapper, IconHeart, ComponentWrapper, SmallTitle, RowWrapperBasic, MediumText, RegularText, TinyText, SmallText, TinyTitle, RenderKeyPoints, UserCardGradiant, ArmerInfo, KeyboardAvoidingScrollView, Reviews, Products, TitlePrimary, IconButton, BackIconAbsolute } from '../../../components';
+import { appIcons, appImages, appStyles, colors, HelpingMethods, routes, sizes } from '../../../services';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 import dummyData from '../../../services/constants/dummyData';
@@ -50,7 +50,7 @@ function ProductDetail(props) {
                 <Spacer height={sizes.statusBarHeight} />
                 <Wrapper>
                     <Image
-                        source={{ uri: product.image }}
+                        source={{ uri: product.image?product.image:product.images?product.images[0]:appImages.noImageAvailable }}
                         style={{ height: height(50), width: null }}
                         resizeMode="contain"
                     />
@@ -111,7 +111,7 @@ function ProductDetail(props) {
                 <Spacer height={sizes.baseMargin} />
                 <TitlePrimary
                     title="Reviews"
-                    onPressRight={() => { }}
+                    onPressRight={() => navigate(routes.reviews)}
                 />
                 <Spacer height={sizes.smallMargin} />
                 <Reviews
@@ -148,14 +148,8 @@ function ProductDetail(props) {
                     />
                 </RowWrapperBasic>
             </AbsoluteWrapper>
-            <IconButton
-                buttonStyle={{ position: 'absolute', top: sizes.smallMargin + sizes.statusBarHeight, left: sizes.marginHorizontalSmall }}
-                shadow
-                iconName="chevron-left"
-                iconType="feather"
-                iconSize={totalSize(4)}
-                iconColor={colors.appTextColor1}
-                onPress={goBack}
+            <BackIconAbsolute
+            onPress={goBack}
             />
         </MainWrapper>
     );

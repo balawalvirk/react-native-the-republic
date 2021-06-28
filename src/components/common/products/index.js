@@ -5,7 +5,8 @@ import { ProductCardPrimary } from "../../cards";
 import { Wrapper } from '../../wrappers';
 import styles from './styles'
 import * as RootNavigation from '../../../services/navigation/rootNavigation'
-export default function Products({ data, viewType, ListHeaderComponent, ListFooterComponent,onPressProduct }) {
+
+export  function Products({ data, viewType, ListHeaderComponent, ListFooterComponent,onPressProduct }) {
     const isGridView = viewType === 'grid'
     const isListView = viewType === 'list'
     const { navigate } = RootNavigation
@@ -30,8 +31,49 @@ export default function Products({ data, viewType, ListHeaderComponent, ListFoot
                                 isListView ? [styles.productContainerList] : null
                         }
                         isFavourite={HelpingMethods.checkIsProductFavourite(item.id)}
+                        onPressHeart={()=>{}}
                         viewType={viewType}
                         image={item.image}
+                        description={item.description}
+                        newPrice={item.new_price}
+                        oldPrice={item.old_price}
+                        location={item.location}
+                        rating={item.rating}
+                        reviewCount={item.review_count}
+                        userImage={user.image}
+                        userName={user.name}
+                    />
+                )
+            }}
+        />
+    )
+}
+
+
+export  function ProductsSecondary({ data, ListHeaderComponent, ListFooterComponent,onPressProduct }) {
+    const { navigate } = RootNavigation
+    return (
+        <FlatList
+            data={data}
+            showsVerticalScrollIndicator={false}
+            key={'key'}
+            ListHeaderComponent={ListHeaderComponent}
+            ListFooterComponent={ListFooterComponent}
+            keyExtractor={(item, index) => (index + 1).toString()}
+            renderItem={({ item, index }) => {
+                const { user } = item
+                return (
+                    <ProductCardPrimary
+                        onPress={()=>onPressProduct(item,index)}
+                        animation={'fadeInUp'}
+                        duration={300 + (50 * (index + 1))}
+                        containerstyle={
+                            styles.productContainerGrid 
+                        }
+                        isFavourite={HelpingMethods.checkIsProductFavourite(item.id)}
+                        onPressHeart={()=>{}}
+                        image={item.image}
+                        images={item.images}
                         description={item.description}
                         newPrice={item.new_price}
                         oldPrice={item.old_price}

@@ -67,13 +67,15 @@ export default class AnimatedGroupButton extends React.Component {
       onPressButton,
       data,
       activeButtonStyle,
+      activeButtonStyleOverwrite,
       inActiveButtonStyle,
       activeTextStyle,
-      inactiveTextStyle,
+      inActiveTextStyle,
       text,
       scrollViewRef,
       containerStyle,
-      iconSize
+      iconSize,
+      activeButtonContent
     } = this.props;
     return (
       <View style={[styles.animatedGroupButtonMainContainer, containerStyle]}>
@@ -116,7 +118,7 @@ export default class AnimatedGroupButton extends React.Component {
                       <RegularText
                         style={[
                           styles.animatedGroupButtonInactivatedButtonTxt,
-                          inactiveTextStyle,
+                          selectedTabIndex === key ? activeTextStyle : inActiveTextStyle,
                         ]}>
                         {item[text]}
                         {/* {text} */}
@@ -125,7 +127,7 @@ export default class AnimatedGroupButton extends React.Component {
                       <CustomIcon
                         icon={item.icon}
                         color={appStyles.textPrimaryColor.color}
-                        size={iconSize?iconSize:totalSize(1.5)}
+                        size={iconSize ? iconSize : totalSize(1.5)}
                       />
 
                   }
@@ -134,8 +136,8 @@ export default class AnimatedGroupButton extends React.Component {
             })}
             <Animated.View
               style={[
+                !activeButtonStyle && styles.animatedGroupButtonActivatedButton,
                 {
-                  ...styles.animatedGroupButtonActivatedButton,
                   height: activeTabHeight,
                   width: activeTabWidth,
                   transform: [
@@ -147,20 +149,22 @@ export default class AnimatedGroupButton extends React.Component {
                 activeButtonStyle,
               ]}>
               {
-                !data[selectedTabIndex].icon ?
-                  <RegularText
-                    style={[
-                      styles.animatedGroupButtonActivatedButtonTxt,
-                      inactiveTextStyle,
-                    ]}>
-                    {data[selectedTabIndex][text]}
-                  </RegularText>
-                  :
-                  <CustomIcon
-                    icon={data[selectedTabIndex].icon}
-                    color={appStyles.textWhite.color}
-                    size={iconSize?iconSize:totalSize(1.5)}
-                  />
+                activeButtonContent ?
+                  activeButtonContent :
+                  !data[selectedTabIndex].icon ?
+                    <RegularText
+                      style={[
+                        styles.animatedGroupButtonActivatedButtonTxt,
+                        activeTextStyle,
+                      ]}>
+                      {data[selectedTabIndex][text]}
+                    </RegularText>
+                    :
+                    <CustomIcon
+                      icon={data[selectedTabIndex].icon}
+                      color={appStyles.textWhite.color}
+                      size={iconSize ? iconSize : totalSize(1.5)}
+                    />
               }
 
             </Animated.View>

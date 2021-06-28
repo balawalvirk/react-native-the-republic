@@ -14,7 +14,7 @@ import { ModalSwipeablePrimary } from '../../modals';
 import { height, totalSize, width } from 'react-native-dimension';
 import { Icon } from 'react-native-elements';
 import * as RootNavigation from '../../../services/navigation/rootNavigation'
-import { MenuOption, MenuPopup,RenderComments } from '..';
+import { MenuOption, MenuPopup, RenderComments } from '..';
 
 
 function Comments({ data, onPress }) {
@@ -52,7 +52,7 @@ function Comments({ data, onPress }) {
     )
 }
 
-function RenderPosts({ data, onPressDotsHorizontal, onPressComment,onPressSendComment,onPressLike ,onPressProduct,onPressHeart}) {
+function RenderPosts({ data, onPressDotsHorizontal, onPressComment, onPressSendComment, onPressLike, onPressProduct, onPressHeart, scrollEnabled,ListHeaderComponent,ListFooterComponent }) {
     const [commentText, setCommentText] = useState('')
 
     return (
@@ -60,12 +60,21 @@ function RenderPosts({ data, onPressDotsHorizontal, onPressComment,onPressSendCo
             <FlatList
                 data={data}
                 key={'key'}
+                scrollEnabled={scrollEnabled}
+                ListHeaderComponent={ListHeaderComponent}
+                ListFooterComponent={ListFooterComponent}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item, index }) => {
                     const { user, product, group, images, } = item
                     return (
                         <Wrapper>
+                            {
+                                index === 0 ?
+                                    <LineHorizontal />
+                                    :
+                                    null
+                            }
                             <Spacer height={sizes.smallMargin} />
                             <ComponentWrapper style={[styles.smallMarginHorizontal]}>
                                 <RowWrapperBasic style={{ alignItems: null, }}>
@@ -117,7 +126,7 @@ function RenderPosts({ data, onPressDotsHorizontal, onPressComment,onPressSendCo
                             </ComponentWrapper>
                             {
                                 product ?
-                                    <TouchableOpacity activeOpacity={1} onPress={()=>onPressProduct(item,index)}>
+                                    <TouchableOpacity activeOpacity={1} onPress={() => onPressProduct(item, index)}>
                                         <Wrapper style={styles.productContainer}>
                                             <Wrapper flex={1}>
                                                 <Image
@@ -128,7 +137,7 @@ function RenderPosts({ data, onPressDotsHorizontal, onPressComment,onPressSendCo
                                                 <AbsoluteWrapper style={{ top: 0, right: 0 }}>
                                                     <IconHeart
                                                         value={HelpingMethods.checkIsProductFavourite(product.id)}
-                                                        onPress={() => onPressHeart(item,index)}
+                                                        onPress={() => onPressHeart(item, index)}
                                                         containerSize={totalSize(6)}
                                                     />
                                                 </AbsoluteWrapper>
@@ -215,7 +224,7 @@ function RenderPosts({ data, onPressDotsHorizontal, onPressComment,onPressSendCo
                                     iconName="thumb-up"
                                     text={item.like_counts}
                                     tintColor={HelpingMethods.checkIsPostLiked(item.id) ? appStyles.textLightGray.color : appStyles.textPrimaryColor.color}
-                                    onPress={()=>onPressLike(item,index)}
+                                    onPress={() => onPressLike(item, index)}
                                 />
                                 <IconWithText
                                     customIcon={appIcons.comment}
@@ -244,7 +253,7 @@ function RenderPosts({ data, onPressDotsHorizontal, onPressComment,onPressSendCo
                                 onChangeText={text => setCommentText(text)}
                                 iconColor={commentText.length ? colors.appColor1 : colors.appTextColor4}
                                 containerStyle={styles.smallMarginHorizontal}
-                                onPressIcon={() => onPressSendComment(item,index,commentText)}
+                                onPressIcon={() => onPressSendComment(item, index, commentText)}
                             />
                             <Spacer height={sizes.smallMargin} />
                             <LineHorizontal color={colors.appBgColor3} height={sizes.smallMargin} />
@@ -256,7 +265,7 @@ function RenderPosts({ data, onPressDotsHorizontal, onPressComment,onPressSendCo
     );
 }
 
-function Posts({ data }) {
+function Posts({ data, scrollEnabled,ListFooterComponent,ListHeaderComponent }) {
     const { navigate } = RootNavigation
     //Menu Options
     const commentMenuOptions = ['View User Profile', 'Delete Comment', 'Report Comment']
@@ -275,6 +284,9 @@ function Posts({ data }) {
         <>
             <RenderPosts
                 data={data}
+                scrollEnabled={scrollEnabled}
+                ListFooterComponent={ListFooterComponent}
+                ListHeaderComponent={ListHeaderComponent}
                 onPressComment={(item, index) => {
                     setCommentForMenu(item)
                     toggleCommentMenu()
@@ -283,10 +295,10 @@ function Posts({ data }) {
                     setPostForMenu(item)
                     togglePostMenu()
                 }}
-                onPressLike={(item,index)=>{}}
-                onPressSendComment={(item,index,commentText)=>{}}
-                onPressProduct={(item,index)=>navigate(routes.productDetail,{product:item.product})}
-                onPressHeart={(item,index)=>{}}
+                onPressLike={(item, index) => { }}
+                onPressSendComment={(item, index, commentText) => { }}
+                onPressProduct={(item, index) => navigate(routes.productDetail, { product: item.product })}
+                onPressHeart={(item, index) => { }}
             />
             <MenuPopup
                 options={postMenuOptions}
@@ -296,7 +308,7 @@ function Posts({ data }) {
                     //Your logic here base on item or index
                     togglePostMenu()
                     if (index === 0) {
-                        navigate(routes.notifications, { item: selectedPostForMenu })
+                        navigate(routes.userProfile, { item: selectedPostForMenu.user })
                     } else if (index === 1) {
                         navigate(routes.notifications, { item: selectedPostForMenu })
                     } else if (index === 2) {
@@ -312,7 +324,7 @@ function Posts({ data }) {
                     //Your logic here base on item or index
                     toggleCommentMenu()
                     if (index === 0) {
-                        navigate(routes.notifications, { item: selectedCommentForMenu })
+                        navigate(routes.userProfile, { item: selectedCommentForMenu.user })
                     } else if (index === 1) {
                         navigate(routes.notifications, { item: selectedCommentForMenu })
                     } else if (index === 2) {

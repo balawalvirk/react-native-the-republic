@@ -22,6 +22,19 @@ export const BackIcon = ({ style, onPress, size }) => {
         />
     );
 }
+export const BackIconAbsolute = ({onPress,containerStyle}) => {
+    return (
+        <IconButton
+            buttonStyle={[{ position: 'absolute', top: sizes.smallMargin + sizes.statusBarHeight, left: sizes.marginHorizontal },containerStyle]}
+            shadow
+            iconName="chevron-left"
+            iconType="feather"
+            iconSize={totalSize(4)}
+            iconColor={colors.appTextColor1}
+            onPress={onPress}
+        />
+    )
+}
 export const IconButton = ({ buttonStyle, onPress, shadow, shadowColored, iconSize, iconColor, iconName, iconType, buttonColor, buttonSize, customIcon, iconStyle, disabled }) => {
     const defaultButtonsize = totalSize(5)
     return (
@@ -117,16 +130,16 @@ export const IconWithText = ({ text, containerStyle, title, customIcon, onPress,
     );
 }
 
-export const IconHeart = ({value,onPress,size,containerColor,containerSize,containerStyle,shadow,shadowColored}) => {
+export const IconHeart = ({ value, onPress, size, containerColor, containerSize, containerStyle, shadow, shadowColored }) => {
     return (
         <IconButton
             iconName={value ? 'heart' : 'hearto'}
             iconColor={value ? colors.error : colors.appTextColor1}
             iconType="antdesign"
-            iconSize={size?size:totalSize(2.5)}
-            buttonSize={containerSize?containerSize:totalSize(4)}
+            iconSize={size ? size : totalSize(2.5)}
+            buttonSize={containerSize ? containerSize : totalSize(4)}
             onPress={onPress}
-            buttonColor={containerColor?containerColor:'transparent'}
+            buttonColor={containerColor ? containerColor : 'transparent'}
             buttonStyle={containerStyle}
             shadow={shadow}
             shadowColored={shadowColored}

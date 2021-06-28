@@ -5,11 +5,13 @@ import { ReviewCardPrimary } from "../../cards";
 
 
 
-export default function Reviews({ data }) {
+export default function Reviews({ data,ListHeaderComponent,ListFooterComponent }) {
     return (
         <FlatList
             data={data}
             key={'key'}
+            ListHeaderComponent={ListHeaderComponent}
+            ListFooterComponent={ListFooterComponent}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item, index }) => {
                 const {user}=item

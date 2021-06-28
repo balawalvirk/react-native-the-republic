@@ -15,7 +15,7 @@ import ImagePickerPopup from './imagePickerPopup'
 import Posts from './posts'
 import MenuPopup from './menuPopup'
 import RenderComments from './renderComments'
-import Products from './products'
+import {Products,ProductsSecondary} from './products'
 import ArmerInfo from './armerInfo'
 import Reviews from './reviews'
 import { LineHorizontal } from '..'
@@ -212,15 +212,15 @@ export const RenderKeyPoints = ({ keyPoints }) => {
 export const TitlePrimary = ({ title, onPressRight, rightText }) => {
     return (
         <RowWrapper>
-            <TinyTitle>{title}</TinyTitle>
+            <TinyTitle style={{...appStyles.fontBold}}>{title}</TinyTitle>
             {
                 onPressRight ?
-                    <MediumText
+                    <RegularText
                     style={[appStyles.textPrimaryColor]}
                         onPress={onPressRight}
                     >
                         {rightText ? rightText : 'View All'}
-                    </MediumText>
+                    </RegularText>
                     :
                     null
             }
@@ -228,4 +228,4 @@ export const TitlePrimary = ({ title, onPressRight, rightText }) => {
     )
 }
 
-export { EditProfileComp, VerificationCodeSentPopup, ImagePickerPopup, Posts, MenuPopup, RenderComments, Products, ArmerInfo ,Reviews}
+export { EditProfileComp, VerificationCodeSentPopup, ImagePickerPopup, Posts, MenuPopup, RenderComments, Products, ArmerInfo ,Reviews,ProductsSecondary}

@@ -15,11 +15,13 @@ import Search from './search'
 import Notifications from './notifications'
 import Chats from './chats'
 import ProductDetail from './productDetail'
+import Reviews from './reviews'
+import UserProfile from './userProfile'
 
 export {
     Community, Explore, MarketPlace, Account,
     FollowRequests, Dealers, Trainings, Comments,
     TheRepublicNews, ContactUs, SubscriptionPlan,
     Chats,Notifications,ShareAPost,MyLocation,Search,
-    ProductDetail
+    ProductDetail,Reviews,UserProfile
 }
