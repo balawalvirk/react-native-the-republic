@@ -75,7 +75,8 @@ export default class AnimatedGroupButton extends React.Component {
       scrollViewRef,
       containerStyle,
       iconSize,
-      activeButtonContent
+      activeButtonContent,
+      activeButtonForceStyle
     } = this.props;
     return (
       <View style={[styles.animatedGroupButtonMainContainer, containerStyle]}>
@@ -136,7 +137,7 @@ export default class AnimatedGroupButton extends React.Component {
             })}
             <Animated.View
               style={[
-                !activeButtonStyle && styles.animatedGroupButtonActivatedButton,
+                !activeButtonForceStyle && styles.animatedGroupButtonActivatedButton,
                 {
                   height: activeTabHeight,
                   width: activeTabWidth,
@@ -147,6 +148,7 @@ export default class AnimatedGroupButton extends React.Component {
                   ],
                 },
                 activeButtonStyle,
+                activeButtonForceStyle
               ]}>
               {
                 activeButtonContent ?

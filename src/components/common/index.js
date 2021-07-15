@@ -15,7 +15,7 @@ import ImagePickerPopup from './imagePickerPopup'
 import Posts from './posts'
 import MenuPopup from './menuPopup'
 import RenderComments from './renderComments'
-import {Products,ProductsSecondary} from './products'
+import { Products, ProductsSecondary, ProductsHorizontalyPrimary } from './productsLists'
 import ArmerInfo from './armerInfo'
 import Reviews from './reviews'
 import { LineHorizontal } from '..'
@@ -140,7 +140,7 @@ export const SwitchPrimary = ({ value, onPress }) => {
 export const LocationPickerButton = ({ text, onPress }) => {
     return (
         <TouchableOpacity disabled={!onPress} onPress={onPress} activeOpacity={1}>
-            <RowWrapper style={{ padding: sizes.smallMargin, backgroundColor: colors.appBgColor3, borderRadius: 100 }}>
+            <RowWrapperBasic style={{ padding: sizes.smallMargin, backgroundColor: colors.appBgColor3, borderRadius: 100 }}>
                 <IconWithText
                     customIcon={appIcons.map_pin_outline}
                     text={text.slice(0, 12) + '..'}
@@ -153,7 +153,7 @@ export const LocationPickerButton = ({ text, onPress }) => {
                     icon={appIcons.drop_down}
                     size={totalSize(1)}
                 />
-            </RowWrapper>
+            </RowWrapperBasic>
         </TouchableOpacity>
     )
 }
@@ -212,11 +212,11 @@ export const RenderKeyPoints = ({ keyPoints }) => {
 export const TitlePrimary = ({ title, onPressRight, rightText }) => {
     return (
         <RowWrapper>
-            <TinyTitle style={{...appStyles.fontBold}}>{title}</TinyTitle>
+            <SmallTitle style={{ ...appStyles.fontBold }}>{title}</SmallTitle>
             {
                 onPressRight ?
                     <RegularText
-                    style={[appStyles.textPrimaryColor]}
+                        style={[appStyles.textPrimaryColor, appStyles.fontBold]}
                         onPress={onPressRight}
                     >
                         {rightText ? rightText : 'View All'}
@@ -227,5 +227,24 @@ export const TitlePrimary = ({ title, onPressRight, rightText }) => {
         </RowWrapper>
     )
 }
+export const FilterButton = ({ onPress }) => {
+    return (
+        <ComponentWrapper>
+            <ButtonColoredSmall
+                onPress={onPress}
+                text="Sort & Filters"
+                iconName="options"
+                iconType="ionicon"
+                textStyle={[appStyles.textRegular, appStyles.textWhite]}
+                buttonStyle={{ borderRadius: 100, paddingHorizontal: sizes.marginHorizontalSmall }}
+            />
+        </ComponentWrapper>
+    )
+}
 
-export { EditProfileComp, VerificationCodeSentPopup, ImagePickerPopup, Posts, MenuPopup, RenderComments, Products, ArmerInfo ,Reviews,ProductsSecondary}
+
+export {
+    EditProfileComp, VerificationCodeSentPopup, ImagePickerPopup,
+    Posts, MenuPopup, RenderComments, Products, ArmerInfo,
+    Reviews, ProductsSecondary, ProductsHorizontalyPrimary
+}

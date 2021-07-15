@@ -17,11 +17,16 @@ import Chats from './chats'
 import ProductDetail from './productDetail'
 import Reviews from './reviews'
 import UserProfile from './userProfile'
+import Sell from './sell'
+import Categories from './categories'
+import CategoryDetail from './categoryDetail'
+import SortFilter from './sortFilter'
 
 export {
     Community, Explore, MarketPlace, Account,
     FollowRequests, Dealers, Trainings, Comments,
     TheRepublicNews, ContactUs, SubscriptionPlan,
-    Chats,Notifications,ShareAPost,MyLocation,Search,
-    ProductDetail,Reviews,UserProfile
+    Chats, Notifications, ShareAPost, MyLocation, Search,
+    ProductDetail, Reviews, UserProfile, Sell, Categories,
+    CategoryDetail,SortFilter
 }

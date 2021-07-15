@@ -204,7 +204,8 @@ const styles = StyleSheet.create({
         ...appStyles.textTiny
     },
     inputTitleStyle: {
-        ...appStyles.textSmalls,
+        ...appStyles.textRegular,
+        color: colors.appTextColor3
         //color: colors.appColor1
     },
     ButtonTextRegularStyle: {

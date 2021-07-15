@@ -52,7 +52,7 @@ function Comments({ data, onPress }) {
     )
 }
 
-function RenderPosts({ data, onPressDotsHorizontal, onPressComment, onPressSendComment, onPressLike, onPressProduct, onPressHeart, scrollEnabled,ListHeaderComponent,ListFooterComponent }) {
+function RenderPosts({ data, onPressDotsHorizontal, onPressComment, onPressSendComment, onPressLike, onPressProduct, onPressHeart, scrollEnabled, ListHeaderComponent, ListFooterComponent }) {
     const [commentText, setCommentText] = useState('')
 
     return (
@@ -247,8 +247,8 @@ function RenderPosts({ data, onPressDotsHorizontal, onPressComment, onPressSendC
                             <Spacer height={sizes.smallMargin} />
                             <TextInputColored
                                 placeholder="Write a comment"
-                                iconName="send"
-                                iconType="feather"
+                                iconNameRight="send"
+                                iconTypeRight="feather"
                                 value={commentText}
                                 onChangeText={text => setCommentText(text)}
                                 iconColor={commentText.length ? colors.appColor1 : colors.appTextColor4}
@@ -265,7 +265,7 @@ function RenderPosts({ data, onPressDotsHorizontal, onPressComment, onPressSendC
     );
 }
 
-function Posts({ data, scrollEnabled,ListFooterComponent,ListHeaderComponent }) {
+function Posts({ data, scrollEnabled, ListFooterComponent, ListHeaderComponent }) {
     const { navigate } = RootNavigation
     //Menu Options
     const commentMenuOptions = ['View User Profile', 'Delete Comment', 'Report Comment']

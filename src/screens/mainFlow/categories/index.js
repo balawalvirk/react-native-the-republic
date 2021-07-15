@@ -1,0 +1,66 @@
+import React, { Component } from 'react';
+import { FlatList } from 'react-native';
+import { Image } from 'react-native';
+import { TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
+import { height } from 'react-native-dimension';
+import { MainWrapper, SearchTextinput, Spacer, TextInputColored, TinyTitle, Wrapper } from '../../../components';
+import { appStyles, colors, DummyData, routes, sizes } from '../../../services';
+
+function RenderAllCategories({ data, onPressCategory }) {
+    return (
+        <Wrapper flex={1}>
+            <FlatList
+                data={data}
+                key="key"
+                numColumns={2}
+                showsVerticalScrollIndicator={false}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item, index }) => {
+                    return (
+                        <TouchableOpacity
+                            activeOpacity={1}
+                            onPress={() => onPressCategory(item, index)}
+                            style={{ flex: 1, marginHorizontal: sizes.marginHorizontal, borderRadius: sizes.cardRadius, borderWidth: 1, borderColor: colors.appBgColor4, marginBottom: sizes.marginVertical / 2, ...{ marginRight: (index + 1) % 2 ? 0 : null, marginleft: !(index + 1) % 2 ? 0 : null } }}>
+                            <Image
+                                source={{ uri: item.image }}
+                                style={{ flex: 1, height: height(20), width: null, borderTopRightRadius: sizes.cardRadius, borderTopLeftRadius: sizes.cardRadius }}
+                            />
+                            <Wrapper style={[appStyles.center, { paddingHorizontal: sizes.marginHorizontalSmall, paddingVertical: sizes.marginVertical / 2, }]}>
+                                <TinyTitle style={[appStyles.textCenter]}>{item.title}</TinyTitle>
+                            </Wrapper>
+                        </TouchableOpacity>
+                    )
+                }}
+                ListFooterComponent={() => {
+                    return (
+                        <Spacer height={sizes.doubleBaseMargin} />
+                    )
+                }}
+            />
+        </Wrapper>
+    )
+}
+
+function Categories(props) {
+    const { navigate } = props.navigation
+    const allCategories = [...DummyData.categories, ...DummyData.categories]
+
+    return (
+        <MainWrapper>
+            <Spacer height={sizes.baseMargin} />
+            <SearchTextinput
+                value={''}
+                onChangeText={(text) => { }}
+                placeholder="Search Categories"
+            />
+            <Spacer height={sizes.baseMargin} />
+            <RenderAllCategories
+                data={allCategories}
+                onPressCategory={(item, index) => { navigate(routes.CategoryDetail, { item }) }}
+            />
+        </MainWrapper>
+    );
+}
+
+export default Categories;

@@ -105,11 +105,12 @@ function UserProfile(props) {
                     onPressButton={(item, index) => setSelectedTabIndex(index)}
                     containerStyle={[{ backgroundColor: 'transparent', marginHorizontal: sizes.marginHorizontal }]}
                     inActiveButtonStyle={{ width: width(40), paddingVertical: height(2.5), backgroundColor: 'transparent', }}
-                    activeButtonStyle={{ position: 'absolute', height: 4, bottom: 0, backgroundColor: colors.appColor1, borderRadius: 5, }}
+                    activeButtonForceStyle={{ position: 'absolute', height: 4, bottom: 0, backgroundColor: colors.appColor1, borderRadius: 5, }}
                     activeButtonContent={<Wrapper></Wrapper>}
                     activeTextStyle={[appStyles.textMedium, appStyles.textPrimaryColor]}
                     inActiveTextStyle={[appStyles.textMedium, appStyles.textLightGray]}
-                />
+               
+               />
                 <Spacer height={sizes.baseMargin} />
                 {
                     selectedTabIndex === 0 ?

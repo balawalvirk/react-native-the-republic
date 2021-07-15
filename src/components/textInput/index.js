@@ -9,7 +9,19 @@ import { CustomIcon, IconWithText } from '../icons';
 import { Spacer } from '../spacers';
 import { Platform } from 'react-native';
 import { Animated } from 'react-native';
-const TextInputColored = ({ iconName, inputRef, iconType, returnKeyLabel, returnKeyType, onSubmitEditing, onPress, maxLength, autoFocus, title, isButton, duration, titleStyle, placeholder, editable, animation, multiline, onFocus, onBlur, onChangeText, secureTextEntry, value, iconColor, iconSize, containerStyle, inputContainerStyle, onPressIcon, inputStyle, right, keyboardType, iconStyle, error }) => {
+const TextInputColored = ({
+    iconNameRight, inputRef, iconTypeRight, returnKeyLabel,
+    returnKeyType, onSubmitEditing, onPress,
+    maxLength, autoFocus, title, isButton,
+    duration, titleStyle, placeholder, editable,
+    animation, multiline, onFocus, onBlur,
+    onChangeText, secureTextEntry, value,
+    iconColorRight, iconSizeRight, containerStyle,
+    inputContainerStyle, onPressIconRight, inputStyle,
+    right, keyboardType, iconStyleRight, error,
+    left, customIconLeft, iconNameLeft, iconTypeLeft, iconSizeLeft,
+    iconColorLeft, iconStyleLeft, onPressIconLeft
+}) => {
     return (
         <TouchableOpacity activeOpacity={1} onPress={onPress} style={[{ marginHorizontal: sizes.marginHorizontal }, containerStyle]}>
             {
@@ -21,13 +33,28 @@ const TextInputColored = ({ iconName, inputRef, iconType, returnKeyLabel, return
                     :
                     null
             }
-            <Wrapper  style={[appStyles.inputContainerColored, {
+            <Wrapper style={[appStyles.inputContainerColored, {
                 borderRadius: sizes.inputRadius,
                 backgroundColor: colors.appBgColor3,
                 marginHorizontal: 0
             }, inputContainerStyle]}>
-
-                <View style={{ flex: 8.5 }}>
+                {
+                    left ?
+                        left
+                        :
+                        customIconLeft ?
+                            <View style={{ alignItems: 'center', marginLeft: sizes.marginHorizontal }}>
+                                <CustomIcon icon={customIconLeft} size={iconSizeLeft ? iconSizeLeft : sizes.icons.medium} color={iconColorLeft ? iconColorLeft : colors.appTextColor1} containerStyle={iconStyleLeft} />
+                            </View>
+                            :
+                            iconNameLeft ?
+                                <View style={{ alignItems: 'center', marginLeft: sizes.marginHorizontal }}>
+                                    <Icon name={iconNameLeft} type={iconTypeLeft} size={iconSizeLeft ? iconSizeLeft : sizes.icons.medium} color={iconColorLeft ? iconColorLeft : colors.appTextColor4} iconStyle={iconStyleLeft} onPress={onPressIconLeft} />
+                                </View>
+                                :
+                                null
+                }
+                <View style={{ flex: 1 }}>
                     {
                         isButton ?
                             <ComponentWrapper>
@@ -53,17 +80,19 @@ const TextInputColored = ({ iconName, inputRef, iconType, returnKeyLabel, return
                                 onBlur={onBlur}
                                 secureTextEntry={secureTextEntry}
                                 maxLength={maxLength}
-                                style={[appStyles.inputField, { width: null, height: height(7), paddingHorizontal: width(5) }, inputStyle]}
+                                style={[appStyles.inputField, { width: null, height: height(7), paddingHorizontal: sizes.marginHorizontal }, inputStyle]}
                             />
                     }
                 </View>
-                <View style={{ flex: 1.5, alignItems: 'center' }}>
+                <View style={{}}>
                     {
                         right ?
                             right
                             :
-                            iconName ?
-                                <Icon name={iconName} type={iconType} size={iconSize ? iconSize : sizes.icons.medium} color={iconColor ? iconColor : colors.appTextColor5} iconStyle={iconStyle} onPress={onPressIcon} />
+                            iconNameRight ?
+                                <View style={{ alignItems: 'center', marginRight: sizes.marginHorizontal }}>
+                                    <Icon name={iconNameRight} type={iconTypeRight} size={iconSizeRight ? iconSizeRight : sizes.icons.medium} color={iconColorRight ? iconColorRight : colors.appTextColor5} iconStyle={iconStyleRight} onPress={onPressIconRight} />
+                                </View>
                                 :
                                 null
                     }
@@ -81,15 +110,15 @@ const TextInputColored = ({ iconName, inputRef, iconType, returnKeyLabel, return
         </TouchableOpacity>
     );
 }
-const TextInputBordered = ({iconName, iconType, placeholder, placeholderTextColor, onFocus, onChangeText, secureTextEntry, value, containerStyle, inputStyle}) => {
+const TextInputBordered = ({ iconName, iconType, placeholder, placeholderTextColor, onFocus, onChangeText, secureTextEntry, value, containerStyle, inputStyle }) => {
     return (
         <View style={[appStyles.inputContainerBorderd, {
             borderRadius: 5,
             borderWidth: 1,
-            borderColor: colors.appColor1 
+            borderColor: colors.appColor1
         }, containerStyle]}>
             <View style={{ flex: 2, alignItems: 'center' }}>
-                <Icon name={iconName} type={iconType} size={totalSize(2.5)} color={ colors.appColor1 } iconStyle={{}} />
+                <Icon name={iconName} type={iconType} size={totalSize(2.5)} color={colors.appColor1} iconStyle={{}} />
             </View>
             <View style={{ flex: 8 }}>
                 <TextInput
@@ -105,7 +134,7 @@ const TextInputBordered = ({iconName, iconType, placeholder, placeholderTextColo
         </View>
     );
 }
-const TextInputUnderlined = ({ onPress, inputRef,autoFocus, left, keyboardType, right, error, editable, titleStyle, title, maxLength, customIconLeft, iconNameLeft, multiline, iconNameRight, placeholderTextColor, iconTypeLeft, iconTypeRight, iconSizeLeft, iconSizeRight, iconColorLeft, iconColorRight, iconStyleLeft, iconStyleRight, onPressIconLeft, onPressIconRight, placeholder, onFocus, onBlur, onChangeText, secureTextEntry, value, containerStyle, inputContainerStyle, inputStyle, titleStatic }) => {
+const TextInputUnderlined = ({ onPress, inputRef, autoFocus, left, keyboardType, right, error, editable, titleStyle, title, maxLength, customIconLeft, iconNameLeft, multiline, iconNameRight, placeholderTextColor, iconTypeLeft, iconTypeRight, iconSizeLeft, iconSizeRight, iconColorLeft, iconColorRight, iconStyleLeft, iconStyleRight, onPressIconLeft, onPressIconRight, placeholder, onFocus, onBlur, onChangeText, secureTextEntry, value, containerStyle, inputContainerStyle, inputStyle, titleStatic }) => {
     const [titleMarginBottom] = useState(new Animated.Value(0))
     //const [titleSize] = useState(new Animated.Value(fontSize.regular))
     const FocusedTitleMarginBottom = Platform.OS === 'ios' ? height(5) : height(5)
@@ -145,7 +174,7 @@ const TextInputUnderlined = ({ onPress, inputRef,autoFocus, left, keyboardType, 
     }
     return (
         <TouchableOpacity disabled={!onPress} activeOpacity={1} onPress={onPress}>
-            <Wrapper style={[{marginHorizontal:sizes.marginHorizontalLarge},containerStyle]}>
+            <Wrapper style={[{ marginHorizontal: sizes.marginHorizontalLarge }, containerStyle]}>
                 {
                     titleStatic ?
                         <>
@@ -162,7 +191,7 @@ const TextInputUnderlined = ({ onPress, inputRef,autoFocus, left, keyboardType, 
                     //borderRadius: sizes.b,
                     borderBottomWidth: 1,
                     borderBottomColor: colors.appBgColor4,
-                    marginHorizontal:0
+                    marginHorizontal: 0
                 }]}>
                     {
                         left ?
@@ -260,4 +289,16 @@ const TextInputUnderlined = ({ onPress, inputRef,autoFocus, left, keyboardType, 
     );
 }
 
-export { TextInputColored, TextInputBordered ,TextInputUnderlined}
+export const SearchTextinput = ({ value, placeholder, inputContainerStyle, onChangeText }) => {
+    return (
+        <TextInputColored
+            value={value}
+            onChangeText={onChangeText}
+            iconNameLeft="search"
+            iconTypeLeft="feather"
+            placeholder={placeholder ? placeholder : "Search"}
+            inputContainerStyle={inputContainerStyle}
+        />
+    )
+}
+export { TextInputColored, TextInputBordered, TextInputUnderlined }

@@ -97,7 +97,7 @@ export const appStyles = StyleSheet.create({
     height: height(7),
     //width: width(80),
     color: colors.appTextColor1,
-    fontFamily: fontFamily.appTextLight,
+    fontFamily: fontFamily.appTextRegular,
     fontSize: totalSize(1.75)
   },
   inputFieldBorderd: {
@@ -323,7 +323,7 @@ export const appStyles = StyleSheet.create({
     color: colors.error
   },
   textLineThrough: {
-    textDecorationLine:'line-through'
+    textDecorationLine: 'line-through'
   },
   tabBarStyle: {
     height: sizes.tabBarHeight,

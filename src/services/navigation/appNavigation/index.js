@@ -12,7 +12,7 @@ import * as MainApp from '../../../screens/mainFlow';
 import { CustomIcon, ImageRound, ComponentWrapper, MediumText, Spacer, Wrapper, RowWrapper, AbsoluteWrapper, ImageProfile, SmallTitle, LogoMain, LocationPickerButton } from '../../../components';
 import { appIcons, appImages, appStyles, colors, fontFamily, fontSize, sizes } from '../../utilities';
 import { totalSize, width } from 'react-native-dimension';
-import { Badge } from 'react-native-elements';
+import { Badge, Icon } from 'react-native-elements';
 import { FlatList, TouchableOpacity } from 'react-native';
 import styles from './styles'
 
@@ -44,42 +44,6 @@ function BottomTabScreens() {
         //initialRouteName={routes.welcome}
         >
             <BottomTab.Screen
-                name={routes.community}
-                component={MainApp.Community}
-                options={() => ({
-                    tabBarLabel: "Community",
-                    tabBarIcon: ({ color, size, focused }) => {
-                        return <CustomIcon icon={appIcons.users} size={tabIconSize} color={color} focused={focused} />
-                    },
-                })}
-            />
-            <BottomTab.Screen
-                name={routes.explore}
-                component={MainApp.Explore}
-                options={() => ({
-                    tabBarLabel: "Explore",
-                    tabBarIcon: ({ color, size, focused }) => {
-                        return <CustomIcon icon={appIcons.globe} size={tabIconSize} color={color} focused={focused} />
-                    },
-                })}
-            />
-            <BottomTab.Screen
-                name={routes.shareApost}
-                component={() => null}
-                options={() => ({
-                    tabBarLabel: "Post",
-                    tabBarIcon: ({ color, size, focused }) => {
-                        return <CustomIcon icon={appIcons.add_circle} size={tabIconSize} color={color} focused={focused} />
-                    },
-                })}
-                listeners={({ navigation }) => ({
-                    tabPress: event => {
-                        event.preventDefault();
-                        navigation.navigate(routes.shareApost)
-                    }
-                })}
-            />
-            <BottomTab.Screen
                 name={routes.marketPlace}
                 component={MainApp.MarketPlace}
                 options={() => ({
@@ -89,6 +53,44 @@ function BottomTabScreens() {
                     },
                 })}
             />
+            <BottomTab.Screen
+                name={routes.explore}
+                component={MainApp.Explore}
+                options={() => ({
+                    tabBarLabel: "Find",
+                    tabBarIcon: ({ color, size, focused }) => {
+                        return <CustomIcon icon={appIcons.globe} size={tabIconSize} color={color} focused={focused} />
+                    },
+                })}
+            />
+            <BottomTab.Screen
+                name={routes.shareApost}
+                component={() => null}
+                options={() => ({
+                    tabBarLabel: "Sell",
+                    tabBarIcon: ({ color, size, focused }) => {
+                        // return <CustomIcon icon={appIcons.add_circle} size={tabIconSize} color={color} focused={focused} />
+                        return <Icon name="camera" type="feather" size={tabIconSize} color={color} focused={focused} />
+                    },
+                })}
+                listeners={({ navigation }) => ({
+                    tabPress: event => {
+                        event.preventDefault();
+                        navigation.navigate(routes.sell)
+                    }
+                })}
+            />
+            <BottomTab.Screen
+                name={routes.community}
+                component={MainApp.Community}
+                options={() => ({
+                    tabBarLabel: "Community",
+                    tabBarIcon: ({ color, size, focused }) => {
+                        return <CustomIcon icon={appIcons.users} size={tabIconSize} color={color} focused={focused} />
+                    },
+                })}
+            />
+
             <BottomTab.Screen
                 name={routes.account}
                 component={MainApp.Account}
@@ -113,7 +115,11 @@ function BottomTabStackScreens() {
             <BottomTabStack.Screen name={routes.mainBottomTab} component={BottomTabScreens}
                 options={({ navigation, route }) => ({
                     title: '',
-                    // headerTitle:()=><LocationPickerButton text="Broklyn, NYC"/>,
+                    headerTitle: () => <Wrapper style={{ alignItems: 'flex-start', }}>
+                        <LocationPickerButton
+                            onPress={() => navigation.navigate(routes.myLocation)}
+                            text="Broklyn, NYC" />
+                    </Wrapper>,
                     headerRight: () =>
                         <RowWrapper style={[{ marginRight: sizes.marginHorizontal }]}>
                             <CustomIcon icon={appIcons.search} size={sizes.icons.medium} color={colors.appTextColor1} onPress={() => navigation.navigate(routes.search)} />
@@ -124,9 +130,10 @@ function BottomTabStackScreens() {
                         </RowWrapper>,
                     headerLeft: () => <RowWrapper style={[{}]}>
                         <CustomIcon onPress={() => navigation.toggleDrawer()} icon={appIcons.menu} size={sizes.icons.medium} color={colors.appTextColor1} />
-                        <LocationPickerButton
+                        {/* <Spacer width={sizes.marginHorizontal} />
+                     <LocationPickerButton
                             onPress={() => navigation.navigate(routes.myLocation)}
-                            text="Broklyn, NYC" />
+                            text="Broklyn, NYC" /> */}
                     </RowWrapper>
                 })}
             />
@@ -212,6 +219,14 @@ const AppNavigation = () => {
                     //title: 'Sign In'
                 }}
             />
+            <AppStack.Screen name={routes.sell} component={MainApp.Sell}
+                options={{
+                    ...headers.screenOptionsPrimary,
+                    //headerShown: false,
+                    title: 'Post an Item',
+                    
+                }}
+            />
             <AppStack.Screen name={routes.followRequests} component={MainApp.FollowRequests}
                 options={{
                     // headerShown: false,
@@ -278,22 +293,41 @@ const AppNavigation = () => {
                     title: 'Chats'
                 }}
             />
-              <AppStack.Screen name={routes.productDetail} component={MainApp.ProductDetail}
+            <AppStack.Screen name={routes.productDetail} component={MainApp.ProductDetail}
                 options={{
-                     headerShown: false,
+                    headerShown: false,
                     //title: 'Chats'
                 }}
             />
-              <AppStack.Screen name={routes.reviews} component={MainApp.Reviews}
+            <AppStack.Screen name={routes.reviews} component={MainApp.Reviews}
                 options={{
                     // headerShown: false,
                     title: 'Reviews'
                 }}
             />
-             <AppStack.Screen name={routes.userProfile} component={MainApp.UserProfile}
+            <AppStack.Screen name={routes.userProfile} component={MainApp.UserProfile}
                 options={{
-                     headerShown: false,
-                   // title: 'Reviews'
+                    headerShown: false,
+                    // title: 'Reviews'
+                }}
+            />
+            <AppStack.Screen name={routes.CategoryDetail} component={MainApp.CategoryDetail}
+                options={{
+                    // headerShown: false,
+                    title: 'Category Detail'
+                }}
+            />
+            <AppStack.Screen name={routes.categories} component={MainApp.Categories}
+                options={{
+                    // headerShown: false,
+                    title: 'Categories'
+                }}
+            />
+            <AppStack.Screen name={routes.sortFilter} component={MainApp.SortFilter}
+                options={{
+                    // headerShown: false,
+                    ...headers.screenOptionsPrimary,
+                    title: 'Sort & Filter'
                 }}
             />
         </AppStack.Navigator>

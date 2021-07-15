@@ -410,8 +410,26 @@ const dummyData = {
             },
             date: '2 monthes ago'
         }
-    ]
+    ],
 
+categories:[
+    {
+        title:'Handguns',
+        image:'https://cdn.britannica.com/33/125033-004-AA6D7B20/Smith-Wesson-handgun.jpg'
+    },
+    {
+        title:'Rifles',
+        image:'https://cdn.britannica.com/80/130780-004-510D7E4C/assault-rifles-top-M16A1-M4-M16A2-M16A4.jpg'
+    },
+    {
+        title:'Shotguns',
+        image:'https://i.ytimg.com/vi/iQzL2fYaW8c/maxresdefault.jpg'
+    },
+    {
+        title:'Ammo',
+        image:'https://www.19fortyfive.com/wp-content/uploads/2021/01/Ammo-Prices.jpg'
+    }
+]
 }
 
 export default dummyData

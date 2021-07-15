@@ -21,8 +21,8 @@ export const routes = {
     createAccount: 'createAccount',
     completeYourProfil: 'completeYourProfil',
     verifyPhone: 'verifyPhone',
-    mainBottomTab:'mainBottomTab',
-    mainDrawer:'mainDrawer',
+    mainBottomTab: 'mainBottomTab',
+    mainDrawer: 'mainDrawer',
     home: 'home',
     community: 'community',
     explore: 'explore',
@@ -35,21 +35,25 @@ export const routes = {
     theRepublicNews: 'theRepublicNews',
     contactUs: 'contactUs',
     subscriptionPlan: 'subscriptionPlan',
-    shareApost:'shareApost',
-    notifications:'notifications',
-    search:'search',
-    chats:'chats',
-    yourLocation:'yourLocation',
-    myLocation:'myLocation',
-    productDetail:'productDetail',
-    reviews:'reviews',
-    userProfile:'userProfile'
+    shareApost: 'shareApost',
+    notifications: 'notifications',
+    search: 'search',
+    chats: 'chats',
+    yourLocation: 'yourLocation',
+    myLocation: 'myLocation',
+    productDetail: 'productDetail',
+    reviews: 'reviews',
+    userProfile: 'userProfile',
+    sell: 'sell',
+    categories: 'categories',
+    CategoryDetail: 'CategoryDetail',
+    sortFilter:'sortFilter'
 }
 export const headers = {
     screenOptionsPrimary: {
         // headerShown: false,
         title: 'Title',
-        headerTitleAlign: 'center',
+        headerTitleAlign: 'left',
         headerStyle: [appStyles.headerPrimaryStyle],
         headerTitleStyle: appStyles.headerTitleStyle,
         // headerTintColor: colors.appTextColor2,
@@ -59,7 +63,7 @@ export const headers = {
     screenOptionsSecondary: {
         // headerShown: false,
         title: 'Title',
-        headerTitleAlign: 'center',
+        headerTitleAlign: 'left',
         headerStyle: [appStyles.headerSecondaryStyle],
         headerTitleStyle: appStyles.headerTitleStyle,
         //  headerTintColor: colors.appTextColor4,
@@ -74,7 +78,7 @@ export const tabs = {
         inactiveTintColor: colors.appTextColor5,
         allowFontScaling: true,
         style: appStyles.tabBarStyle,
-        labelStyle:{fontSize:totalSize(1.1),fontFamily:fontFamily.appTextBold}
+        labelStyle: { fontSize: totalSize(1.1), fontFamily: fontFamily.appTextBold }
         //activeBackgroundColor: '#FFFFFF40',
         //tabStyle: { borderRadius: 20, marginHorizontal: 7.5, marginVertical: 2 }
     },
@@ -93,4 +97,4 @@ export const tabs = {
     }
 }
 
-export {DummyData}
+export { DummyData }
