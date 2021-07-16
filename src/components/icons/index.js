@@ -68,11 +68,11 @@ export const IconButton = ({ buttonStyle, onPress, shadow, shadowColored, iconSi
         </TouchableOpacity>
     );
 }
-export const CustomIcon = ({ icon, size, animation, duration, color, iterationCount, onPress, value }) => {
+export const CustomIcon = ({ icon, size, animation, duration, color, iterationCount, onPress, value,containerStyle }) => {
     const defaulSize = totalSize(5)
     return (
         <Animatable.View animation={animation} duration={duration} iterationCount={iterationCount}>
-            <TouchableOpacity activeOpacity={1} disabled={!onPress} onPress={onPress}>
+            <TouchableOpacity activeOpacity={1} disabled={!onPress} onPress={onPress} style={containerStyle}>
                 <Image
                     source={icon}
                     resizeMode="contain"

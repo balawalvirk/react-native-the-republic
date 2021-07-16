@@ -124,15 +124,16 @@ export const SwitchPrimary = ({ value, onPress }) => {
             activeOpacity={1}
             iconSize={totalSize(2.5)}
             //buttonSize={totalSize(3.5)}
-            buttonStyle={{ width: totalSize(5), alignItems: value ? 'flex-end' : 'flex-start', paddingHorizontal: 2.5, paddingVertical: 0.25, height: null, borderWidth: 1, borderRadius: 100, borderColor: value ? colors.appColor1 : colors.appBgColor4 }}
+            //buttonColor={colors.appBgColor1}
+            buttonStyle={{ width: totalSize(5), alignItems: value ? 'flex-end' : 'flex-start',  height: null,  borderRadius: 100, backgroundColor: value ? colors.appColor1+'40' : colors.appBgColor4, paddingHorizontal: 2.5, paddingVertical: 0.25, }}
             //gradient={darkMode}
-            iconColor={value ? colors.appColor1 : colors.appBgColor4}
+            iconColor={value ? colors.appColor1 : colors.appBgColor1}
             buttonRadius={100}
             onPress={() => {
                 HelpingMethods.handleAnimation()
                 onPress ? onPress() : null
             }}
-            buttonColor={colors.appBgColor1}
+            
         />
     )
 }

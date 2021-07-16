@@ -7,5 +7,6 @@ export default StyleSheet.create({
         borderRadius: sizes.cardRadius * 2,
         height: height(45),
         width: null,
+        marginHorizontal: sizes.marginHorizontal,
     }
 })
