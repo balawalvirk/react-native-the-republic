@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, Image } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
-import { AbsoluteWrapper, RenderTags, MainWrapper, Spacer, ButtonGradient, Wrapper, IconHeart, ComponentWrapper, SmallTitle, RowWrapperBasic, MediumText, RegularText, TinyText, SmallText, TinyTitle, RenderKeyPoints, UserCardGradiant, ArmerInfo, KeyboardAvoidingScrollView, Reviews, Products, TitlePrimary, IconButton, BackIconAbsolute } from '../../../components';
+import { AbsoluteWrapper, RenderTags, MainWrapper, Spacer, ButtonGradient, Wrapper, IconHeart, ComponentWrapper, SmallTitle, RowWrapperBasic, MediumText, RegularText, TinyText, SmallText, TinyTitle, RenderKeyPoints, UserCardPrimary, ArmerInfo, KeyboardAvoidingScrollView, Reviews, Products, TitlePrimary, IconButton, BackIconAbsolute } from '../../../components';
 import { appIcons, appImages, appStyles, colors, HelpingMethods, routes, sizes } from '../../../services';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
@@ -20,7 +20,7 @@ const FooterButton = ({ text, onPress }) => {
 
 function ProductDetail(props) {
     const { navigation, route } = props
-    const { navigate, replace, push,goBack } = navigation
+    const { navigate, replace, push, goBack } = navigation
     const { product } = route.params
     const { info, user } = product
     const tags = ['Handguns', 'Semi Automatic', 'Suppressor']
@@ -50,7 +50,7 @@ function ProductDetail(props) {
                 <Spacer height={sizes.statusBarHeight} />
                 <Wrapper>
                     <Image
-                        source={{ uri: product.image?product.image:product.images?product.images[0]:appImages.noImageAvailable }}
+                        source={{ uri: product.image ? product.image : product.images ? product.images[0] : appImages.noImageAvailable }}
                         style={{ height: height(50), width: null }}
                         resizeMode="contain"
                     />
@@ -95,10 +95,12 @@ function ProductDetail(props) {
                     <RenderTags tags={tags} />
                 </ComponentWrapper>
                 <Spacer height={sizes.baseMargin} />
-                <UserCardGradiant
+                <UserCardPrimary
                     imageUri={user.image}
-                    name={user.name}
-                    distance={'3 miles away'}
+                    title={user.name}
+                    subTitle={'3 miles away'}
+                    gradiant
+                    onPressViewProfile={() => { }}
                 />
                 <Spacer height={sizes.baseMargin} />
                 <ArmerInfo
@@ -134,7 +136,7 @@ function ProductDetail(props) {
                     }}
                 />
             </KeyboardAvoidingScrollView>
-            <AbsoluteWrapper  style={{ bottom: 0, right: 0, left: 0, backgroundColor: colors.appBgColor1, ...appStyles.shadow, paddingVertical: sizes.baseMargin }}>
+            <AbsoluteWrapper style={{ bottom: 0, right: 0, left: 0, backgroundColor: colors.appBgColor1, ...appStyles.shadow, paddingVertical: sizes.baseMargin }}>
                 <RowWrapperBasic style={[{ justifyContent: 'space-evenly', }]}>
                     <FooterButton
                         text="Enquire"
@@ -149,7 +151,7 @@ function ProductDetail(props) {
                 </RowWrapperBasic>
             </AbsoluteWrapper>
             <BackIconAbsolute
-            onPress={goBack}
+                onPress={goBack}
             />
         </MainWrapper>
     );

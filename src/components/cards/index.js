@@ -108,45 +108,59 @@ export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, 
     );
 }
 
-export const UserCardGradiant = ({ containerStyle, imageUri, name, distance, onPress, shadow, onPressViewProfile }) => {
+export const UserCardPrimary = ({ containerStyle, imageUri, title, subTitle, onPress, shadow, onPressViewProfile, gradiant, subContainerStyle, right }) => {
     return (
-        <TouchableOpacity activeOpacity={1} onPress={onPress} style={[{ backgroundColor: 'white', borderRadius: sizes.buttonRadius, marginHorizontal: sizes.marginHorizontal, }, shadow && appStyles.shadow, containerStyle]}>
-            <LinearGradient
-                colors={colors.appGradiantColors}
-                start={{ x: 0.0, y: 0.25 }} end={{ x: 0.5, y: 1.0 }}
-                locations={[0, 0.9]}
-                style={[{ borderRadius: sizes.buttonRadius, paddingVertical: sizes.smallMargin },]}>
+        <TouchableOpacity activeOpacity={1} onPress={onPress} style={[{ backgroundColor: colors.appBgColor2, borderRadius: sizes.buttonRadius, marginHorizontal: sizes.marginHorizontal, }, shadow && appStyles.shadow, containerStyle]}>
+            {
+                gradiant ?
+                    <LinearGradient
+                        colors={colors.appGradiantColors}
+                        start={{ x: 0.0, y: 0.25 }} end={{ x: 0.5, y: 1.0 }}
+                        locations={[0, 0.9]}
+                        style={[{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, borderRadius: sizes.buttonRadius, },]} />
+                    :
+                    null
+            }
+            <Wrapper style={[{ paddingVertical: sizes.smallMargin }, subContainerStyle]}>
                 <RowWrapper style={[styles.smallMarginHorizontal, {}]}>
-                    <Wrapper >
+                    <Wrapper flex={1}>
                         <RowWrapperBasic>
                             <ImageRound
                                 source={{ uri: imageUri }}
                             />
-                            <Spacer width={sizes.TinyMargin} />
-                            <Wrapper>
-                                <MediumText style={[appStyles.textWhite]}>{name}</MediumText>
+                            <Spacer width={sizes.smallMargin} />
+                            <Wrapper flex={1}>
+                                <MediumText numberOfLines={1} style={[gradiant && appStyles.textWhite]}>{title}</MediumText>
                                 <Spacer height={sizes.smallMargin} />
-                                <SmallText style={[{ color: appStyles.textWhite.color + '80' }]}>{distance}</SmallText>
+                                <SmallText style={[gradiant ? { color: appStyles.textWhite.color + '80' } : appStyles.textGray]}>{subTitle}</SmallText>
                             </Wrapper>
                         </RowWrapperBasic>
                     </Wrapper>
+                    <Spacer width={sizes.smallMargin} />
                     <Wrapper style={{}}>
-                        <ButtonColoredSmall
-                            text="View Dealer Profile"
-                            onPress={onPressViewProfile}
-                            buttonStyle={{ backgroundColor: colors.appBgColor1, borderRadius: 100 }}
-                            textStyle={[appStyles.textRegular]}
-                        />
-                    </Wrapper>
+                        {
+                            right ? right :
+                                onPressViewProfile ?
+                                    <ButtonColoredSmall
+                                        text="View Dealer Profile"
+                                        onPress={onPressViewProfile}
+                                        buttonStyle={{ backgroundColor: colors.appBgColor1, borderRadius: 100 }}
+                                        textStyle={[appStyles.textSmall]}
+                                    />
+                                    :
+                                    null
+                        }
 
+                    </Wrapper>
                 </RowWrapper>
-            </LinearGradient>
+            </Wrapper>
+
         </TouchableOpacity>
     )
 }
 
 
-export const ReviewCardPrimary = ({ containerStyle, imageUrl, name, rating, reviewCount, comment, date }) => {
+export const ReviewCardPrimary = ({ containerStyle, imageUrl, title, rating, reviewCount, comment, date }) => {
     return (
         <Wrapper style={[styles.reviewContainer, containerStyle]}>
             <RowWrapperBasic style={{ alignItems: 'flex-start', }}>
@@ -155,7 +169,7 @@ export const ReviewCardPrimary = ({ containerStyle, imageUrl, name, rating, revi
                 />
                 <Spacer width={sizes.smallMargin} />
                 <Wrapper flex={1}>
-                    <RegularText style={[appStyles.fontBold]}>{name}</RegularText>
+                    <RegularText style={[appStyles.fontBold]}>{title}</RegularText>
                     <Spacer height={sizes.smallMargin} />
                     <RowWrapperBasic>
                         <StarRating
@@ -178,5 +192,6 @@ export const ReviewCardPrimary = ({ containerStyle, imageUrl, name, rating, revi
         </Wrapper>
     )
 }
+
 
 

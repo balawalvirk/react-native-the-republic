@@ -62,6 +62,7 @@ function Community() {
             <Spacer height={sizes.smallMargin} />
             <Wrapper >
                 <ButtonGroupAnimated
+                    initalIndex={selectedTabIndex}
                     data={topTabs}
                     text='title'
                     onPressButton={(item, index) => setSelectedTabIndex(index)}

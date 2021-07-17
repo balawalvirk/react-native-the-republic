@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -17,20 +17,29 @@ import { Icon } from 'react-native-elements';
 import { CustomIcon } from '../icons';
 
 
-export default class AnimatedGroupButton extends React.Component {
-  constructor(props) {
-    super(props);
-    this.scrollViewRef = React.createRef();
-    this.state = {
-      activeTabTranslateX: new Animated.Value(0),
-      activeTabWidth: new Animated.Value(0),
-      activeTabHeight: new Animated.Value(0),
-      selectedTabIndex: 0,
-    };
-  }
+export default function AnimatedGroupButton({
+  onPressButton,
+  data,
+  activeButtonStyle,
+  inActiveButtonStyle,
+  activeTextStyle,
+  inActiveTextStyle,
+  text,
+  //scrollViewRef,
+  containerStyle,
+  iconSize,
+  activeButtonContent,
+  activeButtonForceStyle,
+  initalIndex
+}) {
 
-  handleTabSlide = (x, height, width) => {
-    let { activeTabTranslateX, activeTabHeight, activeTabWidth } = this.state;
+  const scrollViewRef = React.useRef();
+  const [activeTabTranslateX] = useState(new Animated.Value(0))
+  const [activeTabWidth] = useState(new Animated.Value(0))
+  const [activeTabHeight] = useState(new Animated.Value(0))
+  const [selectedTabIndex, setTabIndex] = useState(0)
+
+  const handleTabSlide = (x, height, width) => {
     console.log(x, height, width);
     Animated.timing(activeTabTranslateX, {
       toValue: x,
@@ -39,142 +48,124 @@ export default class AnimatedGroupButton extends React.Component {
     }).start();
     Animated.timing(activeTabHeight, {
       toValue: height,
-      duration: 100,
+      duration: 250,
       useNativeDriver: false,
     }).start();
     Animated.timing(activeTabWidth, {
       toValue: width,
-      duration: 100,
+      duration: 250,
       useNativeDriver: false,
     }).start();
-  };
-  handleOnPress = (item, key) => {
-    this.setState({ selectedTabIndex: key }, () =>
-      this.handleTabSlide(item.x, item.tabHeight, item.tabWidth),
-    );
-  };
-  scrollTo(object) {
-    this.scrollViewRef.current.scrollToIndex(object);
   }
-  render() {
-    let {
-      activeTabTranslateX,
-      activeTabHeight,
-      activeTabWidth,
-      selectedTabIndex,
-    } = this.state;
-    const {
-      onPressButton,
-      data,
-      activeButtonStyle,
-      activeButtonStyleOverwrite,
-      inActiveButtonStyle,
-      activeTextStyle,
-      inActiveTextStyle,
-      text,
-      scrollViewRef,
-      containerStyle,
-      iconSize,
-      activeButtonContent,
-      activeButtonForceStyle
-    } = this.props;
-    return (
-      <View style={[styles.animatedGroupButtonMainContainer, containerStyle]}>
-        <View >
-          <ScrollView
-            ref={this.scrollViewRef}
-            horizontal
-            showsHorizontalScrollIndicator={false}>
-            {data.map((item, key) => {
-              return (
-                <TouchableHighlight
-                  underlayColor={colors.appBgColor3 + '80'}
-                  onLayout={event => {
-                    (item.x = event.nativeEvent.layout.x),
-                      (item.tabHeight = event.nativeEvent.layout.height),
-                      (item.tabWidth = event.nativeEvent.layout.width),
-                      key === 0
-                        ? this.handleTabSlide(
-                          item.x,
-                          item.tabHeight,
-                          item.tabWidth,
-                        )
-                        : null;
-                  }}
-                  style={[
-                    {
-                      ...styles.animatedGroupButtonInactivatedButton,
-                      borderColor:
-                        key === selectedTabIndex ? 'transparent' : 'lightgray',
-                      marginLeft: key === 0 ? sizes.marginHorizontal : 0,
-                      marginRight: sizes.marginHorizontal / 2
-                    },
-                    inActiveButtonStyle,
-                  ]}
-                  onPress={() =>
-                    onPressButton(item, key, this.handleOnPress(item, key))
-                  }>
-                  {
-                    !item.icon ?
-                      <RegularText
-                        style={[
-                          styles.animatedGroupButtonInactivatedButtonTxt,
-                          selectedTabIndex === key ? activeTextStyle : inActiveTextStyle,
-                        ]}>
-                        {item[text]}
-                        {/* {text} */}
-                      </RegularText>
-                      :
-                      <CustomIcon
-                        icon={item.icon}
-                        color={appStyles.textPrimaryColor.color}
-                        size={iconSize ? iconSize : totalSize(1.5)}
-                      />
+  const handleOnPress = async (item, key) => {
+    setTabIndex(key)
+    handleTabSlide(item.x, item.tabHeight, item.tabWidth)
+  }
 
-                  }
-                </TouchableHighlight>
-              );
-            })}
-            <Animated.View
-              style={[
-                !activeButtonForceStyle && styles.animatedGroupButtonActivatedButton,
+  if (selectedTabIndex != initalIndex && data[initalIndex].x) {
+    handleOnPress(data[initalIndex], initalIndex)
+  }
+
+
+  return (
+    <View style={[styles.animatedGroupButtonMainContainer, containerStyle]}>
+      <View >
+        <ScrollView
+          ref={scrollViewRef}
+          horizontal
+          showsHorizontalScrollIndicator={false}>
+          {data.map((item, key) => {
+            return (
+              <TouchableHighlight
+                underlayColor={colors.appBgColor3 + '80'}
+                onLayout={event => {
+                  (item.x = event.nativeEvent.layout.x),
+                    (item.tabHeight = event.nativeEvent.layout.height),
+                    (item.tabWidth = event.nativeEvent.layout.width),
+                    key === 0
+                      ? handleTabSlide(
+                        item.x,
+                        item.tabHeight,
+                        item.tabWidth,
+                      )
+                      : null;
+                }}
+                style={[
+                  {
+                    ...styles.animatedGroupButtonInactivatedButton,
+                    borderColor:
+                      key === selectedTabIndex ? 'transparent' : 'lightgray',
+                    marginLeft: key === 0 ? sizes.marginHorizontal : 0,
+                    marginRight: sizes.marginHorizontal / 2
+                  },
+                  inActiveButtonStyle,
+                ]}
+                onPress={async () => {
+                  onPressButton && onPressButton(item, key,)
+                  handleOnPress(item, key);
+                }
+
+                }>
                 {
-                  height: activeTabHeight,
-                  width: activeTabWidth,
-                  transform: [
-                    {
-                      translateX: activeTabTranslateX,
-                    },
-                  ],
-                },
-                activeButtonStyle,
-                activeButtonForceStyle
-              ]}>
-              {
-                activeButtonContent ?
-                  activeButtonContent :
-                  !data[selectedTabIndex].icon ?
+                  !item.icon ?
                     <RegularText
                       style={[
-                        styles.animatedGroupButtonActivatedButtonTxt,
-                        activeTextStyle,
+                        styles.animatedGroupButtonInactivatedButtonTxt,
+                        selectedTabIndex === key ? activeTextStyle : inActiveTextStyle,
                       ]}>
-                      {data[selectedTabIndex][text]}
+                      {item[text]}
+                      {/* {text} */}
                     </RegularText>
                     :
                     <CustomIcon
-                      icon={data[selectedTabIndex].icon}
-                      color={appStyles.textWhite.color}
+                      icon={item.icon}
+                      color={appStyles.textPrimaryColor.color}
                       size={iconSize ? iconSize : totalSize(1.5)}
                     />
-              }
 
-            </Animated.View>
-          </ScrollView>
-        </View>
+                }
+              </TouchableHighlight>
+            );
+          })}
+          <Animated.View
+            style={[
+              !activeButtonForceStyle && styles.animatedGroupButtonActivatedButton,
+              {
+                height: activeTabHeight,
+                width: activeTabWidth,
+                transform: [
+                  {
+                    translateX: activeTabTranslateX,
+                  },
+                ],
+              },
+              activeButtonStyle,
+              activeButtonForceStyle
+            ]}>
+            {
+              activeButtonContent ?
+                activeButtonContent :
+                !data[selectedTabIndex].icon ?
+                  <RegularText
+                    style={[
+                      styles.animatedGroupButtonActivatedButtonTxt,
+                      activeTextStyle,
+                    ]}>
+                    {data[selectedTabIndex][text]}
+                  </RegularText>
+                  :
+                  <CustomIcon
+                    icon={data[selectedTabIndex].icon}
+                    color={appStyles.textWhite.color}
+                    size={iconSize ? iconSize : totalSize(1.5)}
+                  />
+            }
+
+          </Animated.View>
+        </ScrollView>
       </View>
-    );
-  }
+    </View>
+  );
 }
 
 

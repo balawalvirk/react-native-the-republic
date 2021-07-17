@@ -1,12 +1,12 @@
 import React from 'react'
 import { Platform, TouchableOpacity } from 'react-native'
-import { height, totalSize } from 'react-native-dimension'
+import { height, totalSize, width } from 'react-native-dimension'
 import { ModalSwipeablePrimary } from '..'
-import { appIcons, appStyles, colors, HelpingMethods, sizes } from '../../services'
+import { appIcons, appImages, appStyles, colors, HelpingMethods, sizes } from '../../services'
 import { ButtonColored, ButtonColoredSmall, ButtonGradient } from '../buttons'
 import { CustomIcon, IconButton, IconWithText } from '../icons'
 import { Spacer } from '../spacers'
-import { MediumText, RegularText, SmallTitle, TinyTitle } from '../text'
+import { LargeTitle, MediumText, MediumTitle, RegularText, SmallTitle, TinyTitle } from '../text'
 import { TextInputUnderlined } from '../textInput'
 import { ComponentWrapper, RowWrapper, Wrapper, RowWrapperBasic } from '../wrappers'
 import EditProfileComp from './editProfileCom'
@@ -19,6 +19,9 @@ import { Products, ProductsSecondary, ProductsHorizontalyPrimary } from './produ
 import ArmerInfo from './armerInfo'
 import Reviews from './reviews'
 import { LineHorizontal } from '..'
+import { Dealers, Groups } from './usersLists'
+import { ImageProfile, ImageRound } from '../images'
+import { ImageBackground } from 'react-native'
 
 export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, topMargin, children }) => {
     return (
@@ -125,7 +128,7 @@ export const SwitchPrimary = ({ value, onPress }) => {
             iconSize={totalSize(2.5)}
             //buttonSize={totalSize(3.5)}
             //buttonColor={colors.appBgColor1}
-            buttonStyle={{ width: totalSize(5), alignItems: value ? 'flex-end' : 'flex-start',  height: null,  borderRadius: 100, backgroundColor: value ? colors.appColor1+'40' : colors.appBgColor4, paddingHorizontal: 2.5, paddingVertical: 0.25, }}
+            buttonStyle={{ width: totalSize(5), alignItems: value ? 'flex-end' : 'flex-start', height: null, borderRadius: 100, backgroundColor: value ? colors.appColor1 + '40' : colors.appBgColor4, paddingHorizontal: 2.5, paddingVertical: 0.25, }}
             //gradient={darkMode}
             iconColor={value ? colors.appColor1 : colors.appBgColor1}
             buttonRadius={100}
@@ -133,7 +136,7 @@ export const SwitchPrimary = ({ value, onPress }) => {
                 HelpingMethods.handleAnimation()
                 onPress ? onPress() : null
             }}
-            
+
         />
     )
 }
@@ -242,10 +245,92 @@ export const FilterButton = ({ onPress }) => {
         </ComponentWrapper>
     )
 }
+export const ViewAllListButton = ({ onPress }) => {
+    return (
+        <ComponentWrapper>
+            <Spacer height={sizes.smallMargin} />
+            <ButtonColoredSmall
+                onPress={onPress}
+                text="View All"
+                textStyle={[appStyles.textRegular]}
+                buttonStyle={[appStyles.center, { paddingVertical: sizes.marginVertical / 2, backgroundColor: colors.appBgColor3, borderRadius: 100 }]}
+            />
+            <Spacer height={sizes.smallMargin} />
+        </ComponentWrapper>
+    )
+}
+export const ProfileTop = ({ imageUri, title, subTitle, onPress, content }) => {
+    return (
+        <Wrapper>
+            <ImageBackground
+                source={appImages.bg_main}
+                style={{ height: null, width: null }}
+            >
+                <Spacer height={sizes.baseMargin * 2} />
+                <RowWrapper>
+                    <Wrapper>
+                        <ImageProfile
+                            source={{ uri: imageUri }}
+                            imageStyle={{ height: width(30), width: width(30), borderWidth: 5, borderColor: colors.appBgColor1 }}
+                            shadow
+                        />
+                    </Wrapper>
+                    <Spacer width={sizes.marginHorizontal} />
+                    <Wrapper flex={1}>
+                        <SmallTitle numberOfLines={1}>{title}</SmallTitle>
+                        <Spacer height={sizes.baseMargin} />
+                        <RegularText style={[appStyles.textGray]}>{subTitle}</RegularText>
+                        {content}
+                    </Wrapper>
+                </RowWrapper>
+                <Spacer height={sizes.baseMargin * 2} />
+            </ImageBackground>
+        </Wrapper>
+    )
+}
 
+export const ShareSomethingButton = ({onPress, imageUri ,title}) => {
+    const defaultVerticalSpacer=sizes.marginVertical/1.5
+    return (
+        <TouchableOpacity activeOpacity={1} onPress={onPress} style={{ marginHorizontal: sizes.marginHorizontalSmall, borderWidth: 1, borderColor: colors.appBgColor4, borderRadius: sizes.baseRadius, paddingVertical: defaultVerticalSpacer, paddingHorizontal: sizes.marginHorizontalSmall }}>
+            <RowWrapperBasic>
+                <ImageRound
+                    source={{ uri: imageUri }}
+                    size={totalSize(5)}
+                />
+                <Spacer width={sizes.marginHorizontal} />
+                <Wrapper flex={1}>
+                    <MediumText style={[appStyles.textGray]}>{title ? title : 'Share something with your friends'}</MediumText>
+                </Wrapper>
+            </RowWrapperBasic>
+            <Spacer height={defaultVerticalSpacer} />
+            <LineHorizontal color={colors.appBgColor4} height={1}/>
+            <Spacer height={defaultVerticalSpacer} />
+            <RowWrapperBasic style={[{ justifyContent: 'space-evenly', }]}>
+                <IconWithText
+                    text="Photos"
+                    iconName="image"
+                    iconType="feather"
+                    //iconSize={totalSize(2.75)}
+                    tintColor={colors.appTextColor4}
+                    textStyle={[appStyles.textRegular, appStyles.textGray]}
+
+                />
+                <IconWithText
+                    text="Videos"
+                    iconName="video"
+                    iconType="feather"
+                    //iconSize={totalSize(2.75)}
+                    tintColor={colors.appTextColor4}
+                    textStyle={[appStyles.textRegular, appStyles.textGray]}
+                />
+            </RowWrapperBasic>
+        </TouchableOpacity>
+    )
+}
 
 export {
     EditProfileComp, VerificationCodeSentPopup, ImagePickerPopup,
     Posts, MenuPopup, RenderComments, Products, ArmerInfo,
-    Reviews, ProductsSecondary, ProductsHorizontalyPrimary
+    Reviews, ProductsSecondary, ProductsHorizontalyPrimary, Dealers, Groups
 }

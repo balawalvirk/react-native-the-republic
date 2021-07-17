@@ -64,7 +64,7 @@ function BottomTabScreens() {
                 })}
             />
             <BottomTab.Screen
-                name={routes.shareApost}
+                name={'null'}
                 component={() => null}
                 options={() => ({
                     tabBarLabel: "Sell",
@@ -98,7 +98,7 @@ function BottomTabScreens() {
                     tabBarLabel: "Account",
                     tabBarIcon: ({ color, size, focused }) => {
                         //return <CustomIcon icon={appIcons.marketplace} size={tabIconSize} color={color} focused={focused} />
-                        return <ImageRound source={{ uri: appImages.user3 }} size={tabIconSize} style={{ borderWidth: focused ? 1 : 0, borderColor: colors.appColor1 }} />
+                        return <ImageRound source={{ uri: appImages.user3 }} size={tabIconSize} style={{ opacity:focused?1:0.5, borderColor: colors.appColor1 }} />
                     },
                 })}
             />
@@ -224,7 +224,15 @@ const AppNavigation = () => {
                     ...headers.screenOptionsPrimary,
                     //headerShown: false,
                     title: 'Post an Item',
-                    
+
+                }}
+            />
+            <AppStack.Screen name={routes.shareApost} component={MainApp.ShareAPost}
+                options={{
+                    //...headers.screenOptionsPrimary,
+                    //headerShown: false,
+                    title: 'Share a Post',
+
                 }}
             />
             <AppStack.Screen name={routes.followRequests} component={MainApp.FollowRequests}
@@ -276,10 +284,16 @@ const AppNavigation = () => {
                 }}
             />
             <AppStack.Screen name={routes.search} component={MainApp.Search}
-                options={{
-                    // headerShown: false,
-                    title: 'Search'
-                }}
+                options={({ navigation, route }) => ({
+                    title: 'Search',
+                    headerRight: () =>
+                        <ComponentWrapper >
+                            <LocationPickerButton
+                                onPress={() => navigation.navigate(routes.myLocation)}
+                                text="Broklyn, NYC" />
+                        </ComponentWrapper>,
+
+                })}
             />
             <AppStack.Screen name={routes.notifications} component={MainApp.Notifications}
                 options={{
@@ -328,6 +342,30 @@ const AppNavigation = () => {
                     // headerShown: false,
                     ...headers.screenOptionsPrimary,
                     title: 'Sort & Filter'
+                }}
+            />
+            <AppStack.Screen name={routes.groupDetail} component={MainApp.GroupDetail}
+                options={{
+                    // headerShown: false,
+                    title: 'Group'
+                }}
+            />
+            <AppStack.Screen name={routes.favourites} component={MainApp.Favourites}
+                options={{
+                    // headerShown: false,
+                    title: 'Favourites'
+                }}
+            />
+            <AppStack.Screen name={routes.editProfile} component={MainApp.EditProfile}
+                options={{
+                    // headerShown: false,
+                    title: 'Edit Profile'
+                }}
+            />
+             <AppStack.Screen name={routes.changePassword} component={MainApp.ChangePassword}
+                options={{
+                    // headerShown: false,
+                    title: 'Change Password'
                 }}
             />
         </AppStack.Navigator>

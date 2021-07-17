@@ -38,21 +38,21 @@ export const LargeTitle = ({ style, onPress, children }) => {
         </Text>
     );
 }
-export const MediumTitle = ({ style, onPress, children }) => {
+export const MediumTitle = ({ style, onPress, children, ...props }) => {
     return (
         <Text
+            {...props}
             style={[styles.mediumTitleStyle, style]}
-            onPress={onPress}
         >
             {children}
         </Text>
     );
 }
-export const SmallTitle = ({ style, onPress, children }) => {
+export const SmallTitle = ({ style, onPress, children, ...props }) => {
     return (
         <Text
+            {...props}
             style={[styles.smallTitleStyle, style]}
-            onPress={onPress}
         >
             {children}
         </Text>
@@ -79,11 +79,12 @@ export const LargeText = ({ style, onPress, children }) => {
         </Text>
     );
 }
-export const MediumText = ({ style, onPress, children }) => {
+export const MediumText = ({ style, onPress, children, ...props }) => {
     return (
         <Text
             style={[styles.mediumTextStyle, style]}
             onPress={onPress}
+            {...props}
         >
             {children}
         </Text>

@@ -21,6 +21,10 @@ import Sell from './sell'
 import Categories from './categories'
 import CategoryDetail from './categoryDetail'
 import SortFilter from './sortFilter'
+import GroupDetail from './groupDetail'
+import Favourites from './favourites'
+import EditProfile from './editProfile'
+import ChangePassword from './changePassword'
 
 export {
     Community, Explore, MarketPlace, Account,
@@ -28,5 +32,5 @@ export {
     TheRepublicNews, ContactUs, SubscriptionPlan,
     Chats, Notifications, ShareAPost, MyLocation, Search,
     ProductDetail, Reviews, UserProfile, Sell, Categories,
-    CategoryDetail,SortFilter
+    CategoryDetail, SortFilter, GroupDetail, Favourites, EditProfile, ChangePassword
 }

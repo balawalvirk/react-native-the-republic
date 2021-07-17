@@ -70,6 +70,7 @@ function SortFilter(props) {
             <Spacer height={sizes.smallMargin} />
             <ButtonGroupAnimated
                 data={sortingOptions}
+                initalIndex={selectedTabIndex}
                 text='title'
                 onPressButton={(item, index) => setSelectedTabIndex(index)}
                 inActiveButtonStyle={{ paddingVertical: sizes.marginVertical / 3, paddingHorizontal: sizes.marginHorizontalSmall, backgroundColor: 'transparent', borderWidth: 1.5, borderColor: colors.error }}

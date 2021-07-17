@@ -412,24 +412,78 @@ const dummyData = {
         }
     ],
 
-categories:[
-    {
-        title:'Handguns',
-        image:'https://cdn.britannica.com/33/125033-004-AA6D7B20/Smith-Wesson-handgun.jpg'
-    },
-    {
-        title:'Rifles',
-        image:'https://cdn.britannica.com/80/130780-004-510D7E4C/assault-rifles-top-M16A1-M4-M16A2-M16A4.jpg'
-    },
-    {
-        title:'Shotguns',
-        image:'https://i.ytimg.com/vi/iQzL2fYaW8c/maxresdefault.jpg'
-    },
-    {
-        title:'Ammo',
-        image:'https://www.19fortyfive.com/wp-content/uploads/2021/01/Ammo-Prices.jpg'
-    }
-]
+    categories: [
+        {
+            title: 'Handguns',
+            image: 'https://cdn.britannica.com/33/125033-004-AA6D7B20/Smith-Wesson-handgun.jpg'
+        },
+        {
+            title: 'Rifles',
+            image: 'https://cdn.britannica.com/80/130780-004-510D7E4C/assault-rifles-top-M16A1-M4-M16A2-M16A4.jpg'
+        },
+        {
+            title: 'Shotguns',
+            image: 'https://i.ytimg.com/vi/iQzL2fYaW8c/maxresdefault.jpg'
+        },
+        {
+            title: 'Ammo',
+            image: 'https://www.19fortyfive.com/wp-content/uploads/2021/01/Ammo-Prices.jpg'
+        }
+    ],
+    dealers: [
+        {
+            id: 22345,
+            name: 'William Alis',
+            image: appImages.user2,
+        },
+        {
+            id: 8373,
+            name: 'Jenny Wilson',
+            image: appImages.user1,
+        },
+        {
+            id: 8453,
+            name: 'John Thomas',
+            image: appImages.user3,
+        },
+        {
+            id: 46216,
+            name: 'Jackobe Black',
+            image: appImages.user5,
+        },
+        {
+            id: 23445,
+            name: 'Nilson Meno',
+            image: appImages.user4,
+        },
+    ],
+    groups: [
+        {
+            id: 22345,
+            name: 'New York Gun Buyers & Sellers',
+            image: appImages.product1,
+        },
+        {
+            id: 8373,
+            name: 'Boston Gun Lovers',
+            image: appImages.product5,
+        },
+        {
+            id: 8453,
+            name: 'Gun Buyers & Sellers',
+            image: appImages.product3,
+        },
+        {
+            id: 46216,
+            name: 'Yellow Arms Buyers',
+            image: appImages.product4,
+        },
+        {
+            id: 23445,
+            name: 'Armer Sales',
+            image: appImages.product2,
+        },
+    ]
 }
 
 export default dummyData

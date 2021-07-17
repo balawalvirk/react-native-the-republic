@@ -101,6 +101,7 @@ function UserProfile(props) {
                 </Wrapper>
                 <ButtonGroupAnimated
                     data={tabs}
+                    initalIndex={selectedTabIndex}
                     text='title'
                     onPressButton={(item, index) => setSelectedTabIndex(index)}
                     containerStyle={[{ backgroundColor: 'transparent', marginHorizontal: sizes.marginHorizontal }]}

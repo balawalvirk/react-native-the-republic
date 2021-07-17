@@ -47,7 +47,11 @@ export const routes = {
     sell: 'sell',
     categories: 'categories',
     CategoryDetail: 'CategoryDetail',
-    sortFilter:'sortFilter'
+    sortFilter: 'sortFilter',
+    groupDetail: 'groupDetail',
+    favourites: 'favourites',
+    editProfile: 'editProfile',
+    changePassword: 'changePassword'
 }
 export const headers = {
     screenOptionsPrimary: {

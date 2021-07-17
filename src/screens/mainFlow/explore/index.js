@@ -1,7 +1,7 @@
 import React, { Component, useRef, useState } from 'react';
 import { View, Text } from 'react-native';
 import { height, totalSize } from 'react-native-dimension';
-import { MainWrapper, Products, RowWrapper, Wrapper, ButtonGroupAnimated, CustomIcon, AbsoluteWrapper, ButtonColoredSmall, Spacer, ProductCardPrimary, TitleInfoPrimary, ButtonGradient, ArmerInfo, Toasts } from '../../../components';
+import { MainWrapper, Products, RowWrapper, Wrapper, ButtonGroupAnimated, CustomIcon, AbsoluteWrapper, ButtonColoredSmall, Spacer, ProductCardPrimary, TitleInfoPrimary, ButtonGradient, ArmerInfo, Toasts, MediumText } from '../../../components';
 import { appIcons, appStyles, colors, DummyData, HelpingMethods, mapStyles, routes, sizes } from '../../../services';
 import Map from './map'
 import MapView from "react-native-map-clustering";
@@ -147,19 +147,17 @@ function Explore(props) {
                 <Spacer height={sizes.smallMargin} />
                 <RowWrapper>
                     <Wrapper>
-                        {
-                            selectedTabIndex === 0 ?
-                                <ButtonGroupAnimated
-                                    data={topTabs}
-                                    text='title'
-                                    onPressButton={(item, index) => setViewIndex(index)}
-                                    containerStyle={[{ backgroundColor: 'white', borderRadius: 100, }, appStyles.shadow]}
-                                    inActiveButtonStyle={{ backgroundColor: 'transparent', marginRight: 0, marginLeft: 0, paddingHorizontal: sizes.marginHorizontal / 1.5, paddingVertical: sizes.smallMargin, }}
-                                    iconSize={totalSize(2)}
-                                />
-                                :
-                                null
-                        }
+
+                        <ButtonGroupAnimated
+                            data={topTabs}
+                            initalIndex={selectedViewIndex}
+                            text='title'
+                            onPressButton={(item, index) => setViewIndex(index)}
+                            containerStyle={[{ backgroundColor: 'white', borderRadius: 100, opacity: selectedTabIndex === 0 ? 1 : 0 }, appStyles.shadow]}
+                            inActiveButtonStyle={{ backgroundColor: 'transparent', marginRight: 0, marginLeft: 0, paddingHorizontal: sizes.marginHorizontal / 1.5, paddingVertical: sizes.smallMargin, }}
+                            iconSize={totalSize(2)}
+                        />
+
                     </Wrapper>
                     <ButtonColoredSmall
                         text="Sort & Filter"
@@ -177,6 +175,7 @@ function Explore(props) {
                 <Wrapper style={[{ height: height(5), alignSelf: 'center', }, appStyles.center]}>
                     <ButtonGroupAnimated
                         data={bottomTabs}
+                        initalIndex={selectedTabIndex}
                         text='title'
                         onPressButton={(item, index) => setSelectedTabIndex(index)}
                         containerStyle={[{ backgroundColor: 'white', borderRadius: 100, }, appStyles.shadow]}
