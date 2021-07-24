@@ -78,7 +78,6 @@ function Account(props) {
                     // activeButtonContent={<Wrapper></Wrapper>}
                     activeTextStyle={[appStyles.textMedium, appStyles.textPrimaryColor]}
                     inActiveTextStyle={[appStyles.textMedium, appStyles.textLightGray]}
-
                 />
                 <Spacer height={sizes.smallMargin} />
                 {

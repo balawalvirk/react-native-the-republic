@@ -368,6 +368,18 @@ const AppNavigation = () => {
                     title: 'Change Password'
                 }}
             />
+             <AppStack.Screen name={routes.paymentMethods} component={MainApp.PaymentMethods}
+                options={{
+                    // headerShown: false,
+                    title: 'Payment Methods'
+                }}
+            />
+             <AppStack.Screen name={routes.purchaseHistory} component={MainApp.PurchaseHistory}
+                options={{
+                    // headerShown: false,
+                    title: 'Purchase History'
+                }}
+            />
         </AppStack.Navigator>
     )
 }

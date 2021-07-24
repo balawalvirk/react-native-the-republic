@@ -25,15 +25,15 @@ const options = {
 const dummyGenders = [
     {
         label: 'Male',
-        value: 'Male'
+        value: 'male'
     },
     {
         label: 'Female',
-        value: 'Female'
+        value: 'female'
     },
     {
         label: 'Other',
-        value: 'Other'
+        value: 'other'
     }
 ]
 const EditProfile = React.forwardRef((props, ref) => {
@@ -83,15 +83,14 @@ const EditProfile = React.forwardRef((props, ref) => {
     const setAllData = () => {
         const { data } = props
         if (data) {
-            setImageUri(data.image)
+            setImageUri(data.profileImage)
             setFirstName(data.firstName);
             setLastName(data.lastName)
+            setCountryCode(data.countryCode)
+            setCountryPhoneCode(data.countryPhoneCode)
             setPhoneNumber(data.phoneNumber.toString())
             setUsername(data.userName)
             setBirthday(data.birthday)
-            setCity(data.city)
-            setState(data.state)
-            setZipCode(data.zipcode)
             setGender(data.gender)
         }
     }

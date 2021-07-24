@@ -25,6 +25,8 @@ import GroupDetail from './groupDetail'
 import Favourites from './favourites'
 import EditProfile from './editProfile'
 import ChangePassword from './changePassword'
+import PurchaseHistory from './purchaseHistory'
+import PaymentMethods from './paymentMethods'
 
 export {
     Community, Explore, MarketPlace, Account,
@@ -32,5 +34,6 @@ export {
     TheRepublicNews, ContactUs, SubscriptionPlan,
     Chats, Notifications, ShareAPost, MyLocation, Search,
     ProductDetail, Reviews, UserProfile, Sell, Categories,
-    CategoryDetail, SortFilter, GroupDetail, Favourites, EditProfile, ChangePassword
+    CategoryDetail, SortFilter, GroupDetail, Favourites, 
+    EditProfile, ChangePassword,PurchaseHistory,PaymentMethods
 }

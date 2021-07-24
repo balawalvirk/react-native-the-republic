@@ -51,7 +51,9 @@ export const routes = {
     groupDetail: 'groupDetail',
     favourites: 'favourites',
     editProfile: 'editProfile',
-    changePassword: 'changePassword'
+    changePassword: 'changePassword',
+    purchaseHistory:'purchaseHistory',
+    paymentMethods:'paymentMethods'
 }
 export const headers = {
     screenOptionsPrimary: {
