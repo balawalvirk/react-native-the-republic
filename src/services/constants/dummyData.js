@@ -483,6 +483,178 @@ const dummyData = {
             name: 'Armer Sales',
             image: appImages.product2,
         },
+    ],
+    orders: [
+        {
+            id: 743,
+            image: appImages.product2,
+            description: 'Stainless 357 Mag Sporter Superscroll 12GAx3″ 32″bbls',
+            new_price: '529.99',
+            old_price: '849.99',
+            location: 'Block GH67, NY',
+            rating: 4.4,
+            review_count: '92',
+            user: {
+                id: 7734,
+                name: 'Jasone White',
+                image: appImages.user5
+            },
+            cooards: {
+                latitude: 51.5359,
+                longitude: 0.1336
+            },
+            info: {
+                make: 'Browning',
+                modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
+                calibre: '22 LR',
+                actionType: 'Semi Auto',
+                shootingType: '',
+                handedness: 'Right-Handed',
+                barrelLength: '5.679',
+                manufacturerNumber: '2342433s23',
+                firearmsClass: 'Non Restricted'
+            },
+            status: 'active'
+        },
+        {
+            id: 443,
+            image: appImages.product1,
+            description: 'Dan Wesson Model 15-2 Stainless 357 Mag Sporter Superscroll 12GAx3″ 32″bbls',
+            new_price: '743.99',
+            old_price: '949.99',
+            location: 'Down town, NY',
+            rating: 4.5,
+            review_count: '23',
+            user: {
+                id: 5642,
+                name: 'Alex Jhon',
+                image: appImages.user4
+            },
+            cooards: {
+                latitude: 51.5159,
+                longitude: 0.1136
+            },
+            info: {
+                make: 'Browning',
+                modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
+                calibre: '22 LR',
+                actionType: 'Semi Auto',
+                shootingType: '',
+                handedness: 'Right-Handed',
+                barrelLength: '5.679',
+                manufacturerNumber: '2342433s23',
+                firearmsClass: 'Non Restricted'
+            },
+            status: 'active'
+        },
+
+        {
+            id: 725553,
+            image: appImages.product4,
+            description: 'Dan Wesson Model 15-2 Stainless 357 Mag Sporter Superscroll 12GAx3″ 32″bbls',
+            new_price: '743.99',
+            old_price: '949.99',
+            location: 'Down town, NY',
+            rating: 4.8,
+            review_count: '9',
+            user: {
+                id: 5642,
+                name: 'Alex Jhon',
+                image: appImages.user4
+            },
+            cooards: {
+                latitude: 51.5559,
+                longitude: 0.1536
+            },
+            info: {
+                make: 'Browning',
+                modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
+                calibre: '22 LR',
+                actionType: 'Semi Auto',
+                shootingType: '',
+                handedness: 'Right-Handed',
+                barrelLength: '5.679',
+                manufacturerNumber: '2342433s23',
+                firearmsClass: 'Non Restricted'
+            },
+            status: 'completed'
+        },
+        {
+            id: 787252,
+            image: appImages.product3,
+            description: 'Stainless 357 Mag Sporter Superscroll 12GAx3″ 32″bbls',
+            new_price: '529.99',
+            old_price: '849.99',
+            location: 'Block GH67, NY',
+            rating: 4.9,
+            review_count: '32',
+            user: {
+                id: 7734,
+                name: 'Jasone White',
+                image: appImages.user5
+            },
+            cooards: {
+                latitude: 51.5259,
+                longitude: 0.1236
+            },
+            info: {
+                make: 'Browning',
+                modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
+                calibre: '22 LR',
+                actionType: 'Semi Auto',
+                shootingType: '',
+                handedness: 'Right-Handed',
+                barrelLength: '5.679',
+                manufacturerNumber: '2342433s23',
+                firearmsClass: 'Non Restricted'
+            },
+            status: 'active'
+        },
+        {
+            id: 34245,
+            image: appImages.product5,
+            description: 'Dan Wesson Model 15-2 Stainless 357 Mag Sporter Superscroll 12GAx3″ 32″bbls',
+            new_price: '743.99',
+            old_price: '949.99',
+            location: 'Down town, NY',
+            rating: 4.8,
+            review_count: '9',
+            user: {
+                id: 5642,
+                name: 'Alex Jhon',
+                image: appImages.user4
+            },
+            cooards: {
+                latitude: 51.5559,
+                longitude: 0.1536
+            },
+            info: {
+                make: 'Browning',
+                modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
+                calibre: '22 LR',
+                actionType: 'Semi Auto',
+                shootingType: '',
+                handedness: 'Right-Handed',
+                barrelLength: '5.679',
+                manufacturerNumber: '2342433s23',
+                firearmsClass: 'Non Restricted'
+            },
+            status: 'completed'
+        },
+    ],
+    creditCards: [
+        {
+            name: 'John Doe',
+            number: '7781522933341946',
+            expiry: '12/25',
+            type: 'master'
+        },
+        {
+            name: 'John Doe',
+            number: '1153688253926386',
+            expiry: '08/23',
+            type: 'visa'
+        }
     ]
 }
 

@@ -5,7 +5,7 @@ import { height, totalSize, width } from 'react-native-dimension';
 import { colors, appStyles, sizes } from '../../services';
 import * as Animatable from 'react-native-animatable';
 import { SmallText } from '../text';
-import { AbsoluteWrapper } from '../wrappers';
+import { AbsoluteWrapper, Wrapper } from '../wrappers';
 import { Badge } from 'react-native-elements';
 export const BackIcon = ({ style, onPress, size }) => {
     return (
@@ -144,6 +144,32 @@ export const IconHeart = ({ value, onPress, size, containerColor, containerSize,
             shadow={shadow}
             shadowColored={shadowColored}
         />
+    )
+}
+export const CheckIconPrimary = props => {
+    return (
+        <Wrapper animation="zoomIn">
+            <IconButton
+                iconName="check"
+                buttonSize={totalSize(3)}
+                iconSize={totalSize(2)}
+                buttonColor={colors.success}
+                iconColor={colors.appTextColor6}
+            />
+        </Wrapper>
+    )
+}
+export const CloseIconPrimary = props => {
+    return (
+        <Wrapper animation="bounceIn">
+            <IconButton
+                iconName="close"
+                buttonSize={totalSize(3)}
+                iconSize={totalSize(2)}
+                buttonColor={colors.error}
+                iconColor={colors.appTextColor6}
+            />
+        </Wrapper>
     )
 }
 

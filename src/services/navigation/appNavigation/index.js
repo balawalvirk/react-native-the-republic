@@ -353,31 +353,36 @@ const AppNavigation = () => {
             <AppStack.Screen name={routes.favourites} component={MainApp.Favourites}
                 options={{
                     // headerShown: false,
-                    title: 'Favourites'
+                    title: 'Favourites',
+                    headerTitleAlign:'center'
                 }}
             />
             <AppStack.Screen name={routes.editProfile} component={MainApp.EditProfile}
                 options={{
                     // headerShown: false,
-                    title: 'Edit Profile'
+                    title: 'Edit Profile',
+                    headerTitleAlign:'center'
                 }}
             />
              <AppStack.Screen name={routes.changePassword} component={MainApp.ChangePassword}
                 options={{
                     // headerShown: false,
-                    title: 'Change Password'
+                    title: 'Change Password',
+                    headerTitleAlign:'center'
                 }}
             />
              <AppStack.Screen name={routes.paymentMethods} component={MainApp.PaymentMethods}
                 options={{
                     // headerShown: false,
-                    title: 'Payment Methods'
+                    title: 'Payment Methods',
+                    headerTitleAlign:'center'
                 }}
             />
              <AppStack.Screen name={routes.purchaseHistory} component={MainApp.PurchaseHistory}
                 options={{
                     // headerShown: false,
-                    title: 'Purchase History'
+                    title: 'Purchase History',
+                    headerTitleAlign:'center'
                 }}
             />
         </AppStack.Navigator>

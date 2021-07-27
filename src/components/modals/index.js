@@ -10,7 +10,7 @@ import { TextInputColored, TextInputBordered } from '../textInput';
 import Modal from 'react-native-modal'
 import { CheckBoxPrimary } from '../checkBoxs';
 import { ButtonColored, ButtonGradiantColored, ButtonBordered } from '../buttons';
-import { SearchIcon, CloseIcon } from '../icons';
+import { SearchIcon, CloseIcon, BackIcon } from '../icons';
 import { styles } from './styles';
 import { LineHorizontal } from '../lines';
 import { Platform } from 'react-native';

@@ -8,6 +8,9 @@ const appImages = {
     resetpassword_icon: require('../../../assets/images/forgot-password.png'),
     verify_phone_number: require('../../../assets/images/verify-phone-number.png'),
 
+    //card types
+    masterLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/2560px-MasterCard_Logo.svg.png',
+    visaLogo: 'https://logosvector.net/wp-content/uploads/2013/06/visa-card-vector-logo.png',
     //dummy users 
     user1: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80',
     user2: 'https://images.squarespace-cdn.com/content/v1/571114d145bf21108e6acc6f/1598559762695-NBTY0TCW2GPCINKXAY6T/ke17ZwdGBToddI8pDm48kK60W-ob1oA2Fm-j4E_9NQB7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z4YTzHvnKhyp6Da-NYroOW3ZGjoBKy3azqku80C789l0kD6Ec8Uq9YczfrzwR7e2Mh5VMMOxnTbph8FXiclivDQnof69TlCeE0rAhj6HUpXkw/aveda+men.jpg?format=2500w',
@@ -18,11 +21,11 @@ const appImages = {
     noImageAvailable: 'https://lh3.googleusercontent.com/proxy/GWEHp03qoG0SyTzJZCrvt-5Xc4EMnyXWJ_0CPBlRN4c-YtIgmMLmTNnmFdxePHTXEZ2vCQ-yIpEMs7susp1EgnLpkDlesU32U8z_7ab2-UrOKd7JaTgC5BGVqIxonMfGU1zuHZc',
 
     //dummy product
-    product1:'https://freepngimg.com/thumb/gun/16-handgun-png-image.png',
-    product2:'https://www.pngitem.com/pimgs/m/649-6491153_drawn-gun-transparent-guns-from-side-hd-png.png',
-    product3:'https://danwessonfirearms.com/ourquality/wp-content/uploads/2019/05/19z_DWKodiakTwoTone_L.png',
-    product4:'https://danwessonfirearms.com/ourquality/wp-content/uploads/2016/11/Dan-Wesson-Bruin-right.png',
-    product5:'https://i0.wp.com/500photos.com/wp-content/uploads/2018/12/HDR2-pistoletos.png?fit=1200%2C698&ssl=1'
+    product1: 'https://freepngimg.com/thumb/gun/16-handgun-png-image.png',
+    product2: 'https://www.pngitem.com/pimgs/m/649-6491153_drawn-gun-transparent-guns-from-side-hd-png.png',
+    product3: 'https://danwessonfirearms.com/ourquality/wp-content/uploads/2019/05/19z_DWKodiakTwoTone_L.png',
+    product4: 'https://danwessonfirearms.com/ourquality/wp-content/uploads/2016/11/Dan-Wesson-Bruin-right.png',
+    product5: 'https://i0.wp.com/500photos.com/wp-content/uploads/2018/12/HDR2-pistoletos.png?fit=1200%2C698&ssl=1'
 }
 
 const appIcons = {

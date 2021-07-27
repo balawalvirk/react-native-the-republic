@@ -20,6 +20,15 @@ export default StyleSheet.create({
         flexDirection:'row',
        // alignItems:'center'
     },
+    orderCardPrimaryContainer: {
+        // flex:1,
+         borderWidth: 1,
+         borderColor: colors.appBgColor4,
+         borderRadius: sizes.cardRadius,
+         marginHorizontal: sizes.marginHorizontal,
+         //flexDirection:'row',
+        // alignItems:'center'
+     },
     reviewContainer: {
         borderWidth: 1,
         borderColor: colors.appBgColor4,

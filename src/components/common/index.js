@@ -20,6 +20,8 @@ import ArmerInfo from './armerInfo'
 import Reviews from './reviews'
 import { LineHorizontal } from '..'
 import { Dealers, Groups } from './usersLists'
+import { OrdersPrimary } from './ordersLists'
+import AddPaymentMethodModal from './addPaymentMethodModal'
 import { ImageProfile, ImageRound } from '../images'
 import { ImageBackground } from 'react-native'
 
@@ -332,5 +334,6 @@ export const ShareSomethingButton = ({onPress, imageUri ,title}) => {
 export {
     EditProfileComp, VerificationCodeSentPopup, ImagePickerPopup,
     Posts, MenuPopup, RenderComments, Products, ArmerInfo,
-    Reviews, ProductsSecondary, ProductsHorizontalyPrimary, Dealers, Groups
+    Reviews, ProductsSecondary, ProductsHorizontalyPrimary, Dealers, Groups,
+    OrdersPrimary,AddPaymentMethodModal
 }

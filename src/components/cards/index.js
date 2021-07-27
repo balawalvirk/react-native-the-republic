@@ -2,13 +2,13 @@ import React from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { Icon } from 'react-native-elements';
 import { height, totalSize, width } from 'react-native-dimension';
-import { appIcons, appStyles, colors, HelpingMethods, sizes } from '../../services';
+import { appIcons, appImages, appStyles, colors, HelpingMethods, sizes } from '../../services';
 import { Spacer, Wrapper, AbsoluteWrapper, LineHorizontal, LineVertical, ComponentWrapper, MediumText, RowWrapperBasic, RowWrapper, TinyText, RegularText, IconWithText, ImageRound } from '..';
 import styles from './styles'
 import { IconHeart } from '../icons';
 import StarRating from 'react-native-star-rating';
 import LinearGradient from 'react-native-linear-gradient';
-import { SmallText, TinyTitle } from '../text';
+import { LargeText, MediumTitle, SmallText, SmallTitle, TinyTitle } from '../text';
 import { ButtonColoredSmall } from '../buttons';
 import { ImageThumbnailGrid } from '../images';
 
@@ -190,6 +190,133 @@ export const ReviewCardPrimary = ({ containerStyle, imageUrl, title, rating, rev
             <Spacer height={sizes.smallMargin} />
             <RegularText>{comment}</RegularText>
         </Wrapper>
+    )
+}
+export const OrderCardPrimary = ({ onPress, animation, duration, isFavourite, image, images, containerstyle, description, onPressHeart, newPrice, oldPrice, userName, userImage, viewType, rating, reviewCount, status, distance }) => {
+    const defaultViewType = viewType ? viewType : 'grid'
+    const isActive = status === 'active'
+    const isCompleted = status === 'completed'
+    const statusText = isActive ? "Order accepted" : isCompleted ? "Completed" : ''
+    return (
+        <Wrapper animation={animation} duration={duration} style={[styles.orderCardPrimaryContainer, containerstyle]}>
+            <RowWrapperBasic style={[{ alignItems: 'flex-start', paddingVertical: sizes.marginVertical / 2, paddingHorizontal: sizes.marginHorizontalSmall }]}>
+                <Wrapper style={{ justifyContent: 'center' }}>
+                    <TouchableOpacity style={{ borderWidth: 1, borderRadius: sizes.cardRadius, borderColor: colors.appBgColor4 }} activeOpacity={1} onPress={onPress}>
+                        <Image
+                            source={{ uri: image }}
+                            style={{ height: width(25), width: width(25) }}
+                            resizeMode="contain"
+                        />
+                    </TouchableOpacity>
+                </Wrapper>
+                <LineHorizontal />
+                <Wrapper flex={1}>
+                    <TouchableOpacity activeOpacity={1} onPress={onPress}>
+                        <Wrapper style={[styles.smallMarginHorizontal,]}>
+                            <Wrapper >
+                                <RegularText numberOfLines={2}>{description}</RegularText>
+                            </Wrapper>
+                            <Spacer height={sizes.smallMargin} />
+                            <Wrapper >
+                                <RowWrapperBasic>
+                                    <RegularText style={[appStyles.fontBold, appStyles.textPrimaryColor]}>${newPrice}</RegularText>
+                                    <Spacer width={sizes.smallMargin} />
+                                    <TinyText style={[appStyles.textColorError, appStyles.textLineThrough]}>${oldPrice}</TinyText>
+                                </RowWrapperBasic>
+                            </Wrapper>
+                            <Spacer height={sizes.smallMargin} />
+                            <RowWrapperBasic>
+                                <StarRating
+                                    disabled={false}
+                                    maxStars={5}
+                                    rating={rating}
+                                    fullStarColor={colors.rating}
+                                    starSize={totalSize(1.75)}
+                                    starStyle={{ marginRight: totalSize(0.2) }}
+                                />
+                                <Spacer width={sizes.TinyMargin} />
+                                <TinyText>{rating} ({reviewCount})</TinyText>
+                            </RowWrapperBasic>
+                        </Wrapper>
+                        <Spacer height={sizes.smallMargin} />
+                    </TouchableOpacity>
+                </Wrapper>
+            </RowWrapperBasic>
+            <Wrapper style={{ backgroundColor: colors.appBgColor4, paddingVertical: sizes.marginVertical / 2, borderRadius: sizes.cardRadius }}>
+                <RowWrapperBasic style={{ marginHorizontal: sizes.marginHorizontalSmall }}>
+                    <Wrapper flex={1}>
+                        <RowWrapperBasic>
+                            <ImageRound
+                                source={{ uri: userImage }}
+                                size={totalSize(5)}
+                            />
+                            <Spacer width={sizes.smallMargin} />
+                            <Wrapper style={{ alignItems: 'flex-start', }}>
+                                <MediumText>{userName}</MediumText>
+                                <Spacer height={sizes.TinyMargin} />
+                                <SmallText style={[appStyles.textGray]}>{distance}</SmallText>
+                            </Wrapper>
+                        </RowWrapperBasic>
+                    </Wrapper>
+                    <Wrapper>
+                        <ButtonColoredSmall
+                            text={statusText}
+                            buttonStyle={{ paddingHorizontal: sizes.marginHorizontalSmall / 2, borderRadius: 100, backgroundColor: isActive ? colors.appColor1 : isCompleted ? colors.success : colors.appColor1 }}
+                            textStyle={[appStyles.textRegular, appStyles.textWhite]}
+                        />
+                    </Wrapper>
+                </RowWrapperBasic>
+            </Wrapper>
+        </Wrapper>
+    );
+}
+
+export const CreditCardPrimary = ({ containerStyle, name, cardNumber, expiry, onPress, shadow, type, gradiant, subContainerStyle, isDefault,onPressSelect }) => {
+    const isMaster = type === 'master'
+    const isVisa = type === 'visa'
+    const cardTypeIcon = isMaster ? appImages.masterLogo : isVisa ? appImages.visaLogo : appImages.noImageAvailable
+    return (
+        <TouchableOpacity activeOpacity={1} onPress={onPress} style={[{ backgroundColor: colors.appBgColor2, borderRadius: sizes.buttonRadius, marginHorizontal: sizes.marginHorizontal, }, shadow && appStyles.shadow, containerStyle]}>
+            <LinearGradient
+                colors={gradiant ? gradiant : colors.appGradiantColors}
+                start={{ x: 0.0, y: 0.25 }} end={{ x: 0.5, y: 1.0 }}
+                locations={[0, 0.9]}
+                style={[{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, borderRadius: sizes.buttonRadius, },]} />
+
+            <Wrapper style={[{ paddingBottom: sizes.marginVertical/2,paddingTop:sizes.marginVertical,paddingHorizontal:sizes.marginHorizontal }, subContainerStyle]}>
+                <RowWrapperBasic style={{alignItems: 'flex-start',}}>
+                    <Wrapper flex={1}>
+                        <RegularText style={[appStyles.textWhite, appStyles.fontBold]}>{name}</RegularText>
+                    </Wrapper>
+                    <Wrapper style={{}}>
+                        <ButtonColoredSmall
+                            text={isDefault ? 'Default' : 'Select'}
+                            onPress={onPressSelect}
+                            buttonStyle={{ backgroundColor: colors.appBgColor1, borderRadius: 100 ,paddingHorizontal:sizes.marginHorizontalSmall,paddingVertical:sizes.marginVertical/4}}
+                            textStyle={[appStyles.textSmall]}
+                        />
+                    </Wrapper>
+                </RowWrapperBasic>
+                <Spacer height={sizes.smallMargin} />
+                <SmallTitle style={[{ color: appStyles.textWhite.color },appStyles.fontMedium]}>**** **** **** {cardNumber.slice(11,15)}</SmallTitle>
+                <Spacer height={sizes.baseMargin} />
+                <RowWrapperBasic>
+                    <Wrapper flex={1}>
+                        <TinyText style={[{ color: appStyles.textWhite.color + '80' }]}>Expiry</TinyText>
+                        <Spacer height={sizes.TinyMargin} />
+                        <RegularText style={[appStyles.textWhite,]}>{expiry}</RegularText>
+                    </Wrapper>
+                    <Wrapper style={{}}>
+                        <Image
+                            source={{ uri: cardTypeIcon }}
+                            resizeMode="contain"
+                            style={{ width: width(15), height: width(15) }}
+                        />
+                    </Wrapper>
+                </RowWrapperBasic>
+            </Wrapper>
+
+        </TouchableOpacity>
     )
 }
 
