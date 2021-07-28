@@ -1,5 +1,5 @@
 import React from 'react'
-import { Platform, TouchableOpacity } from 'react-native'
+import { Platform, TouchableOpacity,ImageBackground } from 'react-native'
 import { height, totalSize, width } from 'react-native-dimension'
 import { ModalSwipeablePrimary } from '..'
 import { appIcons, appImages, appStyles, colors, HelpingMethods, sizes } from '../../services'
@@ -19,11 +19,10 @@ import { Products, ProductsSecondary, ProductsHorizontalyPrimary } from './produ
 import ArmerInfo from './armerInfo'
 import Reviews from './reviews'
 import { LineHorizontal } from '..'
-import { Dealers, Groups } from './usersLists'
+import { Dealers, Groups,FollowRequestsList } from './usersLists'
 import { OrdersPrimary } from './ordersLists'
 import AddPaymentMethodModal from './addPaymentMethodModal'
 import { ImageProfile, ImageRound } from '../images'
-import { ImageBackground } from 'react-native'
 
 export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, topMargin, children }) => {
     return (
@@ -233,18 +232,16 @@ export const TitlePrimary = ({ title, onPressRight, rightText }) => {
         </RowWrapper>
     )
 }
-export const FilterButton = ({ onPress }) => {
+export const FilterButton = ({ onPress,buttonStyle }) => {
     return (
-        <ComponentWrapper>
             <ButtonColoredSmall
                 onPress={onPress}
                 text="Sort & Filters"
                 iconName="options"
                 iconType="ionicon"
                 textStyle={[appStyles.textRegular, appStyles.textWhite]}
-                buttonStyle={{ borderRadius: 100, paddingHorizontal: sizes.marginHorizontalSmall }}
+                buttonStyle={[{ borderRadius: 100, paddingHorizontal: sizes.marginHorizontalSmall,marginHorizontal:sizes.marginHorizontal },buttonStyle]}
             />
-        </ComponentWrapper>
     )
 }
 export const ViewAllListButton = ({ onPress }) => {
@@ -335,5 +332,7 @@ export {
     EditProfileComp, VerificationCodeSentPopup, ImagePickerPopup,
     Posts, MenuPopup, RenderComments, Products, ArmerInfo,
     Reviews, ProductsSecondary, ProductsHorizontalyPrimary, Dealers, Groups,
-    OrdersPrimary,AddPaymentMethodModal
+    OrdersPrimary,AddPaymentMethodModal,FollowRequestsList
 }
+
+export * from './imagesList'

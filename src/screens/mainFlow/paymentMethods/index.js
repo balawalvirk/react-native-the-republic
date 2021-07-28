@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
 import { View, Text } from 'react-native';
-import { AddPaymentMethodModal, ButtonColored, MainWrapper, Spacer } from '../../../components';
+import { AddPaymentMethodModal, ButtonColored, MainWrapper, Spacer, Toasts } from '../../../components';
 import { colors, DummyData, sizes } from '../../../services';
 import { RenderPaymentMethods } from './renderCards';
 
@@ -23,12 +23,19 @@ function PaymentMethods(props) {
                 text="Add Payment Method"
                 buttonColor={colors.appBgColor4}
                 tintColor={colors.appTextColor1}
-                onPress={ toggleAddPaymentModal}
+                onPress={toggleAddPaymentModal}
 
             />
             <AddPaymentMethodModal
                 isVisible={isAddPaymentModalVisible}
                 toggleModal={toggleAddPaymentModal}
+                onPressAddPaymentMethod={data => {
+                    console.log('Card Data', data)
+                    if(data){
+                        toggleAddPaymentModal()
+                        Toasts.success('Card Added Successfully')
+                    }
+                }}
             />
         </MainWrapper>
     );

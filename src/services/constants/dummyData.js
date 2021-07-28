@@ -457,6 +457,33 @@ const dummyData = {
             image: appImages.user4,
         },
     ],
+    users: [
+        {
+            id: 8373,
+            name: 'Jenny Wilson',
+            image: appImages.user1,
+        },
+        {
+            id: 22345,
+            name: 'William Alis',
+            image: appImages.user2,
+        },
+        {
+            id: 46216,
+            name: 'Jackobe Black',
+            image: appImages.user5,
+        },
+        {
+            id: 8453,
+            name: 'John Thomas',
+            image: appImages.user3,
+        },
+        {
+            id: 23445,
+            name: 'Nilson Meno',
+            image: appImages.user4,
+        },
+    ],
     groups: [
         {
             id: 22345,
@@ -655,6 +682,90 @@ const dummyData = {
             expiry: '08/23',
             type: 'visa'
         }
+    ],
+    notificaitons: [
+        {
+            text: 'New products added in your area. You might like these.',
+            type: 'app',
+            image: null,
+            time: '2h ago',
+            isView: false
+        },
+        {
+            text: 'Davin Grimes left a review on Browning Buck Mark Plus Vision Black/Gold Suppressor Ready 22 LR. Tap here to approve this review.',
+            type: 'review',
+            image: appImages.user2,
+            time: '1d ago',
+            isView: false
+        },
+        {
+            text: 'Your order is on the way. Tap here to keep track of the delivery.',
+            type: 'order',
+            image: appImages.product4,
+            time: '3d ago',
+            isView: true
+        },
+        {
+            text: 'Browning Buck Mark Plus Vision Black/Gold Suppressor Ready 22 LR is now available.',
+            type: 'product',
+            image: appImages.product5,
+            time: '1w ago',
+            isView: true
+        },
+        {
+            text: 'Your notifications about your orders, new products and activity in the community will appear here.',
+            type: 'app',
+            image: null,
+            time: '3w ago',
+            isView: false
+        },
+    ],
+    newsNotifications: [
+        {
+            text: 'General news and notifications sent by the Admin of the app will be shown in this section.',
+            type: 'app',
+            image: null,
+            time: '3w ago',
+            isView: false
+        },
+    ],
+    conversations: [
+        {
+            message: 'Corrupti provident at explicabo quos quasi sit voluptatem.',
+            time: '2h ago',
+            user: {
+                id: 7734,
+                name: 'Jasone White',
+                image: appImages.user5
+            },
+        },
+        {
+            message: 'Mollitia eum id tempore provident quasi consequatur numquam.',
+            time: '2h ago',
+            user: {
+                id: 8373,
+                name: 'Jenny Wilson',
+                image: appImages.user1,
+            },
+        },
+        {
+            message: 'Architecto sequi et sint accusamus.',
+            time: '2h ago',
+            user: {
+                id: 22345,
+                name: 'William Alis',
+                image: appImages.user2,
+            },
+        },
+        {
+            message: 'At laboriosam recusandae sed omnis sit earum omnis.',
+            time: '2h ago',
+            user: {
+                id: 8453,
+                name: 'John Thomas',
+                image: appImages.user3,
+            },
+        },
     ]
 }
 

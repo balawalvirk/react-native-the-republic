@@ -5,5 +5,8 @@ export default StyleSheet.create({
     joinButton:{
         paddingHorizontal:sizes.marginHorizontalSmall/2,
         borderRadius:100
+    },
+    followRequestsListButton:{
+        paddingHorizontal:sizes.marginHorizontalLarge
     }
 })

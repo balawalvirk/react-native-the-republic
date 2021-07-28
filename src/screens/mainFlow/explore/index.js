@@ -1,9 +1,8 @@
 import React, { Component, useRef, useState } from 'react';
 import { View, Text } from 'react-native';
 import { height, totalSize } from 'react-native-dimension';
-import { MainWrapper, Products, RowWrapper, Wrapper, ButtonGroupAnimated, CustomIcon, AbsoluteWrapper, ButtonColoredSmall, Spacer, ProductCardPrimary, TitleInfoPrimary, ButtonGradient, ArmerInfo, Toasts, MediumText } from '../../../components';
+import { MainWrapper, Products, RowWrapper, Wrapper, ButtonGroupAnimated, CustomIcon, AbsoluteWrapper, ButtonColoredSmall, Spacer, ProductCardPrimary, TitleInfoPrimary, ButtonGradient, ArmerInfo, Toasts, MediumText, FilterButton } from '../../../components';
 import { appIcons, appStyles, colors, DummyData, HelpingMethods, mapStyles, routes, sizes } from '../../../services';
-import Map from './map'
 import MapView from "react-native-map-clustering";
 import { Marker } from "react-native-maps";
 import BottomSheet from 'reanimated-bottom-sheet';
@@ -159,15 +158,13 @@ function Explore(props) {
                         />
 
                     </Wrapper>
-                    <ButtonColoredSmall
-                        text="Sort & Filter"
-                        buttonStyle={{ borderRadius: 100, paddingHorizontal: sizes.marginHorizontalSmall }}
-                        customIcon={appIcons.filter}
-                        onPress={() => navigate(routes.sortFilter, {
-                            clearFilter: () => { Toasts.success('Filter cleared') },
-                            applyFilter: () => { Toasts.success('Filter applied') }
-                        })}
-                    />
+                    <FilterButton
+                    onPress={() => navigate(routes.sortFilter, {
+                        clearFilter: () => { Toasts.success('Filter cleared') },
+                        applyFilter: () => { Toasts.success('Filter applied') }
+                    })}
+                    buttonStyle={{marginHorizontal:0}}
+                />
                 </RowWrapper>
                 <Spacer height={sizes.baseMargin} />
             </AbsoluteWrapper>

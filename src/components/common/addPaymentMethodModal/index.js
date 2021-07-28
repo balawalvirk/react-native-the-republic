@@ -1,5 +1,5 @@
-import React, { Component, useState } from 'react';
-import { View, Text, Platform, UIManager, LayoutAnimation } from 'react-native';
+import React, { Component, useState, useEffect } from 'react';
+import { View, Text, Platform, UIManager, LayoutAnimation, Keyboard } from 'react-native';
 import { Wrapper, ComponentWrapper, RowWrapper } from '../../wrappers';
 import { KeyboardAvoidingScrollView } from '../../scrollViews';
 import { Spacer } from '../../spacers';
@@ -25,6 +25,15 @@ function PaymentModal({
     const [nameError, setNameError] = useState('')
     const [cardExpiryError, setCardExpiryError] = useState('')
     const [cvcError, setCvcError] = useState('')
+
+    // manage keyboard
+    const [keyboardVisible, setKeyboardVisible] = useState(false)
+    let keyboardDidShowListener
+    let keyboardDidHideListener
+    useEffect(() => {
+        keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => { HelpingMethods.handleAnimation(); setKeyboardVisible(true) });
+        keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => { HelpingMethods.handleAnimation(); setKeyboardVisible(false) });
+    })
 
 
 
@@ -63,17 +72,18 @@ function PaymentModal({
         !cardExpiry ? setCardExpiryError('Enter expiry.') : cardExpiry.length < 5 ? setCardExpiryError('Invalid expiry') : setCardExpiryError('')
         !cvc ? setCvcError('Enter cvc') : cvc.length < 3 ? setCvcError('Invalid cvc') : setCvcError('')
 
-        if (cardNumber.length === 19 && cardExpiry.length === 5 && cvc.length === 3) {
+        if (cardNumber.length === 19 && name.length >= 2 && cardExpiry.length === 5 && cvc.length === 3) {
             return true
         } else {
             return false
         }
     }
-    getPaymentInfo = () => {
+    const getPaymentInfo = () => {
         let paymentInfo = null
         if (PaymentValidations()) {
             paymentInfo = {
                 card_number: cardNumber.replace(/\s/g, ''),
+                cardHolder_name: name,
                 expiry_date: cardExpiry,
                 cvc: cvc,
                 //save_card: saveCard,
@@ -82,6 +92,7 @@ function PaymentModal({
             setCardNumber('')
             setCardExpiry('')
             setCvc('')
+            setName('')
         } else {
             //Toast.show('Please check all fields')
         }
@@ -95,15 +106,15 @@ function PaymentModal({
             headerTitle={title ? title : 'Add New Payment Method'}
             visible={isVisible}
             toggle={toggleModal}
-            topMargin={height(45)}
-            hideHeader
+            topMargin={keyboardVisible ? height(20) : height(45)}
+        // hideHeader
         //disableSwipe
         >
             <Wrapper flex={1}>
                 <KeyboardAvoidingScrollView>
-                    <Spacer height={sizes.baseMargin*2}/>
+                    {/* <Spacer height={sizes.baseMargin * 2} />
                     <SmallTitle style={[appStyles.textCenter]}>{title ? title : 'Add New Payment Method'}</SmallTitle>
-                    <Spacer height={sizes.baseMargin}/>
+                    <Spacer height={sizes.baseMargin} /> */}
                     {detail && <>
                         <ComponentWrapper>
                             <RegularText style={[appStyles.textGray]}>{detail}</RegularText>
@@ -150,7 +161,7 @@ function PaymentModal({
                         }
                     />
                     <Spacer height={sizes.baseMargin} />
-                    <RowWrapper>
+                    <RowWrapper style={{ alignItems: 'flex-start', }}>
                         <Wrapper flex={1}>
                             <TextInputUnderlined
                                 title="Expiry"
@@ -202,8 +213,9 @@ function PaymentModal({
                     <Spacer height={sizes.baseMargin} />
                     <ButtonColored
                         text={buttonText ? buttonText : "Add Payment Method"}
-                        onPress={onPressAddPaymentMethod}
+                        onPress={() => onPressAddPaymentMethod(getPaymentInfo())}
                     />
+                    <Spacer height={sizes.baseMargin} />
                 </KeyboardAvoidingScrollView>
             </Wrapper>
         </ModalSwipeablePrimary>

@@ -242,10 +242,16 @@ const AppNavigation = () => {
                 }}
             />
             <AppStack.Screen name={routes.dealers} component={MainApp.Dealers}
-                options={{
-                    // headerShown: false,
-                    title: 'Dealers'
-                }}
+               options={({ navigation, route }) => ({
+                title: 'Dealers',
+                headerRight: () =>
+                    <ComponentWrapper >
+                        <LocationPickerButton
+                            onPress={() => navigation.navigate(routes.myLocation)}
+                            text="Broklyn, NYC" />
+                    </ComponentWrapper>,
+
+            })}
             />
             <AppStack.Screen name={routes.trainings} component={MainApp.Trainings}
                 options={{
@@ -256,7 +262,8 @@ const AppNavigation = () => {
             <AppStack.Screen name={routes.comments} component={MainApp.Comments}
                 options={{
                     // headerShown: false,
-                    title: 'Comments'
+                    title: 'Comments',
+                    headerTitleAlign:'center'
                 }}
             />
             <AppStack.Screen name={routes.theRepublicNews} component={MainApp.TheRepublicNews}
@@ -304,7 +311,14 @@ const AppNavigation = () => {
             <AppStack.Screen name={routes.chats} component={MainApp.Chats}
                 options={{
                     // headerShown: false,
-                    title: 'Chats'
+                    title: 'Messages',
+                    headerTitleAlign:'center'
+                }}
+            />
+            <AppStack.Screen name={routes.chatScreen} component={MainApp.ChatScreen}
+                options={{
+                    // headerShown: false,
+                    title: 'Chat',
                 }}
             />
             <AppStack.Screen name={routes.productDetail} component={MainApp.ProductDetail}

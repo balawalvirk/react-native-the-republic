@@ -50,9 +50,16 @@ export const ModalSwipeablePrimary = ({ visible, toggle, disableSwipe, topMargin
                             <View>
                                 {
                                     headerLeft ? headerLeft :
-                                        <BackIcon
-                                            onPress={toggle}
-                                            color={colors.appTextColor6}
+                                        // <BackIcon
+                                        //     onPress={toggle}
+                                        //     color={colors.appTextColor6}
+                                        // />
+                                        <Icon
+                                        name="x"
+                                        type="feather"
+                                        size={totalSize(2.5)}
+                                        color={colors.appTextColor1}
+                                        onPress={toggle}
                                         />
                                 }
                             </View>

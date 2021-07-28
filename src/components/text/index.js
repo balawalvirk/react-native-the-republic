@@ -101,11 +101,12 @@ export const RegularText = ({ style, onPress, children, numberOfLines }) => {
         </Text>
     );
 }
-export const SmallText = ({ style, onPress, children }) => {
+export const SmallText = ({ style, onPress, children,...props }) => {
     return (
         <Text
             style={[styles.smallTextStyle, style]}
             onPress={onPress}
+            {...props}
         >
             {children}
         </Text>

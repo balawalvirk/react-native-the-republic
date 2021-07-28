@@ -4,10 +4,10 @@ import { Icon } from 'react-native-elements';
 import { height, totalSize, width } from 'react-native-dimension';
 import { colors, appStyles, sizes } from '../../services';
 import { ComponentWrapper, Wrapper } from '../wrappers';
-import { RegularText, TinyText } from '../text';
+import { MediumText, RegularText, TinyText } from '../text';
 import { Spacer } from '../spacers';
 
-export const ChatBubbule = ({containerStyle, myMessage, message, time, image}) => {
+export const ChatBubbule = ({ containerStyle, myMessage, message, time, image }) => {
     return (
         <ComponentWrapper
             animation={!myMessage ? 'fadeInLeft' : 'fadeInRight'}
@@ -21,16 +21,16 @@ export const ChatBubbule = ({containerStyle, myMessage, message, time, image}) =
                 image ?
                     <Wrapper>
                         <Image
-                            source={{uri:image}}
+                            source={{ uri: image }}
                             style={[styles.imageStyle]}
                         />
-                        <Spacer height={sizes.smallMargin}/>
+                        <Spacer height={sizes.smallMargin} />
                     </Wrapper>
                     :
                     null
             }
-            <Wrapper style={{ backgroundColor: !myMessage ? colors.appColor2 : colors.appColor1, padding: sizes.smallMargin, borderRadius: 25 }}>
-                <RegularText style={[!myMessage ? appStyles.textPrimaryColor : appStyles.textWhite]}>{message}</RegularText>
+            <Wrapper style={{ backgroundColor: !myMessage ? colors.appBgColor4 : colors.appColor1, paddingHorizontal: sizes.marginHorizontal,paddingVertical: sizes.marginVertical/2, borderRadius: sizes.cardRadius }}>
+                <MediumText style={[!myMessage ? null : appStyles.textWhite]}>{message}</MediumText>
             </Wrapper>
             <TinyText style={[appStyles.textLightGray, { margin: sizes.TinyMargin }]}>{time}</TinyText>
         </ComponentWrapper>

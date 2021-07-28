@@ -301,4 +301,28 @@ export const SearchTextinput = ({ value, placeholder, inputContainerStyle, onCha
         />
     )
 }
+export const TextInputChat = props => {
+    const { onChangeText, onSend, value } = props;
+    return (
+        <TextInputBordered
+            placeholder="Write a message"
+            iconName="send"
+            multiline
+            iconType="font-awesome"
+            iconColor={colors.appColor1}
+            inputStyle={{
+                height: null,
+                backgroundColor: 'transparent',
+                paddingVertical: Platform.OS === 'ios' ? height(2) : null,
+            }}
+            inputContainerStyle={[
+                { alignItems: 'flex-end', marginVertical: height(2) },
+            ]}
+            iconStyle={{ marginVertical: height(2) }}
+            value={value}
+            onChangeText={onChangeText}
+            onPressIcon={onSend}
+        />
+    );
+};
 export { TextInputColored, TextInputBordered, TextInputUnderlined }

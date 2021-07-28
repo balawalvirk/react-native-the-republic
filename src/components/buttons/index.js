@@ -18,7 +18,7 @@ export const ButtonColored = ({
 }) => {
     return (
         <TouchableOpacity onPress={onPress} disabled={isLoading ? true : disabled}>
-            <Wrapper animation={animation} style={[appStyles.buttonColord, { borderRadius: sizes.buttonRadius, height: height(7), backgroundColor: disabled ? colors.appColor1 + '80' : buttonColor ? buttonColor : colors.appColor1,marginHorizontal:sizes.marginHorizontalXLarge }, buttonStyle]}>
+            <Wrapper animation={animation} style={[appStyles.buttonColord, { borderRadius: sizes.buttonRadius, height: height(7), backgroundColor: disabled ? colors.appColor1 + '80' : buttonColor ? buttonColor : colors.appColor1, marginHorizontal: sizes.marginHorizontalXLarge }, buttonStyle]}>
                 <View style={{ flexDirection: direction ? direction : 'row', alignItems: 'center' }}>
                     {
                         customIcon ?
@@ -156,7 +156,7 @@ export const ButtonArrowColored = ({ text, onPress, animation, buttonStyle, text
 }
 
 
-export function ButtonGradient({ text, animation, onPress, buttonStyle, textStyle, iconName, iconType, iconSize, buttonColor, iconStyle, tintColor, loading, shadow ,gradiantContainerStyle}) {
+export function ButtonGradient({ text, animation, onPress, buttonStyle, textStyle, iconName, iconType, iconSize, buttonColor, iconStyle, tintColor, loading, shadow, gradiantContainerStyle }) {
 
     return (
         <TouchableOpacity disabled={loading} onPress={onPress} style={[{ backgroundColor: 'white', height: height(7), borderRadius: sizes.buttonRadius, marginHorizontal: sizes.marginHorizontalXLarge }, shadow && appStyles.shadow, buttonStyle]}>
@@ -164,7 +164,7 @@ export function ButtonGradient({ text, animation, onPress, buttonStyle, textStyl
                 colors={colors.appGradiantColors}
                 start={{ x: 0.0, y: 0.25 }} end={{ x: 0.5, y: 1.0 }}
                 locations={[0, 0.9]}
-                style={[{ flex: 1, borderRadius: sizes.buttonRadius, }, appStyles.center,gradiantContainerStyle]}>
+                style={[{ flex: 1, borderRadius: sizes.buttonRadius, }, appStyles.center, gradiantContainerStyle]}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     {
                         iconName ?
@@ -186,7 +186,7 @@ export function ButtonGradient({ text, animation, onPress, buttonStyle, textStyl
     );
 }
 
-export const ButtonSocial = ({ text ,onPress,logo}) => {
+export const ButtonSocial = ({ text, onPress, logo }) => {
     return (
         <ButtonColored
             text={text ? text : 'Social Button'}
@@ -198,5 +198,19 @@ export const ButtonSocial = ({ text ,onPress,logo}) => {
         />
     )
 }
+export const AddButton = ({ onPress, style, size, buttonSize }) => {
+    const defaultButtonSize = width(20)
 
-export {ButtonGroupAnimated}
+    return (
+        <TouchableOpacity onPress={onPress} style={[appStyles.center, { borderRadius: sizes.baseRadius, backgroundColor: colors.appBgColor4, height: buttonSize ? buttonSize : defaultButtonSize, width: buttonSize ? buttonSize : defaultButtonSize }, style]}>
+            <Icon
+                name="add"
+                type="ionicon"
+                size={size ? size : sizes.icons.large}
+                color={colors.appTextColor4}
+            />
+        </TouchableOpacity>
+    )
+}
+
+export { ButtonGroupAnimated }

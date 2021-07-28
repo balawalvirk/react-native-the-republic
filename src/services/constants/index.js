@@ -53,7 +53,8 @@ export const routes = {
     editProfile: 'editProfile',
     changePassword: 'changePassword',
     purchaseHistory:'purchaseHistory',
-    paymentMethods:'paymentMethods'
+    paymentMethods:'paymentMethods',
+    chatScreen:'chatScreem'
 }
 export const headers = {
     screenOptionsPrimary: {

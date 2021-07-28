@@ -27,6 +27,7 @@ import EditProfile from './editProfile'
 import ChangePassword from './changePassword'
 import PurchaseHistory from './purchaseHistory'
 import PaymentMethods from './paymentMethods'
+import ChatScreen from './chats/chatScreen'
 
 export {
     Community, Explore, MarketPlace, Account,
@@ -35,5 +36,6 @@ export {
     Chats, Notifications, ShareAPost, MyLocation, Search,
     ProductDetail, Reviews, UserProfile, Sell, Categories,
     CategoryDetail, SortFilter, GroupDetail, Favourites, 
-    EditProfile, ChangePassword,PurchaseHistory,PaymentMethods
+    EditProfile, ChangePassword,PurchaseHistory,PaymentMethods,
+    ChatScreen
 }

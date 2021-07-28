@@ -19,12 +19,13 @@ export const ImageRound = ({ style, size, source }) => {
     );
 }
 
-export const ImageSqareRound = ({ style, size, source }) => {
+export const ImageSqareRound = ({ style, size, source,resizeMode }) => {
     const defaultSize = totalSize(5)
     return (
         <Image
             source={source}
             style={[{ height: size ? size : defaultSize, width: size ? size : defaultSize, borderRadius: 15 }, style]}
+            resizeMode={resizeMode}
         />
     );
 }
