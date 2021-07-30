@@ -26,10 +26,10 @@ const drawerScreens = [
     { screen: 'Home', route: routes.mainDrawer },
     { screen: 'Follow Requests', route: routes.followRequests },
     { screen: 'Dealers', route: routes.dealers },
-    { screen: 'Trainings', route: routes.trainings },
+    { screen: 'Training', route: routes.trainings },
     { screen: 'Comments', route: routes.comments },
     { screen: 'The Republic News', route: routes.theRepublicNews },
-    { screen: 'Contact us', route: routes.contactUs },
+    { screen: 'Contact Us', route: routes.contactUs },
 ];
 
 function BottomTabScreens() {
@@ -95,7 +95,7 @@ function BottomTabScreens() {
                 name={routes.account}
                 component={MainApp.Account}
                 options={() => ({
-                    tabBarLabel: "Account",
+                    tabBarLabel: "Profile",
                     tabBarIcon: ({ color, size, focused }) => {
                         //return <CustomIcon icon={appIcons.marketplace} size={tabIconSize} color={color} focused={focused} />
                         return <ImageRound source={{ uri: appImages.user3 }} size={tabIconSize} style={{ opacity:focused?1:0.5, borderColor: colors.appColor1 }} />
@@ -235,6 +235,13 @@ const AppNavigation = () => {
 
                 }}
             />
+            <AppStack.Screen name={routes.tagFriends} component={MainApp.TagFriends}
+                options={{
+                    // headerShown: false,
+                    title: 'Tag Friends',
+                   // headerTitleAlign:'center'
+                }}
+            />
             <AppStack.Screen name={routes.followRequests} component={MainApp.FollowRequests}
                 options={{
                     // headerShown: false,
@@ -355,7 +362,7 @@ const AppNavigation = () => {
                 options={{
                     // headerShown: false,
                     ...headers.screenOptionsPrimary,
-                    title: 'Sort & Filter'
+                    title: 'Sort & Filters'
                 }}
             />
             <AppStack.Screen name={routes.groupDetail} component={MainApp.GroupDetail}

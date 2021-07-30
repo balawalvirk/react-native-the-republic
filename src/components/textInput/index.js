@@ -5,7 +5,7 @@ import { height, totalSize, width } from 'react-native-dimension';
 import { colors, appStyles, fontFamily, sizes, fontSize } from '../../services';
 import { AbsoluteWrapper, ComponentWrapper, Wrapper } from '../wrappers';
 import { InputTitle, MediumText, RegularText, SmallText } from '../text';
-import { CustomIcon, IconWithText } from '../icons';
+import { CustomIcon, IconButton, IconWithText } from '../icons';
 import { Spacer } from '../spacers';
 import { Platform } from 'react-native';
 import { Animated } from 'react-native';
@@ -304,21 +304,32 @@ export const SearchTextinput = ({ value, placeholder, inputContainerStyle, onCha
 export const TextInputChat = props => {
     const { onChangeText, onSend, value } = props;
     return (
-        <TextInputBordered
+        <TextInputColored
             placeholder="Write a message"
-            iconName="send"
             multiline
-            iconType="font-awesome"
-            iconColor={colors.appColor1}
+            left={
+                <IconButton
+                    iconName="add"
+                    iconType="ionicon"
+                    iconColor={colors.appTextColor4}
+                    buttonColor={colors.appBgColor3}
+                    buttonSize={totalSize(4)}
+                    iconSize={totalSize(3)}
+                />
+            }
+            iconNameRight="send-sharp"
+            iconTypeRight="ionicon"
+            iconColorRight={colors.appColor1}
             inputStyle={{
                 height: null,
                 backgroundColor: 'transparent',
-                paddingVertical: Platform.OS === 'ios' ? height(2) : null,
+                paddingVertical: Platform.OS === 'ios' ? height(1) : null,
             }}
             inputContainerStyle={[
-                { alignItems: 'flex-end', marginVertical: height(2) },
+                { marginLeft: sizes.marginHorizontal, alignItems: 'flex-end', marginVertical: height(2), backgroundColor: 'transparent' },
             ]}
-            iconStyle={{ marginVertical: height(2) }}
+            iconStyleRight={{ marginVertical: height(1), marginLeft: sizes.marginHorizontalSmall, transform: [{ rotate: '-45deg' }] }}
+            containerStyle={{ borderTopWidth: 1, borderColor: colors.appBgColor4, backgroundColor: 'transparent', marginHorizontal: 0 }}
             value={value}
             onChangeText={onChangeText}
             onPressIcon={onSend}

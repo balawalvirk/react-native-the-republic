@@ -102,7 +102,11 @@ function ChatScreen(props) {
                         }}
                     />
                     <Wrapper>
-                        <TextInputChat onChangeText={text => { }} onSend={() => { }} />
+                        <TextInputChat
+                            onChangeText={text => { }}
+                            onSend={() => { }}
+                            onAdd={() => { }}
+                        />
                         <Spacer height={sizes.baseMargin} />
                     </Wrapper>
                 </MainWrapper>

@@ -20,7 +20,7 @@ const topTabs = [
     }
 ]
 const productResults = [...DummyData.products, ...DummyData.products]
-const dealerResults = [...DummyData.dealers, ...DummyData.dealers]
+const dealerResults = [...DummyData.users, ...DummyData.users]
 const groupResults = [...DummyData.groups, ...DummyData.groups]
 
 function Search(props) {

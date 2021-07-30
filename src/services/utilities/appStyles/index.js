@@ -287,7 +287,7 @@ export const appStyles = StyleSheet.create({
   ButtonTextRegular: {
     fontSize: fontSize.regular,
     color: '#000000',
-    fontFamily: fontFamily.appTextMedium
+    fontFamily: fontFamily.appTextRegular
   },
   ButtonTextMedium: {
     fontSize: fontSize.medium,

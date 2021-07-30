@@ -129,6 +129,7 @@ export function ProductsHorizontalyPrimary({ data, ListHeaderComponent, ListFoot
                         reviewCount={item.review_count}
                         userImage={user.image}
                         userName={user.name}
+                        isSponsered={item.isSponsered}
                     />
                 )
             }}

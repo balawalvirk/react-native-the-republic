@@ -39,7 +39,7 @@ const dummyData = {
                 info: {
                     make: 'Browning',
                     modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
-                    calibre: '22 LR',
+                    "caliber/Gauge": '22 LR',
                     actionType: 'Semi Auto',
                     shootingType: '',
                     handedness: 'Right-Handed',
@@ -141,7 +141,7 @@ const dummyData = {
             info: {
                 make: 'Browning',
                 modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
-                calibre: '22 LR',
+                "caliber/Gauge": '22 LR',
                 actionType: 'Semi Auto',
                 shootingType: '',
                 handedness: 'Right-Handed',
@@ -171,7 +171,7 @@ const dummyData = {
             info: {
                 make: 'Browning',
                 modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
-                calibre: '22 LR',
+                "caliber/Gauge": '22 LR',
                 actionType: 'Semi Auto',
                 shootingType: '',
                 handedness: 'Right-Handed',
@@ -201,7 +201,7 @@ const dummyData = {
             info: {
                 make: 'Browning',
                 modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
-                calibre: '22 LR',
+                "caliber/Gauge": '22 LR',
                 actionType: 'Semi Auto',
                 shootingType: '',
                 handedness: 'Right-Handed',
@@ -231,7 +231,7 @@ const dummyData = {
             info: {
                 make: 'Browning',
                 modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
-                calibre: '22 LR',
+                "caliber/Gauge": '22 LR',
                 actionType: 'Semi Auto',
                 shootingType: '',
                 handedness: 'Right-Handed',
@@ -265,7 +265,7 @@ const dummyData = {
             info: {
                 make: 'Browning',
                 modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
-                calibre: '22 LR',
+                "caliber/Gauge": '22 LR',
                 actionType: 'Semi Auto',
                 shootingType: '',
                 handedness: 'Right-Handed',
@@ -295,7 +295,7 @@ const dummyData = {
             info: {
                 make: 'Browning',
                 modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
-                calibre: '22 LR',
+                "caliber/Gauge": '22 LR',
                 actionType: 'Semi Auto',
                 shootingType: '',
                 handedness: 'Right-Handed',
@@ -326,7 +326,7 @@ const dummyData = {
             info: {
                 make: 'Browning',
                 modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
-                calibre: '22 LR',
+                "caliber/Gauge": '22 LR',
                 actionType: 'Semi Auto',
                 shootingType: '',
                 handedness: 'Right-Handed',
@@ -356,7 +356,7 @@ const dummyData = {
             info: {
                 make: 'Browning',
                 modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
-                calibre: '22 LR',
+                "caliber/Gauge": '22 LR',
                 actionType: 'Semi Auto',
                 shootingType: '',
                 handedness: 'Right-Handed',
@@ -430,7 +430,7 @@ const dummyData = {
             image: 'https://www.19fortyfive.com/wp-content/uploads/2021/01/Ammo-Prices.jpg'
         }
     ],
-    dealers: [
+    users: [
         {
             id: 22345,
             name: 'William Alis',
@@ -533,7 +533,7 @@ const dummyData = {
             info: {
                 make: 'Browning',
                 modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
-                calibre: '22 LR',
+                "caliber/Gauge": '22 LR',
                 actionType: 'Semi Auto',
                 shootingType: '',
                 handedness: 'Right-Handed',
@@ -564,7 +564,7 @@ const dummyData = {
             info: {
                 make: 'Browning',
                 modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
-                calibre: '22 LR',
+                "caliber/Gauge": '22 LR',
                 actionType: 'Semi Auto',
                 shootingType: '',
                 handedness: 'Right-Handed',
@@ -596,7 +596,7 @@ const dummyData = {
             info: {
                 make: 'Browning',
                 modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
-                calibre: '22 LR',
+                "caliber/Gauge": '22 LR',
                 actionType: 'Semi Auto',
                 shootingType: '',
                 handedness: 'Right-Handed',
@@ -627,7 +627,7 @@ const dummyData = {
             info: {
                 make: 'Browning',
                 modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
-                calibre: '22 LR',
+                "caliber/Gauge": '22 LR',
                 actionType: 'Semi Auto',
                 shootingType: '',
                 handedness: 'Right-Handed',
@@ -658,7 +658,7 @@ const dummyData = {
             info: {
                 make: 'Browning',
                 modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
-                calibre: '22 LR',
+                "caliber/Gauge": '22 LR',
                 actionType: 'Semi Auto',
                 shootingType: '',
                 handedness: 'Right-Handed',

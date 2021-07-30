@@ -1,72 +1,29 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import { TitleInfoPrimary } from '../..'
+
 const ArmerInfo = ({
     info,
 }) => {
-    const { make, modal, calibre, actionType, shootingType, handedness, barrelLength, manufacturerNumber, firearmsClass } = info
+    const { make, modal, caliber, actionType, shootingType, handedness, barrelLength, manufacturerNumber, firearmsClass } = info
+
+    const handleItemTitle = (title) => {
+        let tempTitle = title
+        tempTitle = tempTitle.replace(/([A-Z])/g, ' $1').trim()
+        tempTitle = tempTitle.charAt(0).toUpperCase() + tempTitle.slice(1)
+        return tempTitle
+    }
     return (
         <>
-        {Object.entries(info).map((t, k) =>
-            <TitleInfoPrimary
-                title={t[0]}
-                info={t[1]?t[1]:'N/A'}
-                grayBg={k % 2 === 0}
-            />
-        )}
-    </>
-        // <>
-        //     <TitleInfoPrimary
-        //         title="Make"
-        //         info={make ? make : 'N/A'}
-        //         grayBg
-        //     />
-        //     <TitleInfoPrimary
-        //         title="Modal"
-        //         info={modal ? modal : 'N/A'}
-        //     />
-        //     <TitleInfoPrimary
-        //         title="Calibre / Gauge"
-        //         info={calibre ? calibre : 'N/A'}
-        //         grayBg
-        //     />
-        //     <TitleInfoPrimary
-        //         title="Action Type"
-        //         info={actionType ? actionType : 'N/A'}
-        //     />
-        //     <TitleInfoPrimary
-        //         title="Calibre / Gauge"
-        //         info={calibre ? calibre : 'N/A'}
-        //         grayBg
-        //     />
-        //     <TitleInfoPrimary
-        //         title="Shooting Type"
-        //         info={shootingType ? shootingType : 'N/A'}
-        //     />
-        //     <TitleInfoPrimary
-        //         title="Handedness"
-        //         info={handedness ? handedness : 'N/A'}
-        //         grayBg
-        //     />
-        //     <TitleInfoPrimary
-        //         title="Action Type"
-        //         info={actionType ? actionType : 'N/A'}
-        //     />
-        //     <TitleInfoPrimary
-        //         title="Barrel Length"
-        //         info={barrelLength ? barrelLength : 'N/A'}
-        //         grayBg
-        //     />
-        //     <TitleInfoPrimary
-        //         title="Manufacturer Number"
-        //         info={manufacturerNumber ? manufacturerNumber : 'N/A'}
-        //     />
-        //     <TitleInfoPrimary
-        //         title="Firearms Class"
-        //         info={firearmsClass ? firearmsClass : 'N/A'}
-        //         grayBg
-        //     />
-        // </>
+            {Object.entries(info).map((t, k) =>
+                <TitleInfoPrimary
+                    //title={t[0]}
+                    title={handleItemTitle(t[0])}
+                    info={t[1] ? t[1] : 'N/A'}
+                    grayBg={k % 2 === 0}
+                />
+            )}
+        </>
     )
 }
 

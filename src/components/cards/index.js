@@ -12,7 +12,7 @@ import { LargeText, MediumTitle, SmallText, SmallTitle, TinyTitle } from '../tex
 import { ButtonColoredSmall } from '../buttons';
 import { ImageSqareRound, ImageThumbnailGrid } from '../images';
 
-export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, image, images, containerstyle, description, onPressHeart, newPrice, oldPrice, userName, userImage, viewType, rating, reviewCount }) => {
+export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, image, images, containerstyle, description, onPressHeart, newPrice, oldPrice, userName, userImage, viewType, rating, reviewCount, isSponsered }) => {
     const defaultViewType = viewType ? viewType : 'grid'
     const isGridView = defaultViewType === 'grid'
     const isListView = defaultViewType === 'list'
@@ -37,7 +37,19 @@ export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, 
                                 :
                                 null
                     }
+                    {
+                        isSponsered && isGridView ?
+                            <AbsoluteWrapper style={[{ right: sizes.TinyMargin, bottom: sizes.TinyMargin },]}>
+                                <ButtonColoredSmall
+                                    text="Sponsored"
+                                    textStyle={[appStyles.textSmall, appStyles.textWhite]}
+                                    buttonStyle={[{ paddingHorizontal: sizes.TinyMargin, paddingVertical: sizes.TinyMargin }]}
+                                />
+                            </AbsoluteWrapper>
+                            :
+                            null
 
+                    }
 
                 </TouchableOpacity>
             </Wrapper>
@@ -104,6 +116,7 @@ export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, 
 
             }
 
+
         </Wrapper>
     );
 }
@@ -133,8 +146,16 @@ export const UserCardPrimary = ({ containerStyle, imageSize, imageUri, title, su
                             <Spacer width={sizes.smallMargin} />
                             <Wrapper flex={1}>
                                 <MediumText numberOfLines={1} style={[gradiant && appStyles.textWhite]}>{title}</MediumText>
-                                <Spacer height={sizes.smallMargin} />
-                                <SmallText style={[gradiant ? { color: appStyles.textWhite.color + '80' } : appStyles.textGray]}>{subTitle}</SmallText>
+                                {
+                                    subTitle ?
+                                        <>
+                                            <Spacer height={sizes.smallMargin} />
+                                            <SmallText style={[gradiant ? { color: appStyles.textWhite.color + '80' } : appStyles.textGray]}>{subTitle}</SmallText>
+                                        </>
+                                        :
+                                        null
+                                }
+
                             </Wrapper>
                         </RowWrapperBasic>
                     </Wrapper>
@@ -182,7 +203,7 @@ export const ReviewCardPrimary = ({ containerStyle, imageUrl, title, rating, rev
                             starStyle={{ marginRight: totalSize(0.2) }}
                         />
                         <Spacer width={sizes.TinyMargin} />
-                        <SmallText>{rating} ({reviewCount})</SmallText>
+                        <SmallText>{rating} {reviewCount ? ' (' + reviewCount + ')' : ''}</SmallText>
                     </RowWrapperBasic>
                 </Wrapper>
                 <Spacer width={sizes.smallMargin} />
@@ -193,13 +214,13 @@ export const ReviewCardPrimary = ({ containerStyle, imageUrl, title, rating, rev
         </Wrapper>
     )
 }
-export const OrderCardPrimary = ({ onPress, animation, duration, isFavourite, image, images, containerstyle, description, onPressHeart, newPrice, oldPrice, userName, userImage, viewType, rating, reviewCount, status, distance }) => {
+export const ProductCardSecondary = ({ onPress, animation, duration, isFavourite, image, images, containerstyle, description, onPressHeart, newPrice, oldPrice, userName, userImage, viewType, rating, reviewCount, status, distance, moreInfo }) => {
     const defaultViewType = viewType ? viewType : 'grid'
     const isActive = status === 'active'
     const isCompleted = status === 'completed'
     const statusText = isActive ? "Order accepted" : isCompleted ? "Completed" : ''
     return (
-        <Wrapper animation={animation} duration={duration} style={[styles.orderCardPrimaryContainer, containerstyle]}>
+        <Wrapper animation={animation} duration={duration} style={[styles.ProductCardSecondaryContainer, containerstyle]}>
             <RowWrapperBasic style={[{ alignItems: 'flex-start', paddingVertical: sizes.marginVertical / 2, paddingHorizontal: sizes.marginHorizontalSmall }]}>
                 <Wrapper style={{ justifyContent: 'center' }}>
                     <TouchableOpacity style={{ borderWidth: 1, borderRadius: sizes.cardRadius, borderColor: colors.appBgColor4 }} activeOpacity={1} onPress={onPress}>
@@ -243,31 +264,36 @@ export const OrderCardPrimary = ({ onPress, animation, duration, isFavourite, im
                     </TouchableOpacity>
                 </Wrapper>
             </RowWrapperBasic>
-            <Wrapper style={{ backgroundColor: colors.appBgColor4, paddingVertical: sizes.marginVertical / 2, borderRadius: sizes.cardRadius }}>
-                <RowWrapperBasic style={{ marginHorizontal: sizes.marginHorizontalSmall }}>
-                    <Wrapper flex={1}>
-                        <RowWrapperBasic>
-                            <ImageRound
-                                source={{ uri: userImage }}
-                                size={totalSize(5)}
-                            />
-                            <Spacer width={sizes.smallMargin} />
-                            <Wrapper style={{ alignItems: 'flex-start', }}>
-                                <MediumText>{userName}</MediumText>
-                                <Spacer height={sizes.TinyMargin} />
-                                <SmallText style={[appStyles.textGray]}>{distance}</SmallText>
+            {
+                moreInfo ?
+                    <Wrapper style={{ backgroundColor: colors.appBgColor4, paddingVertical: sizes.marginVertical / 2, borderRadius: sizes.cardRadius }}>
+                        <RowWrapperBasic style={{ marginHorizontal: sizes.marginHorizontalSmall }}>
+                            <Wrapper flex={1}>
+                                <RowWrapperBasic>
+                                    <ImageRound
+                                        source={{ uri: userImage }}
+                                        size={totalSize(5)}
+                                    />
+                                    <Spacer width={sizes.smallMargin} />
+                                    <Wrapper style={{ alignItems: 'flex-start', }}>
+                                        <MediumText>{userName}</MediumText>
+                                        <Spacer height={sizes.TinyMargin} />
+                                        <SmallText style={[appStyles.textGray]}>{distance}</SmallText>
+                                    </Wrapper>
+                                </RowWrapperBasic>
+                            </Wrapper>
+                            <Wrapper>
+                                <ButtonColoredSmall
+                                    text={statusText}
+                                    buttonStyle={{ paddingHorizontal: sizes.marginHorizontalSmall / 2, borderRadius: 100, backgroundColor: isActive ? colors.appColor1 : isCompleted ? colors.success : colors.appColor1 }}
+                                    textStyle={[appStyles.textRegular, appStyles.textWhite]}
+                                />
                             </Wrapper>
                         </RowWrapperBasic>
                     </Wrapper>
-                    <Wrapper>
-                        <ButtonColoredSmall
-                            text={statusText}
-                            buttonStyle={{ paddingHorizontal: sizes.marginHorizontalSmall / 2, borderRadius: 100, backgroundColor: isActive ? colors.appColor1 : isCompleted ? colors.success : colors.appColor1 }}
-                            textStyle={[appStyles.textRegular, appStyles.textWhite]}
-                        />
-                    </Wrapper>
-                </RowWrapperBasic>
-            </Wrapper>
+                    : null
+            }
+
         </Wrapper>
     );
 }
@@ -322,7 +348,7 @@ export const CreditCardPrimary = ({ containerStyle, name, cardNumber, expiry, on
 }
 
 
-export const NotificationCardPrimary = ({ onPress,text, image, type, time, containerStyle }) => {
+export const NotificationCardPrimary = ({ onPress, text, image, type, time, containerStyle }) => {
     const isProduct = type === 'product' || type === 'order'
     const isUser = type === 'review'
     const isApp = type === 'app'
@@ -370,11 +396,11 @@ export const NotificationCardPrimary = ({ onPress,text, image, type, time, conta
 
 }
 
-export const MessageCardPrimary = ({ onPress,name, message, image, isOnline, time, containerStyle }) => {
-   
+export const MessageCardPrimary = ({ onPress, name, message, image, isOnline, time, containerStyle }) => {
+
     return (
         <TouchableOpacity activeOpacity={1} onPress={onPress} style={[{ paddingVertical: sizes.marginVertical / 2, borderBottomWidth: 1, borderBottomColor: colors.appBgColor4, }, containerStyle]}>
-            <RowWrapper style={{ alignItems: 'flex-start',  }}>
+            <RowWrapper style={{ alignItems: 'flex-start', }}>
                 <Wrapper>
                     <ImageRound
                         source={{ uri: image }}

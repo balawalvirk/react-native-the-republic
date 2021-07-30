@@ -27,10 +27,22 @@ function MarketPlace(props) {
 
     const categories = DummyData.categories.slice()
 
+    const addSponseredProduct = () => {
+        let products = []
+        DummyData.products.forEach((item, index) => {
+            let obj = {
+                ...item,
+                isSponsered: index === 0 ? true : false
+            }
+            products.push(obj)
+        })
+        return (products)
+    }
+
     const mainOptions = [
         {
             title: 'Featured',
-            data: DummyData.products.slice()
+            data: addSponseredProduct()
         },
         {
             title: 'Popular',

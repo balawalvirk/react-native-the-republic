@@ -1,7 +1,7 @@
 import React from 'react'
 import { FlatList } from "react-native-gesture-handler";
 import { HelpingMethods, sizes } from '../../../services';
-import { OrderCardPrimary, ProductCardPrimary } from "../../cards";
+import { ProductCardSecondary, ProductCardPrimary } from "../../cards";
 import * as RootNavigation from '../../../services/navigation/rootNavigation'
 
 export function OrdersPrimary({ data, ListHeaderComponent, ListFooterComponent, onPressItem }) {
@@ -17,7 +17,7 @@ export function OrdersPrimary({ data, ListHeaderComponent, ListFooterComponent, 
             renderItem={({ item, index }) => {
                 const { user } = item
                 return (
-                    <OrderCardPrimary
+                    <ProductCardSecondary
                         onPress={() => onPressItem(item, index)}
                         animation={index <= 5 ? 'fadeInUp' : null}
                         duration={300 + (50 * (index + 1))}
@@ -33,6 +33,7 @@ export function OrdersPrimary({ data, ListHeaderComponent, ListFooterComponent, 
                         //location={item.location}
                         rating={item.rating}
                         reviewCount={item.review_count}
+                        moreInfo={true}
                         userImage={user.image}
                         userName={user.name}
                         status={item.status}

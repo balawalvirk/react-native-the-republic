@@ -27,7 +27,7 @@ function Explore(props) {
     const [selectedTabIndex, setSelectedTabIndex] = useState(0)
     const [currentlocation, setCurrentLocation] = useState(defaultLocation)
     const [markers, setMarkers] = useState(DummyData.products)
-    const dealerResults = [...DummyData.dealers, ...DummyData.dealers]
+    const dealerResults = [...DummyData.users, ...DummyData.users]
 
     //Refs
     const mapRef = useRef(null)
@@ -40,7 +40,7 @@ function Explore(props) {
                     <Wrapper flex={1}>
                         <Spacer height={sizes.doubleBaseMargin+sizes.TinyMargin} />
                         <TitleInfoPrimary
-                            title={dealerResults.length + ' results found'}
+                            title={'Near You'}
                         />
                         <Dealers
                             data={dealerResults}

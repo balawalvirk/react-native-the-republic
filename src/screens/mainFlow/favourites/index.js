@@ -19,7 +19,7 @@ function Favourites(props) {
     const [selectedTabIndex, setSelectedTabIndex] = useState(0)
 
     const products = [...DummyData.products, ...DummyData.products]
-    const dealers = [...DummyData.dealers, ...DummyData.dealers]
+    const dealers = [...DummyData.users, ...DummyData.users]
     return (
         <MainWrapper>
             <ButtonGroupAnimated

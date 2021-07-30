@@ -52,9 +52,10 @@ export const routes = {
     favourites: 'favourites',
     editProfile: 'editProfile',
     changePassword: 'changePassword',
-    purchaseHistory:'purchaseHistory',
-    paymentMethods:'paymentMethods',
-    chatScreen:'chatScreem'
+    purchaseHistory: 'purchaseHistory',
+    paymentMethods: 'paymentMethods',
+    chatScreen: 'chatScreen',
+    tagFriends: 'tagFriends'
 }
 export const headers = {
     screenOptionsPrimary: {

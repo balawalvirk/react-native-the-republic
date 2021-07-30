@@ -88,7 +88,7 @@ function Sell(props) {
     const [item, setitem] = useState('')
     const [type, settype] = useState('')
     const [manufacturer, setmanufacturer] = useState('')
-    const [calibre, setCalibre] = useState('')
+    const [caliber, setCalibre] = useState('')
     const [action, setaction] = useState('')
     const [condition, setCondition] = useState('')
     const [description, setDescription] = useState('')
@@ -178,19 +178,19 @@ function Sell(props) {
     }
     const getArmerInfo = () => {
         let obj = {
-            "Manufacturer": 'Browning',
-            "Model": 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
-            "Calibre": '22 LR',
-            "Action Type": 'Semi Auto',
-            "Condition": "Used"
+            "manufacturer": 'Browning',
+            "model": 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
+            "caliber/Gauge": '22 LR',
+            "actionType": 'Semi Auto',
+            "condition": "Used"
         }
         return obj
     }
     return (
         <MainWrapper>
-                <Animated.View
-                    style={{ height: 3, backgroundColor: colors.appColor1, width: stepIndicatorWidth, borderRadius: 5 }}
-                />
+            <Animated.View
+                style={{ height: 3, backgroundColor: colors.appColor1, width: stepIndicatorWidth, borderRadius: 5 }}
+            />
             <KeyboardAvoidingScrollView>
                 <Spacer height={sizes.baseMargin} />
                 {
@@ -261,10 +261,10 @@ function Sell(props) {
                                 />
                                 <Spacer height={sizes.baseMargin} />
                                 <PickerPrimary
-                                    title="Calibre"
+                                    title="Caliber"
                                     // placeholder="No Selected"
                                     data={options}
-                                    value={calibre}
+                                    value={caliber}
                                     onChange={(value, index) => setCalibre(value)}
                                 />
                                 <Spacer height={sizes.baseMargin} />

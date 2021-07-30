@@ -5,7 +5,7 @@ import { DummyData, routes, sizes } from '../../../services';
 
 function FollowRequests(props) {
     const { navigate } = props.navigation
-    const followRequests = [...DummyData.dealers.slice(0,3)]
+    const followRequests = [...DummyData.users.slice(0,3)]
     return (
         <MainWrapper>
             <FollowRequestsList

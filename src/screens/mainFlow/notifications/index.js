@@ -3,6 +3,7 @@ import { View, Text, FlatList } from 'react-native';
 import { Rating } from 'react-native-elements';
 import { ComponentWrapper, MainWrapper, NotificationCardPrimary, RegularText } from '../../../components';
 import { appStyles, colors, DummyData } from '../../../services';
+import ApproveReviewPopup from './approveReviewPopup';
 
 
 
@@ -11,7 +12,9 @@ function Notifications(props) {
     const { navigation } = props
 
     const [notifications, setNotifications] = useState(DummyData.notificaitons)
+    const [isApproveReviewVisible, setApproveReviewVisibility] = useState(false)
 
+    toggleAppriveReview = () => setApproveReviewVisibility(!isApproveReviewVisible)
     //configure Header
     React.useLayoutEffect(() => {
         navigation.setOptions({
@@ -22,6 +25,7 @@ function Notifications(props) {
             )
         });
     }, [navigation]);
+
     return (
         <MainWrapper>
             <FlatList
@@ -36,9 +40,14 @@ function Notifications(props) {
                             image={item.image}
                             type={item.type}
                             time={item.time}
+                            onPress={() => { item.type === 'review' ? toggleAppriveReview() : null }}
                         />
                     )
                 }}
+            />
+            <ApproveReviewPopup
+                visible={isApproveReviewVisible}
+                toggle={toggleAppriveReview}
             />
         </MainWrapper>
     );

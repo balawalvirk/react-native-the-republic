@@ -22,10 +22,10 @@ export const BackIcon = ({ style, onPress, size }) => {
         />
     );
 }
-export const BackIconAbsolute = ({onPress,containerStyle}) => {
+export const BackIconAbsolute = ({ onPress, containerStyle }) => {
     return (
         <IconButton
-            buttonStyle={[{ position: 'absolute', top: sizes.smallMargin + sizes.statusBarHeight, left: sizes.marginHorizontal },containerStyle]}
+            buttonStyle={[{ position: 'absolute', top: sizes.smallMargin + sizes.statusBarHeight, left: sizes.marginHorizontal }, containerStyle]}
             shadow
             iconName="chevron-left"
             iconType="feather"
@@ -68,7 +68,7 @@ export const IconButton = ({ buttonStyle, onPress, shadow, shadowColored, iconSi
         </TouchableOpacity>
     );
 }
-export const CustomIcon = ({ icon, size, animation, duration, color, iterationCount, onPress, value,containerStyle }) => {
+export const CustomIcon = ({ icon, size, animation, duration, color, iterationCount, onPress, value, containerStyle }) => {
     const defaulSize = totalSize(5)
     return (
         <Animatable.View animation={animation} duration={duration} iterationCount={iterationCount}>
@@ -108,14 +108,15 @@ export const TouchableCustomIcon = ({ icon, size, animation, duration, color, on
     );
 }
 
-export const IconWithText = ({ text,disabled, containerStyle, title, customIcon, onPress, tintColor, iconName, iconType, iconSize, textStyle, titleStyle, direction, iconStyle, textContainerStyle }) => {
+export const IconWithText = ({ text, disabled, containerStyle, title, customIcon, onPress, tintColor, iconName, iconType, iconSize, textStyle, titleStyle, direction, iconStyle, textContainerStyle,icon }) => {
     return (
-        <TouchableOpacity disabled={disabled||!onPress} activeOpacity={1} onPress={onPress} style={[{ flexDirection: direction ? direction : 'row', alignItems: 'center', }, containerStyle]}>
+        <TouchableOpacity disabled={disabled || !onPress} activeOpacity={1} onPress={onPress} style={[{ flexDirection: direction ? direction : 'row', alignItems: 'center', }, containerStyle]}>
             {
-                customIcon ?
-                    <CustomIcon icon={customIcon} size={iconSize ? iconSize : totalSize(2)} color={tintColor ? tintColor : colors.appColor1} />
-                    :
-                    <Icon name={iconName ? iconName : 'email'} type={iconType ? iconType : 'material-community'} size={iconSize ? iconSize : totalSize(2)} color={tintColor ? tintColor : colors.appTextColor1} iconStyle={iconStyle} />
+                icon ? icon :
+                    customIcon ?
+                        <CustomIcon icon={customIcon} size={iconSize ? iconSize : totalSize(2)} color={tintColor ? tintColor : colors.appColor1} />
+                        :
+                        <Icon name={iconName ? iconName : 'email'} type={iconType ? iconType : 'material-community'} size={iconSize ? iconSize : totalSize(2)} color={tintColor ? tintColor : colors.appTextColor1} iconStyle={iconStyle} />
             }
             <View style={[direction === 'column' ? { marginVertical: height(1.5) } : { marginHorizontal: width(2) }, textContainerStyle]}>
                 {

@@ -20,7 +20,7 @@ export default StyleSheet.create({
         flexDirection:'row',
        // alignItems:'center'
     },
-    orderCardPrimaryContainer: {
+    ProductCardSecondaryContainer: {
         // flex:1,
          borderWidth: 1,
          borderColor: colors.appBgColor4,

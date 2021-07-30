@@ -1,5 +1,5 @@
 import React from 'react'
-import { Platform, TouchableOpacity,ImageBackground } from 'react-native'
+import { Platform, TouchableOpacity, ImageBackground } from 'react-native'
 import { height, totalSize, width } from 'react-native-dimension'
 import { ModalSwipeablePrimary } from '..'
 import { appIcons, appImages, appStyles, colors, HelpingMethods, sizes } from '../../services'
@@ -19,12 +19,14 @@ import { Products, ProductsSecondary, ProductsHorizontalyPrimary } from './produ
 import ArmerInfo from './armerInfo'
 import Reviews from './reviews'
 import { LineHorizontal } from '..'
-import { Dealers, Groups,FollowRequestsList } from './usersLists'
+import { Dealers, Groups, FollowRequestsList } from './usersLists'
 import { OrdersPrimary } from './ordersLists'
 import AddPaymentMethodModal from './addPaymentMethodModal'
 import { ImageProfile, ImageRound } from '../images'
+import { KeyboardAvoidingScrollView } from '../scrollViews'
+import { ScrollView } from 'react-native'
 
-export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, topMargin, children }) => {
+export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, topMargin, children, scrollEnabled }) => {
     return (
         <ModalSwipeablePrimary
             visible={visible}
@@ -33,77 +35,86 @@ export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType,
             topMargin={topMargin ? Platform.OS === 'ios' ? topMargin : topMargin - height(5) : height(50)}
         >
             <Wrapper flex={1}>
-                <Spacer height={sizes.baseMargin * 1.5} />
-                {
-                    iconName || customIcon ?
-                        <>
-                            <IconButton
-                                iconName={iconName}
-                                iconType={iconType}
-                                customIcon={customIcon}
-                                iconColor={colors.appTextColor6}
-                                buttonColor={colors.success}
-                                buttonSize={totalSize(6)}
-                                iconSize={totalSize(4)}
-                                buttonStyle={{ borderRadius: 100, alignSelf: 'center', }}
-                            />
-                            <Spacer height={sizes.baseMargin * 1.5} />
-                        </>
-                        :
-                        null
-                }
-                {
-                    title ?
-                        <>
-                            <ComponentWrapper>
-                                <SmallTitle style={[appStyles.textCenter]}>{title}</SmallTitle>
-                            </ComponentWrapper>
-                            <Spacer height={sizes.baseMargin} />
-                        </>
-                        :
-                        null
-                }
-                {
-                    info ?
-                        <>
-                            <ComponentWrapper>
-                                <MediumText style={[appStyles.textCenter]}>{info}</MediumText>
-                            </ComponentWrapper>
-                            <Spacer height={sizes.baseMargin} />
-                        </>
-                        :
-                        null
-                }
-                {children}
-                <Spacer height={sizes.baseMargin} />
-                <RowWrapper>
+                <ScrollView showsVerticalScrollIndicator={false} scrollEnabled={scrollEnabled}>
+                    <Spacer height={sizes.baseMargin * 1.5} />
                     {
-                        onPressButton2 ?
-                            <Wrapper flex={1}>
-                                <ButtonColored
-                                    text={buttonText2}
-                                    onPress={onPressButton2}
-                                    buttonColor={colors.appBgColor3}
-                                    tintColor={colors.appTextColor1}
+                        iconName || customIcon ?
+                            <>
+                                <IconButton
+                                    iconName={iconName}
+                                    iconType={iconType}
+                                    customIcon={customIcon}
+                                    iconColor={colors.appTextColor6}
+                                    buttonColor={colors.success}
+                                    buttonSize={totalSize(6)}
+                                    iconSize={totalSize(4)}
+                                    buttonStyle={{ borderRadius: 100, alignSelf: 'center', }}
                                 />
-                            </Wrapper>
+                                <Spacer height={sizes.baseMargin * 1.5} />
+                            </>
                             :
                             null
                     }
                     {
-                        onPressButton1 ?
-                            <Wrapper flex={1}>
-                                <ButtonGradient
-                                    text={buttonText1}
-                                    onPress={onPressButton1}
-                                    shadow
-                                />
-                            </Wrapper>
+                        title ?
+                            <>
+                                <ComponentWrapper>
+                                    <SmallTitle style={[appStyles.textCenter]}>{title}</SmallTitle>
+                                </ComponentWrapper>
+                                <Spacer height={sizes.baseMargin} />
+                            </>
                             :
                             null
                     }
-                </RowWrapper>
-                <Spacer height={sizes.doubleBaseMargin} />
+                    {
+                        info ?
+                            <>
+                                <ComponentWrapper>
+                                    <MediumText style={[appStyles.textCenter]}>{info}</MediumText>
+                                </ComponentWrapper>
+                                <Spacer height={sizes.baseMargin} />
+                            </>
+                            :
+                            null
+                    }
+                    {children}
+                    <Spacer height={sizes.baseMargin} />
+                    <RowWrapper>
+                        {
+                            onPressButton2 ?
+                                <Wrapper flex={1}>
+                                    <ButtonColored
+                                        text={buttonText2}
+                                        onPress={onPressButton2}
+                                        buttonColor={colors.appBgColor3}
+                                        tintColor={colors.appTextColor1}
+                                        buttonStyle={{ marginHorizontal: 0 }}
+                                    />
+                                </Wrapper>
+                                :
+                                null
+                        }
+                        {
+                            onPressButton2 && onPressButton1 ?
+                                <Spacer width={sizes.marginHorizontal} />
+                                : null
+                        }
+                        {
+                            onPressButton1 ?
+                                <Wrapper flex={1}>
+                                    <ButtonGradient
+                                        text={buttonText1}
+                                        onPress={onPressButton1}
+                                        shadow
+                                        buttonStyle={{ marginHorizontal: 0 }}
+                                    />
+                                </Wrapper>
+                                :
+                                null
+                        }
+                    </RowWrapper>
+                    <Spacer height={sizes.doubleBaseMargin} />
+                </ScrollView>
             </Wrapper>
         </ModalSwipeablePrimary>
     )
@@ -232,16 +243,17 @@ export const TitlePrimary = ({ title, onPressRight, rightText }) => {
         </RowWrapper>
     )
 }
-export const FilterButton = ({ onPress,buttonStyle }) => {
+export const FilterButton = ({ onPress, buttonStyle }) => {
     return (
-            <ButtonColoredSmall
-                onPress={onPress}
-                text="Sort & Filters"
-                iconName="options"
-                iconType="ionicon"
-                textStyle={[appStyles.textRegular, appStyles.textWhite]}
-                buttonStyle={[{ borderRadius: 100, paddingHorizontal: sizes.marginHorizontalSmall,marginHorizontal:sizes.marginHorizontal },buttonStyle]}
-            />
+        <ButtonColoredSmall
+            onPress={onPress}
+            text="Sort & Filters"
+            iconName="options"
+            iconType="ionicon"
+            customIcon={appIcons.filter}
+            textStyle={[appStyles.textRegular, appStyles.textWhite]}
+            buttonStyle={[{ borderRadius: 100, paddingHorizontal: sizes.marginHorizontalSmall, marginHorizontal: sizes.marginHorizontal }, buttonStyle]}
+        />
     )
 }
 export const ViewAllListButton = ({ onPress }) => {
@@ -288,8 +300,8 @@ export const ProfileTop = ({ imageUri, title, subTitle, onPress, content }) => {
     )
 }
 
-export const ShareSomethingButton = ({onPress, imageUri ,title}) => {
-    const defaultVerticalSpacer=sizes.marginVertical/1.5
+export const ShareSomethingButton = ({ onPress, imageUri, title }) => {
+    const defaultVerticalSpacer = sizes.marginVertical / 1.5
     return (
         <TouchableOpacity activeOpacity={1} onPress={onPress} style={{ marginHorizontal: sizes.marginHorizontalSmall, borderWidth: 1, borderColor: colors.appBgColor4, borderRadius: sizes.baseRadius, paddingVertical: defaultVerticalSpacer, paddingHorizontal: sizes.marginHorizontalSmall }}>
             <RowWrapperBasic>
@@ -303,7 +315,7 @@ export const ShareSomethingButton = ({onPress, imageUri ,title}) => {
                 </Wrapper>
             </RowWrapperBasic>
             <Spacer height={defaultVerticalSpacer} />
-            <LineHorizontal color={colors.appBgColor4} height={1}/>
+            <LineHorizontal color={colors.appBgColor4} height={1} />
             <Spacer height={defaultVerticalSpacer} />
             <RowWrapperBasic style={[{ justifyContent: 'space-evenly', }]}>
                 <IconWithText
@@ -332,7 +344,7 @@ export {
     EditProfileComp, VerificationCodeSentPopup, ImagePickerPopup,
     Posts, MenuPopup, RenderComments, Products, ArmerInfo,
     Reviews, ProductsSecondary, ProductsHorizontalyPrimary, Dealers, Groups,
-    OrdersPrimary,AddPaymentMethodModal,FollowRequestsList
+    OrdersPrimary, AddPaymentMethodModal, FollowRequestsList
 }
 
 export * from './imagesList'

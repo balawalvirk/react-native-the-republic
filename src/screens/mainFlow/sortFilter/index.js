@@ -59,7 +59,7 @@ function SortFilter(props) {
     const [make, setMake] = useState('')
     const [actionType, setActionType] = useState('')
     const [barrelLength, setBarrelLength] = useState('')
-    const [calibre, setCalibre] = useState('')
+    const [caliber, setCalibre] = useState('')
     const [priceRange, setPriceRange] = useState('')
     return (
         <MainWrapper>
@@ -108,10 +108,10 @@ function SortFilter(props) {
             />
             <Spacer height={sizes.baseMargin} />
             <PickerPrimary
-                title="Calibre / Gauge"
+                title="Caliber / Gauge"
                 // placeholder="No Selected"
                 data={options}
-                value={calibre}
+                value={caliber}
                 onChange={(value, index) => setCalibre(value)}
             />
             <Spacer height={sizes.baseMargin} />
