@@ -29,6 +29,14 @@ import PurchaseHistory from './purchaseHistory'
 import PaymentMethods from './paymentMethods'
 import ChatScreen from './chats/chatScreen'
 import TagFriends from './shareAPost/tagFriends'
+import BuyNow from './buyNow'
+import DeliveryAddress from './buyNow/deliveryAddress'
+import FflDealers from './buyNow/fflDealers'
+import OrderDetail from './orderDetail'
+import OrderInvoice from './orderInvoice'
+import UpgradeSubscriptionPlan from './subscriptionPlan/upgradeSubscriptionPlan'
+import SelectDateTime from './trainings/selectDateTime'
+import Payment from './trainings/payment'
 
 export {
     Community, Explore, MarketPlace, Account,
@@ -36,7 +44,9 @@ export {
     TheRepublicNews, ContactUs, SubscriptionPlan,
     Chats, Notifications, ShareAPost, MyLocation, Search,
     ProductDetail, Reviews, UserProfile, Sell, Categories,
-    CategoryDetail, SortFilter, GroupDetail, Favourites, 
-    EditProfile, ChangePassword,PurchaseHistory,PaymentMethods,
-    ChatScreen,TagFriends
+    CategoryDetail, SortFilter, GroupDetail, Favourites,
+    EditProfile, ChangePassword, PurchaseHistory, PaymentMethods,
+    ChatScreen, TagFriends, BuyNow, DeliveryAddress, FflDealers,
+    OrderDetail, OrderInvoice, UpgradeSubscriptionPlan,
+    SelectDateTime, Payment
 }

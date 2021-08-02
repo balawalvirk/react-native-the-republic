@@ -16,7 +16,7 @@ export default StyleSheet.create({
         width: width(12.5),
         height: width(12.5),
         borderWidth: 0.5,
-        borderColor: colors.appBgColor4,
+        borderColor: colors.appBgColor3,
         borderRadius: sizes.inputRadius,
         color: colors.appTextColor1,
         fontSize: fontSize.medium

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, Image } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
-import { AbsoluteWrapper, RenderTags, MainWrapper, Spacer, ButtonGradient, Wrapper, IconHeart, ComponentWrapper, SmallTitle, RowWrapperBasic, MediumText, RegularText, TinyText, SmallText, TinyTitle, RenderKeyPoints, UserCardPrimary, ArmerInfo, KeyboardAvoidingScrollView, Reviews, Products, TitlePrimary, IconButton, BackIconAbsolute } from '../../../components';
+import { AbsoluteWrapper, RenderTags, MainWrapper, Spacer, ButtonGradient, Wrapper, IconHeart, ComponentWrapper, SmallTitle, RowWrapperBasic, MediumText, RegularText, TinyText, SmallText, TinyTitle, RenderKeyPoints, UserCardPrimary, ArmerInfo, KeyboardAvoidingScrollView, Reviews, Products, TitlePrimary, IconButton, BackIconAbsolute, RowWrapper } from '../../../components';
 import { appIcons, appImages, appStyles, colors, HelpingMethods, routes, sizes } from '../../../services';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
@@ -11,7 +11,7 @@ const FooterButton = ({ text, onPress }) => {
     return (
         <ButtonGradient
             text={text}
-            buttonStyle={{ marginHorizontal: 0, }}
+            buttonStyle={{ flex: 1, marginHorizontal: 0, }}
             gradiantContainerStyle={{ paddingHorizontal: sizes.marginHorizontal }}
             onPress={onPress}
         />
@@ -137,18 +137,22 @@ function ProductDetail(props) {
                 />
             </KeyboardAvoidingScrollView>
             <AbsoluteWrapper style={{ bottom: 0, right: 0, left: 0, backgroundColor: colors.appBgColor1, ...appStyles.shadow, paddingVertical: sizes.baseMargin }}>
-                <RowWrapperBasic style={[{ justifyContent: 'space-evenly', }]}>
+                <RowWrapper style={[{}]}>
                     <FooterButton
                         text="Enquire"
-                        onPress={() => { }}
+                        onPress={() => {
+                            navigate(routes.chatScreen, { enquire: product, user })
+                        }}
                     />
-                    <FooterButton
+                    {/* <FooterButton
                         text="Request Demo"
-                    />
+                    /> */}
+                    <Spacer width={sizes.marginHorizontal} />
                     <FooterButton
                         text="Buy Now"
+                        onPress={() => navigate(routes.buyNow, { product: product })}
                     />
-                </RowWrapperBasic>
+                </RowWrapper>
             </AbsoluteWrapper>
             <BackIconAbsolute
                 onPress={goBack}

@@ -112,7 +112,7 @@ export const FollowRequestsList = ({ data, onPress, onPressHeart, ListHeaderComp
                                     <ButtonColoredSmall
                                         text="Decline"
                                         onPress={onPressDecline}
-                                        buttonStyle={[styles.followRequestsListButton, { backgroundColor: colors.appBgColor4 }]}
+                                        buttonStyle={[styles.followRequestsListButton, { backgroundColor: colors.appBgColor3 }]}
                                         textStyle={[appStyles.textRegular]}
                                     />
                                 </RowWrapperBasic>

@@ -4,6 +4,7 @@ import { height, totalSize } from 'react-native-dimension';
 import { ButtonColoredSmall, ComponentWrapper, IconButton, IconWithText, ImageRound, ImagesPrimary, KeyboardAvoidingScrollView, LineHorizontal, MainWrapper, RegularText, RowWrapper, Spacer, Wrapper } from '../../../components';
 import { appImages, appStyles, colors, fontFamily, fontSize, routes, sizes } from '../../../services';
 import ImageCropPicker from 'react-native-image-crop-picker';
+import ShareOnPopup from './shareOnPopup';
 
 function ShareAPost(props) {
     const { navigation } = props
@@ -11,8 +12,9 @@ function ShareAPost(props) {
     const [shareOn, setShareOn] = useState('On my profile')
     const [postText, setPostText] = useState('')
     const [images, setImages] = useState([])
+    const [shareOnPopupVisible, setShareOnPopupVisibility] = useState(false)
 
-
+    const toggleShareOnPopup = () => setShareOnPopupVisibility(!shareOnPopupVisible)
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
@@ -69,6 +71,7 @@ function ShareAPost(props) {
                             iconType="ionicon"
                             direction="row-reverse"
                             iconSize={totalSize(1.5)}
+                            onPress={toggleShareOnPopup}
                         />
                     </Wrapper>
                 </RowWrapper>
@@ -116,6 +119,15 @@ function ShareAPost(props) {
                     }}
                 />
             </KeyboardAvoidingScrollView>
+            <ShareOnPopup
+                visible={shareOnPopupVisible}
+                toggle={toggleShareOnPopup}
+                onPressItem={(item) => {
+                    console.log('item-->', item)
+                    setShareOn(item.title)
+
+                }}
+            />
         </MainWrapper>
     );
 }

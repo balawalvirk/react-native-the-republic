@@ -11,7 +11,7 @@ export const CheckBoxPrimary = ({ textStyle, containerStyle, text, checked, onPr
     const checkboxIconType = iconType ? iconType : 'material-community'
     const checkboxappIconsize = iconSize ? iconSize : sizes.icons.medium
     const defaultCheckIconColor = checkIconColor ? checkIconColor : colors.appColor1
-    const defaultUncheckIconColor = uncheckIconColor ? uncheckIconColor : colors.appBgColor4
+    const defaultUncheckIconColor = uncheckIconColor ? uncheckIconColor : colors.appBgColor3
     return (
         <IconWithText
             text={text}

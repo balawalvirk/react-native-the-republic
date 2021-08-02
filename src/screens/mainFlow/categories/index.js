@@ -21,7 +21,7 @@ function RenderAllCategories({ data, onPressCategory }) {
                         <TouchableOpacity
                             activeOpacity={1}
                             onPress={() => onPressCategory(item, index)}
-                            style={{ flex: 1, marginHorizontal: sizes.marginHorizontal, borderRadius: sizes.cardRadius, borderWidth: 1, borderColor: colors.appBgColor4, marginBottom: sizes.marginVertical / 2, ...{ marginRight: (index + 1) % 2 ? 0 : null, marginleft: !(index + 1) % 2 ? 0 : null } }}>
+                            style={{ flex: 1, marginHorizontal: sizes.marginHorizontal, borderRadius: sizes.cardRadius, borderWidth: 1, borderColor: colors.appBgColor3, marginBottom: sizes.marginVertical / 2, ...{ marginRight: (index + 1) % 2 ? 0 : null, marginleft: !(index + 1) % 2 ? 0 : null } }}>
                             <Image
                                 source={{ uri: item.image }}
                                 style={{ flex: 1, height: height(20), width: null, borderTopRightRadius: sizes.cardRadius, borderTopLeftRadius: sizes.cardRadius }}

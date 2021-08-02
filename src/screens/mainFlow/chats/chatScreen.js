@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native';
 import { View, Text } from 'react-native';
 import { height, totalSize } from 'react-native-dimension';
-import { ChatBubbule, ComponentWrapper, IconWithText, ImageRound, KeyboardAvoidingScrollView, MainWrapper, RowWrapper, RowWrapperBasic, Spacer, TextInputChat, TinyTitle, Wrapper } from '../../../components';
+import { AbsoluteWrapper, ChatBubbule, ComponentWrapper, IconWithText, ImageRound, ImageSqareRound, KeyboardAvoidingScrollView, MainWrapper, MediumText, RowWrapper, RowWrapperBasic, Spacer, TextInputChat, TinyTitle, Wrapper } from '../../../components';
 import { appStyles, colors, sizes } from '../../../services';
 const myId = 1
 const chatMessages = [
@@ -54,7 +54,7 @@ function ChatScreen(props) {
 
     const { navigation, route } = props
     const { navigate } = navigation
-    const { item } = route.params
+    const { user, enquire } = route.params
 
     //configure Header
     React.useLayoutEffect(() => {
@@ -62,11 +62,11 @@ function ChatScreen(props) {
             headerTitle: () => (
                 <RowWrapperBasic>
                     <ImageRound
-                        source={{ uri: item.user.image }}
+                        source={{ uri: user.image }}
                     />
                     <Spacer width={sizes.marginHorizontalSmall} />
                     <Wrapper>
-                        <TinyTitle>{item.user.name}</TinyTitle>
+                        <TinyTitle>{user.name}</TinyTitle>
                         <Spacer height={sizes.TinyMargin} />
                         <IconWithText
                             iconName="circle"
@@ -82,6 +82,24 @@ function ChatScreen(props) {
     }, [navigation]);
     return (
         <MainWrapper>
+             {
+                enquire ?
+                    <Wrapper style={[{  backgroundColor: colors.error, flexDirection: 'row',alignItems: 'center', paddingVertical: sizes.marginVertical / 2, paddingHorizontal: sizes.marginHorizontalSmall }]}>
+                        <Wrapper style={{ backgroundColor: colors.appBgColor1, borderRadius: sizes.smallRadius }}>
+                            <ImageSqareRound
+                                source={{ uri: enquire.image }}
+                                style={{ borderRadius: sizes.smallRadius }}
+                                resizeMode="contain"
+                            />
+                        </Wrapper>
+                        <Spacer width={sizes.smallMargin} />
+                        <Wrapper flex={1}>
+                            <MediumText numberOfLines={2} style={[appStyles.textWhite]}>{enquire.description}</MediumText>
+                        </Wrapper>
+                    </Wrapper>
+                    :
+                    null
+            }
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
                 behavior={Platform.OS == 'ios' ? 'padding' : 'padding'}
@@ -111,6 +129,7 @@ function ChatScreen(props) {
                     </Wrapper>
                 </MainWrapper>
             </KeyboardAvoidingView>
+           
         </MainWrapper>
     );
 }

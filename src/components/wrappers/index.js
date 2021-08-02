@@ -112,7 +112,7 @@ export const HeaderWrapperPrimary = ({ children, style, animation }) => {
 const styles = StyleSheet.create({
     mainWrapperPrimary: {
         ...appStyles.mainContainer,
-        backgroundColor: colors.appBgColor4
+        backgroundColor: colors.appBgColor3
     },
     removerMarginVertical: {
         marginVertical: null

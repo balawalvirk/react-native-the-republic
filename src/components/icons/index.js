@@ -40,6 +40,7 @@ export const IconButton = ({ buttonStyle, onPress, shadow, shadowColored, iconSi
     return (
         <TouchableOpacity
             onPress={onPress}
+            activeOpacity={1}
             disabled={disabled}
             style={
                 [styles.IconButtonContainer,

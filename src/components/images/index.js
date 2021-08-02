@@ -99,7 +99,7 @@ export const ImageThumbnailGrid = ({ imageStyle, images, containerStyle, animati
                             {
                                 images.map((item, key) => {
                                     return (
-                                        <ThumbnaiImage imageUrl={item} containerStyle={{borderBottomWidth:key===0?0.5:0,borderColor:colors.appBgColor4}}/>
+                                        <ThumbnaiImage imageUrl={item} containerStyle={{borderBottomWidth:key===0?0.5:0,borderColor:colors.appBgColor3}}/>
                                     )
                                 })
                             }
@@ -108,14 +108,14 @@ export const ImageThumbnailGrid = ({ imageStyle, images, containerStyle, animati
                         images.length === 3 ?
                             <Wrapper flex={1}>
                                 <ThumbnaiImage imageUrl={images[0]} 
-                                containerStyle={{borderBottomWidth:0.5,borderColor:colors.appBgColor4}}
+                                containerStyle={{borderBottomWidth:0.5,borderColor:colors.appBgColor3}}
                                 />
                                 <Wrapper flex={1} style={{ flexDirection: 'row', }}>
                                     {
                                         images.slice(1, 3).map((item, key) => {
                                             return (
                                                 <ThumbnaiImage imageUrl={item} 
-                                                containerStyle={{borderRightWidth:key===0?0.5:0,borderColor:colors.appBgColor4}}
+                                                containerStyle={{borderRightWidth:key===0?0.5:0,borderColor:colors.appBgColor3}}
                                                 />
                                             )
                                         })
@@ -126,14 +126,14 @@ export const ImageThumbnailGrid = ({ imageStyle, images, containerStyle, animati
                             images.length === 4 ?
                                 <Wrapper flex={1} style={{ flexDirection: 'row', }}>
                                     <ThumbnaiImage imageUrl={images[0]} 
-                                     containerStyle={{borderRightWidth:0.5,borderColor:colors.appBgColor4}}
+                                     containerStyle={{borderRightWidth:0.5,borderColor:colors.appBgColor3}}
                                     />
                                     <Wrapper flex={1} >
                                         {
                                             images.slice(1, 4).map((item, key) => {
                                                 return (
                                                     <ThumbnaiImage imageUrl={item} 
-                                                    containerStyle={{borderBottomWidth:key!=2?0.5:0,borderColor:colors.appBgColor4}}
+                                                    containerStyle={{borderBottomWidth:key!=2?0.5:0,borderColor:colors.appBgColor3}}
                                                     />
                                                 )
                                             })
@@ -148,7 +148,7 @@ export const ImageThumbnailGrid = ({ imageStyle, images, containerStyle, animati
                                                 images.slice(0, 2).map((item, key) => {
                                                     return (
                                                         <ThumbnaiImage imageUrl={item} 
-                                                        containerStyle={{borderRightWidth:key===0?0.5:0,borderColor:colors.appBgColor4}}
+                                                        containerStyle={{borderRightWidth:key===0?0.5:0,borderColor:colors.appBgColor3}}
                                                         />
                                                     )
                                                 })
@@ -160,11 +160,11 @@ export const ImageThumbnailGrid = ({ imageStyle, images, containerStyle, animati
                                                     return (
                                                         <Wrapper flex={1}>
                                                             <ThumbnaiImage imageUrl={item} 
-                                                             containerStyle={{borderRightWidth:key!=2?0.5:0,borderColor:colors.appBgColor4}}
+                                                             containerStyle={{borderRightWidth:key!=2?0.5:0,borderColor:colors.appBgColor3}}
                                                             />
                                                             {
                                                                 key === 2 && images.length > 5 ?
-                                                                    <AbsoluteWrapper style={{ top: 0, bottom: 0, right: 0, left: 0, backgroundColor: colors.appBgColor4 + 40, ...appStyles.center }}>
+                                                                    <AbsoluteWrapper style={{ top: 0, bottom: 0, right: 0, left: 0, backgroundColor: colors.appBgColor3 + 40, ...appStyles.center }}>
                                                                         <LargeText style={[appStyles.textWhite]}>+ {images.length - 5}</LargeText>
                                                                     </AbsoluteWrapper>
                                                                     :

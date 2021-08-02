@@ -93,7 +93,7 @@ function Explore(props) {
                             initalIndex={selectedTabIndex}
                             text='title'
                             onPressButton={(item, index) => setSelectedTabIndex(index)}
-                            containerStyle={[{ backgroundColor: 'white', borderRadius: 100, borderWidth:  1 ,borderColor:selectedTabIndex === 0 ?colors.appBgColor4:'transparent' },selectedTabIndex === 1&& appStyles.shadow]}
+                            containerStyle={[{ backgroundColor: 'white', borderRadius: 100, borderWidth:  1 ,borderColor:selectedTabIndex === 0 ?colors.appBgColor3:'transparent' },selectedTabIndex === 1&& appStyles.shadow]}
                             inActiveButtonStyle={{ backgroundColor: 'transparent', marginRight: 0, marginLeft: 0, paddingHorizontal: sizes.marginHorizontal * 1.5, paddingVertical: sizes.marginVertical / 2 }}
                             activeButtonStyle={{backgroundColor:colors.appColor2}}
                         />

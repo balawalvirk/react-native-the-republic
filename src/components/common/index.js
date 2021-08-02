@@ -140,9 +140,9 @@ export const SwitchPrimary = ({ value, onPress }) => {
             iconSize={totalSize(2.5)}
             //buttonSize={totalSize(3.5)}
             //buttonColor={colors.appBgColor1}
-            buttonStyle={{ width: totalSize(5), alignItems: value ? 'flex-end' : 'flex-start', height: null, borderRadius: 100, backgroundColor: value ? colors.appColor1 + '40' : colors.appBgColor4, paddingHorizontal: 2.5, paddingVertical: 0.25, }}
+            buttonStyle={{ width: totalSize(5), alignItems: value ? 'flex-end' : 'flex-start', height: null, borderRadius: 100, backgroundColor: value ? colors.appColor1 + '40' : colors.appBgColor3, paddingHorizontal: 2.5, paddingVertical: 0.25, }}
             //gradient={darkMode}
-            iconColor={value ? colors.appColor1 : colors.appBgColor1}
+            iconColor={value ? colors.appColor1 : colors.appBgColor4}
             buttonRadius={100}
             onPress={() => {
                 HelpingMethods.handleAnimation()
@@ -303,7 +303,7 @@ export const ProfileTop = ({ imageUri, title, subTitle, onPress, content }) => {
 export const ShareSomethingButton = ({ onPress, imageUri, title }) => {
     const defaultVerticalSpacer = sizes.marginVertical / 1.5
     return (
-        <TouchableOpacity activeOpacity={1} onPress={onPress} style={{ marginHorizontal: sizes.marginHorizontalSmall, borderWidth: 1, borderColor: colors.appBgColor4, borderRadius: sizes.baseRadius, paddingVertical: defaultVerticalSpacer, paddingHorizontal: sizes.marginHorizontalSmall }}>
+        <TouchableOpacity activeOpacity={1} onPress={onPress} style={{ marginHorizontal: sizes.marginHorizontalSmall, borderWidth: 1, borderColor: colors.appBgColor3, borderRadius: sizes.baseRadius, paddingVertical: defaultVerticalSpacer, paddingHorizontal: sizes.marginHorizontalSmall }}>
             <RowWrapperBasic>
                 <ImageRound
                     source={{ uri: imageUri }}
@@ -315,7 +315,7 @@ export const ShareSomethingButton = ({ onPress, imageUri, title }) => {
                 </Wrapper>
             </RowWrapperBasic>
             <Spacer height={defaultVerticalSpacer} />
-            <LineHorizontal color={colors.appBgColor4} height={1} />
+            <LineHorizontal color={colors.appBgColor3} height={1} />
             <Spacer height={defaultVerticalSpacer} />
             <RowWrapperBasic style={[{ justifyContent: 'space-evenly', }]}>
                 <IconWithText
@@ -337,6 +337,14 @@ export const ShareSomethingButton = ({ onPress, imageUri, title }) => {
                 />
             </RowWrapperBasic>
         </TouchableOpacity>
+    )
+}
+export const TitleValue = ({ title, value, titleStyle, valueStyle,containerStyle ,direction}) => {
+    return (
+        <RowWrapper style={[{},containerStyle]}>
+            <MediumText style={titleStyle}>{title}</MediumText>
+            <MediumText style={[appStyles.textPrimaryColor, appStyles.fontBold, valueStyle]}>{value}</MediumText>
+        </RowWrapper>
     )
 }
 

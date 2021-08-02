@@ -44,7 +44,7 @@ function TagFriends(props) {
                                     iconName="check"
                                     iconSize={totalSize(1.5)}
                                     buttonSize={totalSize(2.5)}
-                                    buttonColor={item.selected ? colors.success : colors.appBgColor4}
+                                    buttonColor={item.selected ? colors.success : colors.appBgColor3}
                                     iconColor={item.selected ? colors.appTextColor6 : colors.appBgColor3}
                                 />
                             }

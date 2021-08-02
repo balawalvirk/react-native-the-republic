@@ -766,6 +766,47 @@ const dummyData = {
                 image: appImages.user3,
             },
         },
+    ],
+    trainings: [
+        {
+            id: '44324552542',
+            title: 'Improve Your Shooting Precision',
+            description: 'Curabitur auctor leo et libero consetur gravida. Morbi gravida et sem dictum varius. Curabitur auctor leo et libero consetur gravida. Morbi gravida et sem dictum varius.',
+            duration: '7 days',
+            charges: '1500',
+            location: 'Firearms Training Center, Atlantic County',
+            user: {
+                id: 8453,
+                name: 'John Thomas',
+                image: appImages.user3,
+            },
+        },
+        {
+            id: '657345345',
+            title: 'Become Master of Handguns',
+            description: 'Curabitur auctor leo et libero consetur gravida. Morbi gravida et sem dictum varius. Curabitur auctor leo et libero consetur gravida. Morbi gravida et sem dictum varius.',
+            duration: '15 days',
+            charges: '2000',
+            location: 'Armor Training Center, Atlantic County',
+            user: {
+                id: 22345,
+                name: 'William Alis',
+                image: appImages.user2,
+            },
+        },
+        {
+            id: '67865322',
+            title: 'Handle Your Rifle Like a Pro!!',
+            description: 'Curabitur auctor leo et libero consetur gravida. Morbi gravida et sem dictum varius. Curabitur auctor leo et libero consetur gravida. Morbi gravida et sem dictum varius.',
+            duration: '7 days',
+            charges: '1500',
+            location: 'Firearms Training Center, Atlantic County',
+            user: {
+                id: 7734,
+                name: 'Jasone White',
+                image: appImages.user5
+            },
+        }
     ]
 }
 

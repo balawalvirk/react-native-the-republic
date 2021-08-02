@@ -7,7 +7,7 @@ export default StyleSheet.create({
     },
     productContainer: {
         borderWidth: 1,
-        borderColor: colors.appBgColor4,
+        borderColor: colors.appBgColor3,
         borderRadius: sizes.cardRadius,
         marginHorizontal: sizes.marginHorizontalSmall
     },

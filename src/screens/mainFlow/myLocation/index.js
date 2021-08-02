@@ -87,7 +87,7 @@ function MyLocation() {
                         minimumValue={0}
                         maximumValue={100}
                         minimumTrackTintColor={colors.appColor1}
-                        maximumTrackTintColor={colors.appBgColor4}
+                        maximumTrackTintColor={colors.appBgColor3}
                     />
                 </Wrapper>
                 <Spacer height={sizes.marginVertical} />

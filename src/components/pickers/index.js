@@ -60,7 +60,7 @@ export const PickerPrimary = ({
             <View style={[appStyles.inputContainerUnderLined, {
                 //borderRadius: sizes.b,
                 borderBottomWidth: 1,
-                borderBottomColor: colors.appBgColor4,
+                borderBottomColor: colors.appBgColor3,
                 marginHorizontal:sizes.marginHorizontalLarge
             }, containerStyle]}>
                 {

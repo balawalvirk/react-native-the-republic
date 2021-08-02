@@ -152,7 +152,7 @@ function Explore(props) {
                             initalIndex={selectedViewIndex}
                             text='title'
                             onPressButton={(item, index) => setViewIndex(index)}
-                            containerStyle={[{ backgroundColor: 'white', borderRadius: 100, opacity: selectedTabIndex === 0 ? 1 : 0,borderWidth:1,borderColor:colors.appBgColor4 }]}
+                            containerStyle={[{ backgroundColor: 'white', borderRadius: 100, opacity: selectedTabIndex === 0 ? 1 : 0,borderWidth:1,borderColor:colors.appBgColor3 }]}
                             inActiveButtonStyle={{ backgroundColor: 'transparent', marginRight: 0, marginLeft: 0, paddingHorizontal: sizes.marginHorizontal / 1.5, paddingVertical: sizes.smallMargin, }}
                             iconSize={totalSize(2)}
                         />

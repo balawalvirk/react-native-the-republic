@@ -224,7 +224,6 @@ export const appStyles = StyleSheet.create({
     },
     shadowOpacity: 0.43,
     shadowRadius: 9.51,
-
     elevation: 15,
   },
   shadowDark: {
@@ -263,6 +262,9 @@ export const appStyles = StyleSheet.create({
   },
   textPrimaryColor: {
     color: colors.appColor1
+  },
+  textSocondaryColor: {
+    color: colors.appColor2
   },
   textWhite: {
     color: colors.appTextColor6
@@ -308,7 +310,7 @@ export const appStyles = StyleSheet.create({
     elevation: 0,
     shadowColor: 'transparent',
     borderBottomWidth: 1,
-    borderBottomColor: colors.appBgColor4,
+    borderBottomColor: colors.appBgColor3,
     height: sizes.headerHeight,
   },
   headerTitleStyle: {
@@ -353,4 +355,22 @@ export const appStyles = StyleSheet.create({
 
     elevation: 10,
   },
+  grayWrapper: {
+    marginHorizontal: sizes.marginHorizontal,
+    paddingHorizontal: sizes.marginHorizontal / 1.25,
+    paddingVertical: sizes.marginVertical / 1.5,
+    backgroundColor: colors.appBgColor3,
+    borderRadius: sizes.cardRadius,
+    // flexDirection: 'row',
+    // alignItems: 'center',
+    // justifyContent: 'space-between'
+},
+borderedWrapper: {
+    marginHorizontal: sizes.marginHorizontal,
+    paddingHorizontal: sizes.marginHorizontal / 1.25,
+    paddingVertical: sizes.marginVertical / 1.5,
+    borderWidth: 1,
+    borderColor: colors.appBgColor3,
+    borderRadius: sizes.cardRadius,
+}
 })

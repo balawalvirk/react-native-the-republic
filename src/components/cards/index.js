@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { Icon } from 'react-native-elements';
 import { height, totalSize, width } from 'react-native-dimension';
-import { appIcons, appImages, appStyles, colors, HelpingMethods, sizes } from '../../services';
+import { appIcons, appImages, appStyles, colors, fontFamily, HelpingMethods, sizes } from '../../services';
 import { Spacer, Wrapper, AbsoluteWrapper, LineHorizontal, LineVertical, ComponentWrapper, MediumText, RowWrapperBasic, RowWrapper, TinyText, RegularText, IconWithText, ImageRound } from '..';
 import styles from './styles'
 import { IconButton, IconHeart } from '../icons';
@@ -11,6 +11,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { LargeText, MediumTitle, SmallText, SmallTitle, TinyTitle } from '../text';
 import { ButtonColoredSmall } from '../buttons';
 import { ImageSqareRound, ImageThumbnailGrid } from '../images';
+import { TitleValue } from '../common';
 
 export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, image, images, containerstyle, description, onPressHeart, newPrice, oldPrice, userName, userImage, viewType, rating, reviewCount, isSponsered }) => {
     const defaultViewType = viewType ? viewType : 'grid'
@@ -121,9 +122,9 @@ export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, 
     );
 }
 
-export const UserCardPrimary = ({ containerStyle, imageSize, imageUri, title, subTitle, onPress, shadow, onPressViewProfile, gradiant, subContainerStyle, right, top, bottom }) => {
+export const UserCardPrimary = ({ containerStyle, imageSize, imageUri, title, subTitle, onPress, left, shadow, onPressViewProfile, gradiant, subContainerStyle, right, top, bottom }) => {
     return (
-        <TouchableOpacity activeOpacity={1} onPress={onPress} style={[{ backgroundColor: colors.appBgColor2, borderRadius: sizes.buttonRadius, marginHorizontal: sizes.marginHorizontal, }, shadow && appStyles.shadow, containerStyle]}>
+        <TouchableOpacity activeOpacity={1} onPress={onPress} style={[{ backgroundColor: colors.appBgColor3, borderRadius: sizes.buttonRadius, marginHorizontal: sizes.marginHorizontal, }, shadow && appStyles.shadow, containerStyle]}>
             {
                 gradiant ?
                     <LinearGradient
@@ -137,6 +138,9 @@ export const UserCardPrimary = ({ containerStyle, imageSize, imageUri, title, su
             <Wrapper style={[{ paddingVertical: sizes.smallMargin }, subContainerStyle]}>
                 {top ? top : null}
                 <RowWrapper style={[styles.smallMarginHorizontal, {}]}>
+                    {
+                        left && left
+                    }
                     <Wrapper flex={1}>
                         <RowWrapperBasic>
                             <ImageRound
@@ -214,16 +218,13 @@ export const ReviewCardPrimary = ({ containerStyle, imageUrl, title, rating, rev
         </Wrapper>
     )
 }
-export const ProductCardSecondary = ({ onPress, animation, duration, isFavourite, image, images, containerstyle, description, onPressHeart, newPrice, oldPrice, userName, userImage, viewType, rating, reviewCount, status, distance, moreInfo }) => {
-    const defaultViewType = viewType ? viewType : 'grid'
-    const isActive = status === 'active'
-    const isCompleted = status === 'completed'
-    const statusText = isActive ? "Order accepted" : isCompleted ? "Completed" : ''
+export const ProductCardSecondary = ({ onPress, animation, duration, image, containerstyle, description, newPrice, oldPrice, rating, reviewCount, moreInfo, moreInfoImage, moreInfoTitle, moreInfoSubTitle, moreInfoRight }) => {
+
     return (
         <Wrapper animation={animation} duration={duration} style={[styles.ProductCardSecondaryContainer, containerstyle]}>
             <RowWrapperBasic style={[{ alignItems: 'flex-start', paddingVertical: sizes.marginVertical / 2, paddingHorizontal: sizes.marginHorizontalSmall }]}>
                 <Wrapper style={{ justifyContent: 'center' }}>
-                    <TouchableOpacity style={{ borderWidth: 1, borderRadius: sizes.cardRadius, borderColor: colors.appBgColor4 }} activeOpacity={1} onPress={onPress}>
+                    <TouchableOpacity style={{ borderWidth: 1, borderRadius: sizes.cardRadius, borderColor: colors.appBgColor3 }} activeOpacity={1} onPress={onPress}>
                         <Image
                             source={{ uri: image }}
                             style={{ height: width(25), width: width(25) }}
@@ -266,28 +267,26 @@ export const ProductCardSecondary = ({ onPress, animation, duration, isFavourite
             </RowWrapperBasic>
             {
                 moreInfo ?
-                    <Wrapper style={{ backgroundColor: colors.appBgColor4, paddingVertical: sizes.marginVertical / 2, borderRadius: sizes.cardRadius }}>
+                    <Wrapper style={{ backgroundColor: colors.appBgColor3, paddingVertical: sizes.marginVertical / 2, borderRadius: sizes.cardRadius }}>
                         <RowWrapperBasic style={{ marginHorizontal: sizes.marginHorizontalSmall }}>
                             <Wrapper flex={1}>
                                 <RowWrapperBasic>
                                     <ImageRound
-                                        source={{ uri: userImage }}
+                                        source={{ uri: moreInfoImage }}
                                         size={totalSize(5)}
                                     />
                                     <Spacer width={sizes.smallMargin} />
                                     <Wrapper style={{ alignItems: 'flex-start', }}>
-                                        <MediumText>{userName}</MediumText>
+                                        <MediumText>{moreInfoTitle}</MediumText>
                                         <Spacer height={sizes.TinyMargin} />
-                                        <SmallText style={[appStyles.textGray]}>{distance}</SmallText>
+                                        <SmallText style={[appStyles.textGray]}>{moreInfoSubTitle}</SmallText>
                                     </Wrapper>
                                 </RowWrapperBasic>
                             </Wrapper>
                             <Wrapper>
-                                <ButtonColoredSmall
-                                    text={statusText}
-                                    buttonStyle={{ paddingHorizontal: sizes.marginHorizontalSmall / 2, borderRadius: 100, backgroundColor: isActive ? colors.appColor1 : isCompleted ? colors.success : colors.appColor1 }}
-                                    textStyle={[appStyles.textRegular, appStyles.textWhite]}
-                                />
+                                {
+                                    moreInfoRight
+                                }
                             </Wrapper>
                         </RowWrapperBasic>
                     </Wrapper>
@@ -353,7 +352,7 @@ export const NotificationCardPrimary = ({ onPress, text, image, type, time, cont
     const isUser = type === 'review'
     const isApp = type === 'app'
     return (
-        <TouchableOpacity onPress={onPress} activeOpacity={1} style={[{ paddingVertical: sizes.marginVertical / 2, borderBottomWidth: 1, borderBottomColor: colors.appBgColor4 }, containerStyle]}>
+        <TouchableOpacity onPress={onPress} activeOpacity={1} style={[{ paddingVertical: sizes.marginVertical / 2, borderBottomWidth: 1, borderBottomColor: colors.appBgColor3 }, containerStyle]}>
             <RowWrapperBasic style={{ alignItems: 'flex-start', marginHorizontal: sizes.marginHorizontalSmall }}>
                 <Wrapper>
                     {
@@ -368,7 +367,7 @@ export const NotificationCardPrimary = ({ onPress, text, image, type, time, cont
                                 <ImageSqareRound
                                     source={{ uri: image }}
                                     size={totalSize(5)}
-                                    style={{ borderWidth: 1, borderColor: colors.appBgColor4 }}
+                                    style={{ borderWidth: 1, borderColor: colors.appBgColor3 }}
                                     resizeMode="contain"
                                 />
                                 :
@@ -399,7 +398,7 @@ export const NotificationCardPrimary = ({ onPress, text, image, type, time, cont
 export const MessageCardPrimary = ({ onPress, name, message, image, isOnline, time, containerStyle }) => {
 
     return (
-        <TouchableOpacity activeOpacity={1} onPress={onPress} style={[{ paddingVertical: sizes.marginVertical / 2, borderBottomWidth: 1, borderBottomColor: colors.appBgColor4, }, containerStyle]}>
+        <TouchableOpacity activeOpacity={1} onPress={onPress} style={[{ paddingVertical: sizes.marginVertical / 2, borderBottomWidth: 1, borderBottomColor: colors.appBgColor3, }, containerStyle]}>
             <RowWrapper style={{ alignItems: 'flex-start', }}>
                 <Wrapper>
                     <ImageRound
@@ -423,4 +422,102 @@ export const MessageCardPrimary = ({ onPress, name, message, image, isOnline, ti
         </TouchableOpacity>
     )
 
+}
+
+export const PlanCard = ({ onPress, title, price, keyPoints, isSelected }) => {
+
+    return (
+        <TouchableOpacity
+            onPress={onPress}
+            activeOpacity={1} style={[appStyles.borderedWrapper, { borderColor: isSelected ? colors.appColor1 : colors.appBgColor3, borderWidth: isSelected ? 2 : 1, marginBottom: sizes.marginVertical }]}>
+            <RowWrapperBasic>
+                <Wrapper flex={1}>
+                    <SmallTitle style={[appStyles.textSocondaryColor]}>{title}</SmallTitle>
+                </Wrapper>
+                <SmallTitle style={[{ color: colors.success, fontFamily: fontFamily.appTextRegular, fontStyle: 'italic' }]}>{price}</SmallTitle>
+            </RowWrapperBasic>
+            <Spacer height={sizes.smallMargin} />
+            <RegularText>{keyPoints.split("• ").join("\n• ")}</RegularText>
+        </TouchableOpacity>
+    )
+}
+
+export const TraningCard = ({ onPress, title, duration, charges, location, userName, userImage, userRating, userReviewsCount, description, containerStyle }) => {
+    const TitleValueSecondary = ({ title, value }) => {
+        return (
+            <TitleValue
+                title={title}
+                value={value}
+                containerStyle={{ flexDirection: 'column', marginHorizontal: 0, alignItems: 'flex-start', }}
+                titleStyle={[appStyles.textRegular, appStyles.fontBold, appStyles.textDarkGray]}
+                valueStyle={[appStyles.textMedium, { marginTop: sizes.smallMargin }]}
+            />
+        )
+    }
+    return (
+        <TouchableOpacity
+            activeOpacity={1}
+            onPress={onPress}
+            activeOpacity={1} style={[appStyles.borderedWrapper, { marginBottom: sizes.marginVertical }, containerStyle]}>
+            <Wrapper>
+                <SmallTitle style={[appStyles.textSocondaryColor]}>{title}</SmallTitle>
+                <Spacer height={sizes.baseRadius} />
+                <TitleValueSecondary
+                    title="Description"
+                    value={description}
+                />
+                <Spacer height={sizes.baseRadius} />
+                <RowWrapperBasic>
+                    <Wrapper flex={1}>
+                        <TitleValueSecondary
+                            title="Duration"
+                            value={duration}
+                        />
+                    </Wrapper>
+                    <Wrapper flex={1}>
+                        <TitleValueSecondary
+                            title="Charges"
+                            value={charges}
+                        />
+                    </Wrapper>
+                </RowWrapperBasic>
+            </Wrapper>
+            <Spacer height={sizes.baseRadius} />
+            <IconWithText
+                iconName="location-outline"
+                iconType="ionicon"
+                text={location}
+                tintColor={colors.appColor1}
+                textStyle={[appStyles.textMedium, appStyles.fontBold, appStyles.textPrimaryColor]}
+            />
+            <Spacer height={sizes.baseRadius} />
+            <RowWrapperBasic>
+                <Wrapper>
+                    <ImageRound
+                        source={{ uri: userImage }}
+                        size={totalSize(4)}
+                    />
+                </Wrapper>
+                <Spacer width={sizes.TinyMargin} />
+
+                <Wrapper style={{ alignItems: 'flex-start', }}>
+                    <RegularText>{userName}</RegularText>
+                    <Spacer height={sizes.TinyMargin} />
+                    <RowWrapperBasic>
+                        <StarRating
+                            disabled={false}
+                            maxStars={5}
+                            rating={userRating}
+                            fullStarColor={colors.rating}
+                            starSize={totalSize(1)}
+                            starStyle={{ marginRight: totalSize(0.2) }}
+                        />
+                        <Spacer width={sizes.TinyMargin} />
+                        <TinyText>{userRating} ({userReviewsCount})</TinyText>
+                    </RowWrapperBasic>
+                </Wrapper>
+            </RowWrapperBasic>
+
+        </TouchableOpacity>
+    )
 }

@@ -98,7 +98,7 @@ function BottomTabScreens() {
                     tabBarLabel: "Profile",
                     tabBarIcon: ({ color, size, focused }) => {
                         //return <CustomIcon icon={appIcons.marketplace} size={tabIconSize} color={color} focused={focused} />
-                        return <ImageRound source={{ uri: appImages.user3 }} size={tabIconSize} style={{ opacity:focused?1:0.5, borderColor: colors.appColor1 }} />
+                        return <ImageRound source={{ uri: appImages.user3 }} size={tabIconSize} style={{ opacity: focused ? 1 : 0.5, borderColor: colors.appColor1 }} />
                     },
                 })}
             />
@@ -239,7 +239,7 @@ const AppNavigation = () => {
                 options={{
                     // headerShown: false,
                     title: 'Tag Friends',
-                   // headerTitleAlign:'center'
+                    // headerTitleAlign:'center'
                 }}
             />
             <AppStack.Screen name={routes.followRequests} component={MainApp.FollowRequests}
@@ -249,28 +249,34 @@ const AppNavigation = () => {
                 }}
             />
             <AppStack.Screen name={routes.dealers} component={MainApp.Dealers}
-               options={({ navigation, route }) => ({
-                title: 'Dealers',
-                headerRight: () =>
-                    <ComponentWrapper >
-                        <LocationPickerButton
-                            onPress={() => navigation.navigate(routes.myLocation)}
-                            text="Broklyn, NYC" />
-                    </ComponentWrapper>,
+                options={({ navigation, route }) => ({
+                    title: 'Dealers',
+                    headerRight: () =>
+                        <ComponentWrapper >
+                            <LocationPickerButton
+                                onPress={() => navigation.navigate(routes.myLocation)}
+                                text="Broklyn, NYC" />
+                        </ComponentWrapper>,
 
-            })}
+                })}
             />
             <AppStack.Screen name={routes.trainings} component={MainApp.Trainings}
-                options={{
-                    // headerShown: false,
-                    title: 'Trainings'
-                }}
+                 options={({ navigation, route }) => ({
+                    title: 'Training',
+                    headerRight: () =>
+                        <ComponentWrapper >
+                            <LocationPickerButton
+                                onPress={() => navigation.navigate(routes.myLocation)}
+                                text="Broklyn, NYC" />
+                        </ComponentWrapper>,
+
+                })}
             />
             <AppStack.Screen name={routes.comments} component={MainApp.Comments}
                 options={{
                     // headerShown: false,
                     title: 'Comments',
-                    headerTitleAlign:'center'
+                    headerTitleAlign: 'center'
                 }}
             />
             <AppStack.Screen name={routes.theRepublicNews} component={MainApp.TheRepublicNews}
@@ -288,7 +294,8 @@ const AppNavigation = () => {
             <AppStack.Screen name={routes.subscriptionPlan} component={MainApp.SubscriptionPlan}
                 options={{
                     // headerShown: false,
-                    title: 'Subscription Plan'
+                    title: 'Subscription Plan',
+                    headerTitleAlign: 'center'
                 }}
             />
             <AppStack.Screen name={routes.myLocation} component={MainApp.MyLocation}
@@ -319,7 +326,7 @@ const AppNavigation = () => {
                 options={{
                     // headerShown: false,
                     title: 'Messages',
-                    headerTitleAlign:'center'
+                    headerTitleAlign: 'center'
                 }}
             />
             <AppStack.Screen name={routes.chatScreen} component={MainApp.ChatScreen}
@@ -375,35 +382,90 @@ const AppNavigation = () => {
                 options={{
                     // headerShown: false,
                     title: 'Favourites',
-                    headerTitleAlign:'center'
+                    headerTitleAlign: 'center'
                 }}
             />
             <AppStack.Screen name={routes.editProfile} component={MainApp.EditProfile}
                 options={{
                     // headerShown: false,
                     title: 'Edit Profile',
-                    headerTitleAlign:'center'
+                    headerTitleAlign: 'center'
                 }}
             />
-             <AppStack.Screen name={routes.changePassword} component={MainApp.ChangePassword}
+            <AppStack.Screen name={routes.changePassword} component={MainApp.ChangePassword}
                 options={{
                     // headerShown: false,
                     title: 'Change Password',
-                    headerTitleAlign:'center'
+                    headerTitleAlign: 'center'
                 }}
             />
-             <AppStack.Screen name={routes.paymentMethods} component={MainApp.PaymentMethods}
+            <AppStack.Screen name={routes.paymentMethods} component={MainApp.PaymentMethods}
                 options={{
                     // headerShown: false,
                     title: 'Payment Methods',
-                    headerTitleAlign:'center'
+                    headerTitleAlign: 'center'
                 }}
             />
-             <AppStack.Screen name={routes.purchaseHistory} component={MainApp.PurchaseHistory}
+            <AppStack.Screen name={routes.purchaseHistory} component={MainApp.PurchaseHistory}
                 options={{
                     // headerShown: false,
                     title: 'Purchase History',
-                    headerTitleAlign:'center'
+                    headerTitleAlign: 'center'
+                }}
+            />
+            <AppStack.Screen name={routes.buyNow} component={MainApp.BuyNow}
+                options={{
+                    // headerShown: false,
+                    title: 'Buy Now',
+                    headerTitleAlign: 'center'
+                }}
+            />
+            <AppStack.Screen name={routes.deliveryAddress} component={MainApp.DeliveryAddress}
+                options={{
+                    // headerShown: false,
+                    title: 'Delivery Address',
+                    headerTitleAlign: 'center'
+                }}
+            />
+            <AppStack.Screen name={routes.fflDealers} component={MainApp.FflDealers}
+                options={{
+                    // headerShown: false,
+                    title: 'FFL Dealers',
+                    headerTitleAlign: 'center'
+                }}
+            />
+            <AppStack.Screen name={routes.orderDetail} component={MainApp.OrderDetail}
+                options={{
+                    // headerShown: false,
+                    title: 'Order Detail',
+                }}
+            />
+            <AppStack.Screen name={routes.orderInvoice} component={MainApp.OrderInvoice}
+                options={{
+                    // headerShown: false,
+                    title: 'order Invoice',
+                    headerTitleAlign: 'center'
+                }}
+            />
+            <AppStack.Screen name={routes.upgradeSubscriptionPlan} component={MainApp.UpgradeSubscriptionPlan}
+                options={{
+                    // headerShown: false,
+                    title: 'Upgrade Subscription Plan',
+                    headerTitleAlign: 'center'
+                }}
+            />
+            <AppStack.Screen name={routes.selectDateTime} component={MainApp.SelectDateTime}
+                options={{
+                    // headerShown: false,
+                    title: 'Select Date and Time',
+                    headerTitleAlign: 'center'
+                }}
+            />
+            <AppStack.Screen name={routes.payment} component={MainApp.Payment}
+                options={{
+                    // headerShown: false,
+                    title: 'Payment',
+                    headerTitleAlign: 'center'
                 }}
             />
         </AppStack.Navigator>

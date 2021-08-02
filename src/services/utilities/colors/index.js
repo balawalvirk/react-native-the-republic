@@ -28,7 +28,7 @@ export const colors = {
 
   rating: '#FFC400',
   success: '#00AA2D',
-  error:'rgba(214,48,49, 1)',
+  error: 'rgba(214,48,49, 1)',
 
   appGradiantColors: ['#0E4095', '#002768'],
 
@@ -44,8 +44,9 @@ export const colors = {
 
   appBgColor1: '#FFFFFF',
   appBgColor2: '#F6F6F6',
-  appBgColor3: '#F2F2F2',
+  appBgColor3: '#EEEEEE',
   appBgColor4: '#CCCCCC',
-  appBgColor5: '#414141'
+  appBgColor5: '#414141',
+  appBgColor6: '#000000'
 }
 

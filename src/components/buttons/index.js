@@ -202,7 +202,7 @@ export const AddButton = ({ onPress, style, size, buttonSize }) => {
     const defaultButtonSize = width(20)
 
     return (
-        <TouchableOpacity onPress={onPress} style={[appStyles.center, { borderRadius: sizes.baseRadius, backgroundColor: colors.appBgColor4, height: buttonSize ? buttonSize : defaultButtonSize, width: buttonSize ? buttonSize : defaultButtonSize }, style]}>
+        <TouchableOpacity onPress={onPress} style={[appStyles.center, { borderRadius: sizes.baseRadius, backgroundColor: colors.appBgColor3, height: buttonSize ? buttonSize : defaultButtonSize, width: buttonSize ? buttonSize : defaultButtonSize }, style]}>
             <Icon
                 name="add"
                 type="ionicon"

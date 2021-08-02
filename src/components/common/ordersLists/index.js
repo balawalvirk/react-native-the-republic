@@ -1,10 +1,12 @@
 import React from 'react'
 import { FlatList } from "react-native-gesture-handler";
-import { HelpingMethods, sizes } from '../../../services';
+import { appStyles, colors, HelpingMethods, sizes } from '../../../services';
 import { ProductCardSecondary, ProductCardPrimary } from "../../cards";
 import * as RootNavigation from '../../../services/navigation/rootNavigation'
+import { ButtonColoredSmall } from '../../buttons';
 
 export function OrdersPrimary({ data, ListHeaderComponent, ListFooterComponent, onPressItem }) {
+   
     return (
         <FlatList
             data={data}
@@ -16,6 +18,9 @@ export function OrdersPrimary({ data, ListHeaderComponent, ListFooterComponent, 
             keyExtractor={(item, index) => (index + 1).toString()}
             renderItem={({ item, index }) => {
                 const { user } = item
+                const isActive = item.status === 'active'
+                const isCompleted = item.status === 'completed'
+                const statusText = isActive ? "Order accepted" : isCompleted ? "Completed" : ''
                 return (
                     <ProductCardSecondary
                         onPress={() => onPressItem(item, index)}
@@ -34,10 +39,16 @@ export function OrdersPrimary({ data, ListHeaderComponent, ListFooterComponent, 
                         rating={item.rating}
                         reviewCount={item.review_count}
                         moreInfo={true}
-                        userImage={user.image}
-                        userName={user.name}
-                        status={item.status}
-                        distance={index + 1 * 3 + ' miles away'}
+                        moreInfoImage={user.image}
+                        moreInfoTitle={user.name}
+                        moreInfoSubTitle={index + 1 * 3 + ' miles away'}
+                        moreInfoRight={
+                            <ButtonColoredSmall
+                                text={statusText}
+                                buttonStyle={{ paddingHorizontal: sizes.marginHorizontalSmall / 2, borderRadius: 100, backgroundColor: isActive ? colors.appColor1 : isCompleted ? colors.success : colors.appColor1 }}
+                                textStyle={[appStyles.textRegular, appStyles.textWhite]}
+                            />
+                        }
                     />
                 )
             }}

@@ -31,7 +31,7 @@ export const ImagesPrimary = ({ onPressAdd, images, onPressCross,imageSize }) =>
                             <ImageSqareRound
                                 size={imageSize?imageSize:defaultSize}
                                 source={{ uri: item.uri }}
-                                style={{borderWidth:1,borderColor:colors.appBgColor4}}
+                                style={{borderWidth:1,borderColor:colors.appBgColor3}}
                             />
                             <AbsoluteWrapper
                                 style={{

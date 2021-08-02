@@ -36,7 +36,7 @@ function Chats(props) {
                             image={item.user.image}
                             message={item.message}
                             time={item.time}
-                            onPress={() => navigate(routes.chatScreen, { item: item })}
+                            onPress={() => navigate(routes.chatScreen, { user: item.user })}
                         />
                     )
                 }}

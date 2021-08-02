@@ -39,7 +39,7 @@ function More({ navigation }) {
     }
     return (
         <Wrapper flex={1}>
-            <Wrapper style={{ marginHorizontal: sizes.marginHorizontal, borderRadius: sizes.cardRadius, borderWidth: 1, borderColor: colors.appBgColor4 }}>
+            <Wrapper style={{ marginHorizontal: sizes.marginHorizontal, borderRadius: sizes.cardRadius, borderWidth: 1, borderColor: colors.appBgColor3 }}>
                 {
                     moreOptions.map((item, index) => {
                         return (

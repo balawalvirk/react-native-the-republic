@@ -21,7 +21,7 @@ function PaymentMethods(props) {
             <Spacer height={sizes.baseMargin} />
             <ButtonColored
                 text="Add Payment Method"
-                buttonColor={colors.appBgColor4}
+                buttonColor={colors.appBgColor3}
                 tintColor={colors.appTextColor1}
                 onPress={toggleAddPaymentModal}
 

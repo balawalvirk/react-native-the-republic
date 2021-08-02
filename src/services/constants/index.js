@@ -55,7 +55,15 @@ export const routes = {
     purchaseHistory: 'purchaseHistory',
     paymentMethods: 'paymentMethods',
     chatScreen: 'chatScreen',
-    tagFriends: 'tagFriends'
+    tagFriends: 'tagFriends',
+    buyNow: 'buyNow',
+    deliveryAddress: 'deliveryAddress',
+    fflDealers: 'fflDealers',
+    orderDetail: 'orderDetail',
+    orderInvoice: 'orderInvoice',
+    upgradeSubscriptionPlan: 'upgradeSubscriptionPlan',
+    selectDateTime: 'selectDateTime',
+    payment: 'payment'
 }
 export const headers = {
     screenOptionsPrimary: {

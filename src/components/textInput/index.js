@@ -190,7 +190,7 @@ const TextInputUnderlined = ({ onPress, inputRef, autoFocus, left, keyboardType,
                 <View style={[appStyles.inputContainerUnderLined, {
                     //borderRadius: sizes.b,
                     borderBottomWidth: 1,
-                    borderBottomColor: colors.appBgColor4,
+                    borderBottomColor: colors.appBgColor3,
                     marginHorizontal: 0
                 }]}>
                     {
@@ -261,7 +261,7 @@ const TextInputUnderlined = ({ onPress, inputRef, autoFocus, left, keyboardType,
                             :
                             iconNameRight ?
                                 <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                                    <Icon name={iconNameRight} type={iconTypeRight} size={iconSizeRight ? iconSizeRight : sizes.icons.medium} color={iconColorRight ? iconColorRight : colors.appBgColor4} iconStyle={iconStyleRight} onPress={onPressIconRight} />
+                                    <Icon name={iconNameRight} type={iconTypeRight} size={iconSizeRight ? iconSizeRight : sizes.icons.medium} color={iconColorRight ? iconColorRight : colors.appBgColor3} iconStyle={iconStyleRight} onPress={onPressIconRight} />
                                 </View>
                                 :
                                 null
@@ -329,7 +329,7 @@ export const TextInputChat = props => {
                 { marginLeft: sizes.marginHorizontal, alignItems: 'flex-end', marginVertical: height(2), backgroundColor: 'transparent' },
             ]}
             iconStyleRight={{ marginVertical: height(1), marginLeft: sizes.marginHorizontalSmall, transform: [{ rotate: '-45deg' }] }}
-            containerStyle={{ borderTopWidth: 1, borderColor: colors.appBgColor4, backgroundColor: 'transparent', marginHorizontal: 0 }}
+            containerStyle={{ borderTopWidth: 1, borderColor: colors.appBgColor3, backgroundColor: 'transparent', marginHorizontal: 0 }}
             value={value}
             onChangeText={onChangeText}
             onPressIcon={onSend}

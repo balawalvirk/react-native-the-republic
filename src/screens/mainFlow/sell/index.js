@@ -199,7 +199,7 @@ function Sell(props) {
 
                             <TouchableOpacity
                                 onPress={toggleImagePickerPopup}
-                                style={{ backgroundColor: colors.appBgColor4, ...styles.imageStyle, }}>
+                                style={{ backgroundColor: colors.appBgColor3, ...styles.imageStyle, }}>
                                 {
                                     imageFile ?
                                         <AbsoluteWrapper style={[{ top: 0, right: 0, left: 0, bottom: 0 }]}>

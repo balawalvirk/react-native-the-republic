@@ -7,14 +7,14 @@ export default StyleSheet.create({
     },
     productContainerGrid: {
         borderWidth: 1,
-        borderColor: colors.appBgColor4,
+        borderColor: colors.appBgColor3,
         borderRadius: sizes.cardRadius,
         marginHorizontal: sizes.marginHorizontal
     },
     productContainerList: {
        // flex:1,
         borderWidth: 1,
-        borderColor: colors.appBgColor4,
+        borderColor: colors.appBgColor3,
         borderRadius: sizes.cardRadius,
         marginHorizontal: sizes.marginHorizontal,
         flexDirection:'row',
@@ -23,7 +23,7 @@ export default StyleSheet.create({
     ProductCardSecondaryContainer: {
         // flex:1,
          borderWidth: 1,
-         borderColor: colors.appBgColor4,
+         borderColor: colors.appBgColor3,
          borderRadius: sizes.cardRadius,
          marginHorizontal: sizes.marginHorizontal,
          //flexDirection:'row',
@@ -31,7 +31,7 @@ export default StyleSheet.create({
      },
     reviewContainer: {
         borderWidth: 1,
-        borderColor: colors.appBgColor4,
+        borderColor: colors.appBgColor3,
         borderRadius: sizes.cardRadius,
         marginHorizontal: sizes.marginHorizontal,
         paddingHorizontal:sizes.marginHorizontalSmall,
