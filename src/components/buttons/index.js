@@ -26,6 +26,7 @@ export const ButtonColored = ({
                                 icon={customIcon}
                                 size={iconSize ? iconSize : totalSize(3)}
                                 color={tintColor && tintColor}
+                                containerStyle={iconStyle}
                             />
                             :
                             iconName ?
@@ -194,6 +195,7 @@ export const ButtonSocial = ({ text, onPress, logo }) => {
             customIcon={logo}
             onPress={() => { }}
             textStyle={[appStyles.ButtonTextMedium]}
+            iconStyle={{ marginRight: sizes.marginHorizontalSmall }}
             onPress={onPress}
         />
     )

@@ -18,7 +18,7 @@ function ImagePickerPopup({ visible,toggle,onPressTakePhoto,onPressSelectFromGal
             <ComponentWrapper style={[{marginHorizontal:sizes.marginHorizontalLarge}]}>
                 <ButtonBordered
                     text="Take Photo"
-                    iconName="camera"
+                  //  iconName="camera"
                     buttonStyle={{backgroundColor: colors.appColor1+'20'}}
                     onPress={() => {
                         toggle();
@@ -30,7 +30,7 @@ function ImagePickerPopup({ visible,toggle,onPressTakePhoto,onPressSelectFromGal
                 <Spacer height={sizes.baseMargin} />
                 <ButtonBordered
                     text="Select from galary"
-                    iconName="image"
+                    //iconName="image"
                     buttonStyle={{backgroundColor: colors.appColor1+'20'}}
                     onPress={() => {
                         toggle();

@@ -82,9 +82,9 @@ function ChatScreen(props) {
     }, [navigation]);
     return (
         <MainWrapper>
-             {
+            {
                 enquire ?
-                    <Wrapper style={[{  backgroundColor: colors.error, flexDirection: 'row',alignItems: 'center', paddingVertical: sizes.marginVertical / 2, paddingHorizontal: sizes.marginHorizontalSmall }]}>
+                    <Wrapper style={[{ backgroundColor: colors.error, flexDirection: 'row', alignItems: 'center', paddingVertical: sizes.marginVertical / 2, paddingHorizontal: sizes.marginHorizontalSmall }]}>
                         <Wrapper style={{ backgroundColor: colors.appBgColor1, borderRadius: sizes.smallRadius }}>
                             <ImageSqareRound
                                 source={{ uri: enquire.image }}
@@ -100,14 +100,15 @@ function ChatScreen(props) {
                     :
                     null
             }
-            <KeyboardAvoidingView
+             <KeyboardAvoidingView
                 style={{ flex: 1 }}
                 behavior={Platform.OS == 'ios' ? 'padding' : 'padding'}
-                keyboardVerticalOffset={Platform.OS == 'ios' ? height(15) : 0}
+                keyboardVerticalOffset={Platform.OS == 'ios' ? height(12) : 0}
                 enabled={Platform.OS === 'ios' ? true : false}>
                 <MainWrapper>
                     <FlatList
-                        data={chatMessages}
+                    showsVerticalScrollIndicator={false}
+                          data={[...chatMessages,...chatMessages,...chatMessages]}
                         ListHeaderComponent={() => <Spacer height={sizes.smallMargin} />}
                         renderItem={({ item, index }) => {
                             return (
@@ -125,11 +126,42 @@ function ChatScreen(props) {
                             onSend={() => { }}
                             onAdd={() => { }}
                         />
-                        <Spacer height={sizes.baseMargin} />
+                        <Spacer height={sizes.smallMargin} />
                     </Wrapper>
                 </MainWrapper>
-            </KeyboardAvoidingView>
-           
+            </KeyboardAvoidingView> 
+            {/* <MainWrapper>
+                <FlatList
+                    data={[...chatMessages,...chatMessages,...chatMessages]}
+                    ListHeaderComponent={() => <Spacer height={sizes.smallMargin} />}
+                    renderItem={({ item, index }) => {
+                        return (
+                            <ChatBubbule
+                                message={item.message}
+                                time={item.time}
+                                myMessage={item.user.id === myId}
+                            />
+                        );
+                    }}
+                    ListFooterComponent={() => <Spacer height={sizes.doubleBaseMargin*2} />}
+
+                />
+
+                <KeyboardAvoidingView
+                    style={{ position: 'absolute', left: 0, right: 0, bottom: 0 }}
+                    behavior="position"
+                    keyboardVerticalOffset={Platform.OS == 'ios' ? height(12) : 0}
+                >
+                    <Wrapper>
+                        <TextInputChat
+                            onChangeText={text => { }}
+                            onSend={() => { }}
+                            onAdd={() => { }}
+                        />
+                        <Spacer height={sizes.smallMargin} />
+                    </Wrapper>
+                </KeyboardAvoidingView>
+            </MainWrapper> */}
         </MainWrapper>
     );
 }

@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { totalSize } from 'react-native-dimension';
 import { ButtonGradient, CustomIcon, MediumText, Spacer, TinyTitle, Wrapper } from '../../../components';
-import { appIcons, appStyles, sizes } from '../../../services';
+import { appIcons, appStyles, routes, sizes } from '../../../services';
+import { navigate } from '../../../services/navigation/rootNavigation';
 
 function NoDataView({ tab }) {
 
@@ -27,6 +28,7 @@ function NoDataView({ tab }) {
                         </Wrapper>
                         <ButtonGradient
                             text="Create Group"
+                            onPress={()=>navigate(routes.createGroup)}
                         />
                     </Wrapper>
             }

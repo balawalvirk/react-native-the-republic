@@ -69,6 +69,7 @@ function PaymentModal({
     const PaymentValidations = () => {
         HelpingMethods.handleAnimation()
         !cardNumber ? setCardNumberError('Enter card number.') : cardNumber.length < 19 ? setCardNumberError('Invalid card number') : setCardNumberError('')
+        !name ? setNameError("Enter card holder's name") : setNameError('')
         !cardExpiry ? setCardExpiryError('Enter expiry.') : cardExpiry.length < 5 ? setCardExpiryError('Invalid expiry') : setCardExpiryError('')
         !cvc ? setCvcError('Enter cvc') : cvc.length < 3 ? setCvcError('Invalid cvc') : setCvcError('')
 

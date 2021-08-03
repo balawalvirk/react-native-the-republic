@@ -152,7 +152,6 @@ function BuyNow(props) {
                     }}
                 />
                 <Spacer height={sizes.doubleBaseMargin} />
-
             </KeyboardAvoidingScrollView>
             <PopupPrimary
                 visible={isOrderPlacedPopupVisible}

@@ -13,7 +13,7 @@ const fontSize = {
   h3: totalSize(3.5),
   h4: totalSize(3),
   h5: totalSize(2.5),
-  h6: totalSize(2),
+  h6: totalSize(1.75),
   input: totalSize(1.75),
   large: totalSize(2),
   medium: totalSize(1.75),

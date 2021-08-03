@@ -21,6 +21,10 @@ export const routes = {
     createAccount: 'createAccount',
     completeYourProfil: 'completeYourProfil',
     verifyPhone: 'verifyPhone',
+    verifyIdentity: 'verifyIdentity',
+    selectSubscriptionPlan: 'selectSubscriptionPlan',
+    subscriptionPayment: 'subscriptionPayment',
+    onBoarding:'onBoarding',
     mainBottomTab: 'mainBottomTab',
     mainDrawer: 'mainDrawer',
     home: 'home',
@@ -63,7 +67,11 @@ export const routes = {
     orderInvoice: 'orderInvoice',
     upgradeSubscriptionPlan: 'upgradeSubscriptionPlan',
     selectDateTime: 'selectDateTime',
-    payment: 'payment'
+    payment: 'payment',
+    createGroup:'createGroup',
+    groupPrivacySettings:'privacySettings',
+    groupMemberRequests:'memberRequests'
+
 }
 export const headers = {
     screenOptionsPrimary: {

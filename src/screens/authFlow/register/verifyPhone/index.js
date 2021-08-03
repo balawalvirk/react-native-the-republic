@@ -27,7 +27,7 @@ function VerifyPhone(props) {
         console.log(`Code is ${code}, you are good to go!`)
         setLoading(true)
         setTimeout(() => {
-            navigate(routes.app)
+            navigate(routes.verifyIdentity)
             setLoading(false)
         }, 2000);
     }

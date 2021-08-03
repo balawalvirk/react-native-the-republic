@@ -10,7 +10,8 @@ import { Spacer } from '../spacers';
 export const ChatBubbule = ({ containerStyle, myMessage, message, time, image }) => {
     return (
         <ComponentWrapper
-            animation={!myMessage ? 'fadeInLeft' : 'fadeInRight'}
+            //animation={!myMessage ? 'fadeInLeft' : 'fadeInRight'}
+            //du
             style={[{
                 alignItems: !myMessage ? 'flex-start' : 'flex-end',
                 //alignItems: 'flex-start',

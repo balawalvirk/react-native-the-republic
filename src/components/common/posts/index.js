@@ -8,7 +8,7 @@ import { MediumText, RegularText, TinyText } from '../../text';
 import { colors } from '../../../services';
 import { RowWrapper, Wrapper, ComponentWrapper, RowWrapperBasic, AbsoluteWrapper } from '../../wrappers';
 import styles from './styles'
-import { IconWithText, IconHeart } from '../../icons';
+import { IconWithText, IconHeart, IconButton } from '../../icons';
 import { TextInputColored } from '../../textInput';
 import { ModalSwipeablePrimary } from '../../modals';
 import { height, totalSize, width } from 'react-native-dimension';
@@ -53,7 +53,7 @@ function Comments({ data, onPress }) {
 }
 
 function RenderPosts({ data, onPressDotsHorizontal, onPressComment, onPressSendComment, onPressLike, onPressProduct, onPressHeart, scrollEnabled, ListHeaderComponent, ListFooterComponent }) {
-    const [commentText, setCommentText] = useState('')
+    //const [commentText, setCommentText] = useState('')
 
     return (
         <Wrapper flex={1}>
@@ -67,6 +67,8 @@ function RenderPosts({ data, onPressDotsHorizontal, onPressComment, onPressSendC
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item, index }) => {
                     const { user, product, group, images, } = item
+                    // let commentText = ''
+                    let commentText = []
                     return (
                         <Wrapper>
                             {
@@ -240,22 +242,41 @@ function RenderPosts({ data, onPressDotsHorizontal, onPressComment, onPressSendC
                             <Spacer height={sizes.smallMargin} />
                             <LineHorizontal height={0.5} />
                             <Spacer height={sizes.smallMargin} />
+                            <TextInputColored
+                                placeholder="Write a comment..."
+                                iconNameRight="send"
+                                iconTypeRight="feather"
+                                value={commentText[index]}
+                                //onChangeText={text => setCommentText(text)}
+                                onChangeText={text => {
+                                    commentText[index] = text,
+                                        console.log('commentText[index]-->', commentText[index] = text)
+                                }}
+                                iconColorRight={colors.appColor1}
+                                containerStyle={styles.smallMarginHorizontal}
+                                onPressIcon={() => onPressSendComment(item, index, commentText[index])}
+                                left={
+                                    <Wrapper>
+                                        <IconButton
+                                            iconName="camera"
+                                            iconType="feather"
+                                            iconSize={totalSize(2)}
+                                            buttonSize={totalSize(4)}
+                                            buttonColor={colors.appColor1 + '20'}
+                                            buttonStyle={{ marginLeft: sizes.marginHorizontalSmall }}
+                                            onPress={() => { }}
+                                        />
+                                    </Wrapper>
+                                }
+                                inputStyle={{ paddingHorizontal: sizes.marginHorizontalSmall }}
+                            />
+                            <Spacer height={sizes.smallMargin} />
                             <RenderComments
                                 data={item.comments}
                                 onPress={(item, index) => onPressComment(item, index)}
                             />
                             <Spacer height={sizes.smallMargin} />
-                            <TextInputColored
-                                placeholder="Write a comment"
-                                iconNameRight="send"
-                                iconTypeRight="feather"
-                                value={commentText}
-                                onChangeText={text => setCommentText(text)}
-                                iconColor={commentText.length ? colors.appColor1 : colors.appTextColor4}
-                                containerStyle={styles.smallMarginHorizontal}
-                                onPressIcon={() => onPressSendComment(item, index, commentText)}
-                            />
-                            <Spacer height={sizes.smallMargin} />
+
                             <LineHorizontal color={colors.appBgColor3} height={sizes.smallMargin} />
                         </Wrapper>
                     )

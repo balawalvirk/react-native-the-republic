@@ -143,10 +143,14 @@ export const UserCardPrimary = ({ containerStyle, imageSize, imageUri, title, su
                     }
                     <Wrapper flex={1}>
                         <RowWrapperBasic>
-                            <ImageRound
-                                source={{ uri: imageUri }}
-                                size={imageSize}
-                            />
+                            {
+                                imageUri ?
+                                    <ImageRound
+                                        source={{ uri: imageUri }}
+                                        size={imageSize}
+                                    /> : null
+                            }
+
                             <Spacer width={sizes.smallMargin} />
                             <Wrapper flex={1}>
                                 <MediumText numberOfLines={1} style={[gradiant && appStyles.textWhite]}>{title}</MediumText>
@@ -458,7 +462,7 @@ export const TraningCard = ({ onPress, title, duration, charges, location, userN
         <TouchableOpacity
             activeOpacity={1}
             onPress={onPress}
-            activeOpacity={1} style={[appStyles.borderedWrapper, { marginBottom: sizes.marginVertical }, containerStyle]}>
+            activeOpacity={1} style={[appStyles.borderedWrapper, {}, containerStyle]}>
             <Wrapper>
                 <SmallTitle style={[appStyles.textSocondaryColor]}>{title}</SmallTitle>
                 <Spacer height={sizes.baseRadius} />
@@ -518,6 +522,42 @@ export const TraningCard = ({ onPress, title, duration, charges, location, userN
                 </Wrapper>
             </RowWrapperBasic>
 
+        </TouchableOpacity>
+    )
+}
+
+export const TimeSlotCard = ({ onPress, date, startTime, endTime, containerStyle }) => {
+    const TitleValueSecondary = ({ title, value }) => {
+        return (
+            <TitleValue
+                title={title}
+                value={value}
+                containerStyle={{ flexDirection: 'column', marginHorizontal: 0, alignItems: 'flex-start', }}
+                titleStyle={[appStyles.textRegular, appStyles.fontBold, appStyles.textDarkGray]}
+                valueStyle={[appStyles.textMedium, { marginTop: sizes.smallMargin }]}
+            />
+        )
+    }
+    return (
+        <TouchableOpacity activeOpacity={1} onPress={onPress} style={[appStyles.grayWrapper, containerStyle]}>
+            <Wrapper>
+                <TinyTitle>{date}</TinyTitle>
+                <Spacer height={sizes.baseMargin} />
+                <RowWrapperBasic>
+                    <Wrapper flex={1}>
+                        <TitleValueSecondary
+                            title="Start Time"
+                            value={startTime}
+                        />
+                    </Wrapper>
+                    <Wrapper flex={1}>
+                        <TitleValueSecondary
+                            title="End Time"
+                            value={endTime}
+                        />
+                    </Wrapper>
+                </RowWrapperBasic>
+            </Wrapper>
         </TouchableOpacity>
     )
 }

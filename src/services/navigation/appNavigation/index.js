@@ -261,7 +261,7 @@ const AppNavigation = () => {
                 })}
             />
             <AppStack.Screen name={routes.trainings} component={MainApp.Trainings}
-                 options={({ navigation, route }) => ({
+                options={({ navigation, route }) => ({
                     title: 'Training',
                     headerRight: () =>
                         <ComponentWrapper >
@@ -465,6 +465,27 @@ const AppNavigation = () => {
                 options={{
                     // headerShown: false,
                     title: 'Payment',
+                    headerTitleAlign: 'center'
+                }}
+            />
+            <AppStack.Screen name={routes.createGroup} component={MainApp.CreateGroup}
+                options={{
+                    // headerShown: false,
+                    title: 'Create Group',
+                    headerTitleAlign: 'center'
+                }}
+            />
+            <AppStack.Screen name={routes.groupPrivacySettings} component={MainApp.PrivacySettings}
+                options={{
+                    // headerShown: false,
+                    title: 'Privacy Settings',
+                    headerTitleAlign: 'center'
+                }}
+            />
+            <AppStack.Screen name={routes.groupMemberRequests} component={MainApp.MemberRequests}
+                options={{
+                    // headerShown: false,
+                    title: 'Member Requests',
                     headerTitleAlign: 'center'
                 }}
             />

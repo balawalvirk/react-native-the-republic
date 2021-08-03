@@ -190,7 +190,7 @@ const TextInputUnderlined = ({ onPress, inputRef, autoFocus, left, keyboardType,
                 <View style={[appStyles.inputContainerUnderLined, {
                     //borderRadius: sizes.b,
                     borderBottomWidth: 1,
-                    borderBottomColor: colors.appBgColor3,
+                    borderBottomColor: colors.appBgColor4,
                     marginHorizontal: 0
                 }]}>
                     {
@@ -329,7 +329,7 @@ export const TextInputChat = props => {
                 { marginLeft: sizes.marginHorizontal, alignItems: 'flex-end', marginVertical: height(2), backgroundColor: 'transparent' },
             ]}
             iconStyleRight={{ marginVertical: height(1), marginLeft: sizes.marginHorizontalSmall, transform: [{ rotate: '-45deg' }] }}
-            containerStyle={{ borderTopWidth: 1, borderColor: colors.appBgColor3, backgroundColor: 'transparent', marginHorizontal: 0 }}
+            containerStyle={{ borderTopWidth: 1, borderColor: colors.appBgColor3, backgroundColor: 'transparent', marginHorizontal: 0,backgroundColor:colors.appBgColor1 }}
             value={value}
             onChangeText={onChangeText}
             onPressIcon={onSend}

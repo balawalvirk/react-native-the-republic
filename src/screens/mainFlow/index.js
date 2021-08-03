@@ -37,6 +37,9 @@ import OrderInvoice from './orderInvoice'
 import UpgradeSubscriptionPlan from './subscriptionPlan/upgradeSubscriptionPlan'
 import SelectDateTime from './trainings/selectDateTime'
 import Payment from './trainings/payment'
+import CreateGroup from './createGroup'
+import PrivacySettings from './createGroup/privacySettings'
+import MemberRequests from './groupDetail/memberRequests'
 
 export {
     Community, Explore, MarketPlace, Account,
@@ -48,5 +51,7 @@ export {
     EditProfile, ChangePassword, PurchaseHistory, PaymentMethods,
     ChatScreen, TagFriends, BuyNow, DeliveryAddress, FflDealers,
     OrderDetail, OrderInvoice, UpgradeSubscriptionPlan,
-    SelectDateTime, Payment
+    SelectDateTime, Payment,
+    CreateGroup,PrivacySettings,MemberRequests
+
 }

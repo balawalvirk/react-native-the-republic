@@ -807,6 +807,24 @@ const dummyData = {
                 image: appImages.user5
             },
         }
+    ],
+    subscriptionPlans : [
+        {
+            title: 'Basic',
+            price: '0',
+            keyPoints: "• Free account • You'll able to post 2 pictures • Basic profile (picture, name, username etc.) • No ability to bump your ads unless paid for • You'll be able to see items posted within 30 miles radius from your location"
+        },
+    
+        {
+            title: 'Premium',
+            price: '50',
+            keyPoints: "• You will have the ability to post 5 sale post that remain active for a month • No more than 5 posts active at one time • You'll be able to add 5 photos per ad • Access to Community & Training network • Bump your ad once every 5 days • You'll have pics and video available on profile group sms not available on Basic"
+        },
+        {
+            title: 'Dealer/Pro',
+            price: '100',
+            keyPoints: "• Unlimited listings • Access to post in training network • You'll also have the ability to advertise on your profile with picture & video • Can also list prices on their profile page • Ads can't be flagged • You'll be able to bump your ads every 5 days"
+        },
     ]
 }
 
