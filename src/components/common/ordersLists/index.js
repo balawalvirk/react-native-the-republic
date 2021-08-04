@@ -5,7 +5,7 @@ import { ProductCardSecondary, ProductCardPrimary } from "../../cards";
 import * as RootNavigation from '../../../services/navigation/rootNavigation'
 import { ButtonColoredSmall } from '../../buttons';
 
-export function OrdersPrimary({ data, ListHeaderComponent, ListFooterComponent, onPressItem }) {
+export function Purchases({ data, ListHeaderComponent, ListFooterComponent, onPressItem }) {
    
     return (
         <FlatList

@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
 import { View, Text } from 'react-native';
 import { height, width } from 'react-native-dimension';
-import { ButtonGroupAnimated, MainWrapper, OrdersPrimary, Spacer } from '../../../components';
+import { ButtonGroupAnimated, MainWrapper, Purchases, Spacer } from '../../../components';
 import { appStyles, colors, routes, sizes } from '../../../services';
 import dummyData from '../../../services/constants/dummyData';
 
@@ -23,7 +23,7 @@ function PurchaseHistory(props) {
 
     //local states
     const [selectedTabIndex, setSelectedTabIndex] = useState(0)
-    const [orders, setOrders] = useState(dummyData.orders)
+    const [orders, setOrders] = useState(dummyData.purchases)
 
     const filterOrders = () => {
         let tempOrders = []
@@ -56,7 +56,7 @@ function PurchaseHistory(props) {
                 inActiveTextStyle={[appStyles.textMedium, appStyles.textLightGray]}
 
             />
-            <OrdersPrimary
+            <Purchases
                 data={filteredOrders}
                 onPressItem={(item, index) => { navigate(routes.orderDetail, { order: item }) }}
                 ListHeaderComponent={() => <Spacer height={sizes.baseMargin} />}

@@ -511,7 +511,7 @@ const dummyData = {
             image: appImages.product2,
         },
     ],
-    orders: [
+    purchases: [
         {
             id: 743,
             image: appImages.product2,
@@ -636,6 +636,164 @@ const dummyData = {
                 firearmsClass: 'Non Restricted'
             },
             status: 'active'
+        },
+        {
+            id: 34245,
+            image: appImages.product5,
+            description: 'Dan Wesson Model 15-2 Stainless 357 Mag Sporter Superscroll 12GAx3″ 32″bbls',
+            new_price: '743.99',
+            old_price: '949.99',
+            location: 'Down town, NY',
+            rating: 4.8,
+            review_count: '9',
+            user: {
+                id: 5642,
+                name: 'Alex Jhon',
+                image: appImages.user4
+            },
+            cooards: {
+                latitude: 51.5559,
+                longitude: 0.1536
+            },
+            info: {
+                make: 'Browning',
+                modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
+                "caliber/Gauge": '22 LR',
+                actionType: 'Semi Auto',
+                shootingType: '',
+                handedness: 'Right-Handed',
+                barrelLength: '5.679',
+                manufacturerNumber: '2342433s23',
+                firearmsClass: 'Non Restricted'
+            },
+            status: 'completed'
+        },
+    ],
+    orders: [
+        {
+            id: 743,
+            image: appImages.product2,
+            description: 'Stainless 357 Mag Sporter Superscroll 12GAx3″ 32″bbls',
+            new_price: '529.99',
+            old_price: '849.99',
+            location: 'Block GH67, NY',
+            rating: 4.4,
+            review_count: '92',
+            user: {
+                id: 7734,
+                name: 'Jasone White',
+                image: appImages.user5
+            },
+            cooards: {
+                latitude: 51.5359,
+                longitude: 0.1336
+            },
+            info: {
+                make: 'Browning',
+                modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
+                "caliber/Gauge": '22 LR',
+                actionType: 'Semi Auto',
+                shootingType: '',
+                handedness: 'Right-Handed',
+                barrelLength: '5.679',
+                manufacturerNumber: '2342433s23',
+                firearmsClass: 'Non Restricted'
+            },
+            status: 'new'
+        },
+        {
+            id: 443,
+            image: appImages.product1,
+            description: 'Dan Wesson Model 15-2 Stainless 357 Mag Sporter Superscroll 12GAx3″ 32″bbls',
+            new_price: '743.99',
+            old_price: '949.99',
+            location: 'Down town, NY',
+            rating: 4.5,
+            review_count: '23',
+            user: {
+                id: 5642,
+                name: 'Alex Jhon',
+                image: appImages.user4
+            },
+            cooards: {
+                latitude: 51.5159,
+                longitude: 0.1136
+            },
+            info: {
+                make: 'Browning',
+                modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
+                "caliber/Gauge": '22 LR',
+                actionType: 'Semi Auto',
+                shootingType: '',
+                handedness: 'Right-Handed',
+                barrelLength: '5.679',
+                manufacturerNumber: '2342433s23',
+                firearmsClass: 'Non Restricted'
+            },
+            status: 'active'
+        },
+
+        {
+            id: 725553,
+            image: appImages.product4,
+            description: 'Dan Wesson Model 15-2 Stainless 357 Mag Sporter Superscroll 12GAx3″ 32″bbls',
+            new_price: '743.99',
+            old_price: '949.99',
+            location: 'Down town, NY',
+            rating: 4.8,
+            review_count: '9',
+            user: {
+                id: 5642,
+                name: 'Alex Jhon',
+                image: appImages.user4
+            },
+            cooards: {
+                latitude: 51.5559,
+                longitude: 0.1536
+            },
+            info: {
+                make: 'Browning',
+                modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
+                "caliber/Gauge": '22 LR',
+                actionType: 'Semi Auto',
+                shootingType: '',
+                handedness: 'Right-Handed',
+                barrelLength: '5.679',
+                manufacturerNumber: '2342433s23',
+                firearmsClass: 'Non Restricted'
+            },
+            status: 'delivered'
+        },
+        {
+            id: 787252,
+            image: appImages.product3,
+            description: 'Stainless 357 Mag Sporter Superscroll 12GAx3″ 32″bbls',
+            new_price: '529.99',
+            old_price: '849.99',
+            location: 'Block GH67, NY',
+            rating: 4.9,
+            review_count: '32',
+            user: {
+                id: 7734,
+                name: 'Jasone White',
+                image: appImages.user5
+            },
+            cooards: {
+                latitude: 51.5259,
+                longitude: 0.1236
+            },
+            info: {
+                make: 'Browning',
+                modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
+                "caliber/Gauge": '22 LR',
+                actionType: 'Semi Auto',
+                shootingType: '',
+                handedness: 'Right-Handed',
+                barrelLength: '5.679',
+                manufacturerNumber: '2342433s23',
+                firearmsClass: 'Non Restricted'
+            },
+            status: 'cancelled'
         },
         {
             id: 34245,
@@ -808,13 +966,13 @@ const dummyData = {
             },
         }
     ],
-    subscriptionPlans : [
+    subscriptionPlans: [
         {
             title: 'Basic',
             price: '0',
             keyPoints: "• Free account • You'll able to post 2 pictures • Basic profile (picture, name, username etc.) • No ability to bump your ads unless paid for • You'll be able to see items posted within 30 miles radius from your location"
         },
-    
+
         {
             title: 'Premium',
             price: '50',
@@ -825,7 +983,42 @@ const dummyData = {
             price: '100',
             keyPoints: "• Unlimited listings • Access to post in training network • You'll also have the ability to advertise on your profile with picture & video • Can also list prices on their profile page • Ads can't be flagged • You'll be able to bump your ads every 5 days"
         },
-    ]
+    ],
+    trainingRequests: [
+        {
+            id: '44324552542',
+            title: 'Improve Your Shooting Precision',
+            startDate: '15 / 06 / 2021',
+            endDate: '22 / 06 / 2021',
+            user: {
+                id: 8453,
+                name: 'John Thomas',
+                image: appImages.user3,
+            },
+        },
+        {
+            id: '657345345',
+            title: 'Become Master of Handguns',
+            startDate: '15 / 06 / 2021',
+            endDate: '22 / 06 / 2021',
+            user: {
+                id: 22345,
+                name: 'William Alis',
+                image: appImages.user2,
+            },
+        },
+        {
+            id: '67865322',
+            title: 'Handle Your Rifle Like a Pro!!',
+            startDate: '15 / 06 / 2021',
+            endDate: '22 / 06 / 2021',
+            user: {
+                id: 7734,
+                name: 'Jasone White',
+                image: appImages.user5
+            },
+        }
+    ],
 }
 
 export default dummyData

@@ -3,7 +3,7 @@ import { TouchableOpacity } from 'react-native';
 import { View, Text } from 'react-native';
 import { totalSize } from 'react-native-dimension';
 import { Icon } from 'react-native-elements';
-import { LineHorizontal, MediumText, RowWrapper, Spacer, Wrapper } from '../../../components';
+import { LineHorizontal, MediumText, OptionsListPrimary, RowWrapper, Spacer, Wrapper } from '../../../components';
 import { appStyles, colors, routes, sizes } from '../../../services';
 import { About, PrivacyPolicy, TermsCondition } from '../../docs';
 
@@ -39,35 +39,10 @@ function More({ navigation }) {
     }
     return (
         <Wrapper flex={1}>
-            <Wrapper style={{ marginHorizontal: sizes.marginHorizontal, borderRadius: sizes.cardRadius, borderWidth: 1, borderColor: colors.appBgColor3 }}>
-                {
-                    moreOptions.map((item, index) => {
-                        return (
-                            <TouchableOpacity activeOpacity={1} onPress={() => handlePressOption(item)}>
-                                <RowWrapper style={{ marginVertical: sizes.baseMargin, marginRight: sizes.marginHorizontalSmall }}>
-                                    <Wrapper flex={1}>
-                                        <MediumText style={[{ color: colors.appTextColor3 }, item === 'Logout' && { color: colors.error }]}>{item}</MediumText>
-                                    </Wrapper>
-                                    <Wrapper style={{ backgroundColor: 'transparent', }}>
-                                        <Icon
-                                            name="chevron-right"
-                                            type="feather"
-                                            color={appStyles.textLightGray.color}
-                                            size={totalSize(2.5)}
-                                        />
-                                    </Wrapper>
-                                </RowWrapper>
-                                {
-                                    index != moreOptions.length - 1 ?
-                                        <LineHorizontal height={1} />
-                                        :
-                                        null
-                                }
-                            </TouchableOpacity>
-                        )
-                    })
-                }
-            </Wrapper>
+            <OptionsListPrimary
+                options={moreOptions}
+                onPressOption={(item, index) => handlePressOption(item, index)}
+            />
             <TermsCondition
                 visible={termsVisible}
                 toggle={toggleTerms}

@@ -27,8 +27,8 @@ export const colors = {
   labeltext: '#8091d0',
 
   rating: '#FFC400',
-  success: '#00AA2D',
-  error: '#e73536',
+  success: '#00C100',
+  error: '#FF0000',
 
   appGradiantColors: ['#0E4095', '#002768'],
 

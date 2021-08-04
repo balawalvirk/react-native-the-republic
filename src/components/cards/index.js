@@ -222,7 +222,7 @@ export const ReviewCardPrimary = ({ containerStyle, imageUrl, title, rating, rev
         </Wrapper>
     )
 }
-export const ProductCardSecondary = ({ onPress, animation, duration, image, containerstyle, description, newPrice, oldPrice, rating, reviewCount, moreInfo, moreInfoImage, moreInfoTitle, moreInfoSubTitle, moreInfoRight }) => {
+export const ProductCardSecondary = ({ onPress, animation, duration, image, containerstyle, description, newPrice, oldPrice, rating, reviewCount, moreInfo, moreInfoImage, moreInfoTitle, moreInfoSubTitle, moreInfoRight, moreInfoContainerStyle ,children}) => {
 
     return (
         <Wrapper animation={animation} duration={duration} style={[styles.ProductCardSecondaryContainer, containerstyle]}>
@@ -271,7 +271,7 @@ export const ProductCardSecondary = ({ onPress, animation, duration, image, cont
             </RowWrapperBasic>
             {
                 moreInfo ?
-                    <Wrapper style={{ backgroundColor: colors.appBgColor3, paddingVertical: sizes.marginVertical / 2, borderRadius: sizes.cardRadius }}>
+                    <Wrapper style={[{ backgroundColor: colors.appBgColor3, paddingVertical: sizes.marginVertical / 2, borderRadius: sizes.cardRadius }, moreInfoContainerStyle]}>
                         <RowWrapperBasic style={{ marginHorizontal: sizes.marginHorizontalSmall }}>
                             <Wrapper flex={1}>
                                 <RowWrapperBasic>
@@ -293,10 +293,11 @@ export const ProductCardSecondary = ({ onPress, animation, duration, image, cont
                                 }
                             </Wrapper>
                         </RowWrapperBasic>
+                        {moreInfo ? moreInfo : null}
                     </Wrapper>
                     : null
             }
-
+            {children}
         </Wrapper>
     );
 }
@@ -525,6 +526,66 @@ export const TraningCard = ({ onPress, title, duration, charges, location, userN
         </TouchableOpacity>
     )
 }
+export const TraningRequestCard = ({ onPress, title, userName, userImage, startDate, endDate, containerStyle }) => {
+    const TitleValuePrimary = ({ title, value }) => {
+        return (
+            <TitleValue
+                title={title}
+                value={value}
+                containerStyle={{ flexDirection: 'column', marginHorizontal: 0, alignItems: 'flex-start', }}
+                titleStyle={[appStyles.textRegular, appStyles.textDarkGray]}
+                valueStyle={[appStyles.textMedium, appStyles.fontBold, { marginTop: sizes.smallMargin }]}
+            />
+        )
+    }
+    return (
+        <TouchableOpacity
+            activeOpacity={1}
+            onPress={onPress}
+            activeOpacity={1} style={[appStyles.borderedWrapper, containerStyle]}>
+            <Wrapper>
+                <SmallTitle style={[appStyles.textSocondaryColor]}>{title}</SmallTitle>
+                <Spacer height={sizes.baseRadius} />
+            </Wrapper>
+            <Spacer height={sizes.baseRadius} />
+            <RowWrapperBasic>
+                <Wrapper flex={1}>
+                    <TitleValuePrimary
+                        title="Start Date"
+                        value={startDate}
+                    />
+                </Wrapper>
+                <Wrapper flex={1}>
+                    <TitleValuePrimary
+                        title="End Date"
+                        value={endDate}
+                    />
+                </Wrapper>
+            </RowWrapperBasic>
+            <Spacer height={sizes.baseRadius} />
+            <Wrapper style={{ marginHorizontal: -sizes.marginHorizontal / 1.25, marginBottom: -sizes.marginVertical / 1.5, backgroundColor: colors.appColor1, paddingHorizontal: sizes.marginHorizontalSmall, paddingVertical: sizes.marginVertical / 2, borderRadius: sizes.cardRadius }}>
+                <RowWrapperBasic>
+                    <Wrapper>
+                        <ImageRound
+                            source={{ uri: userImage }}
+                            size={totalSize(4)}
+                        />
+                    </Wrapper>
+                    <Spacer width={sizes.smallMargin} />
+                    <Wrapper style={{ flex: 1 }}>
+                        <MediumText style={[appStyles.textWhite]}>
+                            {userName} requested a training.
+                            {'\n'}
+                            Please approve the request according to your availability.
+                        </MediumText>
+                    </Wrapper>
+                </RowWrapperBasic>
+            </Wrapper>
+
+        </TouchableOpacity>
+    )
+}
+
 
 export const TimeSlotCard = ({ onPress, date, startTime, endTime, containerStyle }) => {
     const TitleValueSecondary = ({ title, value }) => {

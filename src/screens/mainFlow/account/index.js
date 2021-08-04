@@ -63,6 +63,7 @@ function Account(props) {
                                 buttonStyle={{ paddingHorizontal: sizes.marginHorizontalSmall }}
                                 textStyle={[appStyles.textMedium, appStyles.textWhite]}
                                 iconSize={totalSize(2.5)}
+                                onPress={()=>navigate(routes.seller.sellerDashboard)}
                             />
                         </Wrapper>
                     }

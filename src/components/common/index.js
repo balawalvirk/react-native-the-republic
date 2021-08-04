@@ -20,13 +20,15 @@ import ArmerInfo from './armerInfo'
 import Reviews from './reviews'
 import { LineHorizontal } from '..'
 import { Dealers, Groups, FollowRequestsList } from './usersLists'
-import { OrdersPrimary } from './ordersLists'
+import { Purchases } from './ordersLists'
 import AddPaymentMethodModal from './addPaymentMethodModal'
 import { ImageProfile, ImageRound } from '../images'
 import { KeyboardAvoidingScrollView } from '../scrollViews'
 import { ScrollView } from 'react-native'
+import { StyleSheet } from 'react-native'
+import { LineVertical } from '../lines'
 
-export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, topMargin, children, scrollEnabled }) => {
+export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, topMargin, children, scrollEnabled,button1Style }) => {
     return (
         <ModalSwipeablePrimary
             visible={visible}
@@ -102,11 +104,11 @@ export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType,
                         {
                             onPressButton1 ?
                                 <Wrapper flex={1}>
-                                    <ButtonGradient
+                                    <ButtonColored
                                         text={buttonText1}
                                         onPress={onPressButton1}
                                         shadow
-                                        buttonStyle={{ marginHorizontal: 0 }}
+                                        buttonStyle={[{ marginHorizontal: 0 },button1Style]}
                                     />
                                 </Wrapper>
                                 :
@@ -289,8 +291,14 @@ export const ProfileTop = ({ imageUri, title, subTitle, onPress, content }) => {
                     <Spacer width={sizes.marginHorizontal} />
                     <Wrapper flex={1}>
                         <SmallTitle numberOfLines={1}>{title}</SmallTitle>
-                        <Spacer height={sizes.baseMargin} />
-                        <RegularText style={[appStyles.textGray]}>{subTitle}</RegularText>
+                        {
+                            subTitle ?
+                                <>
+                                    <Spacer height={sizes.smallMargin} />
+                                    <RegularText style={[appStyles.textGray]}>{subTitle}</RegularText>
+                                </> : null
+                        }
+
                         {content}
                     </Wrapper>
                 </RowWrapper>
@@ -339,20 +347,76 @@ export const ShareSomethingButton = ({ onPress, imageUri, title }) => {
         </TouchableOpacity>
     )
 }
-export const TitleValue = ({ title, value, titleStyle, valueStyle,containerStyle ,direction}) => {
+export const TitleValue = ({ title, value, titleStyle, valueStyle, containerStyle, direction }) => {
     return (
-        <RowWrapper style={[{},containerStyle]}>
+        <RowWrapper style={[{}, containerStyle]}>
             <MediumText style={titleStyle}>{title}</MediumText>
             <MediumText style={[appStyles.textPrimaryColor, appStyles.fontBold, valueStyle]}>{value}</MediumText>
         </RowWrapper>
     )
 }
+export const DashboardSeller = ({
+    ordersRecieved,
+    ordersCompleted,
+    earnedThisMonth,
+    earnedOverall,
+}) => {
+    const TitleValue = ({ title, value, containerStyle }) => {
+        return (
+            <Wrapper flex={1} style={[{ alignItems: 'center', justifyContent: 'space-evenly' }, containerStyle]}>
+                <MediumTitle style={[appStyles.textWhite]}>{value}</MediumTitle>
+                <RegularText style={[appStyles.textWhite]}>{title}</RegularText>
+            </Wrapper>
+        )
+    }
 
+    return (
+        <Wrapper style={{ ...appStyles.grayWrapper, paddingVertical: 0, paddingHorizontal: 0, height: height(22.5), backgroundColor: colors.appColor1 }}>
+            <Wrapper flex={1} >
+                <Wrapper flex={1} style={{ flexDirection: 'row', }}>
+                    <TitleValue
+                        title="Orders Received"
+                        value={ordersRecieved}
+                    />
+                    <LineVertical
+                        width={4}
+                        color={colors.appBgColor1}
+                    />
+                    <TitleValue
+                        title="Orders Completed"
+                        value={ordersCompleted}
+                    />
+                </Wrapper>
+            </Wrapper>
+            <LineHorizontal
+                height={4}
+                color={colors.appBgColor1}
+            />
+            <Wrapper flex={1} >
+                <Wrapper flex={1} style={{ flexDirection: 'row', }}>
+                    <TitleValue
+                        title="Earned This Month"
+                        value={earnedThisMonth}
+                    />
+                    <LineVertical
+                        width={4}
+                        color={colors.appBgColor1}
+                    />
+                    <TitleValue
+                        title="Earned Overall"
+                        value={earnedOverall}
+                    />
+                </Wrapper>
+            </Wrapper>
+        </Wrapper>
+    )
+}
 export {
     EditProfileComp, VerificationCodeSentPopup, ImagePickerPopup,
     Posts, MenuPopup, RenderComments, Products, ArmerInfo,
     Reviews, ProductsSecondary, ProductsHorizontalyPrimary, Dealers, Groups,
-    OrdersPrimary, AddPaymentMethodModal, FollowRequestsList
+    Purchases, AddPaymentMethodModal, FollowRequestsList
 }
 
 export * from './imagesList'
+export * from './optionsLists'

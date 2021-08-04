@@ -9,6 +9,7 @@ import {
 } from '@react-navigation/drawer';
 import { header, routes, headers, tabs } from '../../constants';
 import * as MainApp from '../../../screens/mainFlow';
+import * as Seller from '../../../screens/sellerFlow';
 import { CustomIcon, ImageRound, ComponentWrapper, MediumText, Spacer, Wrapper, RowWrapper, AbsoluteWrapper, ImageProfile, SmallTitle, LogoMain, LocationPickerButton } from '../../../components';
 import { appIcons, appImages, appStyles, colors, fontFamily, fontSize, sizes } from '../../utilities';
 import { totalSize, width } from 'react-native-dimension';
@@ -486,6 +487,89 @@ const AppNavigation = () => {
                 options={{
                     // headerShown: false,
                     title: 'Member Requests',
+                    headerTitleAlign: 'center'
+                }}
+            />
+
+
+            {/* Seller screen */}
+            <AppStack.Screen name={routes.seller.sellerDashboard} component={Seller.SellerDashboard}
+                options={{
+                    // headerShown: false,
+                    title: 'Seller Dashboard',
+                    headerTitleAlign: 'center'
+                }}
+            />
+            <AppStack.Screen name={routes.seller.yourProducts} component={Seller.YourProducts}
+                options={{
+                    // headerShown: false,
+                    title: 'Your Products',
+                    headerTitleAlign: 'center'
+                }}
+            />
+            <AppStack.Screen name={routes.seller.requests} component={Seller.Requests}
+                options={{
+                    // headerShown: false,
+                    title: 'Requests',
+                    headerTitleAlign: 'center'
+                }}
+            />
+            <AppStack.Screen name={routes.seller.orders} component={Seller.Orders}
+                options={{
+                    // headerShown: false,
+                    title: 'Orders',
+                    headerTitleAlign: 'center'
+                }}
+            />
+            <AppStack.Screen name={routes.seller.OrderDetail} component={Seller.OrderDetails}
+                options={{
+                    // headerShown: false,
+                    title: 'Order Detail',
+                   // headerTitleAlign: 'center'
+                }}
+            />
+
+            <AppStack.Screen name={routes.seller.earnings} component={Seller.Earnings}
+                options={{
+                    // headerShown: false,
+                    title: 'Earnings',
+                    headerTitleAlign: 'center'
+                }}
+            />
+            <AppStack.Screen name={routes.seller.trainings} component={Seller.Trainings}
+                options={{
+                    // headerShown: false,
+                    title: 'Trainings',
+                    headerTitleAlign: 'center'
+                }}
+            />
+            <AppStack.Screen name={routes.seller.coupons} component={Seller.Coupons}
+                options={{
+                    // headerShown: false,
+                    title: 'Coupons',
+                    headerTitleAlign: 'center'
+                }}
+            />
+            <AppStack.Screen name={routes.seller.invoices} component={Seller.Invoices}
+                options={{
+                    // headerShown: false,
+                    title: 'Invoices',
+                    headerTitleAlign: 'center'
+                }}
+            />
+            <AppStack.Screen name={routes.seller.reports} component={Seller.Reports}
+                options={{
+                    // headerShown: false,
+                    title: 'Reports',
+                    headerTitleAlign: 'center'
+                }}
+            />
+
+            {/* Dealer App Screens */}
+            <AppStack.Screen name={routes.dealer.fulfillments} component={Seller.Fulfillments}
+                options={{
+                    // headerShown: false,
+                    title: 'Fulfillments',
                     headerTitleAlign: 'center'
                 }}
             />

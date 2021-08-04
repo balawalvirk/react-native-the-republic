@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { Component, useEffect, useLayoutEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { View, Text } from 'react-native';
 import { height, totalSize } from 'react-native-dimension';
@@ -20,8 +20,8 @@ const options = {
 
 function CreateGroup(props) {
     const { navigation, route } = props
-    const { navigate, replace } = navigation
-    const data = route.params?route.params.groupData?route.params.groupData:null:null
+    const { navigate, replace, goBack } = navigation
+    const groupData = route.params ? route.params.groupData ? route.params.groupData : null : null
 
     const [imageUri, setImageUri] = useState('')
     const [imageFile, setImageFile] = useState(null)
@@ -36,13 +36,21 @@ function CreateGroup(props) {
     useEffect(() => {
         getSetData()
     }, [navigation])
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            title: groupData ? "Group Settings" : "Create Group",
+        });
+    }, [navigation]);
+
     const getSetData = () => {
-        if (data) {
-            setImageUri(data.image),
-                setName(data.name),
+        if (groupData) {
+            setImageUri(groupData.image),
+                setName(groupData.name),
                 setDescription('Some dummy details and description about this group, lermipsum')
         }
     }
+
     const toggleImagePickerPopup = () => setImagePickerPopupVisibility(!isImagePickerPopupVisible)
     const toggleGroupCreatedPopup = () => setGroupCreatedPopupVisible(!isGroupCreatedPopupVisible)
 
@@ -95,7 +103,7 @@ function CreateGroup(props) {
                             <ImageProfile
                                 source={{ uri: imageFile ? imageFile.uri : imageUri }}
                                 onPressCamera={toggleImagePickerPopup}
-                                //imageStyle={{ height: totalSize(10), width: totalSize(10) }}
+                            //imageStyle={{ height: totalSize(10), width: totalSize(10) }}
 
                             />
                             :
@@ -152,8 +160,10 @@ function CreateGroup(props) {
                 </TouchableOpacity>
                 <Spacer height={sizes.doubleBaseMargin} />
                 <ButtonGradient
-                    text="Create Group"
-                    onPress={toggleGroupCreatedPopup}
+                    text={groupData ? "Update Group Settings" : "Create Group"}
+                    onPress={() => {
+                        groupData ? goBack() : toggleGroupCreatedPopup()
+                    }}
                 />
                 <Spacer height={sizes.doubleBaseMargin} />
             </KeyboardAvoidingScrollView>

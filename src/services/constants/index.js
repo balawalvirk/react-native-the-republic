@@ -24,7 +24,7 @@ export const routes = {
     verifyIdentity: 'verifyIdentity',
     selectSubscriptionPlan: 'selectSubscriptionPlan',
     subscriptionPayment: 'subscriptionPayment',
-    onBoarding:'onBoarding',
+    onBoarding: 'onBoarding',
     mainBottomTab: 'mainBottomTab',
     mainDrawer: 'mainDrawer',
     home: 'home',
@@ -68,9 +68,24 @@ export const routes = {
     upgradeSubscriptionPlan: 'upgradeSubscriptionPlan',
     selectDateTime: 'selectDateTime',
     payment: 'payment',
-    createGroup:'createGroup',
-    groupPrivacySettings:'privacySettings',
-    groupMemberRequests:'memberRequests'
+    createGroup: 'createGroup',
+    groupPrivacySettings: 'privacySettings',
+    groupMemberRequests: 'memberRequests',
+    seller: {
+        sellerDashboard: 'sellerDashboard',
+        yourProducts: 'yourProducts',
+        reports: 'reports',
+        requests: 'requests',
+        orders: 'orders',
+        OrderDetail:'OrderDetails',
+        earnings: 'earnings',
+        trainings: 'yourTrainings',
+        coupons: 'coupons',
+        invoices: 'invoices'
+    },
+    dealer: {
+        fulfillments: 'fulfillments',
+    }
 
 }
 export const headers = {

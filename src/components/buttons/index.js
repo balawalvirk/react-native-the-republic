@@ -55,9 +55,9 @@ export const ButtonColored = ({
     );
 }
 
-export const ButtonColoredSmall = ({ text, onPress, buttonStyle, customIcon, direction, textStyle, iconName, iconType, iconSize, iconColor, iconStyle }) => {
+export const ButtonColoredSmall = ({ text, onPress,disabled, buttonStyle, customIcon, direction, textStyle, iconName, iconType, iconSize, iconColor, iconStyle }) => {
     return (
-        <TouchableOpacity onPress={onPress} style={[{ borderRadius: 15, paddingHorizontal: width(5), paddingVertical: height(1), backgroundColor: colors.appColor1 }, buttonStyle]}>
+        <TouchableOpacity disabled={disabled} onPress={onPress} style={[{ borderRadius: 15, paddingHorizontal: width(5), paddingVertical: height(1), backgroundColor: colors.appColor1 }, buttonStyle]}>
             <View style={{ flexDirection: direction ? direction : 'row', alignItems: 'center' }}>
                 {
                     customIcon ?
