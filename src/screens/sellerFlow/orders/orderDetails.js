@@ -1,76 +1,41 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
+import { TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native';
 import { View, Text } from 'react-native';
-import { totalSize, width } from 'react-native-dimension';
-import { AbsoluteWrapper, ButtonColoredSmall, ButtonGradient, ComponentWrapper, IconWithText, LineHorizontal, MainWrapper, MediumText, ProductCardSecondary, RegularText, RowWrapperBasic, Spacer, TitleValue, Wrapper } from '../../../components';
-import { appStyles, colors, routes, sizes } from '../../../services';
+import { height, totalSize, width } from 'react-native-dimension';
+import { AbsoluteWrapper, ButtonColoredSmall, ButtonGradient, ComponentWrapper, IconWithText, LineHorizontal, MainWrapper, MediumText, ProductCardSecondary, RegularText, RowWrapperBasic, Spacer, TitleValue, Wrapper, OrderStatusWizard, TinyTitle, UserCardPrimary, PopupPrimary, ReviewCardPrimary, ButtonColored } from '../../../components';
+import { appImages, appStyles, colors, routes, sizes } from '../../../services';
 import { OrdersList } from './ordersList';
 
 
-const OrderStatusWizard = ({ step }) => {
-    const steps = ['Order\nrecieved', 'Order\naccepted', 'Delivery\non the way', 'Delivered\nto customer']
 
-
-    return (
-        <Wrapper>
-            <RowWrapperBasic style={{ justifyContent: 'center', }}>
-                {
-                    steps.map((item, index) => {
-                        const wizardStep = index + 1
-                        return (
-                            <RowWrapperBasic style={{ alignItems: 'flex-start', }}>
-                                {
-                                    index != 0 ?
-                                        <LineHorizontal
-                                            height={2}
-                                            width={width(12)}
-                                            color={wizardStep <= step ? colors.success : colors.appBgColor4}
-                                            style={{ marginTop: totalSize(1.5), marginHorizontal: sizes.marginHorizontalSmall }}
-                                        />
-                                        :
-                                        null
-                                }
-                                <IconWithText
-                                    iconName="check-circle"
-                                    iconType="feather"
-                                    iconSize={totalSize(3)}
-                                    tintColor={wizardStep <= step ? colors.success : colors.appBgColor4}
-                                    text={item}
-                                    direction="column"
-                                    textStyle={[appStyles.textRegular, appStyles.textCenter]}
-                                    textContainerStyle={{ position: 'absolute', width: width(20), top: totalSize(3) }}
-                                />
-
-                            </RowWrapperBasic>
-                        )
-                    })
-                }
-            </RowWrapperBasic>
-            <Spacer height={sizes.doubleBaseMargin} />
-        </Wrapper>
-    )
-}
 function OrderDetail(props) {
     const { navigation, route } = props
     const { navigate, goBack } = navigation
     //navigation params
     const { order } = route.params
     const { user } = order
+    const steps = ['Order\nrecieved', 'Order\naccepted', 'Delivery\non the way', 'Delivered\nto customer']
 
-    const orderStep = order.status === 'active' ? 2 : order.status === 'completed' ? 4 : 1
+
+    const isNew = order.status === 'new'
+    const isActive = order.status === 'active'
+    const isDelivered = order.status === 'delivered'
+    const isCompleted = order.status === 'completed'
+    const isCancelled = order.status === 'cancelled'
+    const orderStep = isNew ? 1 : isActive ? 2 : isDelivered ? 3 : isCompleted ? 4 : 1
+    const statusText = isNew ? "New" : isActive ? "Waiting for Shipment" : isDelivered ? "Waiting for review" : isCompleted ? "Completed" : isCancelled ? "Cancelled" : ""
+
+
+    //Local status
+    const [isUpdateStatusPopupVisible, setUpdateStatusPopupVisibility] = useState(false)
+
+    const toggleUpdateStatusPopup = () => setUpdateStatusPopupVisibility(!isUpdateStatusPopupVisible)
 
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
             title: 'Order #' + order.id,
-            // headerRight: () => (
-            //     <ComponentWrapper>
-            //         <ButtonColoredSmall
-            //             text="Cancel Order"
-            //             buttonStyle={{ paddingHorizontal: sizes.marginHorizontalSmall, borderRadius: 100, backgroundColor: colors.error }}
-            //         />
-            //     </ComponentWrapper>
-            // )
         });
     }, [navigation]);
 
@@ -80,15 +45,96 @@ function OrderDetail(props) {
                 showsVerticalScrollIndicator={false}
             >
                 <Spacer height={sizes.baseMargin} />
-                <OrderStatusWizard
-                    step={orderStep}
-                />
+                {
+                    !isCancelled ?
+                        <>
+                            <OrderStatusWizard
+                                activeStep={orderStep}
+                                steps={steps}
+                            />
+                            <Spacer height={sizes.baseMargin} />
+                        </>
+                        :
+                        null
+                }
                 <Wrapper>
                     <OrdersList
                         data={[order]}
+                        onPressOrder={() => { }}
+                        onpressAccept={(item, index) => { }}
+                        onpressCancel={(item, index) => { }}
                     />
+
                 </Wrapper>
-                <ComponentWrapper style={{ }}>
+                {
+                    isNew || isActive ?
+                        order.isPrivate ?
+                            <Wrapper style={[appStyles.grayWrapper, { marginBottom: sizes.baseMargin, backgroundColor: colors.success }]}>
+                                <RowWrapperBasic>
+                                    <Wrapper flex={1}>
+                                        <TinyTitle style={[appStyles.textWhite]}>Private Sale</TinyTitle>
+                                    </Wrapper>
+                                    {/* <SwitchPrimary
+                                    value={privateSale}
+                                    onPress={() => setPrivateSale(!privateSale)}
+                                /> */}
+                                </RowWrapperBasic>
+                                <Spacer height={sizes.baseMargin} />
+                                <RegularText style={[appStyles.textWhite]}>
+                                    The buyer want this sale to be private.
+                                </RegularText>
+                            </Wrapper>
+                            :
+                            !order.isPrivate ?
+                                <Wrapper style={[appStyles.borderedWrapper, { marginBottom: sizes.baseMargin }]}>
+                                    <RowWrapperBasic>
+                                        <Wrapper flex={1}>
+                                            <TinyTitle>Select Your Nearest Dealer</TinyTitle>
+                                        </Wrapper>
+                                        {/* <SwitchPrimary
+                                    value={privateSale}
+                                    onPress={() => setPrivateSale(!privateSale)}
+                                /> */}
+                                    </RowWrapperBasic>
+                                    <Spacer height={sizes.baseMargin} />
+                                    <RegularText style={[appStyles.textDarkGray]}>
+                                        The buyer opted to this sale through FFL Dealer. Please select you nearest FFL Dealer to deliver the product.
+                                    </RegularText>
+                                    <Wrapper>
+                                        <Spacer height={sizes.baseMargin} />
+                                        <UserCardPrimary
+                                            containerStyle={{ marginHorizontal: 0 }}
+                                            imageSize={totalSize(4.5)}
+                                            imageUri={appImages.user5}
+                                            title={'Alex Huck'}
+                                            subTitle={'3 miles away'}
+                                            right={
+                                                <TinyTitle onPress={() => navigate(routes.fflDealers)} style={[appStyles.textPrimaryColor]}>Change</TinyTitle>
+                                            }
+                                        />
+                                    </Wrapper>
+
+                                </Wrapper>
+                                :
+                                null
+                        :
+                        isDelivered || isCompleted ?
+                            order.review ?
+                                <ReviewCardPrimary
+                                    containerStyle={{ marginBottom: sizes.baseMargin }}
+                                    imageUrl={appImages.user3}
+                                    title="Davin Grimes"
+                                    rating={4.6}
+                                    reviewCount={233}
+                                    comment="Phasellus risus turpis, pretium sit amet magna non, molestie ultricies enim. Nullam pulvinar felis at metus malesuada, nec convallis lacus commodo."
+                                    date="2 months ago"
+                                />
+                                :
+                                null
+                            :
+                            null
+                }
+                <ComponentWrapper style={{}}>
                     <RegularText style={[appStyles.textPrimaryColor, appStyles.fontBold]}>Delivery Address</RegularText>
                     <Spacer height={sizes.smallMargin} />
                     <MediumText>14 Wall Street, New York City, NY, USA </MediumText>
@@ -125,14 +171,72 @@ function OrderDetail(props) {
                 />
                 <Spacer height={sizes.doubleBaseMargin * 3} />
             </ScrollView>
-            <AbsoluteWrapper style={{ bottom: sizes.doubleBaseMargin, right: 0, left: 0 }}>
-                <ButtonGradient
-                    text="View Invoice"
-                    onPress={() => navigate(routes.orderInvoice, { order })}
-                />
-            </AbsoluteWrapper>
+            {
+                isCompleted || isActive ?
+                    <AbsoluteWrapper style={{ bottom: sizes.doubleBaseMargin, right: 0, left: 0 }}>
+                        <ButtonGradient
+                            text={isCompleted ? "View Invoice" : isActive ? "Update Status" : ''}
+                            onPress={() => {
+                                isCompleted ?
+                                    navigate(routes.orderInvoice, { order }) :
+                                    isActive ?
+                                        toggleUpdateStatusPopup() :
+                                        null
+                            }}
+                        />
+                    </AbsoluteWrapper>
+                    :
+                    isCancelled ?
+                        <Wrapper>
+                            <ButtonColored
+                                text="You cancelled this order"
+                                buttonColor={colors.appBgColor3}
+                                textStyle={{color:appStyles.textGray.color}}
+                            />
+                            <Spacer height={sizes.doubleBaseMargin}/>
+                        </Wrapper>
+                        :
+                        null
+            }
+            <UpdateStatusPopup
+                visible={isUpdateStatusPopupVisible}
+                toggle={toggleUpdateStatusPopup}
+                onPressStatus={(item, index) => {
+                    console.log('status-->', item)
+                    toggleUpdateStatusPopup()
+                }}
+            />
         </MainWrapper>
     );
 }
 
 export default OrderDetail;
+
+const UpdateStatusPopup = ({ visible, toggle, onPressStatus }) => {
+    const statuses = ['Shipping', 'Delivered', 'Cancel Order']
+    return (
+        <PopupPrimary
+            visible={visible}
+            toggle={toggle}
+            topMargin={height(70)}
+        >
+            <Wrapper>
+                <LineHorizontal />
+                {
+                    statuses.map((item, index) => {
+                        return (
+                            <TouchableOpacity activeOpacity={1} onPress={() => onPressStatus(item, index)}>
+                                <Spacer height={sizes.marginVertical} />
+                                <ComponentWrapper>
+                                    <MediumText style={[{ color: index === statuses.length - 1 ? colors.error : colors.appTextColor2 }]}>{item}</MediumText>
+                                </ComponentWrapper>
+                                <Spacer height={sizes.marginVertical} />
+                                <LineHorizontal />
+                            </TouchableOpacity>
+                        )
+                    })
+                }
+            </Wrapper>
+        </PopupPrimary>
+    )
+}

@@ -3,14 +3,14 @@ import { appStyles, colors, sizes } from "../../../services"
 import React from 'react'
 import { FlatList } from "react-native"
 
-export function OrdersList({ data,onPressOrder,onpressAccept,onpressCancel }) {
+export function OrdersList({ data,onPressOrder,onpressAccept,onpressCancel,ListHeaderComponent,ListFooterComponent }) {
     return (
         <FlatList
             data={data}
             showsVerticalScrollIndicator={false}
             key={'key'}
-            ListHeaderComponent={() => <Spacer height={sizes.baseMargin} />}
-            ListFooterComponent={() => <Spacer height={sizes.baseMargin} />}
+            ListHeaderComponent={ListHeaderComponent}
+            ListFooterComponent={ListFooterComponent}
             keyExtractor={(item, index) => (index + 1).toString()}
             renderItem={({ item, index }) => {
                 const { user } = item
@@ -19,7 +19,7 @@ export function OrdersList({ data,onPressOrder,onpressAccept,onpressCancel }) {
                 const isDelivered = item.status === 'delivered'
                 const isCompleted = item.status === 'completed'
                 const isCancelled = item.status === 'cancelled'
-                const statusText = isNew ? "New" : isActive ? "Waiting for Shipment" : isDelivered ? "Waiting for review" : isCompleted ? "Completed" : isCancelled ? "Cancelled" : ""
+                const statusText = isNew ? "New" : isActive ? "Waiting for Shipment" : isDelivered ?item.review? "Delivered":"Waiting for review" : isCompleted ? "Completed" : isCancelled ? "Cancelled" : ""
                 return (
                     <ProductCardSecondary
                         onPress={() => onPressOrder(item,index)}

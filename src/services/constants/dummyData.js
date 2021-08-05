@@ -699,7 +699,9 @@ const dummyData = {
                 manufacturerNumber: '2342433s23',
                 firearmsClass: 'Non Restricted'
             },
-            status: 'new'
+            status: 'new',
+            isPrivate: false,
+            review: false
         },
         {
             id: 443,
@@ -730,7 +732,9 @@ const dummyData = {
                 manufacturerNumber: '2342433s23',
                 firearmsClass: 'Non Restricted'
             },
-            status: 'active'
+            status: 'active',
+            isPrivate: true,
+            review: false
         },
 
         {
@@ -762,7 +766,42 @@ const dummyData = {
                 manufacturerNumber: '2342433s23',
                 firearmsClass: 'Non Restricted'
             },
-            status: 'delivered'
+            status: 'delivered',
+            isPrivate: false,
+            review: false
+        },
+        {
+            id: 725553,
+            image: appImages.product4,
+            description: 'Dan Wesson Model 15-2 Stainless 357 Mag Sporter Superscroll 12GAx3″ 32″bbls',
+            new_price: '743.99',
+            old_price: '949.99',
+            location: 'Down town, NY',
+            rating: 4.8,
+            review_count: '9',
+            user: {
+                id: 5642,
+                name: 'Alex Jhon',
+                image: appImages.user4
+            },
+            cooards: {
+                latitude: 51.5559,
+                longitude: 0.1536
+            },
+            info: {
+                make: 'Browning',
+                modal: 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
+                "caliber/Gauge": '22 LR',
+                actionType: 'Semi Auto',
+                shootingType: '',
+                handedness: 'Right-Handed',
+                barrelLength: '5.679',
+                manufacturerNumber: '2342433s23',
+                firearmsClass: 'Non Restricted'
+            },
+            status: 'delivered',
+            isPrivate: true,
+            review: true
         },
         {
             id: 787252,
@@ -793,7 +832,9 @@ const dummyData = {
                 manufacturerNumber: '2342433s23',
                 firearmsClass: 'Non Restricted'
             },
-            status: 'cancelled'
+            status: 'cancelled',
+            isPrivate: true,
+            review: false
         },
         {
             id: 34245,
@@ -824,7 +865,9 @@ const dummyData = {
                 manufacturerNumber: '2342433s23',
                 firearmsClass: 'Non Restricted'
             },
-            status: 'completed'
+            status: 'completed',
+            isPrivate: false,
+            review: true
         },
     ],
     creditCards: [

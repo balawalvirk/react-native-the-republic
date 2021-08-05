@@ -6,9 +6,9 @@ import { appStyles, DummyData, sizes } from '../../../services';
 
 function Requests() {
 
-  const [isDeleteProductPopupVisible, setDeleteProductPopupVisibility] = useState(false)
+  const [isRespondRequestPopupVisible, setRespondRequestPopupVisibility] = useState(false)
 
-  const toggleDeleteProductPopup = () => setDeleteProductPopupVisibility(!isDeleteProductPopupVisible)
+  const toggleRespondRequestPopup = () => setRespondRequestPopupVisibility(!isRespondRequestPopupVisible)
 
   const requests = DummyData.trainingRequests
   const request = DummyData.trainingRequests[0]
@@ -22,7 +22,7 @@ function Requests() {
         renderItem={({ item, index }) => {
           return (
             <TraningRequestCard
-            onPress={toggleDeleteProductPopup}
+            onPress={toggleRespondRequestPopup}
               containerStyle={{ marginBottom: sizes.marginVertical / 2 }}
               title={item.title}
               startDate={item.startDate}
@@ -34,10 +34,10 @@ function Requests() {
         }}
       />
       <PopupPrimary
-        visible={isDeleteProductPopupVisible}
-        toggle={toggleDeleteProductPopup}
-        onPressButton1={toggleDeleteProductPopup}
-        onPressButton2={toggleDeleteProductPopup}
+        visible={isRespondRequestPopupVisible}
+        toggle={toggleRespondRequestPopup}
+        onPressButton1={toggleRespondRequestPopup}
+        onPressButton2={toggleRespondRequestPopup}
         buttonText1={'Approve'}
         buttonText2={'Disapprove'}
         topMargin={height(35)}

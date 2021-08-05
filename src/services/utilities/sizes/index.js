@@ -29,7 +29,7 @@ const sizes = {
   TinyMargin: totalSize(0.5),
   smallMargin: totalSize(1),
   baseMargin: totalSize(2),
-  doubleBaseMargin: totalSize(5),
+  doubleBaseMargin: totalSize(4),
   doubleSection: 50,
   horizontalLineHeight: 1,
   searchBarHeight: 30,

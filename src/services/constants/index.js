@@ -81,7 +81,10 @@ export const routes = {
         earnings: 'earnings',
         trainings: 'yourTrainings',
         coupons: 'coupons',
-        invoices: 'invoices'
+        invoices: 'invoices',
+        withdrawEarnings:'withdrawEarnings',
+        createTrainin:'createTrainin',
+        selectDateTime:'sellcerSelectDateTime'
     },
     dealer: {
         fulfillments: 'fulfillments',

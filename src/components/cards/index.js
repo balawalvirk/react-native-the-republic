@@ -222,7 +222,7 @@ export const ReviewCardPrimary = ({ containerStyle, imageUrl, title, rating, rev
         </Wrapper>
     )
 }
-export const ProductCardSecondary = ({ onPress, animation, duration, image, containerstyle, description, newPrice, oldPrice, rating, reviewCount, moreInfo, moreInfoImage, moreInfoTitle, moreInfoSubTitle, moreInfoRight, moreInfoContainerStyle ,children}) => {
+export const ProductCardSecondary = ({ onPress, animation, duration, image, imageStyle, containerstyle, description, newPrice, oldPrice, rating, reviewCount, moreInfo, moreInfoImage, moreInfoTitle, moreInfoSubTitle, moreInfoRight, moreInfoContainerStyle, children, date }) => {
 
     return (
         <Wrapper animation={animation} duration={duration} style={[styles.ProductCardSecondaryContainer, containerstyle]}>
@@ -231,7 +231,7 @@ export const ProductCardSecondary = ({ onPress, animation, duration, image, cont
                     <TouchableOpacity style={{ borderWidth: 1, borderRadius: sizes.cardRadius, borderColor: colors.appBgColor3 }} activeOpacity={1} onPress={onPress}>
                         <Image
                             source={{ uri: image }}
-                            style={{ height: width(25), width: width(25) }}
+                            style={[{ height: width(25), width: width(25) }, imageStyle]}
                             resizeMode="contain"
                         />
                     </TouchableOpacity>
@@ -264,6 +264,14 @@ export const ProductCardSecondary = ({ onPress, animation, duration, image, cont
                                 <Spacer width={sizes.TinyMargin} />
                                 <TinyText>{rating} ({reviewCount})</TinyText>
                             </RowWrapperBasic>
+                            {
+                                date ?
+                                    <>
+                                        <Spacer height={sizes.TinyMargin} />
+                                        <TinyText style={[appStyles.fontBold, appStyles.textPrimaryColor]}>{date}</TinyText>
+                                    </>
+                                    : null
+                            }
                         </Wrapper>
                         <Spacer height={sizes.smallMargin} />
                     </TouchableOpacity>
@@ -585,9 +593,75 @@ export const TraningRequestCard = ({ onPress, title, userName, userImage, startD
         </TouchableOpacity>
     )
 }
+export const TraningSellerCard = ({ onPress, title, duration, charges, containerStyle, onPressDelete, onPressEdit }) => {
+    const TitleValuePrimary = ({ title, value }) => {
+        return (
+            <TitleValue
+                title={title}
+                value={value}
+                containerStyle={{ flexDirection: 'column', marginHorizontal: 0, alignItems: 'flex-start', }}
+                titleStyle={[appStyles.textRegular, appStyles.textDarkGray]}
+                valueStyle={[appStyles.textMedium, appStyles.fontBold, { marginTop: sizes.smallMargin }]}
+            />
+        )
+    }
+    return (
+        <TouchableOpacity
+            activeOpacity={1}
+            onPress={onPress}
+            activeOpacity={1} style={[appStyles.borderedWrapper, containerStyle]}>
+            <Wrapper>
+                <SmallTitle style={[appStyles.textSocondaryColor]}>{title}</SmallTitle>
+                <Spacer height={sizes.baseRadius} />
+            </Wrapper>
+            <Spacer height={sizes.baseRadius} />
+            <RowWrapperBasic>
+                <Wrapper flex={1}>
+                    <TitleValuePrimary
+                        title="Duration"
+                        value={duration}
+                    />
+                </Wrapper>
+                <Wrapper flex={1}>
+                    <TitleValuePrimary
+                        title="Charges"
+                        value={charges}
+                    />
+                </Wrapper>
+            </RowWrapperBasic>
+            <Spacer height={sizes.baseRadius} />
+            <Wrapper style={{ marginHorizontal: -sizes.marginHorizontal / 1.25, marginBottom: -sizes.marginVertical / 1.5, backgroundColor: colors.appBgColor3, paddingHorizontal: sizes.marginHorizontalSmall, paddingVertical: sizes.marginVertical / 2, borderRadius: sizes.cardRadius }}>
+                <RowWrapperBasic>
+                    <Wrapper flex={1}>
+                        {/* <ImageRound
+                            source={{ uri: userImage }}
+                            size={totalSize(4)}
+                        /> */}
+                    </Wrapper>
+                    <Spacer width={sizes.smallMargin} />
+                    <Wrapper >
+                        <RowWrapperBasic>
+                            <ButtonColoredSmall
+                                onPress={onPressEdit}
+                                text="Edit"
+                                buttonStyle={{ paddingHorizontal: sizes.marginHorizontalSmall, borderRadius: 100 }}
+                            />
+                            <Spacer width={sizes.smallMargin} />
+                            <ButtonColoredSmall
+                                onPress={onPressDelete}
+                                text="Delete"
+                                buttonStyle={{ paddingHorizontal: sizes.marginHorizontalSmall, borderRadius: 100, backgroundColor: colors.error }}
+                            />
+                        </RowWrapperBasic>
+                    </Wrapper>
+                </RowWrapperBasic>
+            </Wrapper>
 
+        </TouchableOpacity>
+    )
+}
 
-export const TimeSlotCard = ({ onPress, date, startTime, endTime, containerStyle }) => {
+export const TimeSlotCard = ({ onPress, date, startTime, endTime, containerStyle, onPressDelete }) => {
     const TitleValueSecondary = ({ title, value }) => {
         return (
             <TitleValue
@@ -619,6 +693,21 @@ export const TimeSlotCard = ({ onPress, date, startTime, endTime, containerStyle
                     </Wrapper>
                 </RowWrapperBasic>
             </Wrapper>
+            {
+                onPressDelete ?
+                    <AbsoluteWrapper style={{ right: sizes.marginHorizontalSmall, top: 0, bottom: 0, justifyContent: 'center' }}>
+                        <IconButton
+                            iconName="trash-2"
+                            iconType="feather"
+                            iconColor={colors.appTextColor6}
+                            buttonColor={colors.error}
+                            buttonSize={totalSize(4)}
+                            iconSize={totalSize(2.25)}
+                        />
+                    </AbsoluteWrapper>
+                    :
+                    null
+            }
         </TouchableOpacity>
     )
 }

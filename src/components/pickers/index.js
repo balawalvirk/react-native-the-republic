@@ -2,12 +2,14 @@ import React, { useRef, useState } from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator, FlatList, Platform, Animated } from 'react-native'
 import { Icon } from 'react-native-elements';
 import { height, totalSize, width } from 'react-native-dimension';
-import { colors, fontSize, fontFamily, sizes, appIcons, appStyles } from '../../services';
+import { colors, fontSize, fontFamily, sizes, appIcons, appStyles, HelpingMethods } from '../../services';
 import RNPickerSelect from 'react-native-picker-select'
 import { AbsoluteWrapper, Wrapper, ComponentWrapper, RowWrapper } from '../wrappers';
 import { SmallText, InputTitle, MediumText, RegularText } from '../text';
 import { CustomIcon, IconWithText } from '../icons';
 import { Spacer } from '../spacers';
+import { TextInputUnderlined } from '../textInput';
+import { MaterialIndicator } from 'react-native-indicators';
 
 export const PickerPrimary = ({
     onDonePress, containerStyle, data, title, onChange,
@@ -60,8 +62,8 @@ export const PickerPrimary = ({
             <View style={[appStyles.inputContainerUnderLined, {
                 //borderRadius: sizes.b,
                 borderBottomWidth: 1,
-                borderBottomColor: colors.appBgColor3,
-                marginHorizontal:sizes.marginHorizontalLarge
+                borderBottomColor: colors.appBgColor4,
+                marginHorizontal: sizes.marginHorizontalLarge
             }, containerStyle]}>
                 {
                     left ?
@@ -96,10 +98,11 @@ export const PickerPrimary = ({
                         items={data}
                         placeholder={placeholderObject}
                         useNativeAndroidPickerStyle={true}
-                         pickerProps={{ mode: 'dropdown' }}
-                      //  pickerProps={{ mode: 'dropdown',overflow: 'hidden', style: { overflow: 'hidden' } }}
-                     // pickerProps={{ style: { height: 214, overflow: 'hidden' } }}
+                        pickerProps={{ mode: 'dropdown' }}
+                        //  pickerProps={{ mode: 'dropdown',overflow: 'hidden', style: { overflow: 'hidden' } }}
+                        // pickerProps={{ style: { height: 214, overflow: 'hidden' } }}
                         style={{
+                            width: width(100),
                             ...PickerPrimaryStyles,
                             iconContainer: {
                                 top: height(3.5),
@@ -122,17 +125,17 @@ export const PickerPrimary = ({
                     //     <SmallText style={[{ color: colors.error, textAlign: 'right' }]}>{error}</SmallText>
                     // </AbsoluteWrapper>
                     <Wrapper style={{}} animation="shake">
-                    <Spacer height={sizes.TinyMargin} />
-                    <IconWithText
-                        iconName="alert-circle-outline"
-                        //title="New"
-                        text={error}
+                        <Spacer height={sizes.TinyMargin} />
+                        <IconWithText
+                            iconName="alert-circle-outline"
+                            //title="New"
+                            text={error}
 
-                        tintColor={colors.error}
-                        iconSize={sizes.icons.tiny}
-                        textStyle={[{ fontSize: fontSize.small }]}
-                    />
-                </Wrapper>
+                            tintColor={colors.error}
+                            iconSize={sizes.icons.tiny}
+                            textStyle={[{ fontSize: fontSize.small }]}
+                        />
+                    </Wrapper>
                     :
                     null
             }
@@ -146,8 +149,8 @@ const PickerPrimaryStyles = StyleSheet.create({
         fontFamily: fontFamily.appTextRegular,
         //paddingVertical: height(2),
         height: height(8),
-         paddingHorizontal: 0,
-         marginHorizontal: 0,
+        paddingHorizontal: 0,
+        marginHorizontal: 0,
         //borderWidth: 1,
         //borderColor: colors.appTextColor5,
         //  borderRadius: 5,
@@ -157,10 +160,10 @@ const PickerPrimaryStyles = StyleSheet.create({
     inputAndroid: {
         fontSize: fontSize.regular,
         fontFamily: fontFamily.appTextRegular,
-         paddingHorizontal: 0,
+        paddingHorizontal: 0,
         //paddingVertical: height(2),
         height: height(8),
-         marginHorizontal: 0,
+        marginHorizontal: 0,
         // borderWidth: 1,
         // borderColor: colors.appTextColor5,
         //borderRadius: 5,
@@ -169,5 +172,105 @@ const PickerPrimaryStyles = StyleSheet.create({
     },
 });
 
+export function PickerSearchable({ placeholder, error, data, value, inputStyle, onPressItem, onPressAdd, title, onChangeText, right, left, tintColor, onFocus, onBlur }) {
+    const searchInputRef = useRef(null)
+    const [isFocused, setFocused] = useState(false)
+    const [searchQuery, setSearchQuery] = useState('')
+    const handleOnFocus = () => {
+        HelpingMethods.handleAnimation()
+        setFocused(true)
+    }
+    const handleOnBlur = () => {
+        HelpingMethods.handleAnimation()
+        setFocused(false)
+        setSearchQuery('')
+    }
+    const handleOnPressItem = () => {
+        HelpingMethods.handleAnimation()
+        handleOnBlur()
+        searchInputRef.current.blur()
+        setSearchQuery('')
+    }
+    const getData = () => {
+        let tempData = []
+        if (searchQuery) {
+            let query = searchQuery.toLowerCase()
+            tempData = data.filter(item => {
+                return (
+                    item.label.toLowerCase().includes(query)
+                )
+            })
+        } else {
+            tempData = data
+        }
+        return tempData
+        //console.log('Searched options===>',tempData)
+    }
+
+    return (
+        <Wrapper>
+            <TextInputUnderlined
+            title={title}
+                inputRef={searchInputRef}
+                placeholder={isFocused ? "Type Here" : placeholder}
+                placeholderTextColor={tintColor}
+                value={searchQuery ? searchQuery : value}
+                onFocus={() => {
+                    handleOnFocus();
+                    onFocus && onFocus()
+                }}
+                onBlur={() => {
+                    handleOnBlur();
+                    onBlur && onBlur()
+                }}
+                onChangeText={text => {
+                    setSearchQuery(text);
+                    onChangeText ? onChangeText() : null
+                }}
+                inputStyle={inputStyle}
+                error={error}
+                right={
+                    right ? right :
+                        <Icon name="caret-down-sharp" type="ionicon" size={totalSize(1.5)} color={colors.appTextColor3} />
+                }
+                left={left}
+            />
+            {
+                isFocused &&
+                <ComponentWrapper style={{ height: height(20), backgroundColor: colors.appBgColor2, marginBottom: sizes.smallMargin }}>
+                    {
+                        getData().length ?
+                            <FlatList
+                                data={
+                                    getData()
+                                }
+                                keyboardShouldPersistTaps
+                                nestedScrollEnabled
+                                ListHeaderComponent={() => {
+                                    return (
+                                        <Spacer height={sizes.TinyMargin} />
+                                    )
+                                }}
+                                renderItem={({ item, index }) => {
+                                    return (
+                                        <ComponentWrapper style={{}}>
+                                            <TouchableOpacity onPress={() => onPressItem(item, index, handleOnPressItem())} activeOpacity={1} style={{ paddingVertical: sizes.TinyMargin }}>
+                                                <MediumText style={[appStyles.textMedium]}>{item.label}</MediumText>
+                                            </TouchableOpacity>
+                                        </ComponentWrapper>
+                                    )
+                                }}
+                            />
+                            :
+                           <Wrapper style={{flex:1,...appStyles.center}}>
+                                <RegularText style={[appStyles.textGray]}>No Data Available</RegularText>
+                           </Wrapper>
+                    }
+
+                </ComponentWrapper>
+            }
+        </Wrapper >
+    )
+}
 
 

@@ -1,3 +1,4 @@
+import moment from "moment";
 import { UIManager, LayoutAnimation, Platform } from "react-native";
 import dummyData from "../constants/dummyData";
 
@@ -96,6 +97,9 @@ const HelpingMethods = {
             return "Visa Electron";
 
         return "";
+    },
+    formateTime1: (date) => {
+        return moment(date).format('hh:mm A')
     }
 }
 

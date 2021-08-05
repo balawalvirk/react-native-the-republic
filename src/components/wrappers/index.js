@@ -58,17 +58,17 @@ export const Wrapper = ({ children, style, animation, flex, duration, iterationC
         </Animatable.View>
     );
 }
-export const ComponentWrapper = ({ children, style, animation,horizontal }) => {
+export const ComponentWrapper = ({ children, style, animation, horizontal }) => {
     return (
-        <Animatable.View animation={animation} style={[appStyles.compContainer, styles.removerMarginVertical,{marginHorizontal:horizontal?horizontal:sizes.marginHorizontal}, style]}>
+        <Animatable.View animation={animation} style={[appStyles.compContainer, styles.removerMarginVertical, { marginHorizontal: horizontal ? horizontal : sizes.marginHorizontal }, style]}>
             {children}
         </Animatable.View>
     );
 }
 
-export const RowWrapper = ({ children, style, animation,horizontal }) => {
+export const RowWrapper = ({ children, style, animation, horizontal }) => {
     return (
-        <Animatable.View animation={animation} style={[appStyles.rowCompContainer, styles.removerMarginVertical, {marginHorizontal:horizontal?horizontal:sizes.marginHorizontal},style]}>
+        <Animatable.View animation={animation} style={[appStyles.rowCompContainer, styles.removerMarginVertical, { marginHorizontal: horizontal ? horizontal : sizes.marginHorizontal }, style]}>
             {children}
         </Animatable.View>
     );
@@ -87,7 +87,7 @@ export const CardWrapper = ({ children, style, animation }) => {
         </Animatable.View>
     );
 }
-export const AbsoluteWrapper = ({ children, style, animation,duration }) => {
+export const AbsoluteWrapper = ({ children, style, animation, duration }) => {
     return (
         <Animatable.View animation={animation} duration={duration} style={[{ position: 'absolute', }, style]}>
             {children}
@@ -107,6 +107,26 @@ export const HeaderWrapperPrimary = ({ children, style, animation }) => {
             {children}
         </Animatable.View>
     );
+}
+export const ColoredWrapper = ({ style, children, ...props }) => {
+    return (
+        <TouchableOpacity
+            style={[appStyles.grayWrapper, style]}
+            {...props}
+        >
+            {children}
+        </TouchableOpacity>
+    )
+}
+export const BorderedWrapper = ({ style, children, ...props }) => {
+    return (
+        <Animatable.View
+            style={[appStyles.borderedWrapper, style]}
+            {...props}
+        >
+            {children}
+        </Animatable.View>
+    )
 }
 
 const styles = StyleSheet.create({

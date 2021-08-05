@@ -536,10 +536,31 @@ const AppNavigation = () => {
                     headerTitleAlign: 'center'
                 }}
             />
+            <AppStack.Screen name={routes.seller.withdrawEarnings} component={Seller.WithdrawEarnings}
+                options={{
+                    // headerShown: false,
+                    title: 'Withdraw Earnings',
+                    headerTitleAlign: 'center'
+                }}
+            />
             <AppStack.Screen name={routes.seller.trainings} component={Seller.Trainings}
                 options={{
                     // headerShown: false,
                     title: 'Trainings',
+                  //  headerTitleAlign: 'center'
+                }}
+            />
+             <AppStack.Screen name={routes.seller.createTrainin} component={Seller.CreateTrainin}
+                options={{
+                    // headerShown: false,
+                    title: 'Create Trainin',
+                    headerTitleAlign: 'center'
+                }}
+            />
+             <AppStack.Screen name={routes.seller.selectDateTime} component={Seller.SelectDateTime}
+                options={{
+                    // headerShown: false,
+                    title: 'Select Date and Time',
                     headerTitleAlign: 'center'
                 }}
             />

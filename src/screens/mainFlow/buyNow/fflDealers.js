@@ -51,7 +51,6 @@ function FflDealers(props) {
         <MainWrapper>
             <ScrollView
             >
-                <Spacer height={sizes.baseMargin} />
                 <Wrapper >
                     <MapView
                         style={{

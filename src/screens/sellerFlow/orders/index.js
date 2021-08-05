@@ -79,6 +79,8 @@ function Orders(props) {
         onPressOrder={(item, index) => { navigate(routes.seller.OrderDetail, { order: item }) }}
         onpressAccept={(item, index) => { }}
         onpressCancel={(item, index) => { }}
+        ListHeaderComponent={() => <Spacer height={sizes.baseMargin} />}
+        ListFooterComponent={() => <Spacer height={sizes.doubleBaseMargin} />}
       />
 
     </MainWrapper>

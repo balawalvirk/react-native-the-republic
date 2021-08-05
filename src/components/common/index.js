@@ -28,7 +28,7 @@ import { ScrollView } from 'react-native'
 import { StyleSheet } from 'react-native'
 import { LineVertical } from '../lines'
 
-export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, topMargin, children, scrollEnabled,button1Style }) => {
+export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, topMargin, children, scrollEnabled, button1Style,keyboardShouldPersistTaps }) => {
     return (
         <ModalSwipeablePrimary
             visible={visible}
@@ -37,7 +37,10 @@ export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType,
             topMargin={topMargin ? Platform.OS === 'ios' ? topMargin : topMargin - height(5) : height(50)}
         >
             <Wrapper flex={1}>
-                <ScrollView showsVerticalScrollIndicator={false} scrollEnabled={scrollEnabled}>
+                <ScrollView
+                    keyboardShouldPersistTaps={keyboardShouldPersistTaps}
+                    showsVerticalScrollIndicator={false}
+                     scrollEnabled={scrollEnabled}>
                     <Spacer height={sizes.baseMargin * 1.5} />
                     {
                         iconName || customIcon ?
@@ -103,14 +106,24 @@ export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType,
                         }
                         {
                             onPressButton1 ?
+                            button1Style?
                                 <Wrapper flex={1}>
                                     <ButtonColored
                                         text={buttonText1}
                                         onPress={onPressButton1}
                                         shadow
-                                        buttonStyle={[{ marginHorizontal: 0 },button1Style]}
+                                        buttonStyle={[{ marginHorizontal: 0 }, button1Style]}
                                     />
                                 </Wrapper>
+                                :
+                                <Wrapper flex={1}>
+                                <ButtonGradient
+                                    text={buttonText1}
+                                    onPress={onPressButton1}
+                                    shadow
+                                    buttonStyle={[{ marginHorizontal: 0 }]}
+                                />
+                            </Wrapper>
                                 :
                                 null
                         }
@@ -408,6 +421,49 @@ export const DashboardSeller = ({
                     />
                 </Wrapper>
             </Wrapper>
+        </Wrapper>
+    )
+}
+export const OrderStatusWizard = ({ activeStep, steps }) => {
+    // const steps = ['Order\nrecieved', 'Order\naccepted', 'Delivery\non the way', 'Delivered\nto customer']
+
+
+    return (
+        <Wrapper>
+            <RowWrapperBasic style={{ justifyContent: 'center', }}>
+                {
+                    steps.map((item, index) => {
+                        const wizardStep = index + 1
+                        return (
+                            <RowWrapperBasic style={{ alignItems: 'flex-start', }}>
+                                {
+                                    index != 0 ?
+                                        <LineHorizontal
+                                            height={2}
+                                            width={width(12)}
+                                            color={wizardStep <= activeStep ? colors.success : colors.appBgColor4}
+                                            style={{ marginTop: totalSize(1.5), marginHorizontal: sizes.marginHorizontalSmall }}
+                                        />
+                                        :
+                                        null
+                                }
+                                <IconWithText
+                                    iconName="check-circle"
+                                    iconType="feather"
+                                    iconSize={totalSize(3)}
+                                    tintColor={wizardStep <= activeStep ? colors.success : colors.appBgColor4}
+                                    text={item}
+                                    direction="column"
+                                    textStyle={[appStyles.textRegular, appStyles.textCenter]}
+                                    textContainerStyle={{ position: 'absolute', width: width(20), top: totalSize(3) }}
+                                />
+
+                            </RowWrapperBasic>
+                        )
+                    })
+                }
+            </RowWrapperBasic>
+            <Spacer height={sizes.doubleBaseMargin} />
         </Wrapper>
     )
 }
