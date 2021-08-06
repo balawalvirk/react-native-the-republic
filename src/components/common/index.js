@@ -28,19 +28,21 @@ import { ScrollView } from 'react-native'
 import { StyleSheet } from 'react-native'
 import { LineVertical } from '../lines'
 
-export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, topMargin, children, scrollEnabled, button1Style,keyboardShouldPersistTaps }) => {
+export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, topMargin, children, scrollEnabled, button1Style, keyboardShouldPersistTaps }) => {
+    const defaultTopMargin = Platform.OS === 'ios' ? height(50) : height(40)
+    const customTopMargin = topMargin ? Platform.OS === 'ios' ? topMargin : topMargin - height(10) : defaultTopMargin
     return (
         <ModalSwipeablePrimary
             visible={visible}
             toggle={toggle}
             hideHeader
-            topMargin={topMargin ? Platform.OS === 'ios' ? topMargin : topMargin - height(5) : height(50)}
+            topMargin={customTopMargin}
         >
             <Wrapper flex={1}>
                 <ScrollView
                     keyboardShouldPersistTaps={keyboardShouldPersistTaps}
                     showsVerticalScrollIndicator={false}
-                     scrollEnabled={scrollEnabled}>
+                    scrollEnabled={scrollEnabled}>
                     <Spacer height={sizes.baseMargin * 1.5} />
                     {
                         iconName || customIcon ?
@@ -63,7 +65,7 @@ export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType,
                     {
                         title ?
                             <>
-                                <ComponentWrapper>
+                                <ComponentWrapper style={{marginHorizontal:sizes.marginHorizontalXLarge}}>
                                     <SmallTitle style={[appStyles.textCenter]}>{title}</SmallTitle>
                                 </ComponentWrapper>
                                 <Spacer height={sizes.baseMargin} />
@@ -106,24 +108,24 @@ export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType,
                         }
                         {
                             onPressButton1 ?
-                            button1Style?
-                                <Wrapper flex={1}>
-                                    <ButtonColored
-                                        text={buttonText1}
-                                        onPress={onPressButton1}
-                                        shadow
-                                        buttonStyle={[{ marginHorizontal: 0 }, button1Style]}
-                                    />
-                                </Wrapper>
-                                :
-                                <Wrapper flex={1}>
-                                <ButtonGradient
-                                    text={buttonText1}
-                                    onPress={onPressButton1}
-                                    shadow
-                                    buttonStyle={[{ marginHorizontal: 0 }]}
-                                />
-                            </Wrapper>
+                                button1Style ?
+                                    <Wrapper flex={1}>
+                                        <ButtonColored
+                                            text={buttonText1}
+                                            onPress={onPressButton1}
+                                            shadow
+                                            buttonStyle={[{ marginHorizontal: 0 }, button1Style]}
+                                        />
+                                    </Wrapper>
+                                    :
+                                    <Wrapper flex={1}>
+                                        <ButtonGradient
+                                            text={buttonText1}
+                                            onPress={onPressButton1}
+                                            shadow
+                                            buttonStyle={[{ marginHorizontal: 0 }]}
+                                        />
+                                    </Wrapper>
                                 :
                                 null
                         }
@@ -369,10 +371,8 @@ export const TitleValue = ({ title, value, titleStyle, valueStyle, containerStyl
     )
 }
 export const DashboardSeller = ({
-    ordersRecieved,
-    ordersCompleted,
-    earnedThisMonth,
-    earnedOverall,
+    title1, title2, title3, title4,
+    value1, value2, value3, value4,
 }) => {
     const TitleValue = ({ title, value, containerStyle }) => {
         return (
@@ -388,16 +388,16 @@ export const DashboardSeller = ({
             <Wrapper flex={1} >
                 <Wrapper flex={1} style={{ flexDirection: 'row', }}>
                     <TitleValue
-                        title="Orders Received"
-                        value={ordersRecieved}
+                        title={title1}
+                        value={value1}
                     />
                     <LineVertical
                         width={4}
                         color={colors.appBgColor1}
                     />
                     <TitleValue
-                        title="Orders Completed"
-                        value={ordersCompleted}
+                        title={title2}
+                        value={value2}
                     />
                 </Wrapper>
             </Wrapper>
@@ -408,16 +408,16 @@ export const DashboardSeller = ({
             <Wrapper flex={1} >
                 <Wrapper flex={1} style={{ flexDirection: 'row', }}>
                     <TitleValue
-                        title="Earned This Month"
-                        value={earnedThisMonth}
+                        title={title3}
+                        value={value3}
                     />
                     <LineVertical
                         width={4}
                         color={colors.appBgColor1}
                     />
                     <TitleValue
-                        title="Earned Overall"
-                        value={earnedOverall}
+                        title={title4}
+                        value={value4}
                     />
                 </Wrapper>
             </Wrapper>
@@ -467,6 +467,37 @@ export const OrderStatusWizard = ({ activeStep, steps }) => {
         </Wrapper>
     )
 }
+
+export const OptionsPopup = ({ options, visible, toggle, onPressStatus, titleStyle }) => {
+
+    return (
+        <PopupPrimary
+            visible={visible}
+            toggle={toggle}
+            topMargin={height(70)}
+        >
+            <Wrapper>
+                <LineHorizontal />
+                {
+                    options.map((item, index) => {
+                        return (
+                            <TouchableOpacity activeOpacity={1} onPress={() => onPressStatus(item, index)}>
+                                <Spacer height={sizes.marginVertical} />
+                                <ComponentWrapper>
+                                    <MediumText style={[{ color: item === 'Cancel Order' ? colors.error : item === 'Completed' ? colors.success : colors.appTextColor2 }, titleStyle]}>{item}</MediumText>
+                                    {/* <MediumText style={[{}, () => titleStyle(item, index)]}>{item}</MediumText> */}
+                                </ComponentWrapper>
+                                <Spacer height={sizes.marginVertical} />
+                                <LineHorizontal />
+                            </TouchableOpacity>
+                        )
+                    })
+                }
+            </Wrapper>
+        </PopupPrimary>
+    )
+}
+
 export {
     EditProfileComp, VerificationCodeSentPopup, ImagePickerPopup,
     Posts, MenuPopup, RenderComments, Products, ArmerInfo,

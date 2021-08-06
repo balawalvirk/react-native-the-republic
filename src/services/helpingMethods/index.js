@@ -100,6 +100,9 @@ const HelpingMethods = {
     },
     formateTime1: (date) => {
         return moment(date).format('hh:mm A')
+    },
+    formateDate1: (date) => {
+        return moment(date).format('DD / MM / YYYY')
     }
 }
 

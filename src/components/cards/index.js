@@ -222,7 +222,7 @@ export const ReviewCardPrimary = ({ containerStyle, imageUrl, title, rating, rev
         </Wrapper>
     )
 }
-export const ProductCardSecondary = ({ onPress, animation, duration, image, imageStyle, containerstyle, description, newPrice, oldPrice, rating, reviewCount, moreInfo, moreInfoImage, moreInfoTitle, moreInfoSubTitle, moreInfoRight, moreInfoContainerStyle, children, date }) => {
+export const ProductCardSecondary = ({ perMoreInfo,content, onPress, animation, duration, image, imageStyle, containerstyle, description, newPrice, oldPrice, rating, reviewCount, moreInfo, moreInfoImage, moreInfoTitle, moreInfoSubTitle, moreInfoRight, moreInfoContainerStyle, children, date }) => {
 
     return (
         <Wrapper animation={animation} duration={duration} style={[styles.ProductCardSecondaryContainer, containerstyle]}>
@@ -251,19 +251,26 @@ export const ProductCardSecondary = ({ onPress, animation, duration, image, imag
                                     <TinyText style={[appStyles.textColorError, appStyles.textLineThrough]}>${oldPrice}</TinyText>
                                 </RowWrapperBasic>
                             </Wrapper>
-                            <Spacer height={sizes.smallMargin} />
-                            <RowWrapperBasic>
-                                <StarRating
-                                    disabled={false}
-                                    maxStars={5}
-                                    rating={rating}
-                                    fullStarColor={colors.rating}
-                                    starSize={totalSize(1.75)}
-                                    starStyle={{ marginRight: totalSize(0.2) }}
-                                />
-                                <Spacer width={sizes.TinyMargin} />
-                                <TinyText>{rating} ({reviewCount})</TinyText>
-                            </RowWrapperBasic>
+                            {
+                                rating ?
+                                    <>
+                                        <Spacer height={sizes.smallMargin} />
+                                        <RowWrapperBasic>
+                                            <StarRating
+                                                disabled={false}
+                                                maxStars={5}
+                                                rating={rating}
+                                                fullStarColor={colors.rating}
+                                                starSize={totalSize(1.75)}
+                                                starStyle={{ marginRight: totalSize(0.2) }}
+                                            />
+                                            <Spacer width={sizes.TinyMargin} />
+                                            <TinyText>{rating} ({reviewCount})</TinyText>
+                                        </RowWrapperBasic>
+                                    </>
+                                    :
+                                    null
+                            }
                             {
                                 date ?
                                     <>
@@ -272,11 +279,13 @@ export const ProductCardSecondary = ({ onPress, animation, duration, image, imag
                                     </>
                                     : null
                             }
+                            {content}
                         </Wrapper>
                         <Spacer height={sizes.smallMargin} />
                     </TouchableOpacity>
                 </Wrapper>
             </RowWrapperBasic>
+            {perMoreInfo}
             {
                 moreInfo ?
                     <Wrapper style={[{ backgroundColor: colors.appBgColor3, paddingVertical: sizes.marginVertical / 2, borderRadius: sizes.cardRadius }, moreInfoContainerStyle]}>
@@ -660,7 +669,126 @@ export const TraningSellerCard = ({ onPress, title, duration, charges, container
         </TouchableOpacity>
     )
 }
+export const CouponCard = ({ onPress, title, discountType, discount, expiry, containerStyle, onPressDelete, onPressEdit }) => {
+    const TitleValuePrimary = ({ title, value }) => {
+        return (
+            <TitleValue
+                title={title}
+                value={value}
+                containerStyle={{ flexDirection: 'column', marginHorizontal: 0, alignItems: 'flex-start', }}
+                titleStyle={[appStyles.textRegular, appStyles.textDarkGray]}
+                valueStyle={[appStyles.textMedium, appStyles.fontBold, { marginTop: sizes.smallMargin }]}
+            />
+        )
+    }
+    const fixedDiscount = discountType === 'fixed'
+    const percentageDiscount = discountType === 'percentage'
+    return (
+        <TouchableOpacity
+            activeOpacity={1}
+            onPress={onPress}
+            activeOpacity={1} style={[appStyles.borderedWrapper, containerStyle]}>
+            <Wrapper>
+                <SmallTitle style={[appStyles.textSocondaryColor]}>{title}</SmallTitle>
+                <Spacer height={sizes.baseRadius} />
+            </Wrapper>
+            <Spacer height={sizes.baseRadius} />
+            <RowWrapperBasic>
+                <Wrapper flex={1}>
+                    {
+                        fixedDiscount ?
+                            <TitleValuePrimary
+                                title="Fixed Discount"
+                                value={'-$' + discount}
+                            />
+                            :
+                            percentageDiscount ?
+                                <TitleValuePrimary
+                                    title="%age Discount"
+                                    value={discount + '%'}
+                                />
+                                : null
+                    }
 
+                </Wrapper>
+                <Wrapper flex={1}>
+                    <TitleValuePrimary
+                        title="Expiry"
+                        value={expiry}
+                    />
+                </Wrapper>
+            </RowWrapperBasic>
+            <Spacer height={sizes.baseRadius} />
+            <Wrapper style={{ marginHorizontal: -sizes.marginHorizontal / 1.25, marginBottom: -sizes.marginVertical / 1.5, backgroundColor: colors.appBgColor3, paddingHorizontal: sizes.marginHorizontalSmall, paddingVertical: sizes.marginVertical / 2, borderRadius: sizes.cardRadius }}>
+                <RowWrapperBasic>
+                    <Wrapper flex={1}>
+                        {/* <ImageRound
+                            source={{ uri: userImage }}
+                            size={totalSize(4)}
+                        /> */}
+                    </Wrapper>
+                    <Spacer width={sizes.smallMargin} />
+                    <Wrapper >
+                        <RowWrapperBasic>
+                            <ButtonColoredSmall
+                                onPress={onPressEdit}
+                                text="Edit"
+                                buttonStyle={{ paddingHorizontal: sizes.marginHorizontalSmall, borderRadius: 100 }}
+                            />
+                            <Spacer width={sizes.smallMargin} />
+                            <ButtonColoredSmall
+                                onPress={onPressDelete}
+                                text="Delete"
+                                buttonStyle={{ paddingHorizontal: sizes.marginHorizontalSmall, borderRadius: 100, backgroundColor: colors.error }}
+                            />
+                        </RowWrapperBasic>
+                    </Wrapper>
+                </RowWrapperBasic>
+            </Wrapper>
+
+        </TouchableOpacity>
+    )
+}
+export const InvoiceCard = ({ onPress, amount, orderNum, date, containerStyle }) => {
+    const TitleValuePrimary = ({ title, value }) => {
+        return (
+            <TitleValue
+                title={title}
+                value={value}
+                containerStyle={{ flexDirection: 'column', marginHorizontal: 0, alignItems: 'flex-start', }}
+                titleStyle={[appStyles.textRegular, appStyles.textDarkGray]}
+                valueStyle={[appStyles.textMedium, appStyles.fontBold, { marginTop: sizes.smallMargin }]}
+            />
+        )
+    }
+    return (
+        <TouchableOpacity
+            activeOpacity={1}
+            onPress={onPress}
+            activeOpacity={1} style={[appStyles.borderedWrapper, containerStyle]}>
+
+            <RowWrapperBasic>
+                <Wrapper flex={1}>
+                    <TitleValuePrimary
+                        title="Order #"
+                        value={orderNum}
+                    />
+                </Wrapper>
+                <Wrapper>
+                    <MediumTitle style={[appStyles.textPrimaryColor]}>{amount}</MediumTitle>
+                </Wrapper>
+
+            </RowWrapperBasic>
+            <Spacer height={sizes.baseRadius * 1.5} />
+            <Wrapper >
+                <TitleValuePrimary
+                    title="Date"
+                    value={date}
+                />
+            </Wrapper>
+        </TouchableOpacity>
+    )
+}
 export const TimeSlotCard = ({ onPress, date, startTime, endTime, containerStyle, onPressDelete }) => {
     const TitleValueSecondary = ({ title, value }) => {
         return (

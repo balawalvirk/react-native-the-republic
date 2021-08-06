@@ -42,6 +42,7 @@ function OrderInvoice(props) {
                     <ComponentWrapper style={[appStyles.center]}>
                         <LineHorizontal color={colors.appBgColor6} height={2} style={{ position: 'absolute', right: 0, left: 0 }} />
                         <ButtonColoredSmall
+                        disabled
                             text="Invoice"
                             buttonStyle={[{ paddingHorizontal: sizes.marginHorizontalSmall, borderRadius: 100, backgroundColor: colors.appColor1 }]}
                             textStyle={[appStyles.textMedium, appStyles.fontBold, appStyles.textWhite]}

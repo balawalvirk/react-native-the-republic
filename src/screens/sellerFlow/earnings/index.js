@@ -32,14 +32,19 @@ function Earnings(props) {
       <ScrollView>
         <Spacer height={sizes.baseMargin} />
         <DashboardSeller
-          ordersRecieved='25'
-          ordersCompleted='10'
-          earnedThisMonth="4,679"
-          earnedOverall="94,328"
+         title1="Earned This Month"
+         title2="Earned Overall"
+         title3="Pending for Clearance"
+         title4="Available for Withdrawal"
+          value1='$4,877'
+          value2='$94,834'
+          value3="$877"
+          value4="$934"
+         
         />
         <Spacer height={sizes.doubleBaseMargin} />
         <ButtonGradient
-          text="Withdraw"
+          text="Withdraw Earnings"
           shadow
           onPress={() => navigate(routes.seller.withdrawEarnings)}
         />

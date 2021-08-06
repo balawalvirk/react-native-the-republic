@@ -3,7 +3,7 @@ import { TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native';
 import { View, Text } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
-import { AbsoluteWrapper, ButtonColoredSmall, ButtonGradient, ComponentWrapper, IconWithText, LineHorizontal, MainWrapper, MediumText, ProductCardSecondary, RegularText, RowWrapperBasic, Spacer, TitleValue, Wrapper, OrderStatusWizard, TinyTitle, UserCardPrimary, PopupPrimary, ReviewCardPrimary, ButtonColored } from '../../../components';
+import { AbsoluteWrapper, ButtonColoredSmall, ButtonGradient, ComponentWrapper, IconWithText, LineHorizontal, MainWrapper, MediumText, ProductCardSecondary, RegularText, RowWrapperBasic, Spacer, TitleValue, Wrapper, OrderStatusWizard, TinyTitle, UserCardPrimary, PopupPrimary, ReviewCardPrimary, ButtonColored, OptionsPopup } from '../../../components';
 import { appImages, appStyles, colors, routes, sizes } from '../../../services';
 import { OrdersList } from './ordersList';
 
@@ -16,7 +16,7 @@ function OrderDetail(props) {
     const { order } = route.params
     const { user } = order
     const steps = ['Order\nrecieved', 'Order\naccepted', 'Delivery\non the way', 'Delivered\nto customer']
-
+    const statuses = ['Shipping', 'Delivered', 'Cancel Order']
 
     const isNew = order.status === 'new'
     const isActive = order.status === 'active'
@@ -191,20 +191,22 @@ function OrderDetail(props) {
                             <ButtonColored
                                 text="You cancelled this order"
                                 buttonColor={colors.appBgColor3}
-                                textStyle={{color:appStyles.textGray.color}}
+                                textStyle={{ color: appStyles.textGray.color }}
                             />
-                            <Spacer height={sizes.doubleBaseMargin}/>
+                            <Spacer height={sizes.doubleBaseMargin} />
                         </Wrapper>
                         :
                         null
             }
-            <UpdateStatusPopup
+            <OptionsPopup
                 visible={isUpdateStatusPopupVisible}
                 toggle={toggleUpdateStatusPopup}
                 onPressStatus={(item, index) => {
                     console.log('status-->', item)
                     toggleUpdateStatusPopup()
                 }}
+                options={statuses}
+                
             />
         </MainWrapper>
     );
@@ -212,31 +214,4 @@ function OrderDetail(props) {
 
 export default OrderDetail;
 
-const UpdateStatusPopup = ({ visible, toggle, onPressStatus }) => {
-    const statuses = ['Shipping', 'Delivered', 'Cancel Order']
-    return (
-        <PopupPrimary
-            visible={visible}
-            toggle={toggle}
-            topMargin={height(70)}
-        >
-            <Wrapper>
-                <LineHorizontal />
-                {
-                    statuses.map((item, index) => {
-                        return (
-                            <TouchableOpacity activeOpacity={1} onPress={() => onPressStatus(item, index)}>
-                                <Spacer height={sizes.marginVertical} />
-                                <ComponentWrapper>
-                                    <MediumText style={[{ color: index === statuses.length - 1 ? colors.error : colors.appTextColor2 }]}>{item}</MediumText>
-                                </ComponentWrapper>
-                                <Spacer height={sizes.marginVertical} />
-                                <LineHorizontal />
-                            </TouchableOpacity>
-                        )
-                    })
-                }
-            </Wrapper>
-        </PopupPrimary>
-    )
-}
+

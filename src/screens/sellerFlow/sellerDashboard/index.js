@@ -55,10 +55,14 @@ function SellerDashboard(props) {
         />
         <Spacer height={sizes.baseMargin} />
         <DashboardSeller
-          ordersRecieved='25'
-          ordersCompleted='10'
-          earnedThisMonth="4,679"
-          earnedOverall="94,328"
+          title1="Orders Received"
+          title2="Orders Completed"
+          title3="Earned This Month"
+          title4="Earned Overall"
+          value1='25'
+          value2='10'
+          value3="4,679"
+          value4="94,328"
         />
         <Spacer height={sizes.baseMargin} />
         <OptionsListPrimary

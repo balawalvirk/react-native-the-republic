@@ -81,6 +81,7 @@ export const routes = {
         earnings: 'earnings',
         trainings: 'yourTrainings',
         coupons: 'coupons',
+        createCoupon: 'createCoupon',
         invoices: 'invoices',
         withdrawEarnings:'withdrawEarnings',
         createTrainin:'createTrainin',
@@ -88,6 +89,7 @@ export const routes = {
     },
     dealer: {
         fulfillments: 'fulfillments',
+        fulfillmentDetail:'fulfillmentDetail'
     }
 
 }

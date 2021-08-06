@@ -4,11 +4,13 @@ import Requests from './requests'
 import Orders from './orders'
 import OrderDetails from './orders/orderDetails'
 import Fulfillments from './fulfillments'
+import FulfillmentDetail from './fulfillments/fulfillmentDetail'
 import Earnings from './earnings'
 import Trainings from './trainings'
-import CreateTrainin from './trainings/createTraining'
+import CreateTraining from './trainings/createTraining'
 import SelectDateTime from './trainings/selectDateTime'
 import Coupons from './coupons'
+import CreateCoupon from './coupons/createCoupon'
 import Invoices from './invoices'
 import Reports from './reports'
 import WithdrawEarnings from './earnings/withdrawEarnings'
@@ -16,8 +18,12 @@ import WithdrawEarnings from './earnings/withdrawEarnings'
 export {
   SellerDashboard, YourProducts,
   Reports, Requests, Orders,
-  Fulfillments, Earnings,
-  Trainings, Coupons, Invoices,
-  OrderDetails,WithdrawEarnings,
-  CreateTrainin,SelectDateTime
+  Fulfillments,FulfillmentDetail,
+   Earnings,
+  Trainings,
+  Coupons, CreateCoupon,
+  Invoices,
+  OrderDetails, WithdrawEarnings,
+  CreateTraining, SelectDateTime,
+
 }

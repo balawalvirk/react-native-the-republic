@@ -15,7 +15,7 @@ export function Navigation() {
         <NavigationContainer ref={navigationRef}>
             <MainStack.Navigator
                 screenOptions={{ headerShown: false }}
-                initialRouteName={routes.app}
+                initialRouteName={routes.auth}
             >
                 <MainStack.Screen
                     name={routes.auth}

@@ -64,10 +64,9 @@ function Trainings(props) {
       // button1Style={{ backgroundColor: colors.error }}
       >
         <Wrapper>
-
           <Spacer height={sizes.baseMargin * 2} />
           <ComponentWrapper style={{ marginHorizontal: sizes.marginHorizontalXLarge }}>
-            <SmallTitle style={[appStyles.textCenter]}>Do you want to accept this training request?</SmallTitle>
+            <SmallTitle style={[appStyles.textCenter]}>Are you sure you want to delete this training?</SmallTitle>
           </ComponentWrapper>
           <Spacer height={sizes.baseMargin * 2} />
         </Wrapper>

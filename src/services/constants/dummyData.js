@@ -1062,6 +1062,139 @@ const dummyData = {
             },
         }
     ],
+    coupons: [
+        {
+            code: 'JOHN15OFF',
+            discountType: 'fixed',
+            discount: '12',
+            expiry: '31 / 12 / 2021'
+        },
+        {
+            code: 'republic10',
+            discountType: 'percentage',
+            discount: '15',
+            expiry: '12 / 09 / 2021'
+        }
+    ],
+    invoices: [
+        {
+            orderNumber: '67653223',
+            date: new Date(),
+            amount: '785.77'
+        },
+        {
+            orderNumber: '17877652',
+            date: new Date(),
+            amount: '854.77'
+        },
+        {
+            orderNumber: '3348562',
+            date: new Date(),
+            amount: '334.67'
+        },
+        {
+            orderNumber: '232356475',
+            date: new Date(),
+            amount: '332.32'
+        }
+    ],
+    fulfillments: [
+        {
+            id: 33453,
+            image: appImages.product5,
+            description: 'Dan Wesson Model 15-2 Stainless 357 Mag Sporter Superscroll 12GAx3″ 32″bbls',
+            new_price: '743.99',
+            old_price: '949.99',
+            location: 'Down town, NY',
+            rating: 4.8,
+            review_count: '9',
+            buyer: {
+                id: 5642,
+                name: 'Alex Jhon',
+                image: appImages.user4,
+                dealer: {
+                    id: 3324,
+                    name: 'Jackobe White',
+                    image: appImages.user2,
+                }
+            },
+            seller: {
+                id: 234,
+                name: 'Wilson Hawk',
+                image: appImages.user3,
+                dealer: {
+                    id: 77644,
+                    name: 'Nelson Jauh',
+                    image: appImages.user5,
+                }
+            },
+            status: 'received',
+        },
+        {
+            id: 34245,
+            image: appImages.product3,
+            description: 'Dan Wesson Model 15-2 Stainless 357 Mag Sporter Superscroll 12GAx3″ 32″bbls',
+            new_price: '743.99',
+            old_price: '949.99',
+            location: 'Down town, NY',
+            rating: 4.8,
+            review_count: '9',
+            seller: {
+                id: 5642,
+                name: 'Alex Jhon',
+                image: appImages.user4,
+                dealer: {
+                    id: 3324,
+                    name: 'Nelson Jauh',
+                    image: appImages.user5,
+
+                }
+            },
+            buyer: {
+                id: 234,
+                name: 'Wilson Hawk',
+                image: appImages.user3,
+                dealer: {
+                    id: 77644,
+                    name: 'Jackobe White',
+                    image: appImages.user2,
+                }
+            },
+            status: 'shipmentPending',
+        },
+        {
+            id: 2424,
+            image: appImages.product2,
+            description: 'Dan Wesson Model 15-2 Stainless 357 Mag Sporter Superscroll 12GAx3″ 32″bbls',
+            new_price: '743.99',
+            old_price: '949.99',
+            location: 'Down town, NY',
+            rating: 4.8,
+            review_count: '9',
+            buyer: {
+                id: 5642,
+                name: 'Alex Jhon',
+                image: appImages.user4,
+                dealer: {
+                    id: 3324,
+                    name: 'Nelson Jauh',
+                    image: appImages.user5,
+
+                }
+            },
+            seller: {
+                id: 234,
+                name: 'Wilson Hawk',
+                image: appImages.user3,
+                dealer: {
+                    id: 77644,
+                    name: 'Jackobe White',
+                    image: appImages.user2,
+                }
+            },
+            status: 'completed',
+        },
+    ]
 }
 
 export default dummyData

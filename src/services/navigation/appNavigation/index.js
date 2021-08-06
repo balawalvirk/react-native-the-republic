@@ -550,7 +550,7 @@ const AppNavigation = () => {
                   //  headerTitleAlign: 'center'
                 }}
             />
-             <AppStack.Screen name={routes.seller.createTrainin} component={Seller.CreateTrainin}
+             <AppStack.Screen name={routes.seller.createTrainin} component={Seller.CreateTraining}
                 options={{
                     // headerShown: false,
                     title: 'Create Trainin',
@@ -568,6 +568,13 @@ const AppNavigation = () => {
                 options={{
                     // headerShown: false,
                     title: 'Coupons',
+                   // headerTitleAlign: 'center'
+                }}
+            />
+            <AppStack.Screen name={routes.seller.createCoupon} component={Seller.CreateCoupon}
+                options={{
+                    // headerShown: false,
+                    title: 'Create Coupons',
                     headerTitleAlign: 'center'
                 }}
             />
@@ -592,6 +599,12 @@ const AppNavigation = () => {
                     // headerShown: false,
                     title: 'Fulfillments',
                     headerTitleAlign: 'center'
+                }}
+            />
+             <AppStack.Screen name={routes.dealer.fulfillmentDetail} component={Seller.FulfillmentDetail}
+                options={{
+                    // headerShown: false,
+                    title: 'Fulfillment Detail',
                 }}
             />
         </AppStack.Navigator>
