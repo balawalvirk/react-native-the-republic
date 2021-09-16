@@ -26,21 +26,21 @@ function CreateAccount(props) {
   }
   const handleOnChangePasswordText = (password) => {
     HelpingMethods.handleAnimation()
-    !password ? setPasswordError('') : password.length < 8 ? setPasswordError('Atleast 8 characters') : setPasswordError('')
+    !password ? setPasswordError('') : password.length < 6 ? setPasswordError('Atleast 6 characters') : setPasswordError('')
     setPassword(password)
   }
   const handleOnChangeConfirmPasswordText = (confirmPassword) => {
     HelpingMethods.handleAnimation()
-    !confirmPassword ? setConfirmPasswordError('') : confirmPassword.length < 8 ? setConfirmPasswordError('Atleast 8 characters') : setConfirmPasswordError('')
+    !confirmPassword ? setConfirmPasswordError('') : confirmPassword.length < 6 ? setConfirmPasswordError('Atleast 6 characters') : setConfirmPasswordError('')
     setConfirmPassword(confirmPassword)
   }
   const validations = () => {
     HelpingMethods.handleAnimation()
 
     !email ? setEmailError('Enter your email') : !Validations.validateEmail(email) ? setEmailError('Email format is invalid') : setEmailError('')
-    !password ? setPasswordError('Enter your password') : password.length < 8 ? setPasswordError('Atleast 8 characters') : setPasswordError('')
-    !confirmPassword ? setConfirmPasswordError('Enter confirm password') : confirmPassword.length < 8 ? setConfirmPasswordError('Atleast 8 characters') : confirmPassword != password ? setConfirmPasswordError('Password not matched') : setConfirmPasswordError('')
-    if (password.length >= 8 && confirmPassword.length === password.length && Validations.validateEmail(email)) {
+    !password ? setPasswordError('Enter your password') : password.length < 6 ? setPasswordError('Atleast 6 characters') : setPasswordError('')
+    !confirmPassword ? setConfirmPasswordError('Enter confirm password') : confirmPassword.length < 6 ? setConfirmPasswordError('Atleast 6 characters') : confirmPassword != password ? setConfirmPasswordError('Password not matched') : setConfirmPasswordError('')
+    if (password.length >= 6 && confirmPassword.length === password.length && Validations.validateEmail(email)) {
       return true
     } else {
       return false
@@ -48,7 +48,7 @@ function CreateAccount(props) {
   }
   const handleRegister = () => {
     const credentials = {
-      email: email.toLowerCase(),
+      email: email,
       password: password
     }
     if (validations()) {

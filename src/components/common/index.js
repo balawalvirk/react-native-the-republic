@@ -28,7 +28,7 @@ import { ScrollView } from 'react-native'
 import { StyleSheet } from 'react-native'
 import { LineVertical } from '../lines'
 
-export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, topMargin, children, scrollEnabled, button1Style, keyboardShouldPersistTaps }) => {
+export const PopupPrimary = ({ visible, toggle, title, info, iconName,disableSwipe,disableBackDropPress, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, topMargin, children, scrollEnabled, button1Style, keyboardShouldPersistTaps }) => {
     const defaultTopMargin = Platform.OS === 'ios' ? height(50) : height(40)
     const customTopMargin = topMargin ? Platform.OS === 'ios' ? topMargin : topMargin - height(10) : defaultTopMargin
     return (
@@ -37,6 +37,9 @@ export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconType,
             toggle={toggle}
             hideHeader
             topMargin={customTopMargin}
+            disableSwipe={disableSwipe}
+            disableBackDropPress={disableBackDropPress}
+            
         >
             <Wrapper flex={1}>
                 <ScrollView

@@ -1,7 +1,13 @@
 import moment from "moment";
 import { UIManager, LayoutAnimation, Platform } from "react-native";
 import dummyData from "../constants/dummyData";
+import NetInfo from "@react-native-community/netinfo";
+import store from "../store";
+import { setUserDetail } from "../store/actions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { asyncConts } from "..";
 
+const {dispatch}=store
 const HelpingMethods = {
     handleAnimation: () => {
         if (Platform.OS === "android") {
@@ -103,7 +109,21 @@ const HelpingMethods = {
     },
     formateDate1: (date) => {
         return moment(date).format('DD / MM / YYYY')
-    }
+    },
+    checkInternetConnectivity: async () => {
+        let isConnected = false
+        await NetInfo.fetch().then(state => {
+            // console.log("Connection type", state.type);
+            //console.log("Is connected?", state.isConnected);
+            isConnected = state.isConnected
+        });
+        return isConnected
+    },
+    logout: async () => {
+       dispatch(setUserDetail(null))
+       AsyncStorage.removeItem(asyncConts.user_credentials)
+       AsyncStorage.removeItem(asyncConts.user_details)
+    },
 }
 
 

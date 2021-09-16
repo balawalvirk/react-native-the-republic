@@ -1,40 +1,108 @@
-import React, { Component, useState } from 'react';
-import { View, Text } from 'react-native';
+import React, { Component, useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { height, totalSize } from 'react-native-dimension';
-import { ButtonColored, ButtonGradient, ComponentWrapper, CustomIcon, KeyboardAvoidingScrollView, MainWrapper, PopupPrimary, RegularText, Spacer, TextInputUnderlined, TinyTitle, Wrapper, VerificationCodeSentPopup } from '../../../../components';
-import { appImages, appStyles, routes, sizes } from '../../../../services';
+import { ButtonColored, ButtonGradient, ComponentWrapper, CustomIcon, KeyboardAvoidingScrollView, MainWrapper, PopupPrimary, RegularText, Spacer, TextInputUnderlined, TinyTitle, Wrapper, VerificationCodeSentPopup, Toasts, LoaderAbsolute } from '../../../../components';
+import { appImages, appStyles, asyncConts, Backend, routes, sizes } from '../../../../services';
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 import styles from './styles';
 import CountryPicker from 'react-native-country-picker-modal'
+import auth from '@react-native-firebase/auth';
+
 function VerifyPhone(props) {
     const { navigate } = props.navigation
     const { params } = props.route
-    const { credentials, profileDetails } = params
-    const [loading, setLoading] = useState(false)
+    const { credentials, profileDetails, confirmPhoneNumber } = params
+    console.log('credentials', credentials, 'Profile Details', profileDetails)
+
+    //local states
+    const [confirmation, setConfirmation] = useState(null)
+    const [phoneNumberWithCode, setPhoneNumberWithCode] = useState('')
     const [phoneNumber, setPhoneNumber] = useState(profileDetails.phoneNumber)
     const [phoneNumberError, setPhoneNumberError] = useState('')
     const [countryCode, setCountryCode] = useState(profileDetails.countryCode)
     const [countryPhoneCode, setCountryPhoneCode] = useState(profileDetails.countryPhoneCode)
     const [isVerificationCodeSendModalVisible, setVerificationCodeSendModalVisibility] = useState(false)
     const [isUpdatePhoneNumberPopupVisible, setUpdatePhoneNumberPopupVisibility] = useState(false)
+    const [loading, setLoading] = useState(false)
 
-    console.log('credentials', credentials, 'Profile Details', profileDetails)
+
+
+
+
+
+    useEffect(() => {
+        getSetData()
+    }, [])
 
     const toggleVerificationCodeSendModal = () => setVerificationCodeSendModalVisibility(!isVerificationCodeSendModalVisible)
     const toggleUpdatePhoneNumberPopup = () => setUpdatePhoneNumberPopupVisibility(!isUpdatePhoneNumberPopupVisible)
 
-    const handleVerifyCode = (code) => {
-        console.log(`Code is ${code}, you are good to go!`)
-        setLoading(true)
-        setTimeout(() => {
-            navigate(routes.verifyIdentity)
-            setLoading(false)
-        }, 2000);
+    const getSetData = () => {
+
+        const { phoneNumber, countryPhoneCode } = profileDetails
+        const mobileNumber = '+' + countryPhoneCode + phoneNumber
+        console.log('Phone number: ', mobileNumber)
+        // console.log('confirmPhoneNumber: ',confirmPhoneNumber)
+        setPhoneNumberWithCode(mobileNumber)
+        setConfirmation(confirmPhoneNumber)
     }
+
+    const handleVerifyCode = async (code) => {
+        setLoading(true)
+        console.log(`Code is ${code}`)
+        if (code.length === 6) {
+            await confirmation
+                .confirm(code)
+                .then(res => {
+                    console.log('Verfication Response', res)
+                    Toasts.success('Phone number has been verified')
+                    navigate(routes.verifyIdentity, { credentials, profileDetails,phoneNumber,countryPhoneCode,countryCode })
+                    // registerNewAccount()
+                })
+                .catch(async (error) => {
+                    console.log(error)
+                    setTimeout(() => {
+                        Toasts.error(error.message)
+                    }, 100);
+                })
+        }
+        setLoading(false)
+    }
+
+    const sendCodeToPhoneNumber = async (phoneNumber) => {
+        setLoading(true)
+        await auth()
+            .signInWithPhoneNumber(phoneNumber)
+            .then(confirmResult => {
+                console.log('confirmResult: ', confirmResult)
+                setConfirmation(confirmResult)
+                toggleVerificationCodeSendModal()
+            })
+            .catch(error => {
+                Toasts.error(error.message)
+                console.log(error)
+            })
+        setLoading(false)
+    }
+
     const onSelect = (gender) => {
         setCountryCode(gender.cca2)
-        setCountryPhoneCode(gender.callingCode)
+        setCountryPhoneCode(gender.callingCode[0])
     }
+
+    const handleUpdatePhoneNumber = async () => {
+        const tempPhone = '+' + countryPhoneCode + phoneNumber
+        console.log('Updated Phone Number', tempPhone)
+        if (phoneNumber.length) {
+            toggleUpdatePhoneNumberPopup()
+            setPhoneNumberWithCode(tempPhone)
+            sendCodeToPhoneNumber(tempPhone)
+        } else {
+            setPhoneNumberError('Enter your phone number')
+        }
+
+    }
+
     return (
         <MainWrapper>
             <KeyboardAvoidingScrollView>
@@ -60,7 +128,7 @@ function VerifyPhone(props) {
                     onCodeFilled={handleVerifyCode}
                 />
                 <Spacer height={sizes.doubleBaseMargin} />
-                <ComponentWrapper>
+                {/* <ComponentWrapper>
                     <ButtonGradient
                         text="Verify"
                         loading={loading}
@@ -68,8 +136,8 @@ function VerifyPhone(props) {
                         onPress={handleVerifyCode}
                     />
                 </ComponentWrapper>
-                <Spacer height={sizes.baseMargin * 1.5} />
-                <ComponentWrapper style={[appStyles.center]}>
+                <Spacer height={sizes.baseMargin * 1.5} /> */}
+                {/* <ComponentWrapper style={[appStyles.center]}>
                     <RegularText style={[appStyles.textGray]}>Didn't received the code?</RegularText>
                     <Spacer height={sizes.TinyMargin} />
                     <RegularText style={[appStyles.fontBold, appStyles.textPrimaryColor]}
@@ -80,6 +148,33 @@ function VerifyPhone(props) {
                     <RegularText style={[appStyles.fontBold, appStyles.textPrimaryColor]}
                         onPress={toggleUpdatePhoneNumberPopup}
                     >Change your number</RegularText>
+                </ComponentWrapper> */}
+                <ComponentWrapper style={[appStyles.center]}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            sendCodeToPhoneNumber(phoneNumberWithCode)
+                        }}
+                        style={[appStyles.center]}
+                    >
+                        <RegularText >Didn't received the code?</RegularText>
+                        <Spacer height={sizes.TinyMargin} />
+                        <RegularText style={[appStyles.fontBold, appStyles.textPrimaryColor]}
+                        // onPress={() => {
+                        //     sendCodeToPhoneNumber(phoneNumberWithCode)
+                        // }}
+                        >Resend Code</RegularText>
+                    </TouchableOpacity>
+                    <Spacer height={sizes.baseMargin * 1.5} />
+                    <TouchableOpacity
+                        onPress={toggleUpdatePhoneNumberPopup}
+                        style={[appStyles.center]}
+                    >
+                        <RegularText >Wrong phone number?</RegularText>
+                        <Spacer height={sizes.TinyMargin} />
+                        <RegularText style={[appStyles.fontBold, appStyles.textPrimaryColor]}
+                        // onPress={toggleUpdatePhoneNumberPopup}
+                        >Change your number</RegularText>
+                    </TouchableOpacity>
                 </ComponentWrapper>
             </KeyboardAvoidingScrollView>
             <VerificationCodeSentPopup
@@ -88,14 +183,14 @@ function VerifyPhone(props) {
                 onPressContinue={() => {
                     toggleVerificationCodeSendModal();
                 }}
-                phoneNumber={'6-007867687-78'}
+                phoneNumber={phoneNumberWithCode}
             />
             <PopupPrimary
                 visible={isUpdatePhoneNumberPopupVisible}
                 toggle={toggleUpdatePhoneNumberPopup}
                 title="Update Phone Number"
                 buttonText1="Update"
-                onPressButton1={toggleUpdatePhoneNumberPopup}
+                onPressButton1={handleUpdatePhoneNumber}
                 topMargin={height(30)}
             >
                 <TextInputUnderlined
@@ -126,6 +221,11 @@ function VerifyPhone(props) {
                     }
                 />
             </PopupPrimary>
+            <LoaderAbsolute
+                isVisible={loading}
+                title="Please Wait"
+               // info="Please wait..."
+            />
         </MainWrapper>
     );
 }

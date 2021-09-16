@@ -1,9 +1,10 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { Component, useState } from 'react';
 import { FlatList } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { View, Text } from 'react-native';
-import { BackIcon, ButtonGradient, ComponentWrapper, LargeText, LineHorizontal, MainWrapper, PlanCard, RegularText, RowWrapperBasic, SmallTitle, Spacer, TinyTitle, TitleValue, Wrapper } from '../../../../components';
-import { appStyles, colors, DummyData, fontFamily, HelpingMethods, routes, sizes } from '../../../../services';
+import { BackIcon, ButtonGradient, ComponentWrapper, LargeText, LineHorizontal, LoaderAbsolute, MainWrapper, PlanCard, RegularText, RowWrapperBasic, SmallTitle, Spacer, TinyTitle, TitleValue, Wrapper } from '../../../../components';
+import { appStyles, asyncConts, Backend, colors, DummyData, fontFamily, HelpingMethods, routes, sizes } from '../../../../services';
 
 
 function SelectSubscriptionPlan(props) {
@@ -13,6 +14,7 @@ function SelectSubscriptionPlan(props) {
 
 
   const [selectedIndex, selectIndex] = useState(-1)
+  const [isLoading, setloading] = useState(false)
   const subscriptionPlans = DummyData.subscriptionPlans
 
   React.useLayoutEffect(() => {
@@ -51,10 +53,19 @@ function SelectSubscriptionPlan(props) {
                 const isSelected = selectedIndex === index
                 return (
                   <PlanCard
-                    onPress={() => {
-                      //selectIndex(index),
-                      //  HelpingMethods.handleAnimation()
-                      index != 0 && selectIndex(index)
+                    onPress={async () => {
+
+                      if (index === 0) {
+                        setloading(true)
+                        const data = await AsyncStorage.getItem(asyncConts.user_credentials)
+                        if (data) {
+                          const dataParsed = JSON.parse(data)
+                          Backend.auto_login(dataParsed.email, dataParsed.password)
+                        }
+                        setloading(false)
+                      } else {
+                        selectIndex(index)
+                      }
                     }}
                     title={item.title}
                     price={item.price === 0 ? 'Free' : '$' + item.price + '/month'}
@@ -67,53 +78,53 @@ function SelectSubscriptionPlan(props) {
           </Wrapper>
           :
           <Wrapper flex={1}>
-         <Wrapper flex={1}>
-         <Spacer height={sizes.baseMargin} />
-            <PlanCard
-              onPress={() => {
-                //selectIndex(index),
-                //index != 0 && navigate(routes.upgradeSubscriptionPlan, { selectedPlan: selectedPlan })
-              }}
-              title={selectedPlan.title}
-              price={'$' + selectedPlan.price + '/month'}
-              keyPoints={selectedPlan.keyPoints}
-              isSelected
-            //isSelected={selectedIndex === index}
-            />
-            <ComponentWrapper>
-              <LineHorizontal color={colors.appBgColor4} />
-            </ComponentWrapper>
-            <Spacer height={sizes.baseMargin} />
-            <TitleValue
-              title={'Subtotal'}
-              value={'$ ' + selectedPlan.price + ".00"}
-            />
-            <Spacer height={sizes.baseMargin} />
-            <TitleValue
-              title={'Tax (10%)'}
-              value={'$ 4.99'}
-            />
-            <Spacer height={sizes.baseMargin} />
-            <TitleValue
-              title={'Transaction Charges'}
-              value={'$ 10.00'}
-            />
-            <Spacer height={sizes.baseMargin} />
-            <Wrapper style={[appStyles.grayWrapper, { paddingVertical: sizes.baseMargin * 1.5 }]}>
-              <RowWrapperBasic>
-                <Wrapper flex={1}>
-                  <SmallTitle>Total</SmallTitle>
-                </Wrapper>
-                <SmallTitle style={[appStyles.textPrimaryColor]}>$ 64.44</SmallTitle>
-              </RowWrapperBasic>
+            <Wrapper flex={1}>
+              <Spacer height={sizes.baseMargin} />
+              <PlanCard
+                onPress={() => {
+                  //selectIndex(index),
+                  //index != 0 && navigate(routes.upgradeSubscriptionPlan, { selectedPlan: selectedPlan })
+                }}
+                title={selectedPlan.title}
+                price={'$' + selectedPlan.price + '/month'}
+                keyPoints={selectedPlan.keyPoints}
+                isSelected
+              //isSelected={selectedIndex === index}
+              />
+              <ComponentWrapper>
+                <LineHorizontal color={colors.appBgColor4} />
+              </ComponentWrapper>
+              <Spacer height={sizes.baseMargin} />
+              <TitleValue
+                title={'Subtotal'}
+                value={'$ ' + selectedPlan.price + ".00"}
+              />
+              <Spacer height={sizes.baseMargin} />
+              <TitleValue
+                title={'Tax (10%)'}
+                value={'$ 4.99'}
+              />
+              <Spacer height={sizes.baseMargin} />
+              <TitleValue
+                title={'Transaction Charges'}
+                value={'$ 10.00'}
+              />
+              <Spacer height={sizes.baseMargin} />
+              <Wrapper style={[appStyles.grayWrapper, { paddingVertical: sizes.baseMargin * 1.5 }]}>
+                <RowWrapperBasic>
+                  <Wrapper flex={1}>
+                    <SmallTitle>Total</SmallTitle>
+                  </Wrapper>
+                  <SmallTitle style={[appStyles.textPrimaryColor]}>$ 64.44</SmallTitle>
+                </RowWrapperBasic>
+              </Wrapper>
+              <Spacer height={sizes.baseMargin} />
             </Wrapper>
-            <Spacer height={sizes.baseMargin} />
-         </Wrapper>
             <Wrapper>
               <Spacer height={sizes.doubleBaseMargin} />
               <ButtonGradient
                 text="Proceed to Payment"
-                onPress={() => navigate(routes.subscriptionPayment,{plan:selectedPlan})}
+                onPress={() => navigate(routes.subscriptionPayment, { plan: selectedPlan })}
 
               />
               <Spacer height={sizes.doubleBaseMargin} />
@@ -122,6 +133,11 @@ function SelectSubscriptionPlan(props) {
 
           </Wrapper>
       }
+      <LoaderAbsolute
+        isVisible={isLoading}
+        title="Logging you in"
+        info="Please wait..."
+      />
     </MainWrapper>
   );
 }

@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 import { totalSize } from 'react-native-dimension';
 import { Icon } from 'react-native-elements';
 import { LineHorizontal, MediumText, OptionsListPrimary, RowWrapper, Spacer, Wrapper } from '../../../components';
-import { appStyles, colors, routes, sizes } from '../../../services';
+import { appStyles, colors, HelpingMethods, routes, sizes } from '../../../services';
 import { About, PrivacyPolicy, TermsCondition } from '../../docs';
 
 const moreOptions = [
@@ -36,6 +36,7 @@ function More({ navigation }) {
         else if (item === 'Terms & Conditions') toggleTerms()
         else if (item === 'Privacy Policy') togglePolicy()
         else if (item === 'About Us') toggleAbout()
+        else if (item === 'Logout') HelpingMethods.logout()
     }
     return (
         <Wrapper flex={1}>

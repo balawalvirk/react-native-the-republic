@@ -6,11 +6,99 @@ import { fontFamily, sizes } from '../utilities'
 import { totalSize } from 'react-native-dimension'
 import DummyData from './dummyData'
 
-export const baseURL = ''
+export const baseURL = 'https://republic-backend.herokuapp.com/api/'
 export const endPoints = {
-    login: 'login',
-    courses: 'rooms',
-    classes: 'classes',
+    user:{
+        login:'login',
+        user_register:'user-register',
+        complete_profile:'complete-profile',
+        update_phone:'update-phone',
+        update_profile:'update-profile',
+        submit_identity:'submit-identity',
+        approve_identity:'approve-identity',
+        reject_identity:'reject-identity'
+    },
+    follow:{
+        send_follow_request:'send-follow-request',
+        show_follow_requests:'show-follow-requests',
+        accept_follow_request:'accept-follow-request',
+        decline_follow_request:'decline-follow-request',
+        show_followers:'show-followers',
+        unfollow_user:'unfollow-user'
+    },
+    training:{
+        show_trainings:'show-trainings',
+        add_training:'add-training',
+        show_training:'show-training',
+        book_training:'book-training',
+        user_trainings:'user-trainings',
+        add_timeslot:'add-timeslot',
+        show_timeslots:'show-timeslots',
+        show_timeslot:'show-timeslot',
+        delete_timeslot:'delete-timeslot'
+    },
+    category:{
+        add_category:'add-category',
+        show_categories:'show-categories',
+        delete_category:'delete-category'
+    },
+    product:{
+        add_product:'add-product',
+        add_favorite_product:'add-favorite-product',
+        show_favorite_products:'show-favorite-products',
+        remove_favorite_product:'remove-favorite-product',
+        category_products:'category-products',
+        filter_products:'filter-products',
+        product_review:'product-review',
+        show_reviews:'show-reviews',
+        edit_review:'edit-review',
+        delete_review:'delete-review',
+        nearby_products:'nearby-products'
+    },
+    post:{
+        add_post:'add-post',
+        show_posts:'show-posts',
+        single_post:'single-post',
+        delete_post:'delete-post',
+        report_post:'report-post',
+        add_reaction:'add-reaction',
+        show_reactions:'show-reactions',
+        delete_reaction:'delete-reaction',
+        add_comment:'add-comment',
+        show_comments:'show-comments',
+        edit_comment:'edit-comment',
+        delete_comment:'delete-comment',
+        report_comment:'report-comment'
+    },
+    chat:{
+        show_conversations:'show-conversations',
+        send_message:'send-message',
+        show_messages:'show-messages'
+    },
+    call:{
+        add_callhistory:'add-callhistory',
+        show_callhistories:'show-callhistories',
+        delete_callhistory:'delete-callhistory'
+    },
+    coupon:{
+        create_coupon:'create-coupon',
+        show_coupons:'show-coupons',
+        edit_coupon:'edit-coupon',
+        delete_coupon:'delete-coupon'
+    },
+    group:{
+        create_group:'create-group',
+        edit_group:'edit-group',
+        send_join_request:'send-join-request',
+        accept_request:'accept-request',
+        decline_request:'decline-request',
+        show_group_members:'show-group-members',
+        remove_group_member:'remove-group-member',
+        show_members_requests:'show-members-requests'
+    },
+    contact_us:'contact-us',
+    add_card:'add-card',
+    submit_app_feedback:'submit-app-feedback'
 }
 export const routes = {
     auth: 'auth',
@@ -92,6 +180,11 @@ export const routes = {
         fulfillmentDetail:'fulfillmentDetail'
     }
 
+}
+export const asyncConts={
+    user_credentials:'USER_CREDENTIALS',
+    user_details:'USER_DETAILS',
+    fcm_token:"FCM_TOKEN"
 }
 export const headers = {
     screenOptionsPrimary: {

@@ -1,11 +1,11 @@
 import React from 'react'
 import { StyleSheet, Text } from 'react-native'
-import { appStyles, colors, fontFamily, sizes, appIcons } from '../../services';
+import { appStyles, colors, fontFamily, sizes, appIcons, fontSize } from '../../services';
 import { ComponentWrapper, RowWrapperBasic, Wrapper, RowWrapper } from '../wrappers';
 import { Spacer } from '../spacers';
 import { LineHorizontal } from '../lines';
 import { width, height, totalSize } from 'react-native-dimension';
-import { CustomIcon } from '../icons';
+import { CustomIcon,IconWithText } from '../icons';
 
 // Title Texts
 export const XXLTitle = ({ style, onPress, children }) => {
@@ -163,6 +163,30 @@ export const TitleInfoPrimary = ({ title, info, grayBg, bgColor }) => {
                 </Wrapper>
             </RowWrapper>
         </ComponentWrapper>
+    )
+}
+
+export const ErrorText = ({ text }) => {
+    return (
+        <>
+            {
+                text ?
+                    <Wrapper style={{}} animation="shake">
+                        <Spacer height={sizes.TinyMargin} />
+                        <IconWithText
+                            iconName="alert-circle-outline"
+                            //title="New"
+                            text={text}
+
+                            tintColor={colors.error}
+                            iconSize={sizes.icons.tiny}
+                            textStyle={[{ fontSize: fontSize.small }]}
+                        />
+                    </Wrapper>
+                    :
+                    null
+            }
+        </>
     )
 }
 

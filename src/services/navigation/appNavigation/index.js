@@ -16,6 +16,7 @@ import { totalSize, width } from 'react-native-dimension';
 import { Badge, Icon } from 'react-native-elements';
 import { FlatList, TouchableOpacity } from 'react-native';
 import styles from './styles'
+import { useSelector } from 'react-redux';
 
 const AppStack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -36,6 +37,8 @@ const drawerScreens = [
 function BottomTabScreens() {
     const tabIconSize = totalSize(3)
     //const colors = useSelector(state => state.theme.appTheme)
+    const user=useSelector(state=>state.user)
+    const {userDetail}=user
     return (
         <BottomTab.Navigator
             tabBarOptions={{
@@ -99,7 +102,7 @@ function BottomTabScreens() {
                     tabBarLabel: "Profile",
                     tabBarIcon: ({ color, size, focused }) => {
                         //return <CustomIcon icon={appIcons.marketplace} size={tabIconSize} color={color} focused={focused} />
-                        return <ImageRound source={{ uri: appImages.user3 }} size={tabIconSize} style={{ opacity: focused ? 1 : 0.5, borderColor: colors.appColor1 }} />
+                        return <ImageRound source={{ uri: userDetail.profile_image?userDetail.profile_image:appImages.noUser }} size={tabIconSize} style={{ opacity: focused ? 1 : 0.5, borderColor: colors.appColor1 }} />
                     },
                 })}
             />

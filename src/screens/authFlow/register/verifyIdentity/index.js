@@ -1,12 +1,13 @@
 import React, { Component, useState } from 'react';
 import { View, Text } from 'react-native';
-import { ButtonColored, ButtonGradient, ComponentWrapper, IconButton, ImagePickerPopup, ImageProfile, MainWrapper, PopupPrimary, Spacer, TinyTitle, Wrapper } from '../../../../components';
+import { ButtonColored, ButtonGradient, ComponentWrapper, IconButton, ImagePickerPopup, ImageProfile, LoaderAbsolute, MainWrapper, PopupPrimary, Spacer, TinyTitle, Toasts, Wrapper } from '../../../../components';
 import * as ImagePicker from 'react-native-image-picker';
-import { appStyles, colors, routes, sizes } from '../../../../services';
+import { appStyles, asyncConts, Backend, colors, routes, sizes } from '../../../../services';
 import { height, totalSize } from 'react-native-dimension';
 import { Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native';
 import { Image } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const options = {
     title: 'Select Photo',
     quality: 1,
@@ -21,10 +22,15 @@ const options = {
 
 function VerifyIdentity(props) {
     const { navigate } = props.navigation
-    const [imageUri, setImageUri] = useState('')
-    const [imageFile, setImageFile] = useState(null)
+    const { params } = props.route
+    const { credentials, profileDetails, phoneNumber, countryPhoneCode, countryCode } = params
+    console.log('credentials', credentials, '\nProfile Details', profileDetails, '\nphoneNumber: ', phoneNumber, '\ncountryPhoneCode: ', countryPhoneCode, '\ncountryCode: ', countryCode)
+
+    //local states
+    const [identityFile, setIdentityFile] = useState(null)
     const [isImagePickerPopupVisible, setImagePickerPopupVisibility] = useState(false);
     const [isIdentityVerifiedPopupVisible, setIdentityVerifiedPopupVisible] = useState(false)
+    const [loadingCreateAccount, setLoadingCreateAccount] = useState(false)
 
     const toggleImagePickerPopup = () => setImagePickerPopupVisibility(!isImagePickerPopupVisible)
     const toggleIdentityVerifiedPopup = () => setIdentityVerifiedPopupVisible(!isIdentityVerifiedPopupVisible)
@@ -46,7 +52,7 @@ function VerifyIdentity(props) {
                     name: response.fileName,
                     type: response.type
                 }
-                setImageFile(tempFile)
+                setIdentityFile(tempFile)
             }
         });
     }
@@ -66,7 +72,7 @@ function VerifyIdentity(props) {
                     name: response.fileName,
                     type: response.type
                 }
-                setImageFile(tempFile)
+                setIdentityFile(tempFile)
             }
         });
     }
@@ -121,6 +127,58 @@ function VerifyIdentity(props) {
                 }
             });
     }
+    const registerNewAccount = async () => {
+        const { email, password } = credentials
+        const {
+            imageFile,
+            firstName,
+            lastName,
+            userName,
+            gender,
+            birthday,
+            // phoneNumber,
+            // countryPhoneCode,
+            // countryCode
+        } = profileDetails
+        console.log('profileDetails-->', profileDetails)
+        let fcmToken = await AsyncStorage.getItem(asyncConts.fcm_token);
+        console.log('fcmToken-->', fcmToken)
+        setLoadingCreateAccount(true)
+        await Backend.user_register({ email, password, password_confirmation: password })
+            .then(async res => {
+                if (res) {
+                    const tempUserId = res.user.id
+                    const completeProfileParams = {
+                        user_id: tempUserId,
+                        first_name: firstName,
+                        last_name: lastName,
+                        username: userName,
+                        gender: gender,
+                        //birthday: birthday,
+                        birthday: moment(birthday).format('YYYY-MM-DD'),
+                        phone: phoneNumber,
+                        country_phone_code: countryPhoneCode,
+                        country_code: countryCode,
+                        image: imageFile
+
+                    }
+                    await Backend.complete_profile(completeProfileParams).
+                        then(async res => {
+                            if (res) {
+                                await Backend.submit_identity({ user_id: tempUserId, attachment: identityFile }).
+                                    then(res => {
+                                        if (res) {
+                                            toggleIdentityVerifiedPopup()
+                                            // AsyncStorage.setItem(asyncConts.user_credentials, JSON.stringify(credentials))
+                                            // Toasts.success('Account Created Successfully')
+                                        }
+                                    })
+                            }
+                        })
+                }
+            })
+        setLoadingCreateAccount(false)
+    }
     return (
         <MainWrapper>
 
@@ -131,22 +189,22 @@ function VerifyIdentity(props) {
                 </ComponentWrapper>
                 <Spacer height={sizes.smallMargin} />
                 {
-                    imageFile ?
+                    identityFile ?
                         // <ImageProfile
                         //     source={{ uri: imageFile.uri }}
                         //     onPressCamera={toggleImagePickerPopup}
                         // />
                         <Wrapper>
                             <Image
-                                source={{ uri: imageFile.uri }}
+                                source={{ uri: identityFile.uri }}
                                 style={{ marginHorizontal: sizes.marginHorizontal, borderRadius: sizes.cardRadius, height: height(25) }}
                             />
                             <Spacer height={sizes.baseMargin} />
                             <ButtonColored
                                 text="Remove"
-                                buttonColor={colors.error+'40'}
+                                buttonColor={colors.error + '40'}
                                 tintColor={colors.error}
-                                onPress={()=>setImageFile(null)}
+                                onPress={() => setIdentityFile(null)}
                             />
                         </Wrapper>
                         :
@@ -173,12 +231,12 @@ function VerifyIdentity(props) {
                 }
             </Wrapper>
             {
-                imageFile ?
+                identityFile ?
                     <Wrapper>
                         <Spacer height={sizes.baseMargin} />
                         <ButtonGradient
                             text="Done"
-                            onPress={toggleIdentityVerifiedPopup}
+                            onPress={registerNewAccount}
                         />
                         <Spacer height={sizes.baseMargin} />
 
@@ -190,7 +248,7 @@ function VerifyIdentity(props) {
                 onPressTakePhoto={checkCameraPermission}
                 onPressSelectFromGalary={launchImagePicker}
             />
-             <PopupPrimary
+            <PopupPrimary
                 visible={isIdentityVerifiedPopupVisible}
                 toggle={toggleIdentityVerifiedPopup}
                 iconName="check"
@@ -199,6 +257,11 @@ function VerifyIdentity(props) {
                 info={"We'll let you know once your account has been verified by The Republic"}
                 buttonText1="Continue"
                 onPressButton1={() => { toggleIdentityVerifiedPopup(); navigate(routes.onBoarding) }}
+            />
+            <LoaderAbsolute
+                isVisible={loadingCreateAccount}
+                title="Creating Your Account"
+                info="Please wait..."
             />
         </MainWrapper>
     );

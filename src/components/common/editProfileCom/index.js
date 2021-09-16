@@ -1,6 +1,6 @@
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { View, Text } from 'react-native';
-import { MainWrapper, IconButton, Wrapper, Spacer, ImageProfile, RowWrapperBasic, RowWrapper, TextInputUnderlined, KeyboardAvoidingScrollView, ComponentWrapper, ButtonColored, PickerPrimary, IconWithText, ImagePickerPopup } from '../..';
+import { MainWrapper, IconButton, Wrapper, Spacer, ImageProfile, RowWrapperBasic, RowWrapper, TextInputUnderlined, KeyboardAvoidingScrollView, ComponentWrapper, ButtonColored, PickerPrimary, IconWithText, ImagePickerPopup, RegularText, MediumText } from '../..';
 import { height, totalSize, width } from 'react-native-dimension';
 import { colors, appStyles, sizes, HelpingMethods, appIcons, routes } from '../../../services';
 import * as ImagePicker from 'react-native-image-picker';
@@ -50,14 +50,11 @@ const EditProfile = React.forwardRef((props, ref) => {
     const [phoneNumber, setPhoneNumber] = useState('')
     const [userName, setUsername] = useState('')
     const [birthday, setBirthday] = useState('')
-    const [city, setCity] = useState('')
-    const [state, setState] = useState('')
-    const [zipcode, setZipCode] = useState('')
     const [gender, setGender] = useState('')
     const [genders, setGenders] = useState(dummyGenders)
     const [imageFile, setImageFile] = useState(null)
     const [countryCode, setCountryCode] = useState('US')
-    const [countryPhoneCode, setCountryPhoneCode] = useState('+1')
+    const [countryPhoneCode, setCountryPhoneCode] = useState('1')
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [isImagePickerPopupVisible, setImagePickerPopupVisibility] = useState(false);
     //Error messages
@@ -67,7 +64,7 @@ const EditProfile = React.forwardRef((props, ref) => {
     const [usernameError, setUsernameError] = useState('')
     const [birthdayError, setBirthdayError] = useState('')
     const [genderError, setGenderError] = useState('')
-    const [fileError, setFileError] = useState('')
+    const [imageError, setImageError] = useState('')
 
 
     useEffect(() => {
@@ -78,7 +75,7 @@ const EditProfile = React.forwardRef((props, ref) => {
 
     const onSelect = (gender) => {
         setCountryCode(gender.cca2)
-        setCountryPhoneCode(gender.callingCode)
+        setCountryPhoneCode(gender.callingCode[0])
     }
     const setAllData = () => {
         const { data } = props
@@ -90,7 +87,8 @@ const EditProfile = React.forwardRef((props, ref) => {
             setCountryPhoneCode(data.countryPhoneCode)
             setPhoneNumber(data.phoneNumber.toString())
             setUsername(data.userName)
-            setBirthday(data.birthday)
+           // setBirthday(data.birthday)
+            setBirthday(data.birthday, moment(data.birthday,'YYYY-MM-DD').toDate())
             setGender(data.gender)
         }
     }
@@ -222,7 +220,8 @@ const EditProfile = React.forwardRef((props, ref) => {
     const handleConfirm = (date) => {
         console.warn("A date has been picked: ", date);
         hideDatePicker();
-        setBirthday(moment(date).format('DD/MM/YYYY'))
+        //setBirthday(moment(date).format('DD/MM/YYYY'))
+        setBirthday(date)
         // setTimeout(() => {
         //     BirthdayInputRef.current.blur()
         // }, 500);
@@ -306,7 +305,7 @@ const EditProfile = React.forwardRef((props, ref) => {
                         <TextInputUnderlined
                             // inputRef={BirthdayInputRef}
                             title="Birthday"
-                            value={birthday}
+                            value={birthday?HelpingMethods.formateDate1(birthday):''}
                             // onChangeText={(text) => setBirthday(text)}
                             onPress={showDatePicker}
                             // onFocus={showDatePicker}
@@ -330,16 +329,16 @@ const EditProfile = React.forwardRef((props, ref) => {
                         value={phoneNumber}
                         onChangeText={(text) => setPhoneNumber(text)}
                         error={phoneNumberError}
-                        inputStyle={{ backgroundColor: 'transparent', }}
+                        inputStyle={{ backgroundColor: colors.transparent, }}
                         left={
-                            <Wrapper style={{ marginRight: sizes.marginHorizontal / 2, backgroundColor: 'transparent', }}>
+                            <RowWrapperBasic style={{ marginRight: sizes.marginHorizontalSmall/2, backgroundColor: colors.transparent, }}>
                                 <CountryPicker
                                     {...{
                                         countryCode,
                                         withFilter: true,
                                         withFlag: true,
                                         withCountryNameButton: false,
-                                        withCallingCodeButton: true,
+                                        withCallingCodeButton: false,
                                         withAlphaFilter: true,
                                         withCallingCode: true,
                                         withEmoji: true,
@@ -347,7 +346,8 @@ const EditProfile = React.forwardRef((props, ref) => {
                                     }}
                                 // visible
                                 />
-                            </Wrapper>
+                                <MediumText>+{countryPhoneCode}</MediumText>
+                            </RowWrapperBasic>
                         }
                     />
                 </Wrapper>

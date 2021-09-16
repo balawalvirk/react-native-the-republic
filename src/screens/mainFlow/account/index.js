@@ -2,6 +2,7 @@ import React, { Component, useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { View, Text } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
+import { useSelector } from 'react-redux';
 import { ComponentWrapper, MainWrapper, ButtonColoredSmall, ProfileTop, Spacer, ShareSomethingButton, Posts, Wrapper, ButtonGroupAnimated } from '../../../components';
 import { appStyles, colors, DummyData, routes, sizes } from '../../../services';
 import dummyData from '../../../services/constants/dummyData';

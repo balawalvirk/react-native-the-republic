@@ -20,6 +20,8 @@ function VerficationCodeSentPopup({ visible, toggle, onPressContinue,phoneNumber
                 onPressContinue()
             }}
             topMargin={height(55)}
+            disableBackDropPress
+            disableSwipe
         >
             <Wrapper>
                 <Spacer height={sizes.baseMargin} />

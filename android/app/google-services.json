@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "1013721507878",
+    "project_id": "republic-bd42a",
+    "storage_bucket": "republic-bd42a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1013721507878:android:2672899dd9bf4d6343dee7",
+        "android_client_info": {
+          "package_name": "com.republic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1013721507878-ls9pg84dghjimpabfb275iipfojbvphv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.republic",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "1013721507878-o8dn3omomc1d3ck7ipms0e3i5viji054.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.republic",
+            "certificate_hash": "ee94ea9df49e0f540b122549c6427d46cf15d2ab"
+          }
+        },
+        {
+          "client_id": "1013721507878-sfdj4lgde0a8lkuo6n6pag5fjd88a0v2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZZ3ip34r3xG0cQG_gDiCqQEe6_nWKs3k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1013721507878-sfdj4lgde0a8lkuo6n6pag5fjd88a0v2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1013721507878-dhhjb5t1p2lsji217jaslbordlnsr2qk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.Republic"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

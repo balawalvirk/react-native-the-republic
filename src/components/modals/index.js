@@ -17,7 +17,7 @@ import { Platform } from 'react-native';
 
 
 
-export const ModalSwipeablePrimary = ({ visible, toggle, disableSwipe, topMargin, headerTitle, headerRight, headerLeft, hideHeader, children }) => {
+export const ModalSwipeablePrimary = ({ visible, toggle, disableSwipe, topMargin, headerTitle, headerRight, headerLeft, hideHeader, children,disableBackDropPress }) => {
     const defaultTopMargin = topMargin ? (Platform.OS === 'ios' ? topMargin : topMargin + height(5)) : height(12)
     return (
         <Modal
@@ -26,7 +26,7 @@ export const ModalSwipeablePrimary = ({ visible, toggle, disableSwipe, topMargin
             onSwipeComplete={toggle}
             swipeDirection={disableSwipe ? null : "down"}
             propagateSwipe
-            onBackdropPress={toggle}
+            onBackdropPress={disableBackDropPress?null:toggle}
             backdropOpacity={0}
         >
             <View
