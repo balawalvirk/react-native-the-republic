@@ -2,12 +2,13 @@ import React, { Component, useState } from 'react';
 import { View, Text, Platform, TouchableOpacity, Image, Animated } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
 import { Icon } from 'react-native-elements';
-import { AbsoluteWrapper, ArmerInfo, BackIcon, ButtonGradient, ComponentWrapper, IconWithText, ImagePickerPopup, KeyboardAvoidingScrollView, MainWrapper, MediumText, PickerPrimary, ProductCardPrimary, RegularText, RenderTags, RowWrapper, Spacer, SwitchPrimary, TextInputUnderlined, Toasts, Wrapper } from '../../../components';
-import { appStyles, colors, DummyData, HelpingMethods, sizes } from '../../../services';
+import { AbsoluteWrapper, ArmerInfo, BackIcon, ButtonGradient, ComponentWrapper, IconWithText, ImagePickerPopup, KeyboardAvoidingScrollView, LoaderAbsolute, MainWrapper, MediumText, PickerPrimary, ProductCardPrimary, RegularText, RenderTags, RowWrapper, Spacer, SwitchPrimary, TextInputUnderlined, Toasts, Wrapper } from '../../../components';
+import { appStyles, Backend, colors, DummyData, HelpingMethods, sizes } from '../../../services';
 import styles from './styles'
 import * as ImagePicker from 'react-native-image-picker';
 import { check, PERMISSIONS, RESULTS, request } from 'react-native-permissions';
 import { TextInput } from 'react-native';
+import { useSelector } from 'react-redux';
 const options = [
     {
         label: 'Option 1',
@@ -26,6 +27,13 @@ const options = [
 function Sell(props) {
     const { navigation, route } = props
     const { goBack, navigate } = navigation
+
+    //redux states
+    const product = useSelector(state => state.product)
+    const user = useSelector(state => state.user)
+    const { categories } = product
+    const { userDetail } = user
+    //local states
     const [step, setStep] = useState(1)
     const headerTitle = step === 1 ? "Post an Item" : step === 2 ? "Add Product Details" : step === 3 ? "Add Location Details" : step === 4 ? "Price" : step === 5 ? "Finish" : ""
     const handleBackPress = () => {
@@ -42,8 +50,7 @@ function Sell(props) {
             handleChangeStep(singleStepIndicatorWith * (step + 1))
         ] :
             [
-                goBack(),
-                Toasts.success('Item Posted')
+               handleAddNewProduct()
             ]
     }
     //configure Header
@@ -103,6 +110,9 @@ function Sell(props) {
 
     const [selectedProduct, setProduct] = useState(DummyData.products[0])
     const tags = ['Handguns', 'Semi Automatic', 'Suppressor']
+    const [isLoading, setLoading] = useState(false)
+
+
     const handleChangeStep = (value) => {
         Animated.timing(stepIndicatorWidth, {
             toValue: value,
@@ -149,42 +159,42 @@ function Sell(props) {
             }
         });
     }
-    const checkCameraPermission = () => {
-        check(Platform.OS === 'android' ? PERMISSIONS.ANDROID.CAMERA : PERMISSIONS.IOS.CAMERA)
-            .then((result) => {
-                switch (result) {
-                    case RESULTS.UNAVAILABLE:
-                        console.log('This feature is not available (on this device / in this context)');
-                        break;
-                    case RESULTS.DENIED:
-                        //console.log('The permission has not been requested / is denied but requestable');
-                        requestCameraPermission()
-                        break;
-                    case RESULTS.LIMITED:
-                        console.log('The permission is limited: some actions are possible');
-                        break;
-                    case RESULTS.GRANTED:
-                        //console.log('The permission is granted');
-                        launchCamera()
-                        break;
-                    case RESULTS.BLOCKED:
-                        console.log('The permission is denied and not requestable anymore');
-                        break;
-                }
-            })
-            .catch((error) => {
-                // …
-            });
-    }
+
     const getArmerInfo = () => {
         let obj = {
-            "manufacturer": 'Browning',
-            "model": 'Buck Mark Plus Vision Black/Gold Suppressor Ready',
-            "caliber/Gauge": '22 LR',
-            "actionType": 'Semi Auto',
-            "condition": "Used"
+            "manufacturer": manufacturer,
+            "model": title,
+            "caliber/Gauge": caliber,
+            "actionType": action,
+            "condition": condition
         }
         return obj
+    }
+
+    const handleAddNewProduct = async () => {
+        setLoading(true)
+        await Backend.add_Product({
+            title,
+            item,
+            type,
+            manufacturer,
+            caliber,
+            action,
+            condition,
+            description,
+            city,
+            statee: state,
+            zip_code: zipcode,
+            price,
+            discounted_price: discountedPrice,
+            image: imageFile
+        }).then(res => {
+            if (res) {
+                goBack(),
+                Toasts.success('Product has been added successfuly')
+            }
+        })
+        setLoading(false)
     }
     return (
         <MainWrapper>
@@ -247,7 +257,7 @@ function Sell(props) {
                                 <PickerPrimary
                                     title="Type"
                                     // placeholder="No Selected"
-                                    data={options}
+                                    data={categories}
                                     value={type}
                                     onChange={(value, index) => settype(value)}
                                 />
@@ -354,15 +364,15 @@ function Sell(props) {
                                             <ProductCardPrimary
                                                 //isFavourite={HelpingMethods.checkIsProductFavourite(selectedProduct.id)}
                                                 viewType={'list'}
-                                                image={selectedProduct.image}
-                                                description={selectedProduct.description}
-                                                newPrice={selectedProduct.new_price}
-                                                oldPrice={selectedProduct.old_price}
-                                                location={selectedProduct.location}
+                                                image={imageFile.uri}
+                                                description={description}
+                                                newPrice={discountedPrice}
+                                                oldPrice={price}
+                                                location={city}
                                                 rating={selectedProduct.rating}
                                                 reviewCount={selectedProduct.review_count}
-                                                userImage={selectedProduct.user.image}
-                                                userName={selectedProduct.user.name}
+                                                userImage={userDetail.profile_image}
+                                                userName={userDetail.first_name + ' ' + userDetail.last_name}
                                             // onPress={(item, index) => {
                                             //     sheetRef.current.snapTo(0);
                                             //     navigate(routes.productDetail, { product: selectedProduct })
@@ -370,7 +380,7 @@ function Sell(props) {
                                             />
                                             <Spacer height={sizes.smallMargin} />
                                             <ComponentWrapper>
-                                                <RenderTags tags={tags} />
+                                                <RenderTags tags={[type, item]} />
                                             </ComponentWrapper>
                                             <Spacer height={sizes.smallMargin} />
                                             <ArmerInfo
@@ -378,7 +388,7 @@ function Sell(props) {
                                             />
                                             <Spacer height={sizes.smallMargin} />
                                             <ComponentWrapper>
-                                                <RegularText>Curabitur auctor leo et libero consetur gravida. Morbi gravida et sem dictum varius. Curabitur auctor leo et libero consetur gravida. Morbi gravida et sem dictum varius.</RegularText>
+                                                <RegularText>{description}</RegularText>
                                             </ComponentWrapper>
                                         </Wrapper>
                                         :
@@ -396,8 +406,13 @@ function Sell(props) {
             <ImagePickerPopup
                 visible={isImagePickerPopupVisible}
                 toggle={toggleImagePickerPopup}
-                onPressTakePhoto={checkCameraPermission}
+                onPressTakePhoto={launchCamera}
                 onPressSelectFromGalary={launchImagePicker}
+            />
+            <LoaderAbsolute
+            isVisible={isLoading}
+            title="Adding Your Product"
+            info="Please wait..."
             />
         </MainWrapper >
     );

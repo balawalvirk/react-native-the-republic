@@ -19,7 +19,7 @@ export const PickerPrimary = ({
     const placeholderObject = {
         label: placeholder, value: 'placeholder', color: '#909090',
     }
-    const [titleMarginBottom] = useState(new Animated.Value(0))
+    const [titleMarginBottom] = useState(new Animated.Value(value ? height(6) : 0))
     //const [titleSize] = useState(new Animated.Value(fontSize.regular))
     //const FocusedTitleMarginBottom = Platform.OS === 'ios' ? height(5) : height(5)
     //const [titleMarginBottom, setTitleMarginBottom] = useState(0)
@@ -31,11 +31,6 @@ export const PickerPrimary = ({
             speed: 50,
             useNativeDriver: false
         }).start();
-        // Animated.spring(titleSize, {
-        //     toValue: fontSize.small,
-        //     duration: 250,
-        //    // useNativeDriver: true
-        // }).start();
     };
     const moveTitleDown = () => {
         Animated.timing(titleMarginBottom, {
@@ -44,11 +39,6 @@ export const PickerPrimary = ({
             speed: 50,
             useNativeDriver: false
         }).start();
-        // Animated.spring(titleSize, {
-        //     toValue: fontSize.regular,
-        //     duration: 250,
-        //   //  useNativeDriver: true
-        // }).start();
     };
     const onChangeValue = (value) => {
         value === 'placeholder' ? moveTitleDown() : moveTitleUp()
@@ -97,7 +87,7 @@ export const PickerPrimary = ({
                         itemKey={itemKey}
                         items={data}
                         placeholder={placeholderObject}
-                        useNativeAndroidPickerStyle={true}
+                        useNativeAndroidPickerStyle={false}
                         pickerProps={{ mode: 'dropdown' }}
                         //  pickerProps={{ mode: 'dropdown',overflow: 'hidden', style: { overflow: 'hidden' } }}
                         // pickerProps={{ style: { height: 214, overflow: 'hidden' } }}
@@ -158,11 +148,11 @@ const PickerPrimaryStyles = StyleSheet.create({
         //paddingRight: 30, // to ensure the text is never behind the icon
     },
     inputAndroid: {
-        fontSize: fontSize.regular,
+        fontSize: fontSize.medium,
         fontFamily: fontFamily.appTextRegular,
-        paddingHorizontal: 0,
         //paddingVertical: height(2),
         height: height(8),
+        paddingHorizontal: 0,
         marginHorizontal: 0,
         // borderWidth: 1,
         // borderColor: colors.appTextColor5,
@@ -210,7 +200,7 @@ export function PickerSearchable({ placeholder, error, data, value, inputStyle, 
     return (
         <Wrapper>
             <TextInputUnderlined
-            title={title}
+                title={title}
                 inputRef={searchInputRef}
                 placeholder={isFocused ? "Type Here" : placeholder}
                 placeholderTextColor={tintColor}
@@ -262,9 +252,9 @@ export function PickerSearchable({ placeholder, error, data, value, inputStyle, 
                                 }}
                             />
                             :
-                           <Wrapper style={{flex:1,...appStyles.center}}>
+                            <Wrapper style={{ flex: 1, ...appStyles.center }}>
                                 <RegularText style={[appStyles.textGray]}>No Data Available</RegularText>
-                           </Wrapper>
+                            </Wrapper>
                     }
 
                 </ComponentWrapper>

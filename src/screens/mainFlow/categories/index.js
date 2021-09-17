@@ -1,13 +1,17 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { FlatList } from 'react-native';
 import { Image } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { View, Text } from 'react-native';
 import { height } from 'react-native-dimension';
+import { useSelector } from 'react-redux';
 import { MainWrapper, SearchTextinput, Spacer, TextInputColored, TinyTitle, Wrapper } from '../../../components';
 import { appStyles, colors, DummyData, routes, sizes } from '../../../services';
 
 function RenderAllCategories({ data, onPressCategory }) {
+
+
+
     return (
         <Wrapper flex={1}>
             <FlatList
@@ -27,7 +31,7 @@ function RenderAllCategories({ data, onPressCategory }) {
                                 style={{ flex: 1, height: height(20), width: null, borderTopRightRadius: sizes.cardRadius, borderTopLeftRadius: sizes.cardRadius }}
                             />
                             <Wrapper style={[appStyles.center, { paddingHorizontal: sizes.marginHorizontalSmall, paddingVertical: sizes.marginVertical / 2, }]}>
-                                <TinyTitle style={[appStyles.textCenter]}>{item.title}</TinyTitle>
+                                <TinyTitle style={[appStyles.textCenter]}>{item.name}</TinyTitle>
                             </Wrapper>
                         </TouchableOpacity>
                     )
@@ -46,17 +50,44 @@ function Categories(props) {
     const { navigate } = props.navigation
     const allCategories = [...DummyData.categories, ...DummyData.categories]
 
+    //redux states
+    const product = useSelector(state => state.product)
+    const { categories } = product
+
+    //local states
+    const [searchQuery, setSearchQuery] = useState('')
+    let filteredCategories = []
+
+    //local methods
+    const getFilteredCategories = () => {
+        let tempData = []
+        const query = searchQuery.toLowerCase()
+        tempData = categories.filter(item => {
+            const name = item.name.toLowerCase()
+            return (
+                name.includes(query)
+            )
+        })
+        return tempData
+    }
+
+
+    if (searchQuery.length) {
+        filteredCategories = getFilteredCategories()
+    } else {
+        filteredCategories = categories
+    }
     return (
         <MainWrapper>
             <Spacer height={sizes.baseMargin} />
             <SearchTextinput
-                value={''}
-                onChangeText={(text) => { }}
+                value={searchQuery}
+                onChangeText={(text) => { setSearchQuery(text) }}
                 placeholder="Search Categories"
             />
             <Spacer height={sizes.baseMargin} />
             <RenderAllCategories
-                data={allCategories}
+                data={filteredCategories}
                 onPressCategory={(item, index) => { navigate(routes.CategoryDetail, { item }) }}
             />
         </MainWrapper>

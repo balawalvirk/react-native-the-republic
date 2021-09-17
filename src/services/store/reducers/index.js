@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 
 import userReducer from './user';
-import appReducers from './app';
+import productReducers from './product';
  
 export default combineReducers({
     user: userReducer,
-    app:appReducers
+    product:productReducers
 });
 
 

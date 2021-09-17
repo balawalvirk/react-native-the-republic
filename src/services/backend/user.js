@@ -89,13 +89,13 @@ export const auto_login = async (email, password) => {
 
 export const user_register = async ({ email, password, password_confirmation }) => {
     let response = null
-    const uri=`${baseURL + endPoints.user.user_register}`
+    const uri = `${baseURL + endPoints.user.user_register}`
     let params = {
         email: email.toLowerCase(),
         password,
         password_confirmation
     }
-    console.log('user_register\nuri', uri,'\nParams', params);
+    console.log('user_register\nuri', uri, '\nParams', params);
     await axios
         .post(uri, params)
         .then(async responseJson => {
@@ -103,12 +103,12 @@ export const user_register = async ({ email, password, password_confirmation }) 
             console.log('Response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
-                const userCredentials={
-                    email:params.email,
-                    password:params.password,
+                const userCredentials = {
+                    email: params.email,
+                    password: params.password,
                 }
                 AsyncStorage.setItem(asyncConts.user_credentials, JSON.stringify(userCredentials))
-            }else {
+            } else {
                 Toasts.error(tempResponseData.message)
             }
         })
@@ -131,7 +131,7 @@ export const complete_profile = async ({ user_id, first_name, last_name, usernam
     formDataObject.append("gender", gender)
     formDataObject.append("birthday", birthday)
     formDataObject.append("phone", phone)
-    formDataObject.append("image", image)
+    image && formDataObject.append("image", image)
     formDataObject.append("country_code", country_code)
     formDataObject.append("country_phone_code", country_phone_code)
     console.log('complete_profile\nuri', uri, '\nparams', formDataObject);
@@ -142,7 +142,7 @@ export const complete_profile = async ({ user_id, first_name, last_name, usernam
             console.log('complete_profile Response', tempResponseData);
             if (tempResponseData.success) {
                 response = responseJson.data
-            }else {
+            } else {
                 Toasts.error(tempResponseData.message)
             }
         })
@@ -155,11 +155,11 @@ export const complete_profile = async ({ user_id, first_name, last_name, usernam
 export const submit_identity = async ({ user_id, attachment }) => {
     let response = null
 
-    const uri=`${baseURL + endPoints.user.submit_identity}`
+    const uri = `${baseURL + endPoints.user.submit_identity}`
     const formDataObject = new FormData()
     formDataObject.append("user_id", user_id)
     formDataObject.append("attachment", attachment)
-   
+
     console.log('submit_identity\nuri', uri, '\nparams', formDataObject);
 
     await axios
@@ -169,7 +169,7 @@ export const submit_identity = async ({ user_id, attachment }) => {
             console.log('submit_identity Response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
-            }else {
+            } else {
                 Toasts.error(tempResponseData.message)
             }
         })
@@ -179,34 +179,34 @@ export const submit_identity = async ({ user_id, attachment }) => {
         });
     return response
 };
-export const update_profile = async ({ first_name, last_name, username, gender, birthday, phone, image, country_code, country_phone_code, fcmToken }) => {
+export const update_profile = async ({ first_name, last_name, username, gender, birthday, phone, image, country_code, country_phone_code, fcm_token }) => {
     let response = null
     const state = store.getState()
     const { id } = state.user.userDetail
-    let params = {
-        user_id: id
-    }
-    first_name && [params['first_name'] = first_name]
-    last_name && [params['last_name'] = last_name]
-    username && [params['username'] = username]
-    gender && [params['gender'] = gender]
-    birthday && [params['birthday'] = birthday]
-    phone && [params['phone'] = phone]
-    image && [params['image'] = image]
-    country_code && [params['country_code'] = country_code]
-    country_phone_code && [params['country_phone_code'] = country_phone_code]
-    fcmToken && [params['fcmToken'] = fcmToken]
-    console.log('Params', params);
+    const uri = `${baseURL + endPoints.user.complete_profile}`
+    const formDataObject = new FormData()
+    formDataObject.append("user_id", id)
+    formDataObject.append("first_name", first_name)
+    formDataObject.append("last_name", last_name)
+    formDataObject.append("username", username)
+    formDataObject.append("gender", gender)
+    formDataObject.append("birthday", birthday)
+    formDataObject.append("phone", phone)
+    formDataObject.append("country_code", country_code)
+    formDataObject.append("country_phone_code", country_phone_code)
+    fcm_token && formDataObject.append("fcm_token", fcm_token)
+    image && formDataObject.append("image", image)
+    console.log('update_profile\nuri: ', uri, '\nParams: ', formDataObject);
     await axios
-        .put(`${baseURL + endPoints.user.update_profile}`, params)
+        .post(uri, formDataObject)
         .then(async responseJson => {
             const tempResponseData = responseJson.data
-            console.log('Response', tempResponseData);
+            console.log('response', tempResponseData);
             if (tempResponseData.success) {
-                response = responseJson.data
-                dispatch(setUserDetail(response.user))
-                AsyncStorage.setItem(asyncConts.user_details, JSON.stringify(response.user))
-            }else {
+                response = tempResponseData
+                dispatch(setUserDetail(tempResponseData.user))
+                AsyncStorage.setItem(asyncConts.user_details, JSON.stringify(tempResponseData.user))
+            } else {
                 Toasts.error(tempResponseData.message)
             }
         })

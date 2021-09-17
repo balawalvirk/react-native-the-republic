@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { FlatList } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { View, Text } from 'react-native';
 import { totalSize, width } from 'react-native-dimension';
-import { IconWithText, ImageSqareRound, MainWrapper, ProductsHorizontalyPrimary, ProductsSecondary, RegularText, Spacer, TitlePrimary, Wrapper } from '../../../components';
-import { appStyles, colors, DummyData, routes, sizes } from '../../../services';
+import { useSelector } from 'react-redux';
+import { IconWithText, ImageSqareRound, LoaderAbsolute, MainWrapper, ProductsHorizontalyPrimary, ProductsSecondary, RegularText, Spacer, TitlePrimary, Wrapper } from '../../../components';
+import { appStyles, Backend, colors, DummyData, routes, sizes } from '../../../services';
 import TopCategories from './topCategories';
 function RenderProducts({ title, onPressViewAll, data, onPressProduct }) {
     return (
@@ -25,7 +26,23 @@ function RenderProducts({ title, onPressViewAll, data, onPressProduct }) {
 function MarketPlace(props) {
     const { navigate } = props.navigation
 
-    const categories = DummyData.categories.slice()
+
+    //redux states
+    const product = useSelector(state => state.product)
+    const { categories } = product
+    //local states
+    const [isLoading, setLoading] = useState(true)
+
+    useEffect(() => {
+        getSetData()
+    }, [])
+
+    const getSetData = async () => {
+        await Backend.get_product_categories()
+        setLoading(false)
+    }
+
+    //const categories = DummyData.categories.slice()
 
     const addSponseredProduct = () => {
         let products = []
@@ -86,6 +103,11 @@ function MarketPlace(props) {
 
 
             </ScrollView>
+            <LoaderAbsolute
+                isVisible={isLoading}
+                title="Getting all data"
+                info="Please wait..."
+            />
         </MainWrapper>
     );
 }

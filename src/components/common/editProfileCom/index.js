@@ -361,7 +361,7 @@ const EditProfile = React.forwardRef((props, ref) => {
             <ImagePickerPopup
                 visible={isImagePickerPopupVisible}
                 toggle={toggleImagePickerPopup}
-                onPressTakePhoto={checkCameraPermission}
+                onPressTakePhoto={launchCamera}
                 onPressSelectFromGalary={launchImagePicker}
             />
         </Wrapper>

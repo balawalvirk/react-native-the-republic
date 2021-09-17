@@ -53,7 +53,13 @@ export const endPoints = {
         show_reviews:'show-reviews',
         edit_review:'edit-review',
         delete_review:'delete-review',
-        nearby_products:'nearby-products'
+        nearby_products:'nearby-products',
+        show_categories:'show-categories',
+        show_items:'show-items',
+        show_manufacturers:'show-manufacturers',
+        show_calibers:'show-calibers',
+        show_actions:'show-actions',
+        show_conditions:'show-conditions',
     },
     post:{
         add_post:'add-post',
@@ -184,7 +190,13 @@ export const routes = {
 export const asyncConts={
     user_credentials:'USER_CREDENTIALS',
     user_details:'USER_DETAILS',
-    fcm_token:"FCM_TOKEN"
+    fcm_token:"FCM_TOKEN",
+    product_categories: 'PRODUCT_CATEGORIES',
+    product_items: 'PRODUCT_ITEMS',
+    product_manufacturers: 'PRODUCT_MANUFACTURERS',
+    product_calibers: 'PRODUCT_CALIBERS',
+    product_actions: 'PRODUCT_ACTIONS',
+    product_conditions: 'PRODUCT_CONDITIONS',
 }
 export const headers = {
     screenOptionsPrimary: {

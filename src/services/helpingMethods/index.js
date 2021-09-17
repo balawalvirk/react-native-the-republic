@@ -7,7 +7,7 @@ import { setUserDetail } from "../store/actions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { asyncConts } from "..";
 
-const {dispatch}=store
+const { dispatch } = store
 const HelpingMethods = {
     handleAnimation: () => {
         if (Platform.OS === "android") {
@@ -120,10 +120,24 @@ const HelpingMethods = {
         return isConnected
     },
     logout: async () => {
-       dispatch(setUserDetail(null))
-       AsyncStorage.removeItem(asyncConts.user_credentials)
-       AsyncStorage.removeItem(asyncConts.user_details)
+        dispatch(setUserDetail(null))
+        AsyncStorage.removeItem(asyncConts.user_credentials)
+        AsyncStorage.removeItem(asyncConts.user_details)
     },
+    getPickerData: (data) => {
+        let tempData = []
+        if (data.length) {
+            for (const item of data) {
+                const tempObj = {
+                    ...item,
+                    label: item.name,
+                    value: item.name
+                }
+                tempData.push(tempObj)
+            }
+        }
+        return tempData
+    }
 }
 
 

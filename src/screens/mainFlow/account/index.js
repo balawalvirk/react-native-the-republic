@@ -43,6 +43,12 @@ function Account(props) {
         });
     }, [navigation]);
 
+
+    //redux states
+    const user=useSelector(state=>state.user)
+    const {userDetail}=user
+    //const fullName=userDetail.first_name+' '+userDetail.last_name
+
     //local states
     const [selectedTabIndex, setSelectedTabIndex] = useState(0)
     return (
@@ -51,9 +57,9 @@ function Account(props) {
                 showsVerticalScrollIndicator={false}
             >
                 <ProfileTop
-                    imageUri={userData.image}
-                    title={userData.name}
-                    subTitle={'@jackob443'}
+                    imageUri={userDetail.profile_image}
+                    title={userDetail.first_name+' '+userDetail.last_name}
+                    subTitle={'@'+userDetail.username}
                     content={
                         <Wrapper style={{ alignItems: 'flex-start', }}>
                             <Spacer height={sizes.smallMargin} />
@@ -86,7 +92,7 @@ function Account(props) {
                     selectedTabIndex === 0 ?
                         <Wrapper flex={1}>
                             <ShareSomethingButton
-                                imageUri={DummyData.userData.image}
+                                imageUri={userDetail.prifile_image}
                                 onPress={() => navigate(routes.shareApost)}
                             />
                             <Spacer height={sizes.smallMargin} />

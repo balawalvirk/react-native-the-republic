@@ -1,45 +1,75 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text } from 'react-native';
-import { MainWrapper, IconButton, Wrapper, Spacer, ImageProfile, RowWrapperBasic, RowWrapper, TextInputUnderlined, KeyboardAvoidingScrollView, ComponentWrapper, ButtonColored, PickerPrimary, IconWithText, EditProfileComp, ButtonGradient, PopupPrimary, MediumText, VerificationCodeSentPopup } from '../../../components';
+import { MainWrapper, IconButton, Wrapper, Spacer, ImageProfile, RowWrapperBasic, RowWrapper, TextInputUnderlined, KeyboardAvoidingScrollView, ComponentWrapper, ButtonColored, PickerPrimary, IconWithText, EditProfileComp, ButtonGradient, PopupPrimary, MediumText, VerificationCodeSentPopup, Toasts } from '../../../components';
 import { height, totalSize, width } from 'react-native-dimension';
-import { colors, appStyles, sizes, HelpingMethods, appIcons, routes, appImages } from '../../../services';
+import { colors, appStyles, sizes, HelpingMethods, appIcons, routes, appImages, Backend } from '../../../services';
+import { useSelector } from 'react-redux';
+import moment from 'moment';
 
-const profileData = {
-    profileImage: appImages.user3,
-    firstName: 'Jackobe',
-    lastName: 'Black',
-    userName: 'jackobe443',
-    gender: 'male',
-    birthday: '24/07/1991',
-    countryCode: 'US',
-    countryPhoneCode: '+1',
-    phoneNumber: '689789879'
-}
+
 function EditProfile(props) {
-    const { navigate } = props.navigation
+    const { navigate, goBack } = props.navigation
     const { params } = props.route
     // const { credentials } = params
     const EditProfileRef = useRef(null)
-    // const [isVerificationCodeSendModalVisible, setVerificationCodeSendModalVisibility] = useState(false)
 
-    //console.log('credentials', credentials)
+    //redux states
+    const user = useSelector(state => state.user)
+    const { userDetail } = user
+    const fullName = userDetail.first_name + ' ' + userDetail.last_name
 
-    // const toggleVerificationCodeSendModal = () => setVerificationCodeSendModalVisibility(!isVerificationCodeSendModalVisible)
+    const profileData = {
+        profileImage: userDetail.profile_image,
+        firstName: userDetail.first_name,
+        lastName: userDetail.last_name,
+        userName: userDetail.username,
+        gender: userDetail.gender,
+        birthday: userDetail.birthday,
+        countryCode: userDetail.country_code,
+        countryPhoneCode: userDetail.country_phone_code,
+        phoneNumber: userDetail.phone
+    }
 
 
-    const handleSaveChanges = () => {
+    //local states
+    const [isLoading, setLoading] = useState(false)
+
+
+    const handleSaveChanges = async() => {
         const profileDetails = EditProfileRef.current.getAllData()
+        const isProfileDetailsValid = EditProfileRef.current.validate()
+        const {
+            imageFile,
+            firstName,
+            lastName,
+            userName,
+            gender,
+            birthday,
+            phoneNumber,
+            countryPhoneCode,
+            countryCode
+        } = profileDetails
         console.log('Profile Data:   ', profileDetails)
-        if (
-            profileDetails.imageFile &&
-            profileDetails.firstName &&
-            profileDetails.lastName &&
-            profileDetails.userName &&
-            profileDetails.gender &&
-            profileDetails.birthday &&
-            profileDetails.phoneNumber
-        ) {
-            //toggleVerificationCodeSendModal()
+        if (isProfileDetailsValid) {
+            setLoading(true)
+           await Backend.update_profile({
+                image: imageFile,
+                first_name: firstName,
+                last_name: lastName,
+                username: userName,
+                gender: gender,
+                //birthday: birthday,
+                birthday: moment(birthday).format('YYYY-MM-DD'),
+                phone: phoneNumber,
+                country_phone_code: countryPhoneCode,
+                country_code: countryCode,
+            }).then(res => {
+                if (res) {
+                    Toasts.success('Profile updated successfuly')
+                    goBack()
+                }
+            })
+            setLoading(false)
         }
     }
 
@@ -55,19 +85,10 @@ function EditProfile(props) {
                     text="Save Changes"
                     shadow
                     onPress={handleSaveChanges}
+                    loading={isLoading}
                 />
                 <Spacer height={sizes.doubleBaseMargin} />
             </KeyboardAvoidingScrollView>
-            {/* <VerificationCodeSentPopup
-                visible={isVerificationCodeSendModalVisible}
-                toggle={toggleVerificationCodeSendModal}
-                onPressContinue={() => {
-                    toggleVerificationCodeSendModal();
-                    navigate(routes.verifyPhone,{credentials,profileDetails:EditProfileRef.current.getAllData()})
-                }}
-                phoneNumber={'6-007867687-78'}
-            /> */}
-
         </MainWrapper>
     );
 }

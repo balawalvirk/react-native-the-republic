@@ -26,7 +26,7 @@ function TopCategories({ data, onPressCategory, onPressViewAll }) {
                                     style={{borderRadius:sizes.smallRadius}}
                                 />
                                 <Spacer height={sizes.smallMargin} />
-                                <RegularText>{item.title}</RegularText>
+                                <RegularText>{item.name}</RegularText>
                             </Wrapper>
                         </TouchableOpacity>
                     )

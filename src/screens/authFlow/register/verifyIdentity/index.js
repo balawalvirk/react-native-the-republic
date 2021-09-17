@@ -245,7 +245,7 @@ function VerifyIdentity(props) {
             <ImagePickerPopup
                 visible={isImagePickerPopupVisible}
                 toggle={toggleImagePickerPopup}
-                onPressTakePhoto={checkCameraPermission}
+                onPressTakePhoto={launchCamera}
                 onPressSelectFromGalary={launchImagePicker}
             />
             <PopupPrimary
