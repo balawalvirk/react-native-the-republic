@@ -2,14 +2,15 @@ import React, { Component, useEffect, useLayoutEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { height } from 'react-native-dimension';
 import { BorderedWrapper, ButtonColored, IconButton, KeyboardAvoidingScrollView, LineHorizontal, MainWrapper, MediumText, PopupPrimary, RowWrapper, RowWrapperBasic, Spacer, SwitchPrimary, TextInputUnderlined } from '../../../components';
-import { colors, HelpingMethods, routes, sizes } from '../../../services';
+import { Backend, colors, HelpingMethods, routes, sizes } from '../../../services';
 import DateTimePicker from 'react-native-modal-datetime-picker';
+import moment from 'moment';
 
 function CreateCoupon(props) {
   const { navigation, route } = props
   const { navigate, goBack } = navigation
   const { params } = route
-  const couponData = params ? params.coupon ? params.coupon : null : null
+  const couponDetail = params ? params.couponDetail ? params.couponDetail : null : null
 
   useEffect(() => {
     getSetCouponData()
@@ -18,7 +19,7 @@ function CreateCoupon(props) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: couponData ? "Edit Coupon" : "Create Coupon"
+      title: couponDetail ? "Edit Coupon" : "Create Coupon"
     });
   }, [navigation]);
 
@@ -28,9 +29,10 @@ function CreateCoupon(props) {
   const [discount, setDiscount] = useState('')
   const [expiry, setExpiry] = useState('')
   const [minOrderValue, setMinOrderValue] = useState('')
+  const [isLoading, setLoading] = useState(false)
 
   const [codeError, setCodeError] = useState('')
-  const [discountError, setDescriptionError] = useState('')
+  const [discountError, setDiscountError] = useState('')
   const [expiryError, setExpiryError] = useState('')
   const [minOrderValueError, setMinOrderValueError] = useState('')
 
@@ -46,24 +48,74 @@ function CreateCoupon(props) {
 
   const handleConfirmExpiryDate = (date) => {
     console.warn("Expiry date has been picked: ", date);
-    setExpiry(date)
+    //setExpiry(date)
+    setExpiry(moment(date).format('YYYY-MM-DD'))
     toggleExpiryDatePicker()
-    // setEstimatedArrivalTime(moment(date).format('DD/MM/YYYY hh:mm A'))
   }
 
   const getSetCouponData = () => {
-    if (couponData) {
-      const { code, discount, expiry, discountType } = couponData
+    if (couponDetail) {
+      const { code, discount_amount, expiry_date, discount_type, minimum_order } = couponDetail
       setCode(code)
-      setDiscount(discount)
-      setDiscountType(discountType)
-      setExpiry(new Date())
-      setMinOrderValue('89')
+      setDiscount(discount_amount)
+      setDiscountType(discount_type)
+      setExpiry(expiry_date)
+      setMinOrderValue(minimum_order)
     }
   }
 
   const fixedDiscount = discountType === 'fixed'
   const percentageDiscount = discountType === 'percentage'
+
+  const isCouponDataValid = () => {
+    HelpingMethods.handleAnimation()
+    !code ? setCodeError('Enter coupon code') : setCodeError('')
+    !discount ? setDiscountError('Enter discount') : setDiscountError('')
+    !minOrderValue ? setMinOrderValueError('Enter minimum order value') : setMinOrderValueError('')
+    !expiry ? setExpiryError('Select expiry date') : setExpiryError('')
+    if (code && discount && minOrderValue && expiry) {
+      return true
+    }
+  }
+  const handleCreateCoupon = async () => {
+    setLoading(true)
+    if (isCouponDataValid()) {
+      const couponDetails = {
+        code,
+        discount_type: discountType,
+        discount_amount: discount,
+        minimum_order: minOrderValue,
+        expiry_date: expiry
+      }
+      console.log('couponDetails --> ', couponDetails)
+      await Backend.create_coupon(couponDetails).then(res => {
+        if (res) {
+          toggleCouponCreatedPopup()
+        }
+      })
+    }
+    setLoading(false)
+  }
+  const handleEditCoupon = async () => {
+    setLoading(true)
+    if (isCouponDataValid()) {
+      const couponDetails = {
+        coupon_id:couponDetail.id,
+        code,
+        discount_type: discountType,
+        discount_amount: discount,
+        minimum_order: minOrderValue,
+        expiry_date: expiry
+      }
+      console.log('couponDetails --> ', couponDetails)
+      await Backend.edit_coupon(couponDetails).then(res => {
+        if (res) {
+          toggleCouponUpdatedPopup()
+        }
+      })
+    }
+    setLoading(false)
+  }
   return (
     <MainWrapper>
       <KeyboardAvoidingScrollView>
@@ -72,10 +124,10 @@ function CreateCoupon(props) {
           title="Coupon Code"
           value={code}
           onChangeText={t => setCode(t)}
-          error={codeError}
           iconNameRight={code && "check-circle"}
           iconTypeRight="feather"
           iconColorRight={colors.success}
+          error={codeError}
         />
         <Spacer height={sizes.baseMargin} />
         <BorderedWrapper style={{ paddingHorizontal: 0, }}>
@@ -86,16 +138,23 @@ function CreateCoupon(props) {
               onPress={() => setDiscountType('fixed')}
             />
           </RowWrapper>
-          <Spacer height={sizes.smallMargin} />
-          <TextInputUnderlined
-            title="Enter discount amount"
-            editable={fixedDiscount}
-            value={fixedDiscount && `${(discount.length ? '-$' : '') + discount}`}
-            onChangeText={(text) => setDiscount(text.replace('-$', ''))}
-            error={discountError}
-            keyboardType="number-pad"
-            containerStyle={{ marginHorizontal: sizes.marginHorizontalSmall }}
-          />
+          {
+            fixedDiscount ?
+              <>
+                <Spacer height={sizes.smallMargin} />
+                <TextInputUnderlined
+                  title="Enter discount amount"
+                  editable={fixedDiscount}
+                  value={fixedDiscount && `${(discount.length ? '-$' : '') + discount}`}
+                  onChangeText={(text) => setDiscount(text.replace('-$', ''))}
+                  keyboardType="number-pad"
+                  containerStyle={{ marginHorizontal: sizes.marginHorizontalSmall }}
+                  error={discountError}
+                />
+              </>
+              :
+              null
+          }
           <Spacer height={sizes.baseMargin} />
           <LineHorizontal />
           <Spacer height={sizes.baseMargin} />
@@ -106,16 +165,23 @@ function CreateCoupon(props) {
               onPress={() => setDiscountType('percentage')}
             />
           </RowWrapper>
-          <Spacer height={sizes.smallMargin} />
-          <TextInputUnderlined
-            title="Enter discount %age"
-            editable={percentageDiscount}
-            keyboardType="number-pad"
-            value={percentageDiscount && `${(discount.length ? '%' : '') + discount}`}
-            onChangeText={(text) => setDiscount(text.replace('%', ''))}
-            error={discountError}
-            containerStyle={{ marginHorizontal: sizes.marginHorizontalSmall }}
-          />
+          {
+            percentageDiscount ?
+              <>
+                <Spacer height={sizes.smallMargin} />
+                <TextInputUnderlined
+                  title="Enter discount %age"
+                  editable={percentageDiscount}
+                  keyboardType="number-pad"
+                  value={percentageDiscount && `${(discount.length ? '%' : '') + discount}`}
+                  onChangeText={(text) => setDiscount(text.replace('%', ''))}
+                  containerStyle={{ marginHorizontal: sizes.marginHorizontalSmall }}
+                  error={discountError}
+                />
+              </>
+              :
+              null
+          }
         </BorderedWrapper>
 
         <Spacer height={sizes.baseMargin} />
@@ -123,30 +189,31 @@ function CreateCoupon(props) {
           title="Minimum Order Value"
           value={`${(minOrderValue.length ? '$' : '') + minOrderValue}`}
           onChangeText={(text) => setMinOrderValue(text.replace('$', ''))}
-          error={minOrderValueError}
           keyboardType="number-pad"
+          error={minOrderValueError}
         />
         <Spacer height={sizes.baseMargin} />
         <TextInputUnderlined
           title="Expiry Date"
-          value={expiry ? HelpingMethods.formateDate1(expiry) : ''}
+          value={expiry ? HelpingMethods.formateDateToDate1(expiry) : ''}
           onChangeText={t => setExpiry(t)}
-          error={expiryError}
           iconNameRight="calendar"
           iconTypeRight="feather"
           editable={false}
           onPress={toggleExpiryDatePicker}
           iconColorRight={colors.appTextColor1}
+          error={expiryError}
         />
         <Spacer height={sizes.doubleBaseMargin} />
         <ButtonColored
-          text={couponData ? "Update Coupon" : "Create Coupon"}
+          text={couponDetail ? "Update Coupon" : "Create Coupon"}
           onPress={() => {
-            couponData ? [
-              toggleCouponUpdatedPopup()
+            couponDetail ? [
+              handleEditCoupon()
             ] :
-              toggleCouponCreatedPopup()
+              handleCreateCoupon()
           }}
+          isLoading={isLoading}
         />
         <Spacer height={sizes.doubleBaseMargin} />
       </KeyboardAvoidingScrollView>
@@ -159,9 +226,11 @@ function CreateCoupon(props) {
         info={"Customers can use this coupon code on your products to avail discounts"}
         buttonText1="Continue"
         onPressButton1={() => { toggleCouponUpdatedPopup(); goBack() }}
-        //topMargin={height(60)}
+        disableSwipe
+        disableBackDropPress
+      //topMargin={height(60)}
       />
-       <PopupPrimary
+      <PopupPrimary
         visible={isCouponCreatedPopupVisible}
         toggle={toggleCouponCreatedPopup}
         iconName="check"
@@ -170,7 +239,9 @@ function CreateCoupon(props) {
         info={"Customers can use this coupon code on your products to avail discounts"}
         buttonText1="Continue"
         onPressButton1={() => { toggleCouponCreatedPopup(); goBack() }}
-        //topMargin={height(60)}
+        disableSwipe
+        disableBackDropPress
+      //topMargin={height(60)}
       />
       <DateTimePicker
         isVisible={isExpiryDatePickerVisible}

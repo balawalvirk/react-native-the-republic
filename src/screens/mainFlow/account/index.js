@@ -92,7 +92,7 @@ function Account(props) {
                     selectedTabIndex === 0 ?
                         <Wrapper flex={1}>
                             <ShareSomethingButton
-                                imageUri={userDetail.prifile_image}
+                                imageUri={userDetail.profile_image}
                                 onPress={() => navigate(routes.shareApost)}
                             />
                             <Spacer height={sizes.smallMargin} />

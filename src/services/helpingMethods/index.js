@@ -110,6 +110,9 @@ const HelpingMethods = {
     formateDate1: (date) => {
         return moment(date).format('DD / MM / YYYY')
     },
+    formateDateToDate1:(date)=>{
+        return moment(date,'YYYY-MM-DD').format('DD / MM / YYYY')
+    },
     checkInternetConnectivity: async () => {
         let isConnected = false
         await NetInfo.fetch().then(state => {

@@ -225,7 +225,7 @@ export const get_product_conditions = async () => {
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios
-            .get(`${baseURL + endPoints.product.show_actions}`)
+            .get(`${baseURL + endPoints.product.show_conditions}`)
             .then(async responseJson => {
                 const tempResponseData = responseJson.data
                 console.log('Response', tempResponseData);

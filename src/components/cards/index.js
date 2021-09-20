@@ -222,7 +222,7 @@ export const ReviewCardPrimary = ({ containerStyle, imageUrl, title, rating, rev
         </Wrapper>
     )
 }
-export const ProductCardSecondary = ({ perMoreInfo,content, onPress, animation, duration, image, imageStyle, containerstyle, description, newPrice, oldPrice, rating, reviewCount, moreInfo, moreInfoImage, moreInfoTitle, moreInfoSubTitle, moreInfoRight, moreInfoContainerStyle, children, date }) => {
+export const ProductCardSecondary = ({ perMoreInfo, content, onPress, animation, duration, image, imageStyle, containerstyle, description, newPrice, oldPrice, rating, reviewCount, moreInfo, moreInfoImage, moreInfoTitle, moreInfoSubTitle, moreInfoRight, moreInfoContainerStyle, children, date }) => {
 
     return (
         <Wrapper animation={animation} duration={duration} style={[styles.ProductCardSecondaryContainer, containerstyle]}>
@@ -831,6 +831,7 @@ export const TimeSlotCard = ({ onPress, date, startTime, endTime, containerStyle
                             buttonColor={colors.error}
                             buttonSize={totalSize(4)}
                             iconSize={totalSize(2.25)}
+                            onPress={onPressDelete}
                         />
                     </AbsoluteWrapper>
                     :
@@ -838,4 +839,40 @@ export const TimeSlotCard = ({ onPress, date, startTime, endTime, containerStyle
             }
         </TouchableOpacity>
     )
+}
+
+export const IconTitleCrossCard = ({ style, onPress, hideLine, iconSize, title, icon, titleStyle, onPressCross, containerStyle }) => {
+    return (
+        <TouchableOpacity disabled={!onPress} onPress={onPress} activeOpacity={1}>
+            <Wrapper style={style}>
+                <RowWrapper style={[{ marginVertical: sizes.baseMargin }, containerStyle]}>
+                    <Wrapper flex={1}>
+                        <IconWithText
+                            text={title}
+                            //customIcon={icon}
+                            iconName="map-pin"
+                            iconType="feather"
+                            textStyle={[
+                                appStyles.textMedium,
+                                { marginLeft: sizes.marginHorizontalSmall },
+                                titleStyle
+                            ]}
+                            iconSize={iconSize ? iconSize : sizes.icons.medium}
+                        />
+                    </Wrapper>
+                    {
+                        onPressCross ?
+                            <Icon
+                                name="close"
+                                type="evilicon"
+                                size={sizes.icons.large}
+                                onPress={onPressCross}
+                            /> :
+                            null
+                    }
+                </RowWrapper>
+
+            </Wrapper>
+        </TouchableOpacity>
+    );
 }

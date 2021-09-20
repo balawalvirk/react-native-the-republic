@@ -42,10 +42,7 @@ export const ButtonColored = ({
                     }
                     {
                         isLoading ?
-                            <ActivityIndicator
-                                color={activityColor ? activityColor : colors.appBgColor1}
-                                size={"small"}
-                            />
+                            <MaterialIndicator size={totalSize(2.5)} color={'#FFFFFF'} />
                             :
                             <ButtonTextMedium style={[{ color: tintColor ? tintColor : colors.appTextColor6, }, textStyle]}>{text}</ButtonTextMedium>
                     }
@@ -55,7 +52,7 @@ export const ButtonColored = ({
     );
 }
 
-export const ButtonColoredSmall = ({ text, onPress,disabled, buttonStyle, customIcon, direction, textStyle, iconName, iconType, iconSize, iconColor, iconStyle }) => {
+export const ButtonColoredSmall = ({ text, onPress, disabled, buttonStyle, customIcon, direction, textStyle, iconName, iconType, iconSize, iconColor, iconStyle }) => {
     return (
         <TouchableOpacity disabled={disabled} onPress={onPress} style={[{ borderRadius: 15, paddingHorizontal: width(5), paddingVertical: height(1), backgroundColor: colors.appColor1 }, buttonStyle]}>
             <View style={{ flexDirection: direction ? direction : 'row', alignItems: 'center' }}>

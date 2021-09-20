@@ -1,8 +1,8 @@
 import React, { Component, useEffect, useLayoutEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { height } from 'react-native-dimension';
-import { ButtonColored, IconButton, KeyboardAvoidingScrollView, MainWrapper, PopupPrimary, RowWrapperBasic, Spacer, TextInputUnderlined } from '../../../components';
-import { routes, sizes } from '../../../services';
+import { ButtonColored, IconButton, KeyboardAvoidingScrollView, MainWrapper, PopupPrimary, RowWrapperBasic, Spacer, TextInputUnderlined, GoogleAutoComplete, ComponentWrapper, ErrorText, InputTitle } from '../../../components';
+import { colors, HelpingMethods, routes, sizes } from '../../../services';
 
 function CreateTraining(props) {
     const { navigation, route } = props
@@ -26,6 +26,8 @@ function CreateTraining(props) {
     const [description, setDescription] = useState('')
     const [duration, setDuration] = useState('')
     const [location, setLocation] = useState('')
+    const [latitude, setLatitude] = useState('')
+    const [longitude, setLongitude] = useState('')
     const [charges, setCharges] = useState('')
     const [spots, setSpots] = useState(1)
 
@@ -48,7 +50,31 @@ function CreateTraining(props) {
             setDuration(duration)
             setLocation(location)
             setCharges(charges)
-            setSpots(4)
+            setSpots(spots)
+        }
+    }
+
+    const isDetailsValid = () => {
+        HelpingMethods.handleAnimation()
+        !title ? setTitleError('Please add title') : setTitleError('')
+        !description ? setDescriptionError('Please add description') : setDescriptionError('')
+        !duration ? setDurationError('Please add duration') : setDurationError('')
+        !location ? setLocationError('Please add location') : setLocationError('')
+        !charges ? setChargesError('Please add charges') : setChargesError('')
+        if (title, description, duration, location, charges) {
+            return true
+        } else {
+            return false
+        }
+    }
+    const handleEditTraining = () => {
+        toggleTrainingCreatedPopup()
+    }
+    const handleContinue = () => {
+        if (isDetailsValid()) {
+            navigate(routes.seller.selectDateTime, { trainingData: { title, description, duration, location,latitude,longitude, charges, spots, } })
+        } else {
+
         }
     }
     return (
@@ -66,13 +92,13 @@ function CreateTraining(props) {
                     titleStatic="Description"
                     value={description}
                     onChangeText={t => setDescription(t)}
-                    error={descriptionError}
                     multiline
                     inputStyle={{
                         height: height(12),
                         marginTop: sizes.smallMargin,
                         textAlignVertical: 'top'
                     }}
+                    error={descriptionError}
                 />
                 <Spacer height={sizes.baseMargin} />
                 <TextInputUnderlined
@@ -82,17 +108,45 @@ function CreateTraining(props) {
                     error={durationError}
                 />
                 <Spacer height={sizes.baseMargin} />
-                <TextInputUnderlined
+                {/* <TextInputUnderlined
                     title="Training Location"
                     value={location}
                     onChangeText={t => setLocation(t)}
                     error={locationError}
-                />
+                /> */}
+                <ComponentWrapper style={{marginHorizontal:sizes.marginHorizontalLarge}}>
+                    <InputTitle>Location</InputTitle>
+                </ComponentWrapper>
+                <ComponentWrapper style={{ marginHorizontal: sizes.marginHorizontalSmall }}>
+                    <GoogleAutoComplete
+                        onPressItem={(details, location) => {
+                            console.log('details', details)
+                            console.log('location', location)
+                            setLocation(details.description)
+                            setLatitude(location.lat)
+                            setLongitude(location.lng)
+                        }}
+                        value={location}
+                        leftIcon={null}
+                        textInputContainer={{
+                            borderWidth: 0,
+                            borderRadius: 0,
+                            borderBottomWidth: 1,
+                            borderColor: colors.appBgColor4
+                        }}
+                        placeholder="Type here..."
+                    />
+                </ComponentWrapper>
+                <ComponentWrapper style={{marginHorizontal:sizes.marginHorizontalLarge}}>
+                    <ErrorText
+                        text={locationError}
+                    />
+                </ComponentWrapper>
                 <Spacer height={sizes.baseMargin} />
                 <TextInputUnderlined
                     title="Training Charges"
-                    value={charges}
-                    onChangeText={t => setCharges(t)}
+                    value={`${charges ? '$' + charges : ''}`}
+                    onChangeText={t => setCharges(t.replace('$',''))}
                     error={chargesError}
                 />
                 <Spacer height={sizes.baseMargin} />
@@ -124,9 +178,9 @@ function CreateTraining(props) {
                     text={trainingData ? "Update Training" : "Continue"}
                     onPress={() => {
                         trainingData ? [
-                            toggleTrainingCreatedPopup()
+                            handleEditTraining()
                         ] :
-                            navigate(routes.seller.selectDateTime, { training: {} })
+                            handleContinue()
                     }}
                 />
                 <Spacer height={sizes.doubleBaseMargin} />

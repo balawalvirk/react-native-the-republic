@@ -27,9 +27,9 @@ import { KeyboardAvoidingScrollView } from '../scrollViews'
 import { ScrollView } from 'react-native'
 import { StyleSheet } from 'react-native'
 import { LineVertical } from '../lines'
-
-export const PopupPrimary = ({ visible, toggle, title, info, iconName,disableSwipe,disableBackDropPress, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, topMargin, children, scrollEnabled, button1Style, keyboardShouldPersistTaps }) => {
-    const defaultTopMargin = Platform.OS === 'ios' ? height(50) : height(40)
+import GoogleAutoComplete from './googleAutoComplete'
+export const PopupPrimary = ({ visible, toggle, title, info, iconName, disableSwipe, disableBackDropPress, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2,loadingButton1,loadinButton2 ,topMargin, children, scrollEnabled, button1Style, keyboardShouldPersistTaps }) => {
+    const defaultTopMargin = Platform.OS === 'ios' ? height(55) : height(45)
     const customTopMargin = topMargin ? Platform.OS === 'ios' ? topMargin : topMargin - height(10) : defaultTopMargin
     return (
         <ModalSwipeablePrimary
@@ -39,7 +39,7 @@ export const PopupPrimary = ({ visible, toggle, title, info, iconName,disableSwi
             topMargin={customTopMargin}
             disableSwipe={disableSwipe}
             disableBackDropPress={disableBackDropPress}
-            
+
         >
             <Wrapper flex={1}>
                 <ScrollView
@@ -68,7 +68,7 @@ export const PopupPrimary = ({ visible, toggle, title, info, iconName,disableSwi
                     {
                         title ?
                             <>
-                                <ComponentWrapper style={{marginHorizontal:sizes.marginHorizontalXLarge}}>
+                                <ComponentWrapper style={{ marginHorizontal: sizes.marginHorizontalXLarge }}>
                                     <SmallTitle style={[appStyles.textCenter]}>{title}</SmallTitle>
                                 </ComponentWrapper>
                                 <Spacer height={sizes.baseMargin} />
@@ -99,6 +99,7 @@ export const PopupPrimary = ({ visible, toggle, title, info, iconName,disableSwi
                                         buttonColor={colors.appBgColor3}
                                         tintColor={colors.appTextColor1}
                                         buttonStyle={{ marginHorizontal: 0 }}
+                                        isLoading={loadinButton2}
                                     />
                                 </Wrapper>
                                 :
@@ -118,6 +119,7 @@ export const PopupPrimary = ({ visible, toggle, title, info, iconName,disableSwi
                                             onPress={onPressButton1}
                                             shadow
                                             buttonStyle={[{ marginHorizontal: 0 }, button1Style]}
+                                            isLoading={loadingButton1}
                                         />
                                     </Wrapper>
                                     :
@@ -127,6 +129,7 @@ export const PopupPrimary = ({ visible, toggle, title, info, iconName,disableSwi
                                             onPress={onPressButton1}
                                             shadow
                                             buttonStyle={[{ marginHorizontal: 0 }]}
+                                            loading={loadingButton1}
                                         />
                                     </Wrapper>
                                 :
@@ -500,12 +503,19 @@ export const OptionsPopup = ({ options, visible, toggle, onPressStatus, titleSty
         </PopupPrimary>
     )
 }
+export const NoDataViewPrimary = ({ title }) => {
+    return (
+        <Wrapper flex={1} style={[appStyles.center]}>
+            <MediumText style={[appStyles.textGray]}>No {title ? title : 'Data'} Found</MediumText>
+        </Wrapper>
+    )
+}
 
 export {
     EditProfileComp, VerificationCodeSentPopup, ImagePickerPopup,
     Posts, MenuPopup, RenderComments, Products, ArmerInfo,
     Reviews, ProductsSecondary, ProductsHorizontalyPrimary, Dealers, Groups,
-    Purchases, AddPaymentMethodModal, FollowRequestsList
+    Purchases, AddPaymentMethodModal, FollowRequestsList, GoogleAutoComplete
 }
 
 export * from './imagesList'

@@ -1,8 +1,9 @@
+import { useFocusEffect } from '@react-navigation/core';
 import React, { Component, useState, useLayoutEffect } from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { height } from 'react-native-dimension';
-import { ComponentWrapper, MainWrapper, TraningSellerCard, PopupPrimary, SmallTitle, Spacer, TraningRequestCard, Wrapper, ButtonColoredSmall } from '../../../components';
-import { appStyles, colors, DummyData, routes, sizes } from '../../../services';
+import { ComponentWrapper, MainWrapper, TraningSellerCard, PopupPrimary, SmallTitle, Spacer, TraningRequestCard, Wrapper, ButtonColoredSmall, MediumText, LoaderPrimary, SkeletonListVerticalPrimary } from '../../../components';
+import { appStyles, Backend, colors, DummyData, routes, sizes } from '../../../services';
 
 function Trainings(props) {
   const { navigation } = props
@@ -24,32 +25,55 @@ function Trainings(props) {
     });
   }, [navigation]);
 
+
+
   const [isDeleteTraningPopupVisible, setDeleteTrainingPopupVisibility] = useState(false)
+  const [trainings, setTrainings] = useState(null)
 
   const toggleDeleteTrainingPopup = () => setDeleteTrainingPopupVisibility(!isDeleteTraningPopupVisible)
 
-  const trainings = DummyData.trainings
+  //const trainings = DummyData.trainings
+  useFocusEffect(
+    React.useCallback(() => {
+      // !userToken ? null :  Backend.GetAllNotifications()
+      Backend.get_user_tranings().
+      then(res=>{
+        if(res){
+          setTrainings(res.trainings)
+        }
+      })
+    }, [])
+  );
 
+  if(trainings===null){
+    return(<SkeletonListVerticalPrimary/>)
+  }
   return (
     <MainWrapper>
-      <FlatList
-        data={trainings}
-        ListHeaderComponent={() => <Spacer height={sizes.baseMargin} />}
-        ListFooterComponent={() => <Spacer height={sizes.baseMargin} />}
-        renderItem={({ item, index }) => {
-          return (
-            <TraningSellerCard
-              onPress={() => { }}
-              containerStyle={{ marginBottom: sizes.marginVertical / 2 }}
-              title={item.title}
-              duration={item.duration}
-              charges={item.charges}
-              onPressEdit={() => { navigate(routes.seller.createTrainin, { training: item }) }}
-              onPressDelete={toggleDeleteTrainingPopup}
-            />
-          )
-        }}
-      />
+      {trainings.length ?
+        <FlatList
+          data={trainings}
+          ListHeaderComponent={() => <Spacer height={sizes.baseMargin} />}
+          ListFooterComponent={() => <Spacer height={sizes.baseMargin} />}
+          renderItem={({ item, index }) => {
+            return (
+              <TraningSellerCard
+                onPress={() => { }}
+                containerStyle={{ marginBottom: sizes.marginVertical / 2 }}
+                title={item.title}
+                duration={item.duration}
+                charges={item.charges}
+                onPressEdit={() => { navigate(routes.seller.createTrainin, { training: item }) }}
+                onPressDelete={toggleDeleteTrainingPopup}
+              />
+            )
+          }}
+        />
+        :
+        <Wrapper flex={1} style={[appStyles.center]}>
+          <MediumText>No Trainings Found</MediumText>
+        </Wrapper>
+      }
       <PopupPrimary
         visible={isDeleteTraningPopupVisible}
         toggle={toggleDeleteTrainingPopup}

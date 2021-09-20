@@ -9,20 +9,31 @@ import * as ImagePicker from 'react-native-image-picker';
 import { check, PERMISSIONS, RESULTS, request } from 'react-native-permissions';
 import { TextInput } from 'react-native';
 import { useSelector } from 'react-redux';
-const options = [
-    {
-        label: 'Option 1',
-        value: 'Option 1'
+// const options = [
+//     {
+//         label: 'Option 1',
+//         value: 'Option 1'
+//     },
+//     {
+//         label: 'Option 2',
+//         value: 'Option 2'
+//     },
+//     {
+//         label: 'Option 3',
+//         value: 'Option 3'
+//     }
+// ]
+const options = {
+    title: 'Select Photo',
+    quality: 1,
+    maxWidth: 500,
+    maxHeight: 500,
+    // customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+    storageOptions: {
+        skipBackup: true,
+        path: 'images',
     },
-    {
-        label: 'Option 2',
-        value: 'Option 2'
-    },
-    {
-        label: 'Option 3',
-        value: 'Option 3'
-    }
-]
+};
 
 function Sell(props) {
     const { navigation, route } = props
@@ -31,7 +42,7 @@ function Sell(props) {
     //redux states
     const product = useSelector(state => state.product)
     const user = useSelector(state => state.user)
-    const { categories } = product
+    const { categories,items, actions,manufacturers,conditions,calibers } = product
     const { userDetail } = user
     //local states
     const [step, setStep] = useState(1)
@@ -87,7 +98,7 @@ function Sell(props) {
 
     const singleStepIndicatorWith = width(100) / 5
     const [stepIndicatorWidth, setStepIndicatorWidth] = useState(new Animated.Value(singleStepIndicatorWith))
-    const [title, setTitle] = useState('')
+    const [title, setTitle] = useState('') 
     const [imageFile, setImageFile] = useState(null)
     const [isImagePickerPopupVisible, setImagePickerPopupVisibility] = useState(false);
     const toggleImagePickerPopup = () => setImagePickerPopupVisibility(!isImagePickerPopupVisible)
@@ -249,7 +260,7 @@ function Sell(props) {
                                 <PickerPrimary
                                     title="Item"
                                     // placeholder="No Selected"
-                                    data={options}
+                                    data={items}
                                     value={item}
                                     onChange={(value, index) => setitem(value)}
                                 />
@@ -265,7 +276,7 @@ function Sell(props) {
                                 <PickerPrimary
                                     title="Manufacturer"
                                     // placeholder="No Selected"
-                                    data={options}
+                                    data={manufacturers}
                                     value={manufacturer}
                                     onChange={(value, index) => setmanufacturer(value)}
                                 />
@@ -273,7 +284,7 @@ function Sell(props) {
                                 <PickerPrimary
                                     title="Caliber"
                                     // placeholder="No Selected"
-                                    data={options}
+                                    data={calibers}
                                     value={caliber}
                                     onChange={(value, index) => setCalibre(value)}
                                 />
@@ -281,7 +292,7 @@ function Sell(props) {
                                 <PickerPrimary
                                     title="Action"
                                     // placeholder="No Selected"
-                                    data={options}
+                                    data={actions}
                                     value={action}
                                     onChange={(value, index) => setaction(value)}
                                 />
@@ -289,7 +300,7 @@ function Sell(props) {
                                 <PickerPrimary
                                     title="Condition"
                                     // placeholder="No Selected"
-                                    data={options}
+                                    data={conditions}
                                     value={condition}
                                     onChange={(value, index) => setCondition(value)}
                                 />

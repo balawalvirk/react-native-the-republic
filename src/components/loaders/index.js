@@ -19,14 +19,23 @@ import { RegularText ,TinyTitle} from '../text';
 import { Spacer } from '../spacers';
 
 
-export const LoaderPrimary = ({}) => {
+export const LoaderPrimary = ({ title, info}) => {
     return (
        <MainWrapper>
             <Wrapper flex={1} style={[{ justifyContent: 'center', backgroundColor: 'transparent' }]}>
             <Wrapper style={[appStyles.center, { backgroundColor: 'transparent' }]}>
-                <WaveIndicator color={colors.appColor1} size={sizes.icons.xxl} />
-                <Spacer height={sizes.baseMargin} />
-                <RegularText style={[appStyles.textLightGray]}>Loading</RegularText>
+                <BallIndicator color={colors.appColor1} size={sizes.icons.xxl} />
+                <Spacer height={sizes.doubleBaseMargin * 1.5} />
+                <TinyTitle >{title ? title : 'Loading'}</TinyTitle>
+                            {
+                                info ?
+                                    <ComponentWrapper>
+                                        <Spacer height={sizes.baseMargin} />
+                                        <RegularText style={[appStyles.textCenter]}>{info}</RegularText>
+                                    </ComponentWrapper>
+                                    :
+                                    null
+                            }
             </Wrapper>
         </Wrapper>
        </MainWrapper>

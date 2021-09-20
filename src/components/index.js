@@ -18,5 +18,6 @@ export * from './toasts'
 export * from './headers'
 export * from './pickers'
 export * from './common'
+export * from './skeletonPlacehoder'
 
 
