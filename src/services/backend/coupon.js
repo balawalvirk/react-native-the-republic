@@ -131,7 +131,7 @@ export const delete_coupon = async ({ coupon_id, }) => {
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios
-            .delete(uri, params)
+            .post(uri, params)
             .then(async responseJson => {
                 const tempResponseData = responseJson.data
                 console.log('Response', tempResponseData);
