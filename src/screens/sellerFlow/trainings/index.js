@@ -9,6 +9,9 @@ function Trainings(props) {
   const { navigation } = props
   const { navigate } = navigation
 
+  const [loadingDelete, setLoadingDelete] = useState(false)
+  const [selectedTraining, setSelectedTraining] = useState(null)
+
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -37,16 +40,30 @@ function Trainings(props) {
     React.useCallback(() => {
       // !userToken ? null :  Backend.GetAllNotifications()
       Backend.get_user_tranings().
-      then(res=>{
-        if(res){
-          setTrainings(res.trainings)
-        }
-      })
+        then(res => {
+          if (res) {
+            setTrainings(res.trainings)
+          }
+        })
     }, [])
   );
 
-  if(trainings===null){
-    return(<SkeletonListVerticalPrimary/>)
+  const handleDeleteTraining = async () => {
+    setLoadingDelete(true)
+    await Backend.delete_tranings({ training_id: selectedTraining.id }).
+      then(res => {
+        if (res) {
+          const newTrainings = trainings.filter(item => item.id != selectedTraining.id)
+          setTrainings(newTrainings)
+          toggleDeleteTrainingPopup()
+          setSelectedTraining(null)
+        }
+      })
+    setLoadingDelete(false)
+  }
+
+  if (trainings === null) {
+    return (<SkeletonListVerticalPrimary />)
   }
   return (
     <MainWrapper>
@@ -64,7 +81,10 @@ function Trainings(props) {
                 duration={item.duration}
                 charges={item.charges}
                 onPressEdit={() => { navigate(routes.seller.createTrainin, { training: item }) }}
-                onPressDelete={toggleDeleteTrainingPopup}
+                onPressDelete={() => {
+                  setSelectedTraining(item)
+                  toggleDeleteTrainingPopup()
+                }}
               />
             )
           }}
@@ -77,11 +97,12 @@ function Trainings(props) {
       <PopupPrimary
         visible={isDeleteTraningPopupVisible}
         toggle={toggleDeleteTrainingPopup}
-        onPressButton1={toggleDeleteTrainingPopup}
+        onPressButton1={handleDeleteTraining}
         onPressButton2={toggleDeleteTrainingPopup}
         buttonText1={'Yes'}
         buttonText2={'No'}
-        topMargin={height(60)}
+        topMargin={height(65)}
+        loadingButton1={loadingDelete}
         button1Style={{ backgroundColor: colors.error }}
       //title="Are you sure you want to delete this training?"
 

@@ -35,7 +35,14 @@ export const endPoints = {
         add_timeslot:'add-timeslot',
         show_timeslots:'show-timeslots',
         show_timeslot:'show-timeslot',
-        delete_timeslot:'delete-timeslot'
+        delete_timeslot:'delete-timeslot',
+        edit_training:'edit-training',
+        delete_training:'delete-training',
+        send_training_request:'send-training-request',
+        show_training_requests:'show-training-requests',
+        accept_training_request:'accept-training-request',
+        reject_training_request:'reject-training-request',
+        user_training_requests:'user-training-requests',
     },
     category:{
         add_category:'add-category',

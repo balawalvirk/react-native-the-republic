@@ -138,3 +138,71 @@ export const add_traning_timeSlots = async ({ training_id, date, start_time, end
     return response
 };
 
+export const edit_traning = async ({training_id, title, description, location, duration, charges, spots, status, latitude, longitude }) => {
+    let response = null
+    const state = store.getState()
+    const { id } = state.user.userDetail
+
+    const uri = `${baseURL + endPoints.training.edit_training}`
+    const params = {
+        user_id: id,
+        training_id,
+        title,
+        description,
+        location,
+        duration,
+        charges,
+        spots,
+        status,
+        latitude,
+        longitude
+    }
+    console.log('edit_traning \n uri: ', uri, '\n params: ', params)
+    const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    if (isInternetAvailable) {
+        await axios
+            .post(uri, params)
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
+    }
+    return response
+};
+
+export const delete_tranings = async ({training_id}) => {
+    let response = null
+    const params={
+        training_id
+    }
+    const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    if (isInternetAvailable) {
+        await axios
+            .post(`${baseURL + endPoints.training.delete_training}`,params)
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
+    }
+    return response
+};

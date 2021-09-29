@@ -2,13 +2,15 @@ import React, { Component, useEffect, useLayoutEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { height } from 'react-native-dimension';
 import { ButtonColored, IconButton, KeyboardAvoidingScrollView, MainWrapper, PopupPrimary, RowWrapperBasic, Spacer, TextInputUnderlined, GoogleAutoComplete, ComponentWrapper, ErrorText, InputTitle } from '../../../components';
-import { colors, HelpingMethods, routes, sizes } from '../../../services';
+import { Backend, colors, HelpingMethods, routes, sizes } from '../../../services';
 
 function CreateTraining(props) {
     const { navigation, route } = props
     const { navigate, goBack } = navigation
     const { params } = route
     const trainingData = params ? params.training ? params.training : null : null
+
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         getSetTrainingData()
@@ -44,11 +46,13 @@ function CreateTraining(props) {
 
     const getSetTrainingData = () => {
         if (trainingData) {
-            const { title, description, duration, location, charges, spots } = trainingData
+            const { title, description, duration, location, latitude, longitude, charges, spots } = trainingData
             setTitle(title)
             setDescription(description)
             setDuration(duration)
             setLocation(location)
+            setLatitude(latitude)
+            setLongitude(longitude)
             setCharges(charges)
             setSpots(spots)
         }
@@ -67,12 +71,19 @@ function CreateTraining(props) {
             return false
         }
     }
-    const handleEditTraining = () => {
-        toggleTrainingCreatedPopup()
+    const handleEditTraining = async () => {
+        setLoading(true)
+        await Backend.edit_traning({ training_id:trainingData.id, title, description, duration, location, latitude, longitude, charges, spots,status:'active' }).
+            then(res => {
+                if (res) {
+                    toggleTrainingCreatedPopup()
+                }
+            })
+        setLoading(true)
     }
     const handleContinue = () => {
         if (isDetailsValid()) {
-            navigate(routes.seller.selectDateTime, { trainingData: { title, description, duration, location,latitude,longitude, charges, spots, } })
+            navigate(routes.seller.selectDateTime, { trainingData: { title, description, duration, location, latitude, longitude, charges, spots, } })
         } else {
 
         }
@@ -114,7 +125,7 @@ function CreateTraining(props) {
                     onChangeText={t => setLocation(t)}
                     error={locationError}
                 /> */}
-                <ComponentWrapper style={{marginHorizontal:sizes.marginHorizontalLarge}}>
+                <ComponentWrapper style={{ marginHorizontal: sizes.marginHorizontalLarge }}>
                     <InputTitle>Location</InputTitle>
                 </ComponentWrapper>
                 <ComponentWrapper style={{ marginHorizontal: sizes.marginHorizontalSmall }}>
@@ -137,7 +148,7 @@ function CreateTraining(props) {
                         placeholder="Type here..."
                     />
                 </ComponentWrapper>
-                <ComponentWrapper style={{marginHorizontal:sizes.marginHorizontalLarge}}>
+                <ComponentWrapper style={{ marginHorizontal: sizes.marginHorizontalLarge }}>
                     <ErrorText
                         text={locationError}
                     />
@@ -146,7 +157,7 @@ function CreateTraining(props) {
                 <TextInputUnderlined
                     title="Training Charges"
                     value={`${charges ? '$' + charges : ''}`}
-                    onChangeText={t => setCharges(t.replace('$',''))}
+                    onChangeText={t => setCharges(t.replace('$', ''))}
                     error={chargesError}
                 />
                 <Spacer height={sizes.baseMargin} />
@@ -182,6 +193,7 @@ function CreateTraining(props) {
                         ] :
                             handleContinue()
                     }}
+                    isLoading={loading}
                 />
                 <Spacer height={sizes.doubleBaseMargin} />
             </KeyboardAvoidingScrollView>
@@ -195,6 +207,8 @@ function CreateTraining(props) {
                 buttonText1="Continue"
                 onPressButton1={() => { toggleTrainingCreatedPopup(); navigate(routes.seller.trainings) }}
                 topMargin={height(60)}
+                disableBackDropPress
+                disableSwipe
             />
         </MainWrapper>
     );
