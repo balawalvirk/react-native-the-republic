@@ -1,10 +1,12 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { Component, useState } from 'react';
 import { View, Text } from 'react-native';
 import { height } from 'react-native-dimension';
-import { ButtonGradient, CheckIconPrimary, CloseIconPrimary, ComponentWrapper, KeyboardAvoidingScrollView, LineHorizontal, MainWrapper, PopupPrimary, RowWrapper, RowWrapperBasic, SmallTitle, Spacer, TextInputUnderlined, TinyTitle, TitleValue, Wrapper } from '../../../../components';
-import { appStyles, colors, HelpingMethods, routes, sizes } from '../../../../services';
+import { ButtonGradient, CheckIconPrimary, CloseIconPrimary, ComponentWrapper, KeyboardAvoidingScrollView, LineHorizontal, MainWrapper, PopupPrimary, RowWrapper, RowWrapperBasic, SmallTitle, Spacer, TextInputUnderlined, TinyTitle, TitleValue, Toasts, Wrapper } from '../../../../components';
+import { appStyles, asyncConts, Backend, colors, HelpingMethods, routes, sizes, stripeKeys } from '../../../../services';
 
 function SubscriptionPayment(props) {
+
     const { navigate } = props.navigation
     const { plan } = props.route.params
     const [cardNumber, setCardNumber] = useState('')
@@ -16,8 +18,17 @@ function SubscriptionPayment(props) {
     const [cardExpiryError, setCardExpiryError] = useState('')
     const [cvcError, setCvcError] = useState('')
     const [isOrderPlacedPopupVisible, setOrderPlacedPopupVisible] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const toggleOrderPlacedPopup = () => setOrderPlacedPopupVisible(!isOrderPlacedPopupVisible)
+
+    const isPremium = plan.title === 'Premium'
+    const isDealerPro = plan.title === 'Dealer/Pro'
+
+    const subTotal = Number(plan.price)
+    const tax = (Number(plan.price) / 100) * 10
+    const transectionCharges = 10
+    const total = subTotal + tax + transectionCharges
 
     // Handle card number on change
     const handleOnChangeCardNumberText = (cardNumber) => {
@@ -60,24 +71,105 @@ function SubscriptionPayment(props) {
             return false
         }
     }
-    const total = JSON.parse(plan.price) + 4.99 + 10
+
+    const handlePay = () => {
+        if (PaymentValidations()) {
+            handleSetupSubscription()
+        }
+    }
+    const handleSetupSubscription = async () => {
+        let strip_paymentId = ''
+        let stripe_customerId = ''
+        setLoading(true)
+        const data = await AsyncStorage.getItem(asyncConts.user_details)
+        const userData = JSON.parse(data)
+        const paymentDetails = {
+            card_number: cardNumber,
+            expiry_date: cardExpiry,
+            cvc
+        }
+        //console.log('Stripe data is not saved')
+        let paymentObject
+        let customerObject
+        paymentObject = await Backend.createStripePaymentObject(paymentDetails)
+        console.log("CreatePaymentObject Response==>", paymentObject)
+        strip_paymentId = paymentObject.id
+        if (strip_paymentId) {
+            
+            customerObject = await Backend.createStripeCustomer(userData)
+            console.log("CreateCustomer Response==>", customerObject)
+            stripe_customerId = customerObject.id
+            if (stripe_customerId) {
+                await Backend.attachStripePaymentMethodToCustomer(stripe_customerId, strip_paymentId).
+                    then(async (response) => {
+                        console.log("Attach Response==>", response)
+                        if (response.id) {
+                            handleSubscribe(stripe_customerId, strip_paymentId)
+                        } else {
+                            Toasts.error('Subscription Failed! unable to link payment method with customer.')
+                            setLoading(false)
+                        }
+                    }) // don't need to do this step everytime
+            } else {
+                Toasts.error('Subscription Failed! Unable to create customer.')
+                setLoading(false)
+            }
+
+        } else {
+            Toasts.error('Subscription Failed! invalid payment method.')
+            setLoading(false)
+        }
+    }
+
+    const handleSubscribe = async (stripeCustomerObjectID, stripePaymentObjectID) => {
+        console.log('stripe Data', stripeCustomerObjectID, stripePaymentObjectID)
+        await Backend.createStripeSubscription(
+            isPremium ? stripeKeys.subscription_premium_price : isDealerPro ? stripeKeys.subscription_dealerPro_price : '',
+            stripeCustomerObjectID,
+            stripePaymentObjectID).
+            then(async (response) => {
+                console.log("Create Subscription Stripe Respons==>", response)
+                if (response.status === "active") {
+                    toggleOrderPlacedPopup()
+                    // await Backend.update_profile({
+                    //     customer_id: stripeCustomerObjectID,
+                    //     payment_id: stripePaymentObjectID,
+                    //     subscription_id: response.id,
+                    //     user_type: plan.title.toLowerCase(),
+                    //     subscription_plan: plan.title
+                    // }).
+                    //     then(async (response) => {
+                    //         if (response) {
+                    //             toggleOrderPlacedPopup()
+                    //         }
+                    //     })
+                } else {
+                    Toasts.error('Subscription Failed, try again with other payment methode')
+                }
+
+            }).catch(async (error) => {
+                console.error(error)
+                Toasts.error('Subscription Failed! please try again')
+            })
+        setLoading(false)
+    }
     return (
         <MainWrapper>
             <KeyboardAvoidingScrollView>
                 <Spacer height={sizes.baseMargin} />
                 <TitleValue
                     title={'Subtotal'}
-                    value={'$ ' + plan.price + ".00"}
+                    value={'$ ' + subTotal}
                 />
                 <Spacer height={sizes.baseMargin} />
                 <TitleValue
                     title={'Tax (10%)'}
-                    value={'$ 4.99'}
+                    value={'$ ' + tax}
                 />
                 <Spacer height={sizes.baseMargin} />
                 <TitleValue
                     title={'Transaction Charges'}
-                    value={'$ 10.00'}
+                    value={'$ ' + transectionCharges}
                 />
                 <Spacer height={sizes.baseMargin} />
                 <Wrapper style={[appStyles.grayWrapper, { paddingVertical: sizes.baseMargin * 1.5 }]}>
@@ -191,11 +283,8 @@ function SubscriptionPayment(props) {
                 <Spacer height={sizes.doubleBaseMargin} />
                 <ButtonGradient
                     text={"Pay $" + total}
-                    onPress={() => {
-                        if (PaymentValidations()) {
-                            toggleOrderPlacedPopup()
-                        }
-                    }}
+                    onPress={handlePay}
+                    loading={loading}
                 />
             </KeyboardAvoidingScrollView>
             <PopupPrimary
@@ -206,8 +295,20 @@ function SubscriptionPayment(props) {
                 title="Subscription Plan Upgraded"
                 // info={"You'll be notified when your order is accepted and on it's way to delivery." + '\n\n' + "You can track your order in your purchase history."}
                 buttonText1="Continue"
-                onPressButton1={() => { toggleOrderPlacedPopup(); navigate(routes.app) }}
+                onPressButton1={async () => {
+                    setLoading(true)
+                    const data = await AsyncStorage.getItem(asyncConts.user_credentials)
+                    if (data) {
+                        const dataParsed = JSON.parse(data)
+                        await Backend.auto_login(dataParsed.email, dataParsed.password)
+                    }
+                    toggleOrderPlacedPopup()
+                    setLoading(false)
+                }}
+                loadingButton1={loading}
                 topMargin={height(65)}
+                disableSwipe
+                disableBackDropPress
             />
         </MainWrapper>
     );

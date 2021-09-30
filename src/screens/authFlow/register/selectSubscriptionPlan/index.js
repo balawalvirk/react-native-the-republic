@@ -36,8 +36,16 @@ function SelectSubscriptionPlan(props) {
 
 
   let selectedPlan = {}
+  let subTotal = 0
+  let tax = 0
+  let transectionCharges = 0
+  let total = 0
   if (selectedIndex >= 0) {
     selectedPlan = subscriptionPlans[selectedIndex]
+    subTotal = Number(selectedPlan.price)
+    tax = (Number(selectedPlan.price) / 100) * 10
+    transectionCharges = 10
+    total = Number(selectedPlan.price) + tax + transectionCharges
   }
 
   return (
@@ -97,17 +105,17 @@ function SelectSubscriptionPlan(props) {
               <Spacer height={sizes.baseMargin} />
               <TitleValue
                 title={'Subtotal'}
-                value={'$ ' + selectedPlan.price + ".00"}
+                value={'$ ' + subTotal}
               />
               <Spacer height={sizes.baseMargin} />
               <TitleValue
                 title={'Tax (10%)'}
-                value={'$ 4.99'}
+                value={'$ ' + tax}
               />
               <Spacer height={sizes.baseMargin} />
               <TitleValue
                 title={'Transaction Charges'}
-                value={'$ 10.00'}
+                value={'$ ' + transectionCharges}
               />
               <Spacer height={sizes.baseMargin} />
               <Wrapper style={[appStyles.grayWrapper, { paddingVertical: sizes.baseMargin * 1.5 }]}>
@@ -115,7 +123,7 @@ function SelectSubscriptionPlan(props) {
                   <Wrapper flex={1}>
                     <SmallTitle>Total</SmallTitle>
                   </Wrapper>
-                  <SmallTitle style={[appStyles.textPrimaryColor]}>$ 64.44</SmallTitle>
+                  <SmallTitle style={[appStyles.textPrimaryColor]}>$ {total}</SmallTitle>
                 </RowWrapperBasic>
               </Wrapper>
               <Spacer height={sizes.baseMargin} />

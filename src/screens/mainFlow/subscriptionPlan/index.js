@@ -1,9 +1,11 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { View, Text } from 'react-native';
-import { LargeText, MainWrapper, PlanCard, RegularText, RowWrapperBasic, SmallTitle, Spacer, Wrapper } from '../../../components';
-import { appStyles, colors, fontFamily, routes, sizes } from '../../../services';
+import { height } from 'react-native-dimension';
+import { useSelector } from 'react-redux';
+import { LargeText, MainWrapper, PlanCard, PopupPrimary, RegularText, RowWrapperBasic, SmallTitle, Spacer, Toasts, Wrapper } from '../../../components';
+import { appStyles, Backend, colors, fontFamily, routes, sizes } from '../../../services';
 
 const subscriptionPlans = [
     {
@@ -26,29 +28,100 @@ const subscriptionPlans = [
 function SubscriptionPlan(props) {
     const { navigate } = props.navigation
 
-    const [selectedIndex, selectIndex] = useState(0)
+    //redux states
+    const user = useSelector(state => state.user)
+    const { userDetail } = user
+    //local states
+    const [selectedPlanIndex, setPlanIndex] = useState(0)
+    const [loadingCancelSubscription, setLoadingCancelSubscription] = useState(false)
 
+    const [isCancelSubscriptionPopupVisible, setCancelSubscriptionPopupVisibility] = useState(false)
+    const toggleCancelSubscriptionPopup = () => setCancelSubscriptionPopupVisibility(!isCancelSubscriptionPopupVisible)
 
+    useEffect(() => {
+        getSetUserSubscriptionPlan()
+    }, [userDetail])
+
+    const getSetUserSubscriptionPlan = () => {
+        const subscription_plan = userDetail.subscription_plan 
+        if (subscriptionPlans.length && subscription_plan) {
+            const tempItem = subscriptionPlans.find(item => item.title === subscription_plan)
+            if (tempItem) {
+                const tempIndex = subscriptionPlans.indexOf(tempItem)
+                if (tempIndex >= 0) {
+                    setPlanIndex(tempIndex)
+                }
+            }
+        }
+    }
+    const handleCancelSubscription = async () => {
+        setLoadingCancelSubscription(true)
+        let subscriptionId = userDetail.subscription_id?userDetail.subscription_id:'sub_1JfOIiLAATci74dLnVZPUmNi'
+        await Backend.cancelStripeSubscribtion(subscriptionId).
+            then(async (response) => {
+                console.log('Cancel subscribtion response', response)
+                if (response.status === 'canceled') {
+                     await Backend.update_profile({
+                         //customer_id: stripeCustomerObjectID,
+                         //payment_id: stripePaymentObjectID,
+                         //subscription_id: response.id,
+                         user_type: 'basic',
+                         subscription_plan: 'Basic'
+                     }).
+                         then(async (response) => {
+                             if (response) {
+                                 toggleCancelSubscriptionPopup()
+                                 Toasts.success('Subscription has been cancelled')
+                                 setPlanIndex(0)
+                             }
+                         })
+                } else {
+                    Toasts.error('Operation Failed')
+                    toggleCancelSubscriptionPopup()
+                }
+            })
+        setLoadingCancelSubscription(false)
+    }
     return (
         <MainWrapper>
             <FlatList
                 data={subscriptionPlans}
                 ListHeaderComponent={() => <Spacer height={sizes.baseMargin} />}
                 renderItem={({ item, index }) => {
-                    const isSelected = selectedIndex === index
+                    const isSelected = selectedPlanIndex === index
                     return (
                         <PlanCard
                             onPress={() => {
-                                //selectIndex(index),
-                                index != 0 && navigate(routes.upgradeSubscriptionPlan, { plan: item })
+                                //setPlanIndex(index),
+                                if (index === 0 && selectedPlanIndex != index) {
+                                    toggleCancelSubscriptionPopup()
+                                }
+                                if (index != 0 && selectedPlanIndex != index) {
+                                    navigate(routes.upgradeSubscriptionPlan, { plan: item })
+                                }
                             }}
                             title={item.title}
                             price={item.price === 0 ? 'Free' : '$' + item.price + '/month'}
                             keyPoints={item.keyPoints}
-                            isSelected={selectedIndex === index}
+                            isSelected={selectedPlanIndex === index}
                         />
                     )
                 }}
+            />
+            <PopupPrimary
+                visible={isCancelSubscriptionPopupVisible}
+                toggle={toggleCancelSubscriptionPopup}
+                iconName="close"
+                iconType="ionicon"
+                iconContainerColor={colors.error}
+                title={`Cancel ${subscriptionPlans[selectedPlanIndex].title} Plan`}
+                info={"Are you sure to cancel the current subscription plan?"}
+                buttonText1="Yes"
+                buttonText2="No"
+                onPressButton1={handleCancelSubscription}
+                onPressButton2={toggleCancelSubscriptionPopup}
+                loadingButton1={loadingCancelSubscription}
+                topMargin={height(60)}
             />
         </MainWrapper>
     );

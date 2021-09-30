@@ -56,7 +56,7 @@ function CompleteYourProfile(props) {
     }
 
     return (
-        <MainWrapper>
+        <MainWrapper> 
             <KeyboardAvoidingScrollView>
                 <EditProfileComp
                     ref={EditProfileRef}

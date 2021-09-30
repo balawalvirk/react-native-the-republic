@@ -319,9 +319,9 @@ export const ProductCardSecondary = ({ perMoreInfo, content, onPress, animation,
     );
 }
 
-export const CreditCardPrimary = ({ containerStyle, name, cardNumber, expiry, onPress, shadow, type, gradiant, subContainerStyle, isDefault, onPressSelect }) => {
-    const isMaster = type === 'master'
-    const isVisa = type === 'visa'
+export const CreditCardPrimary = ({ containerStyle, name, cardNumber, expiry, onPress, shadow,  gradiant, subContainerStyle, isDefault, onPressSelect }) => {
+    const isMaster = HelpingMethods.getCardType(cardNumber) === 'Mastercard'
+    const isVisa = HelpingMethods.getCardType(cardNumber) === 'Visa'
     const cardTypeIcon = isMaster ? appImages.masterLogo : isVisa ? appImages.visaLogo : appImages.noImageAvailable
     return (
         <TouchableOpacity activeOpacity={1} onPress={onPress} style={[{ backgroundColor: colors.appBgColor2, borderRadius: sizes.buttonRadius, marginHorizontal: sizes.marginHorizontal, }, shadow && appStyles.shadow, containerStyle]}>
@@ -346,7 +346,7 @@ export const CreditCardPrimary = ({ containerStyle, name, cardNumber, expiry, on
                     </Wrapper>
                 </RowWrapperBasic>
                 <Spacer height={sizes.smallMargin} />
-                <SmallTitle style={[{ color: appStyles.textWhite.color }, appStyles.fontMedium]}>**** **** **** {cardNumber.slice(11, 15)}</SmallTitle>
+                <SmallTitle style={[{ color: appStyles.textWhite.color }, appStyles.fontMedium]}>{HelpingMethods.getHiddenCardNumber(cardNumber)}</SmallTitle>
                 <Spacer height={sizes.baseMargin} />
                 <RowWrapperBasic>
                     <Wrapper flex={1}>

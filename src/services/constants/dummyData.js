@@ -872,15 +872,27 @@ const dummyData = {
     ],
     creditCards: [
         {
+            id:'4238',
             name: 'John Doe',
-            number: '7781522933341946',
-            expiry: '12/25',
+            card_number: '4000000000000077',
+            expiry_date: '12/25',
+            cvc:'435',
             type: 'master'
         },
         {
-            name: 'John Doe',
-            number: '1153688253926386',
-            expiry: '08/23',
+            id:'6689',
+            name: 'William Shaw',
+            card_number: '4242424242424242',
+            expiry_date: '08/23',
+            cvc:'667',
+            type: 'visa'
+        },
+        {
+            id:'778',
+            name: 'Anita Jack',
+            card_number: '5555555555554444',
+            expiry_date: '08/23',
+            cvc:'897',
             type: 'visa'
         }
     ],

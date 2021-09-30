@@ -8,7 +8,7 @@ import styles from './styles';
 import CountryPicker from 'react-native-country-picker-modal'
 import auth from '@react-native-firebase/auth';
 
-function VerifyPhone(props) {
+function VerifyPhone(props) { 
     const { navigate } = props.navigation
     const { params } = props.route
     const { credentials, profileDetails, confirmPhoneNumber } = params

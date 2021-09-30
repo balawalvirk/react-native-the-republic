@@ -102,7 +102,7 @@ function BottomTabScreens() {
                     tabBarLabel: "Profile",
                     tabBarIcon: ({ color, size, focused }) => {
                         //return <CustomIcon icon={appIcons.marketplace} size={tabIconSize} color={color} focused={focused} />
-                        return <ImageRound source={{ uri: userDetail.profile_image?userDetail.profile_image:appImages.noUser }} size={tabIconSize} style={{ opacity: focused ? 1 : 0.5, borderColor: colors.appColor1 }} />
+                        return <ImageRound source={{ uri: userDetail?userDetail.profile_image?userDetail.profile_image:appImages.noUser:appImages.noUser }} size={tabIconSize} style={{ opacity: focused ? 1 : 0.5, borderColor: colors.appColor1 }} />
                     },
                 })}
             />

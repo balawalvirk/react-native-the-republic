@@ -8,6 +8,7 @@ import { Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native';
 import { Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import moment from 'moment';
 const options = {
     title: 'Select Photo',
     quality: 1,
@@ -76,57 +77,7 @@ function VerifyIdentity(props) {
             }
         });
     }
-    const checkCameraPermission = () => {
-        check(Platform.OS === 'android' ? PERMISSIONS.ANDROID.CAMERA : PERMISSIONS.IOS.CAMERA)
-            .then((result) => {
-                switch (result) {
-                    case RESULTS.UNAVAILABLE:
-                        console.log('This feature is not available (on this device / in this context)');
-                        break;
-                    case RESULTS.DENIED:
-                        //console.log('The permission has not been requested / is denied but requestable');
-                        requestCameraPermission()
-                        break;
-                    case RESULTS.LIMITED:
-                        console.log('The permission is limited: some actions are possible');
-                        break;
-                    case RESULTS.GRANTED:
-                        //console.log('The permission is granted');
-                        launchCamera()
-                        break;
-                    case RESULTS.BLOCKED:
-                        console.log('The permission is denied and not requestable anymore');
-                        break;
-                }
-            })
-            .catch((error) => {
-                // …
-            });
-    }
-    const requestCameraPermission = () => {
-        request(Platform.OS === 'android' ? PERMISSIONS.ANDROID.CAMERA : PERMISSIONS.IOS.CAMERA)
-            .then((result) => {
-                switch (result) {
-                    case RESULTS.UNAVAILABLE:
-                        console.log('This feature is not available (on this device / in this context)');
-                        break;
-                    case RESULTS.DENIED:
-                        //console.log('The permission has not been requested / is denied but requestable');
-                        //requestCameraPermission()
-                        break;
-                    case RESULTS.LIMITED:
-                        console.log('The permission is limited: some actions are possible');
-                        break;
-                    case RESULTS.GRANTED:
-                        //console.log('The permission is granted');
-                        launchCamera()
-                        break;
-                    case RESULTS.BLOCKED:
-                        console.log('The permission is denied and not requestable anymore');
-                        break;
-                }
-            });
-    }
+    
     const registerNewAccount = async () => {
         const { email, password } = credentials
         const {
@@ -140,7 +91,7 @@ function VerifyIdentity(props) {
             // countryPhoneCode,
             // countryCode
         } = profileDetails
-        console.log('profileDetails-->', profileDetails)
+        console.log('profileDetails-->', profileDetails) 
         let fcmToken = await AsyncStorage.getItem(asyncConts.fcm_token);
         console.log('fcmToken-->', fcmToken)
         setLoadingCreateAccount(true)
@@ -190,10 +141,6 @@ function VerifyIdentity(props) {
                 <Spacer height={sizes.smallMargin} />
                 {
                     identityFile ?
-                        // <ImageProfile
-                        //     source={{ uri: imageFile.uri }}
-                        //     onPressCamera={toggleImagePickerPopup}
-                        // />
                         <Wrapper>
                             <Image
                                 source={{ uri: identityFile.uri }}
@@ -208,16 +155,6 @@ function VerifyIdentity(props) {
                             />
                         </Wrapper>
                         :
-                        // <IconButton
-                        //     iconName="camera"
-                        //     iconType="feather"
-                        //     buttonSize={totalSize(20)}
-                        //     iconSize={totalSize(4)}
-                        //     buttonColor={colors.appBgColor2}
-                        //     buttonStyle={{ borderRadius: 100 }}
-                        //     iconColor={colors.appTextColor1}
-                        //     onPress={toggleImagePickerPopup}
-                        // />
                         <TouchableOpacity
                             onPress={toggleImagePickerPopup}
                             style={[appStyles.grayWrapper, appStyles.center, { height: height(25) }]}>
@@ -257,6 +194,8 @@ function VerifyIdentity(props) {
                 info={"We'll let you know once your account has been verified by The Republic"}
                 buttonText1="Continue"
                 onPressButton1={() => { toggleIdentityVerifiedPopup(); navigate(routes.onBoarding) }}
+                disableBackDropPress
+                disableSwipe
             />
             <LoaderAbsolute
                 isVisible={loadingCreateAccount}

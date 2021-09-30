@@ -28,7 +28,8 @@ import { ScrollView } from 'react-native'
 import { StyleSheet } from 'react-native'
 import { LineVertical } from '../lines'
 import GoogleAutoComplete from './googleAutoComplete'
-export const PopupPrimary = ({ visible, toggle, title, info, iconName, disableSwipe, disableBackDropPress, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2,loadingButton1,loadinButton2 ,topMargin, children, scrollEnabled, button1Style, keyboardShouldPersistTaps }) => {
+
+export const PopupPrimary = ({ visible, toggle, title, info, iconName,iconColor,iconContainerColor,iconContainerSize,iconSize, disableSwipe, disableBackDropPress, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2,loadingButton1,loadinButton2 ,topMargin, children, scrollEnabled, button1Style, keyboardShouldPersistTaps }) => {
     const defaultTopMargin = Platform.OS === 'ios' ? height(55) : height(45)
     const customTopMargin = topMargin ? Platform.OS === 'ios' ? topMargin : topMargin - height(10) : defaultTopMargin
     return (
@@ -54,10 +55,10 @@ export const PopupPrimary = ({ visible, toggle, title, info, iconName, disableSw
                                     iconName={iconName}
                                     iconType={iconType}
                                     customIcon={customIcon}
-                                    iconColor={colors.appTextColor6}
-                                    buttonColor={colors.success}
-                                    buttonSize={totalSize(6)}
-                                    iconSize={totalSize(4)}
+                                    iconColor={iconColor?iconColor:colors.appTextColor6}
+                                    buttonColor={iconContainerColor?iconContainerColor:colors.success}
+                                    buttonSize={iconContainerSize?iconContainerSize:totalSize(6)}
+                                    iconSize={iconSize?iconSize:totalSize(4)}
                                     buttonStyle={{ borderRadius: 100, alignSelf: 'center', }}
                                 />
                                 <Spacer height={sizes.baseMargin * 1.5} />

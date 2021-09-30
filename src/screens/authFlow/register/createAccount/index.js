@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
 import { View, Text } from 'react-native';
 import { MainWrapper, XXLTitle, Spacer, ComponentWrapper, BackIcon, BackgroundElementTop, Wrapper, LogoMain, TextInputBordered, TextInputUnderlined, AbsoluteWrapper, CheckBoxPrimary, ButtonColored, RegularText, RowWrapper, Toasts, KeyboardAvoidingScrollView, ButtonGradient, ErrorText } from '../../../../components';
-import { appStyles, sizes, HelpingMethods, Validations, routes } from '../../../../services';
+import { appStyles, sizes, HelpingMethods, Validations, routes, Backend } from '../../../../services';
 import { totalSize, height } from 'react-native-dimension';
 import { TermsCondition } from '../../../docs';
 
@@ -37,7 +37,6 @@ function CreateAccount(props) {
   }
   const validations = () => {
     HelpingMethods.handleAnimation()
-
     !email ? setEmailError('Enter your email') : !Validations.validateEmail(email) ? setEmailError('Email format is invalid') : setEmailError('')
     !password ? setPasswordError('Enter your password') : password.length < 6 ? setPasswordError('Atleast 6 characters') : setPasswordError('')
     !confirmPassword ? setConfirmPasswordError('Enter confirm password') : confirmPassword.length < 6 ? setConfirmPasswordError('Atleast 6 characters') : confirmPassword != password ? setConfirmPasswordError('Password not matched') : setConfirmPasswordError('')
@@ -46,25 +45,27 @@ function CreateAccount(props) {
         if (accept) {
           return true
         } else {
-          Toasts.error('Please our accept terms & conditions')
+          Toasts.error('Please accept our terms & conditions')
         }
       }
     } else {
       return false
     }
   }
-  const handleRegister = () => {
+  const handleRegister = async() => {
     const credentials = {
       email: email,
       password: password
     }
     if (validations()) {
-
       setLoading(true)
-      setTimeout(() => {
-        navigate(routes.completeYourProfil, { credentials })
-        setLoading(false)
-      }, 1000);
+      await Backend.checkUser({email}).
+        then(res => {
+          if (res) {
+            navigate(routes.completeYourProfil, { credentials })
+          }
+        })
+      setLoading(false)
     }
   }
 
@@ -76,11 +77,8 @@ function CreateAccount(props) {
         <Spacer height={sizes.baseMargin} />
         <TextInputUnderlined
           title="Email"
-          //placeholder=""
           value={email}
           keyboardType="email-address"
-          // iconName="email"
-          //customIconLeft={appIcons.user}
           onChangeText={handleOnChangeEmailText}
           error={emailError}
         />
@@ -88,14 +86,9 @@ function CreateAccount(props) {
         <TextInputUnderlined
           title="Password"
           value={password}
-          //  customIconLeft={appIcons.lock}
           iconNameRight={passwordVisible ? "eye" : "eye-off"}
           iconTypeRight="feather"
           onPressIconRight={() => setPasswordVisible(!passwordVisible)}
-          //iconColorRight={colors.appTextColor3}
-          //keyboardType="ascii-capable"
-          // iconName="lock"
-          // customIconLeft={appIcons.lock}
           secureTextEntry={!passwordVisible}
           onChangeText={handleOnChangePasswordText}
           inputStyle={{ letterSpacing: totalSize(0.5) }}
@@ -105,14 +98,9 @@ function CreateAccount(props) {
         <TextInputUnderlined
           title="Confirm Password"
           value={confirmPassword}
-          //  customIconLeft={appIcons.lock}
           iconNameRight={confirmPasswordVisible ? "eye" : "eye-off"}
           iconTypeRight="feather"
           onPressIconRight={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
-          //iconColorRight={colors.appTextColor3}
-          //keyboardType="ascii-capable"
-          // iconName="lock"
-          // customIconLeft={appIcons.lock}
           secureTextEntry={!confirmPasswordVisible}
           onChangeText={handleOnChangeConfirmPasswordText}
           inputStyle={{ letterSpacing: totalSize(0.5) }}

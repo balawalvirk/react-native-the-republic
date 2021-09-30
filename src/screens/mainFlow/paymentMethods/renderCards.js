@@ -19,9 +19,8 @@ export function RenderPaymentMethods({ data, onPressItem, onPressSelect, selecte
                         <CreditCardPrimary
                             containerStyle={{ width: width(80), marginLeft: 0, marginRight: sizes.marginHorizontalSmall, marginVertical: sizes.marginVertical }}
                             name={item.name}
-                            cardNumber={item.number}
-                            expiry={item.expiry}
-                            type={item.type}
+                            cardNumber={item.card_number}
+                            expiry={item.expiry_date}
                             shadow
                             onPress={() => onPressItem(item, index)}
                             onPressSelect={() => onPressSelect(item, index)}

@@ -44,6 +44,30 @@ export const login = async (email, password) => {
     return response
 };
 
+export const checkUser = async ({email}) => {
+    let response = null
+    let params = {
+        email: email.toLowerCase(),
+    }
+    console.log('Params', params);
+    await axios
+        .post(`${baseURL + endPoints.user.check_user}`, params)
+        .then(async responseJson => {
+            const tempResponseData = responseJson.data
+            console.log('Response', tempResponseData);
+            if (tempResponseData.success) {
+                response = tempResponseData
+            } else {
+                Toasts.error(tempResponseData.message)
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};
+
 export const auto_login = async (email, password) => {
     let response = null
     let params = {
@@ -134,6 +158,9 @@ export const complete_profile = async ({ user_id, first_name, last_name, usernam
     image && formDataObject.append("image", image)
     formDataObject.append("country_code", country_code)
     formDataObject.append("country_phone_code", country_phone_code)
+    formDataObject.append("user_type", 'basic')
+    formDataObject.append("subscription_plan", 'Basic')
+
     console.log('complete_profile\nuri', uri, '\nparams', formDataObject);
     await axios
         .post(uri, formDataObject)
@@ -141,7 +168,8 @@ export const complete_profile = async ({ user_id, first_name, last_name, usernam
             const tempResponseData = responseJson.data
             console.log('complete_profile Response', tempResponseData);
             if (tempResponseData.success) {
-                response = responseJson.data
+                response = tempResponseData
+                AsyncStorage.setItem(asyncConts.user_details, JSON.stringify(tempResponseData.user))
             } else {
                 Toasts.error(tempResponseData.message)
             }
@@ -179,23 +207,35 @@ export const submit_identity = async ({ user_id, attachment }) => {
         });
     return response
 };
-export const update_profile = async ({ first_name, last_name, username, gender, birthday, phone, image, country_code, country_phone_code, fcm_token }) => {
+export const update_profile = async ({ first_name, last_name, username, gender, birthday, phone, image, country_code, country_phone_code, fcm_token, subscription_id, customer_id, payment_id, user_type,subscription_plan, latitude, longitude, distance }) => {
     let response = null
     const state = store.getState()
     const { id } = state.user.userDetail
     const uri = `${baseURL + endPoints.user.complete_profile}`
     const formDataObject = new FormData()
     formDataObject.append("user_id", id)
-    formDataObject.append("first_name", first_name)
-    formDataObject.append("last_name", last_name)
-    formDataObject.append("username", username)
-    formDataObject.append("gender", gender)
-    formDataObject.append("birthday", birthday)
-    formDataObject.append("phone", phone)
-    formDataObject.append("country_code", country_code)
-    formDataObject.append("country_phone_code", country_phone_code)
+    first_name && formDataObject.append("first_name", first_name)
+    last_name && formDataObject.append("last_name", last_name)
+    username && formDataObject.append("username", username)
+    gender && formDataObject.append("gender", gender)
+    birthday && formDataObject.append("birthday", birthday)
+    phone && formDataObject.append("phone", phone)
+    country_code && formDataObject.append("country_code", country_code)
+    country_phone_code && formDataObject.append("country_phone_code", country_phone_code)
     fcm_token && formDataObject.append("fcm_token", fcm_token)
     image && formDataObject.append("image", image)
+    //user type configs
+    user_type && formDataObject.append("user_type", user_type)
+    subscription_plan && formDataObject.append("subscription_plan", subscription_plan)
+    //stripe configs
+    subscription_id && formDataObject.append("subscription_id", subscription_id)
+    customer_id && formDataObject.append("customer_id", customer_id)
+    payment_id && formDataObject.append("payment_id", payment_id)
+    //location configs
+    latitude && formDataObject.append("latitude", latitude)
+    longitude && formDataObject.append("longitude", longitude)
+    distance && formDataObject.append("distance", distance)
+
     console.log('update_profile\nuri: ', uri, '\nParams: ', formDataObject);
     await axios
         .post(uri, formDataObject)

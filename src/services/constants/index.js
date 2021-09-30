@@ -6,112 +6,124 @@ import { fontFamily, sizes } from '../utilities'
 import { totalSize } from 'react-native-dimension'
 import DummyData from './dummyData'
 
+export const stripeKeys = {
+    publishable_key: 'pk_test_51Jb6KVLAATci74dLLsZkauglGDRsOx377wrbAm69Q8jyZIRf95BvebllW2hYopF65KH1hBf5BGd1MTaZsXgIZYK200IHqAYJUa',
+    secret_key: 'sk_test_51Jb6KVLAATci74dLGLOUlvIjucfhcHvHZHdgiLlXedshWcvr3efJDhwdkLfMxHKnZxzuONFWjuvBRdjEjOTVLS4S00YmPfQOaB',
+    authorization_key: 'Bearer sk_test_51Jb6KVLAATci74dLGLOUlvIjucfhcHvHZHdgiLlXedshWcvr3efJDhwdkLfMxHKnZxzuONFWjuvBRdjEjOTVLS4S00YmPfQOaB',
+    //Products
+    subscription_dealerPro_price: 'price_1JfK9bLAATci74dLgFEnBC7F',
+    subscription_premium_price: 'price_1JfK93LAATci74dLdguEUbWK'
+}
 export const baseURL = 'https://republic-backend.herokuapp.com/api/'
 export const endPoints = {
-    user:{
-        login:'login',
-        user_register:'user-register',
-        complete_profile:'complete-profile',
-        update_phone:'update-phone',
-        update_profile:'update-profile',
-        submit_identity:'submit-identity',
-        approve_identity:'approve-identity',
-        reject_identity:'reject-identity'
+    user: {
+        login: 'login',
+        user_register: 'user-register',
+        complete_profile: 'complete-profile',
+        update_phone: 'update-phone',
+        update_profile: 'update-profile',
+        submit_identity: 'submit-identity',
+        approve_identity: 'approve-identity',
+        reject_identity: 'reject-identity',
+        check_user: 'check-user'
     },
-    follow:{
-        send_follow_request:'send-follow-request',
-        show_follow_requests:'show-follow-requests',
-        accept_follow_request:'accept-follow-request',
-        decline_follow_request:'decline-follow-request',
-        show_followers:'show-followers',
-        unfollow_user:'unfollow-user'
+    creditCard: {
+        add_card: 'add-card'
     },
-    training:{
-        show_trainings:'show-trainings',
-        add_training:'add-training',
-        show_training:'show-training',
-        book_training:'book-training',
-        user_trainings:'user-trainings',
-        add_timeslot:'add-timeslot',
-        show_timeslots:'show-timeslots',
-        show_timeslot:'show-timeslot',
-        delete_timeslot:'delete-timeslot',
-        edit_training:'edit-training',
-        delete_training:'delete-training',
-        send_training_request:'send-training-request',
-        show_training_requests:'show-training-requests',
-        accept_training_request:'accept-training-request',
-        reject_training_request:'reject-training-request',
-        user_training_requests:'user-training-requests',
+    follow: {
+        send_follow_request: 'send-follow-request',
+        show_follow_requests: 'show-follow-requests',
+        accept_follow_request: 'accept-follow-request',
+        decline_follow_request: 'decline-follow-request',
+        show_followers: 'show-followers',
+        unfollow_user: 'unfollow-user'
     },
-    category:{
-        add_category:'add-category',
-        show_categories:'show-categories',
-        delete_category:'delete-category'
+    training: {
+        show_trainings: 'show-trainings',
+        add_training: 'add-training',
+        show_training: 'show-training',
+        book_training: 'book-training',
+        user_trainings: 'user-trainings',
+        add_timeslot: 'add-timeslot',
+        show_timeslots: 'show-timeslots',
+        show_timeslot: 'show-timeslot',
+        delete_timeslot: 'delete-timeslot',
+        edit_training: 'edit-training',
+        delete_training: 'delete-training',
+        send_training_request: 'send-training-request',
+        show_training_requests: 'show-training-requests',
+        accept_training_request: 'accept-training-request',
+        reject_training_request: 'reject-training-request',
+        user_training_requests: 'user-training-requests',
     },
-    product:{
-        add_product:'add-product',
-        add_favorite_product:'add-favorite-product',
-        show_favorite_products:'show-favorite-products',
-        remove_favorite_product:'remove-favorite-product',
-        category_products:'category-products',
-        filter_products:'filter-products',
-        product_review:'product-review',
-        show_reviews:'show-reviews',
-        edit_review:'edit-review',
-        delete_review:'delete-review',
-        nearby_products:'nearby-products',
-        show_categories:'show-categories',
-        show_items:'show-items',
-        show_manufacturers:'show-manufacturers',
-        show_calibers:'show-calibers',
-        show_actions:'show-actions',
-        show_conditions:'show-conditions',
+    category: {
+        add_category: 'add-category',
+        show_categories: 'show-categories',
+        delete_category: 'delete-category'
     },
-    post:{
-        add_post:'add-post',
-        show_posts:'show-posts',
-        single_post:'single-post',
-        delete_post:'delete-post',
-        report_post:'report-post',
-        add_reaction:'add-reaction',
-        show_reactions:'show-reactions',
-        delete_reaction:'delete-reaction',
-        add_comment:'add-comment',
-        show_comments:'show-comments',
-        edit_comment:'edit-comment',
-        delete_comment:'delete-comment',
-        report_comment:'report-comment'
+    product: {
+        add_product: 'add-product',
+        add_favorite_product: 'add-favorite-product',
+        show_favorite_products: 'show-favorite-products',
+        remove_favorite_product: 'remove-favorite-product',
+        category_products: 'category-products',
+        filter_products: 'filter-products',
+        product_review: 'product-review',
+        show_reviews: 'show-reviews',
+        edit_review: 'edit-review',
+        delete_review: 'delete-review',
+        nearby_products: 'nearby-products',
+        show_categories: 'show-categories',
+        show_items: 'show-items',
+        show_manufacturers: 'show-manufacturers',
+        show_calibers: 'show-calibers',
+        show_actions: 'show-actions',
+        show_conditions: 'show-conditions',
     },
-    chat:{
-        show_conversations:'show-conversations',
-        send_message:'send-message',
-        show_messages:'show-messages'
+    post: {
+        add_post: 'add-post',
+        show_posts: 'show-posts',
+        single_post: 'single-post',
+        delete_post: 'delete-post',
+        report_post: 'report-post',
+        add_reaction: 'add-reaction',
+        show_reactions: 'show-reactions',
+        delete_reaction: 'delete-reaction',
+        add_comment: 'add-comment',
+        show_comments: 'show-comments',
+        edit_comment: 'edit-comment',
+        delete_comment: 'delete-comment',
+        report_comment: 'report-comment'
     },
-    call:{
-        add_callhistory:'add-callhistory',
-        show_callhistories:'show-callhistories',
-        delete_callhistory:'delete-callhistory'
+    chat: {
+        show_conversations: 'show-conversations',
+        send_message: 'send-message',
+        show_messages: 'show-messages'
     },
-    coupon:{
-        create_coupon:'create-coupon',
-        show_coupons:'show-coupons',
-        edit_coupon:'edit-coupon',
-        delete_coupon:'delete-coupon'
+    call: {
+        add_callhistory: 'add-callhistory',
+        show_callhistories: 'show-callhistories',
+        delete_callhistory: 'delete-callhistory'
     },
-    group:{
-        create_group:'create-group',
-        edit_group:'edit-group',
-        send_join_request:'send-join-request',
-        accept_request:'accept-request',
-        decline_request:'decline-request',
-        show_group_members:'show-group-members',
-        remove_group_member:'remove-group-member',
-        show_members_requests:'show-members-requests'
+    coupon: {
+        create_coupon: 'create-coupon',
+        show_coupons: 'show-coupons',
+        edit_coupon: 'edit-coupon',
+        delete_coupon: 'delete-coupon'
     },
-    contact_us:'contact-us',
-    add_card:'add-card',
-    submit_app_feedback:'submit-app-feedback'
+    group: {
+        create_group: 'create-group',
+        edit_group: 'edit-group',
+        send_join_request: 'send-join-request',
+        accept_request: 'accept-request',
+        decline_request: 'decline-request',
+        show_group_members: 'show-group-members',
+        remove_group_member: 'remove-group-member',
+        show_members_requests: 'show-members-requests'
+    },
+    contact_us: 'contact-us',
+    add_card: 'add-card',
+    submit_app_feedback: 'submit-app-feedback'
 }
 export const routes = {
     auth: 'auth',
@@ -178,26 +190,26 @@ export const routes = {
         reports: 'reports',
         requests: 'requests',
         orders: 'orders',
-        OrderDetail:'OrderDetails',
+        OrderDetail: 'OrderDetails',
         earnings: 'earnings',
         trainings: 'yourTrainings',
         coupons: 'coupons',
         createCoupon: 'createCoupon',
         invoices: 'invoices',
-        withdrawEarnings:'withdrawEarnings',
-        createTrainin:'createTrainin',
-        selectDateTime:'sellcerSelectDateTime'
+        withdrawEarnings: 'withdrawEarnings',
+        createTrainin: 'createTrainin',
+        selectDateTime: 'sellcerSelectDateTime'
     },
     dealer: {
         fulfillments: 'fulfillments',
-        fulfillmentDetail:'fulfillmentDetail'
+        fulfillmentDetail: 'fulfillmentDetail'
     }
 
 }
-export const asyncConts={
-    user_credentials:'USER_CREDENTIALS',
-    user_details:'USER_DETAILS',
-    fcm_token:"FCM_TOKEN",
+export const asyncConts = {
+    user_credentials: 'USER_CREDENTIALS',
+    user_details: 'USER_DETAILS',
+    fcm_token: "FCM_TOKEN",
     product_categories: 'PRODUCT_CATEGORIES',
     product_items: 'PRODUCT_ITEMS',
     product_manufacturers: 'PRODUCT_MANUFACTURERS',
