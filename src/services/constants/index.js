@@ -28,7 +28,8 @@ export const endPoints = {
         check_user: 'check-user'
     },
     creditCard: {
-        add_card: 'add-card'
+        add_card: 'add-card',
+        show_cards:'show-cards'
     },
     follow: {
         send_follow_request: 'send-follow-request',
@@ -63,6 +64,9 @@ export const endPoints = {
     },
     product: {
         add_product: 'add-product',
+        user_products:'user-products',
+        edit_product:'edit-product',
+        delete_product:'delete-product',
         add_favorite_product: 'add-favorite-product',
         show_favorite_products: 'show-favorite-products',
         remove_favorite_product: 'remove-favorite-product',

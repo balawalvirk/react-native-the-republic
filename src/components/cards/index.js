@@ -12,6 +12,7 @@ import { LargeText, MediumTitle, SmallText, SmallTitle, TinyTitle } from '../tex
 import { ButtonColoredSmall } from '../buttons';
 import { ImageSqareRound, ImageThumbnailGrid } from '../images';
 import { TitleValue } from '../common';
+import { BallIndicator, DotIndicator, MaterialIndicator } from 'react-native-indicators';
 
 export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, image, images, containerstyle, description, onPressHeart, newPrice, oldPrice, userName, userImage, viewType, rating, reviewCount, isSponsered }) => {
     const defaultViewType = viewType ? viewType : 'grid'
@@ -319,7 +320,7 @@ export const ProductCardSecondary = ({ perMoreInfo, content, onPress, animation,
     );
 }
 
-export const CreditCardPrimary = ({ containerStyle, name, cardNumber, expiry, onPress, shadow,  gradiant, subContainerStyle, isDefault, onPressSelect }) => {
+export const CreditCardPrimary = ({ containerStyle, name, cardNumber, expiry, onPress, shadow, gradiant, subContainerStyle, isDefault, onPressSelect, isLoading }) => {
     const isMaster = HelpingMethods.getCardType(cardNumber) === 'Mastercard'
     const isVisa = HelpingMethods.getCardType(cardNumber) === 'Visa'
     const cardTypeIcon = isMaster ? appImages.masterLogo : isVisa ? appImages.visaLogo : appImages.noImageAvailable
@@ -337,12 +338,27 @@ export const CreditCardPrimary = ({ containerStyle, name, cardNumber, expiry, on
                         <RegularText style={[appStyles.textWhite, appStyles.fontBold]}>{name}</RegularText>
                     </Wrapper>
                     <Wrapper style={{}}>
-                        <ButtonColoredSmall
-                            text={isDefault ? 'Default' : 'Select'}
-                            onPress={onPressSelect}
-                            buttonStyle={{ backgroundColor: colors.appBgColor1, borderRadius: 100, paddingHorizontal: sizes.marginHorizontalSmall, paddingVertical: sizes.marginVertical / 4 }}
-                            textStyle={[appStyles.textSmall]}
-                        />
+                        {
+                            isLoading ?
+                                <AbsoluteWrapper style={{ right: 0, left: 0, alignItems: 'center' }}>
+                                    <BallIndicator
+                                        size={totalSize(2)}
+                                        color={colors.appTextColor6}
+                                    />
+                                </AbsoluteWrapper>
+                                :
+                                null
+                        }
+
+                        <Wrapper style={{ opacity: isLoading ? 0 : 1 }}>
+                            <ButtonColoredSmall
+                                text={isDefault ? 'Default' : 'Select'}
+                                onPress={onPressSelect}
+                                buttonStyle={{ backgroundColor: colors.appBgColor1, borderRadius: 100, paddingHorizontal: sizes.marginHorizontalSmall, paddingVertical: sizes.marginVertical / 4 }}
+                                textStyle={[appStyles.textSmall]}
+                            />
+                        </Wrapper>
+
                     </Wrapper>
                 </RowWrapperBasic>
                 <Spacer height={sizes.smallMargin} />

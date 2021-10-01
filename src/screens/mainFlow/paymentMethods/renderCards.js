@@ -4,7 +4,7 @@ import { width } from 'react-native-dimension'
 import { CreditCardPrimary, Spacer, Wrapper } from '../../../components'
 import { sizes } from '../../../services'
 
-export function RenderPaymentMethods({ data, onPressItem, onPressSelect, selectedIndex }) {
+export function RenderPaymentMethods({ data, onPressItem, onPressSelect, selectedIndex,loadingIndex }) {
     return (
         <Wrapper>
             <FlatList
@@ -25,6 +25,7 @@ export function RenderPaymentMethods({ data, onPressItem, onPressSelect, selecte
                             onPress={() => onPressItem(item, index)}
                             onPressSelect={() => onPressSelect(item, index)}
                             isDefault={selectedIndex === index}
+                            isLoading={index===loadingIndex}
                         />
                     )
                 }}

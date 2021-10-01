@@ -38,11 +38,13 @@ function MarketPlace(props) {
     }, [])
 
     const getSetData = async () => {
+        await Backend.get_credit_cards()
         await Backend.get_product_categories()
         await Backend.get_product_items()
         await Backend.get_product_manufacturers()
         await Backend.get_product_calibers()
         await Backend.get_product_actions()
+        await Backend.get_product_conditions()
         await Backend.get_product_conditions()
         setLoading(false)
     }

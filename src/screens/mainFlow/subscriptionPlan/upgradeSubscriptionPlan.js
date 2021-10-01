@@ -13,9 +13,9 @@ function UpgradeSubscriptionPlan(props) {
 
     //redux states
     const user = useSelector(state => state.user)
-    const { userDetail } = user
-    const userCreditCards = dummyData.creditCards
-    const testSubscriptionId=''
+    const { userDetail, creditCards } = user
+    //const userCreditCards = dummyData.creditCards
+    const testSubscriptionId = ''
 
     //local states
     const [defaultCreditCard, setDefaultCreditCard] = useState(null)
@@ -37,22 +37,22 @@ function UpgradeSubscriptionPlan(props) {
     const toggleCancelCurrentSubscriptionPopup = () => setCancelCurrentSubscriptionPopupVisible(!isCancelCurrentSubscriptionPopupVisible)
 
     useEffect(() => {
-        const default_card_id = userDetail.default_card_id ? userDetail.default_card_id : '4238'
+        const default_card_id = userDetail.default_card_id
         console.log(default_card_id)
-        console.log(userCreditCards.length)
+        console.log(creditCards.length)
 
-        if (userCreditCards.length) {
-            const tempCreditCard = userCreditCards.find(item => item.id === default_card_id)
+        if (default_card_id && creditCards.length) {
+            const tempCreditCard = creditCards.find(item => item.id.toString() === default_card_id)
             console.log('tempCreditCard', tempCreditCard)
             tempCreditCard && setDefaultCreditCard(tempCreditCard)
         }
     }, [userDetail])
 
-    const handleUpgradeSubscriptionPlan=()=>{
-        let subscriptionId = userDetail.subscription_id?userDetail.subscription_id:testSubscriptionId
-        if(subscriptionId){
+    const handleUpgradeSubscriptionPlan = () => {
+        let subscriptionId = userDetail.subscription_id
+        if (subscriptionId) {
             toggleCancelCurrentSubscriptionPopup()
-        }else{
+        } else {
             handleSetupSubscription()
         }
     }
@@ -117,7 +117,7 @@ function UpgradeSubscriptionPlan(props) {
                         then(async (response) => {
                             if (response) {
                                 toggleSubscriptionUpgradedPopup()
-                                
+
                             }
                         })
                 } else {
@@ -133,22 +133,26 @@ function UpgradeSubscriptionPlan(props) {
 
     const handleCancelCurrentSubscription = async () => {
         setLoadingCancelSubscription(true)
-        let subscriptionId = userDetail.subscription_id ? userDetail.subscription_id : testSubscriptionId
-        await Backend.cancelStripeSubscribtion(subscriptionId).
+        // let subscriptionId = userDetail.subscription_id
+        const { subscription_id, payment_id, customer_id } = userDetail
+        await Backend.cancelStripeSubscribtion(subscription_id).
             then(async (response) => {
                 console.log('Cancel subscribtion response', response)
                 if (response.status === 'canceled') {
                     await Backend.update_profile({
-                        //customer_id: stripeCustomerObjectID,
-                        //payment_id: stripePaymentObjectID,
-                        //subscription_id: response.id,
                         user_type: 'basic',
-                        subscription_plan: 'Basic'
+                        subscription_plan: 'Basic',
+                        cancel_subscription
                     }).
                         then(async (response) => {
                             if (response) {
                                 toggleCancelCurrentSubscriptionPopup()
-                                handleSetupSubscription()
+                                if (payment_id && customer_id) {
+                                    setLoading(true)
+                                    handleSubscribe(customer_id, payment_id)
+                                } else {
+                                    handleSetupSubscription()
+                                }
                             }
                         })
                 } else {
@@ -217,7 +221,7 @@ function UpgradeSubscriptionPlan(props) {
                     :
                     <ButtonGradient
                         text="Add Payment Method"
-                        onPress={toggleSubscriptionUpgradedPopup}
+                        onPress={() => navigate(routes.paymentMethods)}
                     />
             }
             <Spacer height={sizes.doubleBaseMargin} />

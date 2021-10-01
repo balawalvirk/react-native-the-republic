@@ -1,5 +1,5 @@
 import { 
-    SET_USER_DETAIL } from '../actionTypes'
+    SET_USER_DETAIL,SET_CREDIT_CARDS } from '../actionTypes'
 
 
 export const setUserDetail = data => {
@@ -8,5 +8,14 @@ export const setUserDetail = data => {
         payload: data,
     };
 };
+
+export const setCreditCards = data => {
+    return {
+        type: SET_CREDIT_CARDS,
+        payload: data,
+    };
+};
+
+
 
 

@@ -15,7 +15,7 @@ import { height } from 'react-native-dimension';
 function PaymentModal({
     isVisible, toggleModal, title,
     onPressAddPaymentMethod, hideSaveCardCheck,
-    buttonText, detail
+    buttonText, detail,isLoading
 }) {
     const [cardNumber, setCardNumber] = useState('')
     const [name, setName] = useState('')
@@ -84,7 +84,7 @@ function PaymentModal({
         if (PaymentValidations()) {
             paymentInfo = {
                 card_number: cardNumber.replace(/\s/g, ''),
-                cardHolder_name: name,
+                name,
                 expiry_date: cardExpiry,
                 cvc: cvc,
                 //save_card: saveCard,
@@ -108,6 +108,8 @@ function PaymentModal({
             visible={isVisible}
             toggle={toggleModal}
             topMargin={keyboardVisible ? height(20) : height(45)}
+            disableBackDropPress={isLoading}
+            disableSwipe={isLoading}
         // hideHeader
         //disableSwipe
         >
@@ -215,6 +217,7 @@ function PaymentModal({
                     <ButtonColored
                         text={buttonText ? buttonText : "Add Payment Method"}
                         onPress={() => onPressAddPaymentMethod(getPaymentInfo())}
+                        isLoading={isLoading}
                     />
                     <Spacer height={sizes.baseMargin} />
                 </KeyboardAvoidingScrollView>

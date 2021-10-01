@@ -66,7 +66,8 @@ function SubscriptionPlan(props) {
                          //payment_id: stripePaymentObjectID,
                          //subscription_id: response.id,
                          user_type: 'basic',
-                         subscription_plan: 'Basic'
+                         subscription_plan: 'Basic',
+                         cancel_subscription
                      }).
                          then(async (response) => {
                              if (response) {

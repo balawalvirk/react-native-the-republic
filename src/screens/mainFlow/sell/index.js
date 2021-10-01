@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { View, Text, Platform, TouchableOpacity, Image, Animated } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
 import { Icon } from 'react-native-elements';
@@ -9,20 +9,6 @@ import * as ImagePicker from 'react-native-image-picker';
 import { check, PERMISSIONS, RESULTS, request } from 'react-native-permissions';
 import { TextInput } from 'react-native';
 import { useSelector } from 'react-redux';
-// const options = [
-//     {
-//         label: 'Option 1',
-//         value: 'Option 1'
-//     },
-//     {
-//         label: 'Option 2',
-//         value: 'Option 2'
-//     },
-//     {
-//         label: 'Option 3',
-//         value: 'Option 3'
-//     }
-// ]
 const options = {
     title: 'Select Photo',
     quality: 1,
@@ -38,15 +24,17 @@ const options = {
 function Sell(props) {
     const { navigation, route } = props
     const { goBack, navigate } = navigation
+    const { params } = route
+    const productDetail =params? params.productDetail ? params.productDetail : null:null
 
     //redux states
     const product = useSelector(state => state.product)
     const user = useSelector(state => state.user)
-    const { categories,items, actions,manufacturers,conditions,calibers } = product
+    const { categories, items, actions, manufacturers, conditions, calibers } = product
     const { userDetail } = user
     //local states
     const [step, setStep] = useState(1)
-    const headerTitle = step === 1 ? "Post an Item" : step === 2 ? "Add Product Details" : step === 3 ? "Add Location Details" : step === 4 ? "Price" : step === 5 ? "Finish" : ""
+    const headerTitle = step === 1 ? productDetail ? "Update Item" : "Post an Item" : step === 2 ? "Add Product Details" : step === 3 ? "Add Location Details" : step === 4 ? "Price" : step === 5 ? "Finish" : ""
     const handleBackPress = () => {
         step === 1 ?
             goBack() :
@@ -61,7 +49,7 @@ function Sell(props) {
             handleChangeStep(singleStepIndicatorWith * (step + 1))
         ] :
             [
-               handleAddNewProduct()
+                productDetail ? handleEditProduct() : handleAddNewProduct()
             ]
     }
     //configure Header
@@ -96,9 +84,58 @@ function Sell(props) {
         });
     }, [navigation, step]);
 
+    useEffect(() => {
+        getSetProductDetail()
+    }, [])
+    const getSetProductDetail = () => {
+        if (productDetail) {
+            const {
+                title,
+                item,
+                type,
+                manufacturer,
+                caliber,
+                action,
+                condition,
+                description,
+                city,
+                state,
+                zip_code,
+                price,
+                discounted_price,
+                images,
+                latitude,
+                longitude
+            } = productDetail
+            setTitle(title)
+            setitem(item)
+            settype(type)
+            setmanufacturer(manufacturer)
+            setCalibre(caliber)
+            setaction(action)
+            setCondition(condition)
+            setDescription(description)
+            setCity(city)
+            setState(state)
+            setZipcode(zip_code)
+            setPrice(price)
+            discounted_price && [setDiscountedPrice(discounted_price), setDiscountedPriceVisibility(true)]
+            setLatitude(latitude)
+            setLongitude(longitude)
+            if (images) {
+                const parsedImages = JSON.parse(images)
+                if (parsedImages.length) {
+                    setImageUri(parsedImages[0])
+                }
+            }
+        }
+    }
+
+
     const singleStepIndicatorWith = width(100) / 5
     const [stepIndicatorWidth, setStepIndicatorWidth] = useState(new Animated.Value(singleStepIndicatorWith))
-    const [title, setTitle] = useState('') 
+    const [title, setTitle] = useState('')
+    const [imageUri, setImageUri] = useState(null)
     const [imageFile, setImageFile] = useState(null)
     const [isImagePickerPopupVisible, setImagePickerPopupVisibility] = useState(false);
     const toggleImagePickerPopup = () => setImagePickerPopupVisibility(!isImagePickerPopupVisible)
@@ -114,6 +151,8 @@ function Sell(props) {
     const [city, setCity] = useState('')
     const [state, setState] = useState('')
     const [zipcode, setZipcode] = useState('')
+    const [latitude, setLatitude] = useState('78.090909')
+    const [longitude, setLongitude] = useState('-102.09876')
 
     const [price, setPrice] = useState('')
     const [isDiscountedPriceVisible, setDiscountedPriceVisibility] = useState('')
@@ -198,11 +237,41 @@ function Sell(props) {
             zip_code: zipcode,
             price,
             discounted_price: discountedPrice,
-            image: imageFile
+            image: imageFile,
+            latitude,
+            longitude
         }).then(res => {
             if (res) {
-                goBack(),
-                Toasts.success('Product has been added successfuly')
+                goBack()
+                Toasts.success('Product has been added')
+            }
+        })
+        setLoading(false)
+    }
+    const handleEditProduct = async () => {
+        setLoading(true)
+        await Backend.edit_Product({
+            product_id: productDetail.id,
+            title,
+            item,
+            type,
+            manufacturer,
+            caliber,
+            action,
+            condition,
+            description,
+            city,
+            statee: state,
+            zip_code: zipcode,
+            price,
+            discounted_price: discountedPrice,
+            image: imageFile,
+            latitude,
+            longitude
+        }).then(res => {
+            if (res) {
+                goBack()
+                Toasts.success('Product has been updated')
             }
         })
         setLoading(false)
@@ -222,11 +291,12 @@ function Sell(props) {
                                 onPress={toggleImagePickerPopup}
                                 style={{ backgroundColor: colors.appBgColor3, ...styles.imageStyle, }}>
                                 {
-                                    imageFile ?
+                                    imageFile || imageUri ?
                                         <AbsoluteWrapper style={[{ top: 0, right: 0, left: 0, bottom: 0 }]}>
                                             <Image
-                                                source={{ uri: imageFile.uri }}
+                                                source={{ uri: imageFile ? imageFile.uri : imageUri }}
                                                 style={{ height: '100%', width: '100%', borderRadius: sizes.cardRadius * 2 }}
+                                                resizeMode="contain"
                                             />
                                         </AbsoluteWrapper>
                                         :
@@ -236,12 +306,12 @@ function Sell(props) {
                                     <IconWithText
                                         iconName="camera"
                                         iconType="feather"
-                                        text={imageFile ? "Retake photo" : "Add your product photo"}
+                                        text={imageFile || imageUri ? "Retake photo" : "Add your product photo"}
                                         direction="column"
                                         iconSize={totalSize(5)}
-                                        textStyle={[appStyles.textMedium, imageFile && appStyles.textWhite]}
+                                        textStyle={[appStyles.textMedium, (imageFile || imageUri) && appStyles.textWhite]}
                                         onPress={toggleImagePickerPopup}
-                                        tintColor={imageFile ? colors.appTextColor6 : colors.appTextColor1}
+                                        tintColor={imageFile || imageUri ? colors.appTextColor6 : colors.appTextColor1}
                                     />
                                 </AbsoluteWrapper>
                             </TouchableOpacity>
@@ -375,7 +445,7 @@ function Sell(props) {
                                             <ProductCardPrimary
                                                 //isFavourite={HelpingMethods.checkIsProductFavourite(selectedProduct.id)}
                                                 viewType={'list'}
-                                                image={imageFile.uri}
+                                                image={imageFile ? imageFile.uri : imageUri}
                                                 description={description}
                                                 newPrice={discountedPrice}
                                                 oldPrice={price}
@@ -409,7 +479,7 @@ function Sell(props) {
             <Wrapper>
                 <Spacer height={sizes.baseMargin} />
                 <ButtonGradient
-                    text={step < 5 ? "Next" : "Post"}
+                    text={step < 5 ? "Next" : productDetail ? "Update" : "Post"}
                     onPress={handleOnNextStep}
                 />
                 <Spacer height={sizes.baseMargin * 1.5} />
@@ -421,9 +491,9 @@ function Sell(props) {
                 onPressSelectFromGalary={launchImagePicker}
             />
             <LoaderAbsolute
-            isVisible={isLoading}
-            title="Adding Your Product"
-            info="Please wait..."
+                isVisible={isLoading}
+                title={(productDetail ? "Updating" : "Adding") + " Your Product"}
+                info="Please wait..."
             />
         </MainWrapper >
     );

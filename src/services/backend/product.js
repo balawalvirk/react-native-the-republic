@@ -8,7 +8,7 @@ import HelpingMethods from "../helpingMethods";
 import { setProductActions, setProductCalibers, setProductCategories, setProductConditions, setProductItems, setProductManufacturers, setUserDetail } from "../store/actions";
 const { dispatch } = store
 
-export const add_Product = async ({ title, item, type, manufacturer, caliber, action, condition, description, city, statee, zip_code, price, discounted_price, image }) => {
+export const add_Product = async ({ title, item, type, manufacturer, caliber, action, condition, description, city, statee, zip_code, price, discounted_price, latitude, longitude, image }) => {
     let response = null
     const state = store.getState()
     const { id } = state.user.userDetail
@@ -28,6 +28,8 @@ export const add_Product = async ({ title, item, type, manufacturer, caliber, ac
     formDataObject.append("state", statee)
     formDataObject.append("zip_code", zip_code)
     formDataObject.append("price", price)
+    latitude && formDataObject.append("latitude", latitude)
+    longitude && formDataObject.append("longitude", longitude)
     discounted_price && formDataObject.append("discounted_price", discounted_price)
     image && formDataObject.append("image[]", image)
 
@@ -47,6 +49,101 @@ export const add_Product = async ({ title, item, type, manufacturer, caliber, ac
             Toasts.error(error.response.data.message)
             console.error(error);
         });
+    return response
+};
+
+export const get_user_products = async (userId) => {
+    let response = null
+    const state=store.getState()
+    const user_id=userId?userId:state.user.userDetail.id
+    const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    if (isInternetAvailable) {
+        await axios
+            .post(`${baseURL + endPoints.product.user_products}`,{user_id})
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
+    } 
+    return response
+};
+
+export const edit_Product = async ({product_id, title, item, type, manufacturer, caliber, action, condition, description, city, statee, zip_code, price, discounted_price, latitude, longitude, image }) => {
+    let response = null
+    const state = store.getState()
+    const { id } = state.user.userDetail
+
+    const uri = `${baseURL + endPoints.product.edit_product}`
+    const formDataObject = new FormData()
+    formDataObject.append("user_id", id)
+    formDataObject.append("product_id", product_id)
+    formDataObject.append("title", title)
+    formDataObject.append("item", item)
+    formDataObject.append("type", type)
+    formDataObject.append("manufacturer", manufacturer)
+    formDataObject.append("caliber", caliber)
+    formDataObject.append("action", action)
+    formDataObject.append("condition", condition)
+    formDataObject.append("description", description)
+    formDataObject.append("city", city)
+    formDataObject.append("state", statee)
+    formDataObject.append("zip_code", zip_code)
+    formDataObject.append("price", price)
+    latitude && formDataObject.append("latitude", latitude)
+    longitude && formDataObject.append("longitude", longitude)
+    discounted_price && formDataObject.append("discounted_price", discounted_price)
+    image && formDataObject.append("image[]", image)
+
+    console.log('edit_Product\nuri', uri, '\nparams', formDataObject);
+    await axios
+        .post(uri, formDataObject)
+        .then(async responseJson => {
+            const tempResponseData = responseJson.data
+            console.log('response', tempResponseData);
+            if (tempResponseData.success) {
+                response = responseJson.data
+            } else {
+                Toasts.error(tempResponseData.message)
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};
+
+export const delete_product = async (product_id) => {
+    let response = null
+    const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    if (isInternetAvailable) {
+        await axios
+            .post(`${baseURL + endPoints.product.delete_product}`,{product_id})
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
+    } 
     return response
 };
 

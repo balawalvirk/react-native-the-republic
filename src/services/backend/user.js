@@ -44,7 +44,7 @@ export const login = async (email, password) => {
     return response
 };
 
-export const checkUser = async ({email}) => {
+export const checkUser = async ({ email }) => {
     let response = null
     let params = {
         email: email.toLowerCase(),
@@ -207,7 +207,11 @@ export const submit_identity = async ({ user_id, attachment }) => {
         });
     return response
 };
-export const update_profile = async ({ first_name, last_name, username, gender, birthday, phone, image, country_code, country_phone_code, fcm_token, subscription_id, customer_id, payment_id, user_type,subscription_plan, latitude, longitude, distance }) => {
+export const update_profile = async ({
+    first_name, last_name, username, gender, birthday, phone, image,
+    country_code, country_phone_code, fcm_token, subscription_id, cancel_subscription,
+    customer_id, payment_id, user_type, subscription_plan, latitude,
+    longitude, distance, default_card_id }) => {
     let response = null
     const state = store.getState()
     const { id } = state.user.userDetail
@@ -231,10 +235,12 @@ export const update_profile = async ({ first_name, last_name, username, gender, 
     subscription_id && formDataObject.append("subscription_id", subscription_id)
     customer_id && formDataObject.append("customer_id", customer_id)
     payment_id && formDataObject.append("payment_id", payment_id)
+    cancel_subscription && formDataObject.append("subscription_id", '')
     //location configs
     latitude && formDataObject.append("latitude", latitude)
     longitude && formDataObject.append("longitude", longitude)
     distance && formDataObject.append("distance", distance)
+    default_card_id && formDataObject.append("default_card_id", default_card_id)
 
     console.log('update_profile\nuri: ', uri, '\nParams: ', formDataObject);
     await axios

@@ -29,7 +29,7 @@ import { StyleSheet } from 'react-native'
 import { LineVertical } from '../lines'
 import GoogleAutoComplete from './googleAutoComplete'
 
-export const PopupPrimary = ({ visible, toggle, title, info, iconName,iconColor,iconContainerColor,iconContainerSize,iconSize, disableSwipe, disableBackDropPress, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2,loadingButton1,loadinButton2 ,topMargin, children, scrollEnabled, button1Style, keyboardShouldPersistTaps }) => {
+export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconColor, iconContainerColor, iconContainerSize, iconSize, disableSwipe, disableBackDropPress, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, loadingButton1, loadinButton2, topMargin, children, scrollEnabled, button1Style, keyboardShouldPersistTaps }) => {
     const defaultTopMargin = Platform.OS === 'ios' ? height(55) : height(45)
     const customTopMargin = topMargin ? Platform.OS === 'ios' ? topMargin : topMargin - height(10) : defaultTopMargin
     return (
@@ -55,10 +55,10 @@ export const PopupPrimary = ({ visible, toggle, title, info, iconName,iconColor,
                                     iconName={iconName}
                                     iconType={iconType}
                                     customIcon={customIcon}
-                                    iconColor={iconColor?iconColor:colors.appTextColor6}
-                                    buttonColor={iconContainerColor?iconContainerColor:colors.success}
-                                    buttonSize={iconContainerSize?iconContainerSize:totalSize(6)}
-                                    iconSize={iconSize?iconSize:totalSize(4)}
+                                    iconColor={iconColor ? iconColor : colors.appTextColor6}
+                                    buttonColor={iconContainerColor ? iconContainerColor : colors.success}
+                                    buttonSize={iconContainerSize ? iconContainerSize : totalSize(6)}
+                                    iconSize={iconSize ? iconSize : totalSize(4)}
                                     buttonStyle={{ borderRadius: 100, alignSelf: 'center', }}
                                 />
                                 <Spacer height={sizes.baseMargin * 1.5} />
@@ -508,6 +508,34 @@ export const NoDataViewPrimary = ({ title }) => {
     return (
         <Wrapper flex={1} style={[appStyles.center]}>
             <MediumText style={[appStyles.textGray]}>No {title ? title : 'Data'} Found</MediumText>
+        </Wrapper>
+    )
+}
+export const AddDataViewPrimary = ({ title, iconName, iconType, onPress }) => {
+    return (
+        <Wrapper flex={1} style={[appStyles.center]}>
+            {/* <IconWithText
+                iconName={iconName ? iconName : 'add-circle'}
+                iconType={iconType ? iconType : "ionicon"}
+                text={'Add ' + title}
+                direction="column"
+                iconSize={totalSize(15)}
+                tintColor={colors.appTextColor4}
+                textStyle={[appStyles.textMedium, appStyles.textGray]}
+                onPress={onPress}
+            /> */}
+            <TouchableOpacity activeOpacity={1} onPress={onPress} style={[appStyles.center]}>
+                <IconButton
+                    iconName={iconName ? iconName : 'add'}
+                    iconType={iconType ? iconType : "material"}
+                    iconSize={totalSize(12.5)}
+                    buttonSize={totalSize(20)}
+                    iconColor={colors.appTextColor1}
+                    buttonColor={colors.appBgColor3}
+                />
+                <Spacer height={sizes.baseMargin} />
+                <MediumText>{'Add ' + title}</MediumText>
+            </TouchableOpacity>
         </Wrapper>
     )
 }

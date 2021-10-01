@@ -80,6 +80,8 @@ function SubscriptionPayment(props) {
     const handleSetupSubscription = async () => {
         let strip_paymentId = ''
         let stripe_customerId = ''
+        let paymentObject
+        let customerObject
         setLoading(true)
         const data = await AsyncStorage.getItem(asyncConts.user_details)
         const userData = JSON.parse(data)
@@ -88,14 +90,12 @@ function SubscriptionPayment(props) {
             expiry_date: cardExpiry,
             cvc
         }
-        //console.log('Stripe data is not saved')
-        let paymentObject
-        let customerObject
+        await Backend.add_credit_card({ user_id: userData.id, name, ...paymentDetails })
         paymentObject = await Backend.createStripePaymentObject(paymentDetails)
         console.log("CreatePaymentObject Response==>", paymentObject)
         strip_paymentId = paymentObject.id
         if (strip_paymentId) {
-            
+
             customerObject = await Backend.createStripeCustomer(userData)
             console.log("CreateCustomer Response==>", customerObject)
             stripe_customerId = customerObject.id
@@ -130,19 +130,19 @@ function SubscriptionPayment(props) {
             then(async (response) => {
                 console.log("Create Subscription Stripe Respons==>", response)
                 if (response.status === "active") {
-                    toggleOrderPlacedPopup()
-                    // await Backend.update_profile({
-                    //     customer_id: stripeCustomerObjectID,
-                    //     payment_id: stripePaymentObjectID,
-                    //     subscription_id: response.id,
-                    //     user_type: plan.title.toLowerCase(),
-                    //     subscription_plan: plan.title
-                    // }).
-                    //     then(async (response) => {
-                    //         if (response) {
-                    //             toggleOrderPlacedPopup()
-                    //         }
-                    //     })
+                    // toggleOrderPlacedPopup()
+                    await Backend.update_profile({
+                        customer_id: stripeCustomerObjectID,
+                        payment_id: stripePaymentObjectID,
+                        subscription_id: response.id,
+                        user_type: plan.title.toLowerCase(),
+                        subscription_plan: plan.title
+                    }).
+                        then(async (response) => {
+                            if (response) {
+                                toggleOrderPlacedPopup()
+                            }
+                        })
                 } else {
                     Toasts.error('Subscription Failed, try again with other payment methode')
                 }

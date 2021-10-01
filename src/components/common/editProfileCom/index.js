@@ -87,8 +87,8 @@ const EditProfile = React.forwardRef((props, ref) => {
             setCountryPhoneCode(data.countryPhoneCode)
             setPhoneNumber(data.phoneNumber.toString())
             setUsername(data.userName)
-           // setBirthday(data.birthday)
-            setBirthday(data.birthday, moment(data.birthday,'YYYY-MM-DD').toDate())
+             setBirthday(data.birthday)
+            //setBirthday(data.birthday, moment(data.birthday, 'YYYY-MM-DD').toDate())
             setGender(data.gender)
         }
     }
@@ -131,58 +131,6 @@ const EditProfile = React.forwardRef((props, ref) => {
             }
         });
     }
-    const checkCameraPermission = () => {
-        check(Platform.OS === 'android' ? PERMISSIONS.ANDROID.CAMERA : PERMISSIONS.IOS.CAMERA)
-            .then((result) => {
-                switch (result) {
-                    case RESULTS.UNAVAILABLE:
-                        console.log('This feature is not available (on this device / in this context)');
-                        break;
-                    case RESULTS.DENIED:
-                        //console.log('The permission has not been requested / is denied but requestable');
-                        requestCameraPermission()
-                        break;
-                    case RESULTS.LIMITED:
-                        console.log('The permission is limited: some actions are possible');
-                        break;
-                    case RESULTS.GRANTED:
-                        //console.log('The permission is granted');
-                        launchCamera()
-                        break;
-                    case RESULTS.BLOCKED:
-                        console.log('The permission is denied and not requestable anymore');
-                        break;
-                }
-            })
-            .catch((error) => {
-                // …
-            });
-    }
-
-    const requestCameraPermission = () => {
-        request(Platform.OS === 'android' ? PERMISSIONS.ANDROID.CAMERA : PERMISSIONS.IOS.CAMERA)
-            .then((result) => {
-                switch (result) {
-                    case RESULTS.UNAVAILABLE:
-                        console.log('This feature is not available (on this device / in this context)');
-                        break;
-                    case RESULTS.DENIED:
-                        //console.log('The permission has not been requested / is denied but requestable');
-                        //requestCameraPermission()
-                        break;
-                    case RESULTS.LIMITED:
-                        console.log('The permission is limited: some actions are possible');
-                        break;
-                    case RESULTS.GRANTED:
-                        //console.log('The permission is granted');
-                        launchCamera()
-                        break;
-                    case RESULTS.BLOCKED:
-                        console.log('The permission is denied and not requestable anymore');
-                        break;
-                }
-            });
-    }
 
     const validate = () => {
         HelpingMethods.handleAnimation()
@@ -202,7 +150,7 @@ const EditProfile = React.forwardRef((props, ref) => {
             lastName,
             userName,
             gender,
-            birthday,
+            birthday: birthday,
             phoneNumber,
             countryPhoneCode,
             countryCode
@@ -219,9 +167,10 @@ const EditProfile = React.forwardRef((props, ref) => {
     };
     const handleConfirm = (date) => {
         console.warn("A date has been picked: ", date);
+        console.warn("date string: ", moment(date).toISOString());
         hideDatePicker();
-        //setBirthday(moment(date).format('DD/MM/YYYY'))
-        setBirthday(date)
+        setBirthday(moment(date).toISOString())
+        //setBirthday(date)
         // setTimeout(() => {
         //     BirthdayInputRef.current.blur()
         // }, 500);
@@ -305,7 +254,7 @@ const EditProfile = React.forwardRef((props, ref) => {
                         <TextInputUnderlined
                             // inputRef={BirthdayInputRef}
                             title="Birthday"
-                            value={birthday?HelpingMethods.formateDate1(birthday):''}
+                            value={birthday ? HelpingMethods.formateDate1(birthday) : ''}
                             // onChangeText={(text) => setBirthday(text)}
                             onPress={showDatePicker}
                             // onFocus={showDatePicker}
@@ -331,7 +280,7 @@ const EditProfile = React.forwardRef((props, ref) => {
                         error={phoneNumberError}
                         inputStyle={{ backgroundColor: colors.transparent, }}
                         left={
-                            <RowWrapperBasic style={{ marginRight: sizes.marginHorizontalSmall/2, backgroundColor: colors.transparent, }}>
+                            <RowWrapperBasic style={{ marginRight: sizes.marginHorizontalSmall / 2, backgroundColor: colors.transparent, }}>
                                 <CountryPicker
                                     {...{
                                         countryCode,
