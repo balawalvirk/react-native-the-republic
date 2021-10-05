@@ -41,6 +41,7 @@ function YourProducts(props) {
     setLoadingDelete(true)
     await Backend.delete_product(seletedProduct.id).
       then(res => {
+        setLoadingDelete(false)
         if (res) {
           const newProducts = products.filter(item => item.id != seletedProduct.id)
           setProducts(newProducts)
@@ -49,7 +50,7 @@ function YourProducts(props) {
           Toasts.success('Product deleted')
         }
       })
-    setLoadingDelete(false)
+    
   }
 
   if (!products) {

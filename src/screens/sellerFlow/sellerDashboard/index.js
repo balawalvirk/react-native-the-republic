@@ -3,6 +3,7 @@ import { ScrollView } from 'react-native';
 import { View, Text } from 'react-native';
 import { height, totalSize } from 'react-native-dimension';
 import StarRating from 'react-native-star-rating';
+import { useSelector } from 'react-redux';
 import { DashboardSeller, MainWrapper, MediumTitle, OptionsListPrimary, ProfileTop, RowWrapperBasic, Spacer, TinyText, Wrapper } from '../../../components';
 import { appStyles, colors, DummyData, routes, sizes } from '../../../services';
 
@@ -16,7 +17,11 @@ const options = [
 function SellerDashboard(props) {
   const { navigation } = props
   const { navigate, goBack } = navigation
-  const { userData } = DummyData
+  //const { userData } = DummyData
+
+  //redux states
+  const user=useSelector(state=>state.user)
+  const {userDetail}=user
 
   const handlePressOption = (item) => {
     if (item === 'Products Inventory') navigate(routes.seller.yourProducts)
@@ -33,8 +38,8 @@ function SellerDashboard(props) {
     <MainWrapper>
       <ScrollView showsVerticalScrollIndicator={false}>
         <ProfileTop
-          imageUri={userData.image}
-          title={userData.name}
+         imageUri={userDetail.profile_image}
+         title={userDetail.first_name+' '+userDetail.last_name}
           content={
             <Wrapper style={{ alignItems: 'flex-start', }}>
               <Spacer height={sizes.smallMargin} />

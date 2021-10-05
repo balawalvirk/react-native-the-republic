@@ -56,6 +56,9 @@ export const endPoints = {
         accept_training_request: 'accept-training-request',
         reject_training_request: 'reject-training-request',
         user_training_requests: 'user-training-requests',
+        trainer_training_requests: 'all-training-requests',
+        accept_training_request:'accept-training-request',
+        reject_training_request:'reject-training-request'
     },
     category: {
         add_category: 'add-category',

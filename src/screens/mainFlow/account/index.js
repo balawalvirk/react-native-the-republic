@@ -22,26 +22,25 @@ const tabs = [
 function Account(props) {
     const { navigation, route } = props
     const { navigate } = navigation
-    const { userData } = dummyData
-    const isJoined = true
+    //const isJoined = true
 
     const allPosts = DummyData.posts.slice(0, 4)
     //configure Header
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerRight: () => (
-                <ComponentWrapper>
-                    <ButtonColoredSmall
-                        text={isJoined ? "Joined" : "join"}
-                        onPress={() => {
-                        }}
-                        buttonStyle={{ paddingHorizontal: sizes.marginHorizontal, paddingVertical: sizes.marginVertical / 2, backgroundColor: isJoined ? colors.appColor1 + '20' : colors.appColor1 }}
-                        textStyle={[appStyles.textRegular, isJoined ? appStyles.textPrimaryColor : appStyles.textWhite]}
-                    />
-                </ComponentWrapper>
-            )
-        });
-    }, [navigation]);
+    // useLayoutEffect(() => {
+    //     navigation.setOptions({
+    //         headerRight: () => (
+    //             <ComponentWrapper>
+    //                 <ButtonColoredSmall
+    //                     text={isJoined ? "Joined" : "join"}
+    //                     onPress={() => {
+    //                     }}
+    //                     buttonStyle={{ paddingHorizontal: sizes.marginHorizontal, paddingVertical: sizes.marginVertical / 2, backgroundColor: isJoined ? colors.appColor1 + '20' : colors.appColor1 }}
+    //                     textStyle={[appStyles.textRegular, isJoined ? appStyles.textPrimaryColor : appStyles.textWhite]}
+    //                 />
+    //             </ComponentWrapper>
+    //         )
+    //     });
+    // }, [navigation]);
 
 
     //redux states

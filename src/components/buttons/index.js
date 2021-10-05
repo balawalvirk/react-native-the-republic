@@ -42,7 +42,7 @@ export const ButtonColored = ({
                     }
                     {
                         isLoading ?
-                            <MaterialIndicator size={totalSize(2.5)} color={'#FFFFFF'} />
+                            <MaterialIndicator size={totalSize(2.5)} color={tintColor?tintColor:'#FFFFFF'} />
                             :
                             <ButtonTextMedium style={[{ color: tintColor ? tintColor : colors.appTextColor6, }, textStyle]}>{text}</ButtonTextMedium>
                     }

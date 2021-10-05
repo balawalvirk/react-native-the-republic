@@ -206,3 +206,90 @@ export const delete_tranings = async ({training_id}) => {
     }
     return response
 };
+
+export const get_trainer_traning_requests = async () => {
+    let response = null
+    const state = store.getState()
+    const { id } = state.user.userDetail
+
+    const params = {
+        user_id: id
+    }
+    const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    if (isInternetAvailable) {
+        await axios
+            .post(`${baseURL + endPoints.training.trainer_training_requests}`, params)
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
+    }
+    return response
+};
+
+export const accept_traning_request = async ({training_id,trainingRequest_id,user_id}) => {
+    let response = null
+    const params={
+        training_id,
+        user_id,
+        trainingRequest_id
+    }
+    const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    if (isInternetAvailable) {
+        await axios
+            .post(`${baseURL + endPoints.training.accept_training_request}`,params)
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
+    }
+    return response
+};
+
+export const reject_traning_request = async ({training_id,trainingRequest_id}) => {
+    let response = null
+    const params={
+        training_id,
+        trainingRequest_id
+    }
+    const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    if (isInternetAvailable) {
+        await axios
+            .post(`${baseURL + endPoints.training.reject_training_request}`,params)
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
+    }
+    return response
+};

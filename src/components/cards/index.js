@@ -585,13 +585,13 @@ export const TraningRequestCard = ({ onPress, title, userName, userImage, startD
                 <Wrapper flex={1}>
                     <TitleValuePrimary
                         title="Start Date"
-                        value={startDate}
+                        value={HelpingMethods.formateDate1(startDate)}
                     />
                 </Wrapper>
                 <Wrapper flex={1}>
                     <TitleValuePrimary
                         title="End Date"
-                        value={endDate}
+                        value={HelpingMethods.formateDate1(endDate)}
                     />
                 </Wrapper>
             </RowWrapperBasic>
@@ -600,7 +600,7 @@ export const TraningRequestCard = ({ onPress, title, userName, userImage, startD
                 <RowWrapperBasic>
                     <Wrapper>
                         <ImageRound
-                            source={{ uri: userImage }}
+                            source={{ uri: userImage?userImage:appImages.noUser }}
                             size={totalSize(4)}
                         />
                     </Wrapper>

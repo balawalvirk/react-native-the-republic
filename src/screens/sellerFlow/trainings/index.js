@@ -53,13 +53,14 @@ function Trainings(props) {
     await Backend.delete_tranings({ training_id: selectedTraining.id }).
       then(res => {
         if (res) {
+          setLoadingDelete(false)
           const newTrainings = trainings.filter(item => item.id != selectedTraining.id)
           setTrainings(newTrainings)
           toggleDeleteTrainingPopup()
           setSelectedTraining(null)
         }
       })
-    setLoadingDelete(false)
+  
   }
 
   if (trainings === null) {
