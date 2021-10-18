@@ -12,7 +12,7 @@ function PaymentMethods(props) {
     const user = useSelector(state => state.user)
     const { creditCards, userDetail } = user
     //const [cards, setCards] = useState(DummyData.creditCards)
-    const [defaultCardIndex, setDefaultCardIndex] = useState(0)
+    const [defaultCardIndex, setDefaultCardIndex] = useState(-1)
     const [isAddPaymentModalVisible, setAddPaymentModalVisibility] = useState(false)
     const [loadingAddCard, setLoadingAddCard] = useState(false)
     const [loadingDefault, setLoadingDefault] = useState(-1)
@@ -42,6 +42,7 @@ function PaymentMethods(props) {
             then(async res => {
                 if (res) {
                     await Backend.get_credit_cards()
+                    await Backend.update_profile({ default_card_id: res.card.id })
                     toggleAddPaymentModal()
                     Toasts.success('Payment methode added')
                 }
@@ -50,12 +51,7 @@ function PaymentMethods(props) {
     }
     const handleSetDefaultpaymentMethod = async (item, index) => {
         setLoadingDefault(index)
-        await Backend.update_profile({ default_card_id: item.id }).
-            then(res => {
-                if (res) {
-                    setDefaultCardIndex(index)
-                }
-            })
+        await Backend.update_profile({ default_card_id: item.id })
         setLoadingDefault(-1)
     }
     return (
@@ -66,7 +62,7 @@ function PaymentMethods(props) {
                         <RenderPaymentMethods
                             data={creditCards}
                             selectedIndex={defaultCardIndex}
-                            onPressSelect={(item, index) => handleSetDefaultpaymentMethod(item,index)}
+                            onPressSelect={(item, index) => handleSetDefaultpaymentMethod(item, index)}
                             onPressItem={(item, index) => { }}
                             loadingIndex={loadingDefault}
                         />

@@ -142,7 +142,7 @@ function UpgradeSubscriptionPlan(props) {
                     await Backend.update_profile({
                         user_type: 'basic',
                         subscription_plan: 'Basic',
-                        cancel_subscription
+                        cancel_subscription:true
                     }).
                         then(async (response) => {
                             if (response) {
@@ -243,7 +243,7 @@ function UpgradeSubscriptionPlan(props) {
                 title="Subscription Plan Upgraded"
                 // info={"You'll be notified when your order is accepted and on it's way to delivery." + '\n\n' + "You can track your order in your purchase history."}
                 buttonText1="Continue"
-                onPressButton1={() => { toggleSubscriptionUpgradedPopup(); navigate(routes.mainBottomTab) }}
+                onPressButton1={() => { toggleSubscriptionUpgradedPopup(); goBack() }}
                 topMargin={height(65)}
                 disableBackDropPress
                 disableSwipe
@@ -255,7 +255,7 @@ function UpgradeSubscriptionPlan(props) {
                 iconType="material"
                 iconContainerColor={colors.success}
                 title={`Upgrade Plan`}
-                info={"You are currently subscribed on Premium plan, are you sure to cancel the current subscription plan and subscribe to Dealer/Pro plan?"}
+                info={`You are currently subscribed on ${userDetail.subscription_plan} plan, are you sure to cancel the current subscription plan and subscribe to ${plan.title} plan?`}
                 buttonText1="Yes"
                 buttonText2="No"
                 onPressButton1={handleCancelCurrentSubscription}

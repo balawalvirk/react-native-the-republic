@@ -231,7 +231,7 @@ export const ProductCardSecondary = ({ perMoreInfo, content, onPress, animation,
                 <Wrapper style={{ justifyContent: 'center' }}>
                     <TouchableOpacity style={{ borderWidth: 1, borderRadius: sizes.cardRadius, borderColor: colors.appBgColor3 }} activeOpacity={1} onPress={onPress}>
                         <Image
-                            source={{ uri: image }}
+                            source={{ uri: image?image:appImages.noImageAvailable }}
                             style={[{ height: width(25), width: width(25) }, imageStyle]}
                             resizeMode="contain"
                         />
@@ -294,7 +294,7 @@ export const ProductCardSecondary = ({ perMoreInfo, content, onPress, animation,
                             <Wrapper flex={1}>
                                 <RowWrapperBasic>
                                     <ImageRound
-                                        source={{ uri: moreInfoImage }}
+                                        source={{ uri: moreInfoImage}}
                                         size={totalSize(5)}
                                     />
                                     <Spacer width={sizes.smallMargin} />

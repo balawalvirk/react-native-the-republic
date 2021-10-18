@@ -262,3 +262,35 @@ export const update_profile = async ({
         });
     return response
 };
+
+export const getSellerReports = async () => {
+    let response = null
+    const state = store.getState()
+    const { id } = state.user.userDetail
+    const uri = `${baseURL + endPoints.order.get_reports}`
+    let params = {
+        seller_id: id,
+    }
+    console.log('user_register\nuri', uri, '\nParams', params);
+    await axios
+        .post(uri, params)
+        .then(async responseJson => {
+            const tempResponseData = responseJson.data
+            console.log('Response', tempResponseData);
+            if (tempResponseData.success) {
+                response = tempResponseData
+                const userCredentials = {
+                    email: params.email,
+                    password: params.password,
+                }
+                AsyncStorage.setItem(asyncConts.user_credentials, JSON.stringify(userCredentials))
+            } else {
+                Toasts.error(tempResponseData.message)
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};

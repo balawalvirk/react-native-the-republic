@@ -142,7 +142,7 @@ const HelpingMethods = {
         return tempData
     },
     getHiddenCardNumber:(cardNumber)=>{
-        return `**** **** **** ${cardNumber.slice(11, 15)}`
+        return `**** **** **** ${cardNumber.slice(12, 16)}`
     }
 }
 

@@ -1,9 +1,10 @@
+import { useFocusEffect } from '@react-navigation/core';
 import React, { Component, useState } from 'react';
 import { FlatList } from 'react-native';
 import { View, Text } from 'react-native';
 import { height, width } from 'react-native-dimension';
-import { ButtonColored, ButtonColoredSmall, ButtonGroupAnimated, MainWrapper, MediumText, ProductCardSecondary, Purchases, RegularText, RowWrapper, RowWrapperBasic, Spacer, TitleInfoPrimary, TitlePrimary, TitleValue, Wrapper } from '../../../components';
-import { appStyles, colors, routes, sizes } from '../../../services';
+import { ButtonColored, ButtonColoredSmall, ButtonGroupAnimated, MainWrapper, MediumText, ProductCardSecondary, Purchases, RegularText, RowWrapper, RowWrapperBasic, SkeletonListVerticalPrimary, Spacer, TitleInfoPrimary, TitlePrimary, TitleValue, Toasts, Wrapper } from '../../../components';
+import { appStyles, Backend, colors, orderStatuses, routes, sizes } from '../../../services';
 import dummyData from '../../../services/constants/dummyData';
 import { OrdersList } from './ordersList';
 
@@ -35,7 +36,54 @@ function Orders(props) {
 
   //local states
   const [selectedTabIndex, setSelectedTabIndex] = useState(0)
-  const [orders, setOrders] = useState(dummyData.orders)
+  const [orders, setOrders] = useState(null)
+  const [loadingAcceptIndex, setLoadingAcceptIndex] = useState(-1)
+  const [loadingCancelIndex, setLoadingCancelIndex] = useState(-1)
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getSetOrders()
+    }, [])
+  )
+
+  const getSetOrders = async () => {
+    await Backend.getOrders().
+      then(async res => {
+        if (res) {
+          setOrders(res.orders)
+        }
+      })
+  }
+
+  const handleAcceptOrder = async (item, index) => {
+    setLoadingAcceptIndex(index)
+    await Backend.updateOrderStatus({
+      order_id: item.id,
+      status: orderStatuses.accepted
+    }).
+      then(async res => {
+        setLoadingAcceptIndex(-1)
+        if (res) {
+          await getSetOrders()
+          Toasts.success('Order has been accepted')
+        }
+      })
+  }
+
+  const handleCancelOrder = async (item, index) => {
+    setLoadingCancelIndex(index)
+    await Backend.updateOrderStatus({
+      order_id: item.id,
+      status: orderStatuses.cancelled
+    }).
+      then(async res => {
+        setLoadingCancelIndex(-1)
+        if (res) {
+          await getSetOrders()
+          Toasts.success('Order has been cancelled')
+        }
+      })
+  }
 
   const filterOrders = () => {
     let tempOrders = []
@@ -44,11 +92,11 @@ function Orders(props) {
     } else {
       tempOrders = orders.filter(item => {
         return (
-          selectedTabIndex === 1 ? item.status === 'new' :
-            selectedTabIndex === 2 ? item.status === 'active' :
-              selectedTabIndex === 3 ? item.status === 'delivered' :
-                selectedTabIndex === 4 ? item.status === 'completed' :
-                  selectedTabIndex === 5 ? item.status === 'cancelled' : null
+          selectedTabIndex === 1 ? item.status === orderStatuses.pending :
+            selectedTabIndex === 2 ? item.status === orderStatuses.accepted ||item.status === orderStatuses.shipping :
+              selectedTabIndex === 3 ? item.status === orderStatuses.delivered :
+                selectedTabIndex === 4 ? item.status === orderStatuses.completed:
+                  selectedTabIndex === 5 ? item.status === orderStatuses.cancelled : null
         )
       })
     }
@@ -59,6 +107,12 @@ function Orders(props) {
   let filteredOrders = []
   filteredOrders = filterOrders()
 
+
+  if (!orders) {
+    return (
+      <SkeletonListVerticalPrimary />
+    )
+  }
   return (
     <MainWrapper>
       <ButtonGroupAnimated
@@ -77,10 +131,13 @@ function Orders(props) {
       <OrdersList
         data={filteredOrders}
         onPressOrder={(item, index) => { navigate(routes.seller.OrderDetail, { order: item }) }}
-        onpressAccept={(item, index) => { }}
-        onpressCancel={(item, index) => { }}
+        onpressAccept={handleAcceptOrder}
+        onpressCancel={handleCancelOrder}
+        loadingAcceptIndex={loadingAcceptIndex}
+        loadingCancelIndex={loadingCancelIndex}
         ListHeaderComponent={() => <Spacer height={sizes.baseMargin} />}
         ListFooterComponent={() => <Spacer height={sizes.doubleBaseMargin} />}
+        
       />
 
     </MainWrapper>

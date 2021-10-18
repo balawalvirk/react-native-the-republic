@@ -56,7 +56,7 @@ function SubscriptionPlan(props) {
     }
     const handleCancelSubscription = async () => {
         setLoadingCancelSubscription(true)
-        let subscriptionId = userDetail.subscription_id?userDetail.subscription_id:'sub_1JfOIiLAATci74dLnVZPUmNi'
+        let subscriptionId = userDetail.subscription_id
         await Backend.cancelStripeSubscribtion(subscriptionId).
             then(async (response) => {
                 console.log('Cancel subscribtion response', response)
@@ -67,7 +67,7 @@ function SubscriptionPlan(props) {
                          //subscription_id: response.id,
                          user_type: 'basic',
                          subscription_plan: 'Basic',
-                         cancel_subscription
+                         cancel_subscription:true
                      }).
                          then(async (response) => {
                              if (response) {
@@ -94,7 +94,7 @@ function SubscriptionPlan(props) {
                         <PlanCard
                             onPress={() => {
                                 //setPlanIndex(index),
-                                if (index === 0 && selectedPlanIndex != index) {
+                                if (index === 0 && selectedPlanIndex != index && userDetail.subscription_id) {
                                     toggleCancelSubscriptionPopup()
                                 }
                                 if (index != 0 && selectedPlanIndex != index) {
@@ -115,7 +115,7 @@ function SubscriptionPlan(props) {
                 iconName="close"
                 iconType="ionicon"
                 iconContainerColor={colors.error}
-                title={`Cancel ${subscriptionPlans[selectedPlanIndex].title} Plan`}
+                title={`Cancel ${userDetail.subscription_plan} Plan`}
                 info={"Are you sure to cancel the current subscription plan?"}
                 buttonText1="Yes"
                 buttonText2="No"

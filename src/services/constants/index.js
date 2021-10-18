@@ -29,7 +29,7 @@ export const endPoints = {
     },
     creditCard: {
         add_card: 'add-card',
-        show_cards:'show-cards'
+        show_cards: 'show-cards'
     },
     follow: {
         send_follow_request: 'send-follow-request',
@@ -57,8 +57,8 @@ export const endPoints = {
         reject_training_request: 'reject-training-request',
         user_training_requests: 'user-training-requests',
         trainer_training_requests: 'all-training-requests',
-        accept_training_request:'accept-training-request',
-        reject_training_request:'reject-training-request'
+        accept_training_request: 'accept-training-request',
+        reject_training_request: 'reject-training-request'
     },
     category: {
         add_category: 'add-category',
@@ -67,9 +67,9 @@ export const endPoints = {
     },
     product: {
         add_product: 'add-product',
-        user_products:'user-products',
-        edit_product:'edit-product',
-        delete_product:'delete-product',
+        user_products: 'user-products',
+        edit_product: 'edit-product',
+        delete_product: 'delete-product',
         add_favorite_product: 'add-favorite-product',
         show_favorite_products: 'show-favorite-products',
         remove_favorite_product: 'remove-favorite-product',
@@ -127,6 +127,17 @@ export const endPoints = {
         show_group_members: 'show-group-members',
         remove_group_member: 'remove-group-member',
         show_members_requests: 'show-members-requests'
+    },
+    order: {
+        create_order: 'create-order',
+        update_order: 'update-order',
+        get_orders: 'get-orders',
+        update_order_status: 'update-order-status',
+        get_reports: 'get-reports',
+        get_invoices: 'get-invoices',
+        get_invoice: 'get-invoice',
+        get_earnings_reports: 'get-earnings',
+        weekly_reports: 'weekly-reports',
     },
     contact_us: 'contact-us',
     add_card: 'add-card',
@@ -223,6 +234,14 @@ export const asyncConts = {
     product_calibers: 'PRODUCT_CALIBERS',
     product_actions: 'PRODUCT_ACTIONS',
     product_conditions: 'PRODUCT_CONDITIONS',
+}
+export const orderStatuses={
+    pending:'pending',
+    accepted:'accepted',
+    shipping:'shipping',
+    delivered:'delivered',
+    completed:'completed',
+    cancelled:'cancelled'
 }
 export const headers = {
     screenOptionsPrimary: {

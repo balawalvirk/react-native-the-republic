@@ -3,8 +3,8 @@ import { TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native';
 import { View, Text } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
-import { AbsoluteWrapper, ButtonColoredSmall, ButtonGradient, ComponentWrapper, IconWithText, LineHorizontal, MainWrapper, MediumText, ProductCardSecondary, RegularText, RowWrapperBasic, Spacer, TitleValue, Wrapper, OrderStatusWizard, TinyTitle, UserCardPrimary, PopupPrimary, ReviewCardPrimary, ButtonColored, OptionsPopup } from '../../../components';
-import { appImages, appStyles, colors, routes, sizes } from '../../../services';
+import { AbsoluteWrapper, ButtonColoredSmall, ButtonGradient, ComponentWrapper, IconWithText, LineHorizontal, MainWrapper, MediumText, ProductCardSecondary, RegularText, RowWrapperBasic, Spacer, TitleValue, Wrapper, OrderStatusWizard, TinyTitle, UserCardPrimary, PopupPrimary, ReviewCardPrimary, ButtonColored, OptionsPopup, Toasts, LoaderAbsolute } from '../../../components';
+import { appImages, appStyles, Backend, colors, orderStatuses, routes, sizes } from '../../../services';
 import { OrdersList } from './ordersList';
 
 
@@ -13,31 +13,88 @@ function OrderDetail(props) {
     const { navigation, route } = props
     const { navigate, goBack } = navigation
     //navigation params
-    const { order } = route.params
-    const { user } = order
+    const orderDetail = route.params.order
+    // const { user } = order
+
     const steps = ['Order\nrecieved', 'Order\naccepted', 'Delivery\non the way', 'Delivered\nto customer']
     const statuses = ['Shipping', 'Delivered', 'Cancel Order']
 
-    const isNew = order.status === 'new'
-    const isActive = order.status === 'active'
-    const isDelivered = order.status === 'delivered'
-    const isCompleted = order.status === 'completed'
-    const isCancelled = order.status === 'cancelled'
-    const orderStep = isNew ? 1 : isActive ? 2 : isDelivered ? 3 : isCompleted ? 4 : 1
-    const statusText = isNew ? "New" : isActive ? "Waiting for Shipment" : isDelivered ? "Waiting for review" : isCompleted ? "Completed" : isCancelled ? "Cancelled" : ""
+
 
 
     //Local status
+
+    const [order, setOrder] = useState(orderDetail)
+    const [loadingAcceptIndex, setLoadingAcceptIndex] = useState(-1)
+    const [loadingCancelIndex, setLoadingCancelIndex] = useState(-1)
+    const [isLoadingStatus, setLoadingStatus] = useState(false)
     const [isUpdateStatusPopupVisible, setUpdateStatusPopupVisibility] = useState(false)
+
+    const isNew = order.status === orderStatuses.pending
+    const isActive = order.status === orderStatuses.accepted ||order.status === orderStatuses.shipping
+    const isDelivered = order.status === orderStatuses.delivered
+    const isCompleted = order.status === orderStatuses.completed
+    const isCancelled = order.status === orderStatuses.cancelled
+    const orderStep = isNew ? 1 : isActive ? 2 : isDelivered ? 3 : isCompleted ? 4 : 1
+    const statusText = isNew ? "New" : isActive ? "Waiting for Shipment" : isDelivered ? "Waiting for review" : isCompleted ? "Completed" : isCancelled ? "Cancelled" : ""
 
     const toggleUpdateStatusPopup = () => setUpdateStatusPopupVisibility(!isUpdateStatusPopupVisible)
 
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
-            title: 'Order #' + order.id,
+            title: 'Order #' + order.order_no,
         });
     }, [navigation]);
+
+    const handleAcceptOrder = async (item, index) => {
+        setLoadingAcceptIndex(index)
+        await Backend.updateOrderStatus({
+            order_id: item.id,
+            status: orderStatuses.accepted
+        }).
+            then(async res => {
+                setLoadingAcceptIndex(-1)
+                if (res) {
+                    setOrder(res.order)
+                    Toasts.success('Order has been accepted')
+                }
+            })
+    }
+
+    const handleCancelOrder = async (item, index) => {
+        setLoadingCancelIndex(index)
+        await Backend.updateOrderStatus({
+            order_id: item.id,
+            status: orderStatuses.cancelled
+        }).
+            then(async res => {
+                setLoadingCancelIndex(-1)
+                if (res) {
+                    setOrder(res.order)
+                    Toasts.success('Order has been cancelled')
+                }
+            })
+    }
+
+    const handleUpdateOrderStatus = async (selectedStatus, index) => {
+        const tempStatus = selectedStatus === 'Shipping' ? orderStatuses.shipping :
+            selectedStatus === 'Delivered' ? orderStatuses.delivered :
+                selectedStatus === 'Cancel Order' ? orderStatuses.cancelled : ''
+        toggleUpdateStatusPopup()
+        setLoadingStatus(true)
+        await Backend.updateOrderStatus({
+            order_id: order.id,
+            status: tempStatus
+        }).
+            then(async res => {
+                setLoadingStatus(false)
+                if (res) {
+                    setOrder(res.order)
+                    Toasts.success('Order status updated')
+                }
+            })
+    }
 
     return (
         <MainWrapper>
@@ -61,8 +118,10 @@ function OrderDetail(props) {
                     <OrdersList
                         data={[order]}
                         onPressOrder={() => { }}
-                        onpressAccept={(item, index) => { }}
-                        onpressCancel={(item, index) => { }}
+                        onpressAccept={handleAcceptOrder}
+                        onpressCancel={handleCancelOrder}
+                        loadingAcceptIndex={loadingAcceptIndex}
+                        loadingCancelIndex={loadingCancelIndex}
                     />
 
                 </Wrapper>
@@ -85,7 +144,7 @@ function OrderDetail(props) {
                                 </RegularText>
                             </Wrapper>
                             :
-                            !order.isPrivate ?
+                            order.isPrivate === 0 ?
                                 <Wrapper style={[appStyles.borderedWrapper, { marginBottom: sizes.baseMargin }]}>
                                     <RowWrapperBasic>
                                         <Wrapper flex={1}>
@@ -137,7 +196,7 @@ function OrderDetail(props) {
                 <ComponentWrapper style={{}}>
                     <RegularText style={[appStyles.textPrimaryColor, appStyles.fontBold]}>Delivery Address</RegularText>
                     <Spacer height={sizes.smallMargin} />
-                    <MediumText>14 Wall Street, New York City, NY, USA </MediumText>
+                    <MediumText>{order.address}</MediumText>
                 </ComponentWrapper>
                 <Spacer height={sizes.baseMargin} />
                 <ComponentWrapper>
@@ -146,17 +205,17 @@ function OrderDetail(props) {
                 <Spacer height={sizes.baseMargin} />
                 <TitleValue
                     title={'Subtotal'}
-                    value={'$ 749.99'}
+                    value={'$ ' + order.sub_total}
                 />
                 <Spacer height={sizes.baseMargin} />
                 <TitleValue
                     title={'Tax (10%)'}
-                    value={'$ 74.99'}
+                    value={'$ ' + order.tax}
                 />
                 <Spacer height={sizes.baseMargin} />
                 <TitleValue
                     title={'Transaction Charges'}
-                    value={'$ 10.00'}
+                    value={'$ ' + order.transaction_charges}
                 />
                 <Spacer height={sizes.baseMargin} />
                 <ComponentWrapper>
@@ -165,7 +224,7 @@ function OrderDetail(props) {
                 <Spacer height={sizes.baseMargin} />
                 <TitleValue
                     title={'Total'}
-                    value={'$ 834.98'}
+                    value={'$ ' + order.total}
                     titleStyle={[appStyles.h5]}
                     valueStyle={[appStyles.h5, appStyles.textPrimaryColor]}
                 />
@@ -203,10 +262,13 @@ function OrderDetail(props) {
                 toggle={toggleUpdateStatusPopup}
                 onPressStatus={(item, index) => {
                     console.log('status-->', item)
-                    toggleUpdateStatusPopup()
+                    handleUpdateOrderStatus(item)
                 }}
                 options={statuses}
-                
+            />
+            <LoaderAbsolute
+                isVisible={isLoadingStatus}
+                title="Updating Order Status"
             />
         </MainWrapper>
     );

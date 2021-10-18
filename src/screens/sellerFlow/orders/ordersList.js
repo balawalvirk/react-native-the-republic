@@ -1,9 +1,9 @@
 import { ButtonColored, ButtonColoredSmall, MediumText, ProductCardSecondary, RegularText, RowWrapper, Spacer, Wrapper } from "../../../components"
-import { appStyles, colors, sizes } from "../../../services"
+import { appImages, appStyles, colors, orderStatuses, sizes } from "../../../services"
 import React from 'react'
 import { FlatList } from "react-native"
 
-export function OrdersList({ data,onPressOrder,onpressAccept,onpressCancel,ListHeaderComponent,ListFooterComponent }) {
+export function OrdersList({ data, onPressOrder, onpressAccept, onpressCancel, ListHeaderComponent, ListFooterComponent, loadingAcceptIndex, loadingCancelIndex }) {
     return (
         <FlatList
             data={data}
@@ -14,30 +14,57 @@ export function OrdersList({ data,onPressOrder,onpressAccept,onpressCancel,ListH
             keyExtractor={(item, index) => (index + 1).toString()}
             renderItem={({ item, index }) => {
                 const { user } = item
-                const isNew = item.status === 'new'
-                const isActive = item.status === 'active'
-                const isDelivered = item.status === 'delivered'
-                const isCompleted = item.status === 'completed'
-                const isCancelled = item.status === 'cancelled'
-                const statusText = isNew ? "New" : isActive ? "Waiting for Shipment" : isDelivered ?item.review? "Delivered":"Waiting for review" : isCompleted ? "Completed" : isCancelled ? "Cancelled" : ""
+                const isNew = item.status === orderStatuses.pending
+                const isActive = item.status === orderStatuses.accepted
+                const isShipping = item.status === orderStatuses.shipping
+                const isDelivered = item.status === orderStatuses.delivered
+                const isCompleted = item.status === orderStatuses.completed
+                const isCancelled = item.status === orderStatuses.cancelled
+                const statusText = isNew ? "New" : isActive ? "Waiting for Shipment" : isShipping ? "Shipping" : isDelivered ? "Waiting for review" : isCompleted ? "Completed" : isCancelled ? "Cancelled" : ""
+
+                const deliveryAddress = item.address
+
+                //product info
+                let productImage = null
+                let productTitle = ''
+                let productAverageRating=0
+                let productReviewsCount=''
+                let productPrice=''
+                let productDiscountedPrice=''
+                if (item.product) {
+                    const {product}=item
+                    const images = product.images ? JSON.parse(product.images) : null
+                    productImage = images ? images[0] : null
+                    productTitle=product.title
+                    productAverageRating=product.average_rating&&product.average_rating
+                    productReviewsCount=product.reviews_count&&product.reviews_count
+                    productPrice=product.price
+                    productDiscountedPrice=product.discounted_price
+                }
+
+
+                //user info
+                const userImage = item.user.profile_image?item.user.profile_image:appImages.noUser
+                const userName = item.user.first_name + ' ' + item.user.last_name
                 return (
                     <ProductCardSecondary
-                        onPress={() => onPressOrder(item,index)}
+                        onPress={() => onPressOrder(item, index)}
                         animation={index <= 5 ? 'fadeInUp' : null}
                         duration={300 + (50 * (index + 1))}
                         containerstyle={
                             { marginBottom: sizes.marginVertical }
                         }
-                        image={item.image}
-                        description={item.description}
-                        newPrice={item.new_price}
-                        oldPrice={item.old_price}
+                        image={productImage}
+                    
+                        description={productTitle}
+                        oldPrice={productPrice}
+                        newPrice={productDiscountedPrice}
                         //location={item.location}
-                        rating={item.rating}
-                        reviewCount={item.review_count}
+                        rating={productAverageRating}
+                        reviewCount={productReviewsCount}
 
-                        moreInfoImage={user.image}
-                        moreInfoTitle={user.name}
+                        moreInfoImage={userImage}
+                        moreInfoTitle={userName}
                         moreInfoSubTitle={'Buyer'}
                         moreInfoRight={
                             !isNew ?
@@ -58,7 +85,7 @@ export function OrdersList({ data,onPressOrder,onpressAccept,onpressCancel,ListH
                                         <Wrapper style={{ marginHorizontal: sizes.marginHorizontalSmall, marginTop: sizes.marginVertical / 2 }}>
                                             <RegularText style={[appStyles.textPrimaryColor, appStyles.fontBold]}>Delivery Address</RegularText>
                                             <Spacer height={sizes.smallMargin} />
-                                            <MediumText>14 Wall Street, New York City, NY, USA </MediumText>
+                                            <MediumText>{deliveryAddress}</MediumText>
                                         </Wrapper>
                                         :
                                         null
@@ -79,7 +106,8 @@ export function OrdersList({ data,onPressOrder,onpressAccept,onpressCancel,ListH
                                                         text="Accept"
                                                         buttonColor={colors.success}
                                                         buttonStyle={{ marginHorizontal: 0 }}
-                                                        onPress={()=>onpressAccept(item,index)}
+                                                        onPress={() => onpressAccept(item, index)}
+                                                        isLoading={loadingAcceptIndex === index}
                                                     />
                                                 </Wrapper>
                                                 <Spacer width={sizes.marginHorizontal} />
@@ -88,7 +116,8 @@ export function OrdersList({ data,onPressOrder,onpressAccept,onpressCancel,ListH
                                                         text="Cancel"
                                                         buttonColor={colors.error}
                                                         buttonStyle={{ marginHorizontal: 0 }}
-                                                        onPress={()=>onpressCancel(item,index)}
+                                                        onPress={() => onpressCancel(item, index)}
+                                                        isLoading={loadingCancelIndex === index}
                                                     />
                                                 </Wrapper>
                                             </RowWrapper>
