@@ -139,6 +139,11 @@ export const endPoints = {
         get_earnings_reports: 'get-earnings',
         weekly_reports: 'weekly-reports',
     },
+    bank:{
+        add_bank_account:'add-bank-account',
+        get_bank_accounts:'get-bank-accounts',
+        get_banks:'get-banks'
+    },
     contact_us: 'contact-us',
     add_card: 'add-card',
     submit_app_feedback: 'submit-app-feedback'

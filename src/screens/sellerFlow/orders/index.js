@@ -3,6 +3,7 @@ import React, { Component, useState } from 'react';
 import { FlatList } from 'react-native';
 import { View, Text } from 'react-native';
 import { height, width } from 'react-native-dimension';
+import { useSelector } from 'react-redux';
 import { ButtonColored, ButtonColoredSmall, ButtonGroupAnimated, MainWrapper, MediumText, ProductCardSecondary, Purchases, RegularText, RowWrapper, RowWrapperBasic, SkeletonListVerticalPrimary, Spacer, TitleInfoPrimary, TitlePrimary, TitleValue, Toasts, Wrapper } from '../../../components';
 import { appStyles, Backend, colors, orderStatuses, routes, sizes } from '../../../services';
 import dummyData from '../../../services/constants/dummyData';
@@ -34,26 +35,22 @@ function Orders(props) {
   const { navigation } = props
   const { navigate } = navigation
 
+  //redux states
+  const order = useSelector(state => state.order)
+  const { allOrders } = order
+
   //local states
   const [selectedTabIndex, setSelectedTabIndex] = useState(0)
-  const [orders, setOrders] = useState(null)
+  //const [orders, setOrders] = useState(null)
   const [loadingAcceptIndex, setLoadingAcceptIndex] = useState(-1)
   const [loadingCancelIndex, setLoadingCancelIndex] = useState(-1)
 
   useFocusEffect(
     React.useCallback(() => {
-      getSetOrders()
+      Backend.getOrders()
     }, [])
   )
 
-  const getSetOrders = async () => {
-    await Backend.getOrders().
-      then(async res => {
-        if (res) {
-          setOrders(res.orders)
-        }
-      })
-  }
 
   const handleAcceptOrder = async (item, index) => {
     setLoadingAcceptIndex(index)
@@ -88,14 +85,14 @@ function Orders(props) {
   const filterOrders = () => {
     let tempOrders = []
     if (selectedTabIndex === 0) {
-      tempOrders = orders
+      tempOrders = allOrders
     } else {
-      tempOrders = orders.filter(item => {
+      tempOrders = allOrders.filter(item => {
         return (
           selectedTabIndex === 1 ? item.status === orderStatuses.pending :
-            selectedTabIndex === 2 ? item.status === orderStatuses.accepted ||item.status === orderStatuses.shipping :
+            selectedTabIndex === 2 ? item.status === orderStatuses.accepted || item.status === orderStatuses.shipping :
               selectedTabIndex === 3 ? item.status === orderStatuses.delivered :
-                selectedTabIndex === 4 ? item.status === orderStatuses.completed:
+                selectedTabIndex === 4 ? item.status === orderStatuses.completed :
                   selectedTabIndex === 5 ? item.status === orderStatuses.cancelled : null
         )
       })
@@ -108,7 +105,7 @@ function Orders(props) {
   filteredOrders = filterOrders()
 
 
-  if (!orders) {
+  if (!allOrders) {
     return (
       <SkeletonListVerticalPrimary />
     )
@@ -137,7 +134,6 @@ function Orders(props) {
         loadingCancelIndex={loadingCancelIndex}
         ListHeaderComponent={() => <Spacer height={sizes.baseMargin} />}
         ListFooterComponent={() => <Spacer height={sizes.doubleBaseMargin} />}
-        
       />
 
     </MainWrapper>

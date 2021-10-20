@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { View, Text } from 'react-native';
 import { height, totalSize } from 'react-native-dimension';
 import StarRating from 'react-native-star-rating';
 import { useSelector } from 'react-redux';
 import { DashboardSeller, MainWrapper, MediumTitle, OptionsListPrimary, ProfileTop, RowWrapperBasic, Spacer, TinyText, Wrapper } from '../../../components';
-import { appStyles, colors, DummyData, routes, sizes } from '../../../services';
+import { appStyles, Backend, colors, DummyData, routes, sizes } from '../../../services';
 
 const options = [
   'Products Inventory',
@@ -20,9 +20,19 @@ function SellerDashboard(props) {
   //const { userData } = DummyData
 
   //redux states
-  const user=useSelector(state=>state.user)
-  const {userDetail}=user
+  const user = useSelector(state => state.user)
+  const { userDetail, reports } = user
 
+  //local states
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getSetSellerReports()
+  }, [])
+
+  const getSetSellerReports = () => {
+    Backend.getSellerReports()
+  }
   const handlePressOption = (item) => {
     if (item === 'Products Inventory') navigate(routes.seller.yourProducts)
     else if (item === 'Requests') navigate(routes.seller.requests)
@@ -38,8 +48,8 @@ function SellerDashboard(props) {
     <MainWrapper>
       <ScrollView showsVerticalScrollIndicator={false}>
         <ProfileTop
-         imageUri={userDetail.profile_image}
-         title={userDetail.first_name+' '+userDetail.last_name}
+          imageUri={userDetail.profile_image}
+          title={userDetail.first_name + ' ' + userDetail.last_name}
           content={
             <Wrapper style={{ alignItems: 'flex-start', }}>
               <Spacer height={sizes.smallMargin} />
@@ -60,14 +70,15 @@ function SellerDashboard(props) {
         />
         <Spacer height={sizes.baseMargin} />
         <DashboardSeller
+          isLoading={!reports}
           title1="Orders Received"
           title2="Orders Completed"
           title3="Earned This Month"
           title4="Earned Overall"
-          value1='25'
-          value2='10'
-          value3="4,679"
-          value4="94,328"
+          value1={reports && reports.orders}
+          value2={reports && reports.completed_orders}
+          value3={reports && reports.earned_thisMonth}
+          value4={reports && reports.earned_overall}
         />
         <Spacer height={sizes.baseMargin} />
         <OptionsListPrimary

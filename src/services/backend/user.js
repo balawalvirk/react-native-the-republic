@@ -5,7 +5,7 @@ import store from "../store";
 import * as Backend from './index'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import HelpingMethods from "../helpingMethods";
-import { setUserDetail } from "../store/actions";
+import { setReports, setUserDetail } from "../store/actions";
 const { dispatch } = store
 
 
@@ -207,6 +207,7 @@ export const submit_identity = async ({ user_id, attachment }) => {
         });
     return response
 };
+
 export const update_profile = async ({
     first_name, last_name, username, gender, birthday, phone, image,
     country_code, country_phone_code, fcm_token, subscription_id, cancel_subscription,
@@ -271,7 +272,7 @@ export const getSellerReports = async () => {
     let params = {
         seller_id: id,
     }
-    console.log('user_register\nuri', uri, '\nParams', params);
+    console.log('getSellerReports \nuri', uri, '\nParams', params);
     await axios
         .post(uri, params)
         .then(async responseJson => {
@@ -279,11 +280,7 @@ export const getSellerReports = async () => {
             console.log('Response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
-                const userCredentials = {
-                    email: params.email,
-                    password: params.password,
-                }
-                AsyncStorage.setItem(asyncConts.user_credentials, JSON.stringify(userCredentials))
+                dispatch(setReports(tempResponseData.reports))
             } else {
                 Toasts.error(tempResponseData.message)
             }

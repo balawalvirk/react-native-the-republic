@@ -1,7 +1,7 @@
 import React from 'react'
 import { Platform, TouchableOpacity, ImageBackground } from 'react-native'
 import { height, totalSize, width } from 'react-native-dimension'
-import { ModalSwipeablePrimary } from '..'
+import { ModalSwipeablePrimary, SkeletonPrimary } from '..'
 import { appIcons, appImages, appStyles, colors, HelpingMethods, sizes } from '../../services'
 import { ButtonColored, ButtonColoredSmall, ButtonGradient } from '../buttons'
 import { CustomIcon, IconButton, IconWithText } from '../icons'
@@ -380,6 +380,7 @@ export const TitleValue = ({ title, value, titleStyle, valueStyle, containerStyl
 export const DashboardSeller = ({
     title1, title2, title3, title4,
     value1, value2, value3, value4,
+    isLoading
 }) => {
     const TitleValue = ({ title, value, containerStyle }) => {
         return (
@@ -391,44 +392,52 @@ export const DashboardSeller = ({
     }
 
     return (
-        <Wrapper style={{ ...appStyles.grayWrapper, paddingVertical: 0, paddingHorizontal: 0, height: height(22.5), backgroundColor: colors.appColor1 }}>
-            <Wrapper flex={1} >
-                <Wrapper flex={1} style={{ flexDirection: 'row', }}>
-                    <TitleValue
-                        title={title1}
-                        value={value1}
-                    />
-                    <LineVertical
-                        width={4}
-                        color={colors.appBgColor1}
-                    />
-                    <TitleValue
-                        title={title2}
-                        value={value2}
-                    />
-                </Wrapper>
-            </Wrapper>
-            <LineHorizontal
-                height={4}
-                color={colors.appBgColor1}
-            />
-            <Wrapper flex={1} >
-                <Wrapper flex={1} style={{ flexDirection: 'row', }}>
-                    <TitleValue
-                        title={title3}
-                        value={value3}
-                    />
-                    <LineVertical
-                        width={4}
-                        color={colors.appBgColor1}
-                    />
-                    <TitleValue
-                        title={title4}
-                        value={value4}
-                    />
-                </Wrapper>
-            </Wrapper>
-        </Wrapper>
+        <>
+            {
+                isLoading ?
+                    <SkeletonPrimary itemStyle={{height:height(22.5)}}/>
+                    :
+                    <Wrapper style={{ ...appStyles.grayWrapper, paddingVertical: 0, paddingHorizontal: 0, height: height(22.5), backgroundColor: colors.appColor1 }}>
+                        <Wrapper flex={1} >
+                            <Wrapper flex={1} style={{ flexDirection: 'row', }}>
+                                <TitleValue
+                                    title={title1}
+                                    value={value1}
+                                />
+                                <LineVertical
+                                    width={4}
+                                    color={colors.appBgColor1}
+                                />
+                                <TitleValue
+                                    title={title2}
+                                    value={value2}
+                                />
+                            </Wrapper>
+                        </Wrapper>
+                        <LineHorizontal
+                            height={4}
+                            color={colors.appBgColor1}
+                        />
+                        <Wrapper flex={1} >
+                            <Wrapper flex={1} style={{ flexDirection: 'row', }}>
+                                <TitleValue
+                                    title={title3}
+                                    value={value3}
+                                />
+                                <LineVertical
+                                    width={4}
+                                    color={colors.appBgColor1}
+                                />
+                                <TitleValue
+                                    title={title4}
+                                    value={value4}
+                                />
+                            </Wrapper>
+                        </Wrapper>
+                    </Wrapper>
+
+            }
+        </>
     )
 }
 export const OrderStatusWizard = ({ activeStep, steps }) => {

@@ -110,6 +110,10 @@ const HelpingMethods = {
     formateDate1: (date) => {
         return moment(date).format('DD / MM / YYYY')
     },
+    formateDate2: (date) => {
+        //'Fri, 4th June, 2021'
+        return moment(date).format('ddd, DD MMMM, YYYY')
+    },
     formateDateToDate1:(date)=>{
         return moment(date,'YYYY-MM-DD').format('DD / MM / YYYY')
     },

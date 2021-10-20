@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { ScrollView } from 'react-native';
 import { View, Text } from 'react-native';
+import { useSelector } from 'react-redux';
 import { ButtonColoredSmall, ButtonGradient, CardWrapper, ComponentWrapper, LargeTitle, LineHorizontal, MainWrapper, RegularText, RowWrapper, Spacer, TitleValue, Wrapper } from '../../../components';
-import { appStyles, colors, sizes } from '../../../services';
+import { appStyles, colors, HelpingMethods, sizes } from '../../../services';
 
 const TitleValueSecondary = ({ title, value }) => {
     return (
@@ -19,15 +20,21 @@ const TitleValueSecondary = ({ title, value }) => {
 function OrderInvoice(props) {
     const { navigation, route } = props
     const { navigate, goBack } = navigation
+
     //navigation params
     const { order } = route.params
-    const { user } = order
+    //const { user } = order
+
+    //redux states
+    const user = useSelector(state => state.user)
+    const { userDetail } = user
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
-            title: 'Invoice for Order #' + order.id,
+            title: 'Invoice for Order #' + order.order_no,
         });
     }, [navigation]);
+
     return (
         <MainWrapper style={{ backgroundColor: colors.appBgColor6 }}>
             <ScrollView
@@ -42,7 +49,7 @@ function OrderInvoice(props) {
                     <ComponentWrapper style={[appStyles.center]}>
                         <LineHorizontal color={colors.appBgColor6} height={2} style={{ position: 'absolute', right: 0, left: 0 }} />
                         <ButtonColoredSmall
-                        disabled
+                            disabled
                             text="Invoice"
                             buttonStyle={[{ paddingHorizontal: sizes.marginHorizontalSmall, borderRadius: 100, backgroundColor: colors.appColor1 }]}
                             textStyle={[appStyles.textMedium, appStyles.fontBold, appStyles.textWhite]}
@@ -53,13 +60,14 @@ function OrderInvoice(props) {
                         <Wrapper flex={1}>
                             <TitleValueSecondary
                                 title="Order #"
-                                value={order.id}
+                                value={order.order_no}
                             />
                         </Wrapper>
                         <Wrapper flex={1}>
                             <TitleValueSecondary
                                 title="Date"
-                                value={'Fri, 4th June, 2021'}
+                                //value={'Fri, 4th June, 2021'}
+                                value={HelpingMethods.formateDate2(order.created_at)}
                             />
                         </Wrapper>
                     </RowWrapper>
@@ -67,15 +75,14 @@ function OrderInvoice(props) {
                     <ComponentWrapper>
                         <LineHorizontal color={colors.appBgColor4} />
                         <Spacer height={sizes.baseMargin} />
-
                         <TitleValueSecondary
                             title="Item"
-                            value={order.description}
+                            value={order.product.title}
                         />
                         <Spacer height={sizes.baseMargin} />
                         <TitleValueSecondary
                             title="Seller"
-                            value={user.name + ' (' + user.name.replace(/ /g, "_").toLowerCase() + '@email.com)'}
+                            value={userDetail.first_name + ' ' + userDetail.last_name + ' (' + userDetail.email + ')'}
                         />
                         <Spacer height={sizes.baseMargin} />
                         <LineHorizontal color={colors.appBgColor4} />
@@ -83,17 +90,17 @@ function OrderInvoice(props) {
                     <Spacer height={sizes.baseMargin} />
                     <TitleValue
                         title={'Subtotal'}
-                        value={'$ 749.99'}
+                        value={'$ ' + order.sub_total}
                     />
                     <Spacer height={sizes.baseMargin} />
                     <TitleValue
                         title={'Tax (10%)'}
-                        value={'$ 74.99'}
+                        value={'$ ' + order.tax}
                     />
                     <Spacer height={sizes.baseMargin} />
                     <TitleValue
                         title={'Transaction Charges'}
-                        value={'$ 10.00'}
+                        value={'$ ' + order.transaction_charges}
                     />
                     <Spacer height={sizes.baseMargin} />
                     <ComponentWrapper>
@@ -101,7 +108,7 @@ function OrderInvoice(props) {
                     </ComponentWrapper>
                     <Spacer height={sizes.baseMargin} />
                     <ComponentWrapper style={[appStyles.center]}>
-                        <LargeTitle style={[appStyles.textPrimaryColor]}>$ 834.98</LargeTitle>
+                        <LargeTitle style={[appStyles.textPrimaryColor]}>$ {order.total}</LargeTitle>
                     </ComponentWrapper>
                     <Spacer height={sizes.baseMargin} />
                 </CardWrapper>

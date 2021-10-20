@@ -5,7 +5,7 @@ import store from "../store";
 import * as Backend from './index'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import HelpingMethods from "../helpingMethods";
-import { setCreditCards, setUserDetail } from "../store/actions";
+import { setAllOrders, setCreditCards, setUserDetail } from "../store/actions";
 const { dispatch } = store
 
 export const createOrder = async ({
@@ -118,6 +118,7 @@ export const getOrders = async (user_id) => {
             console.log('getOrders Response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
+                dispatch(setAllOrders(tempResponseData.orders))
                 //tempResponseData.orders
             } else {
                 Toasts.error(tempResponseData.message)
@@ -151,6 +152,32 @@ export const updateOrderStatus = async ({order_id,status}) => {
                 Toasts.error(tempResponseData.message)
             }
 
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};
+
+export const getInvoices = async () => {
+    let response = null
+    const state = store.getState()
+    const userId =  state.user.userDetail.id
+    let params = {
+        seller_id: userId,
+    }
+    console.log('getInvoices Params', params);
+    await axios
+        .post(`${baseURL + endPoints.order.get_invoices}`, params)
+        .then(async responseJson => {
+            const tempResponseData = responseJson.data
+            console.log('getInvoices Response', tempResponseData);
+            if (tempResponseData.success) {
+                response = tempResponseData
+            } else {
+                Toasts.error(tempResponseData.message)
+            }
         })
         .catch(error => {
             Toasts.error(error.response.data.message)

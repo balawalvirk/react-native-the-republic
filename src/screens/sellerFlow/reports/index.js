@@ -1,15 +1,24 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { ButtonColoredSmall, ComponentWrapper, DashboardSeller, IconWithText, LineHorizontal, MainWrapper, MediumTitle, RowWrapperBasic, SmallTitle, Spacer, TinyTitle, TitlePrimary, Wrapper } from '../../../components';
-import { appStyles, colors, fontFamily, fontSize, sizes } from '../../../services';
+import { appStyles, Backend, colors, fontFamily, fontSize, sizes } from '../../../services';
 import { Text as TextSvg, LinearGradient, Stop, Defs, Rect } from 'react-native-svg'
 import { BarChart, Grid, YAxis, XAxis, PieChart, AreaChart } from 'react-native-svg-charts'
 import { height, totalSize } from 'react-native-dimension';
 import * as shape from 'd3-shape'
 import { ScrollView } from 'react-native';
+import { useSelector } from 'react-redux';
 
 const ReportGraph = ({ title, subTitle, status, percentage, data, }) => {
+
+
+ 
+  //local states
   const [selectedType, selectType] = useState(1)
+  
+  
+  
+  //contstants
   const types = ['Week', 'All Time']
 
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul']
@@ -17,6 +26,7 @@ const ReportGraph = ({ title, subTitle, status, percentage, data, }) => {
   const isLose = status === 'lose'
   const isSuccess = status === 'success'
   const tintColor = isLose ? colors.error : colors.success
+
   const StockPriceGradient = ({ index }) => (
     <Defs key={index}>
       <LinearGradient id={'stockPricegradient'} x1={'0%'} y1={'0%'} x2={'0%'} y2={'100%'}>
@@ -29,6 +39,7 @@ const ReportGraph = ({ title, subTitle, status, percentage, data, }) => {
       </LinearGradient>
     </Defs>
   )
+  
   return (
     <Wrapper>
       <Wrapper style={{ marginHorizontal: sizes.marginHorizontalSmall }}>
@@ -128,6 +139,20 @@ const ReportGraph = ({ title, subTitle, status, percentage, data, }) => {
 
 function Reports() {
 
+
+  //redux states
+  const user = useSelector(state => state.user)
+  const { userDetail, reports } = user
+
+  
+  useEffect(() => {
+    getSetSellerReports()
+  }, [])
+
+  const getSetSellerReports = () => {
+    Backend.getSellerReports()
+  }
+
   const orders = [50, 10, 40, 95, 85, 91, 35, 53, 24, 50, 20, 80]
   const salesReport = [100, 200, 400, 300, 500, 300, 900, 1000, 500,]
 
@@ -137,16 +162,17 @@ function Reports() {
     <MainWrapper>
      <ScrollView showsVerticalScrollIndicator={false}>
      <Spacer height={sizes.baseMargin} />
-      <DashboardSeller
-        title1="Orders Received"
-        title2="Orders Completed"
-        title3="Earned This Month"
-        title4="Earned Overall"
-        value1='25'
-        value2='10'
-        value3="4,679"
-        value4="94,328"
-      />
+     <DashboardSeller
+          isLoading={!reports}
+          title1="Orders Received"
+          title2="Orders Completed"
+          title3="Earned This Month"
+          title4="Earned Overall"
+          value1={reports && reports.orders}
+          value2={reports && reports.completed_orders}
+          value3={reports && reports.earned_thisMonth}
+          value4={reports && reports.earned_overall}
+        />
       <Spacer height={sizes.doubleBaseMargin} />
       <ReportGraph
         title="Sales Report"
