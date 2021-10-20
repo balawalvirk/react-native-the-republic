@@ -31,6 +31,11 @@ export const endPoints = {
         add_card: 'add-card',
         show_cards: 'show-cards'
     },
+    fullfillment: {
+        add_fullfillment: 'add-fullfillment',
+        update_fullfillment: 'update-fullfillment',
+        get_fullfillments:'get-fullfillments'
+    },
     follow: {
         send_follow_request: 'send-follow-request',
         show_follow_requests: 'show-follow-requests',

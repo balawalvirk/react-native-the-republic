@@ -2,7 +2,7 @@ import { useFocusEffect } from '@react-navigation/core';
 import React, { Component, useState, useLayoutEffect } from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { height } from 'react-native-dimension';
-import { ComponentWrapper, MainWrapper, TraningSellerCard, PopupPrimary, SmallTitle, Spacer, TraningRequestCard, Wrapper, ButtonColoredSmall, MediumText, LoaderPrimary, SkeletonListVerticalPrimary } from '../../../components';
+import { ComponentWrapper, MainWrapper, TraningSellerCard, PopupPrimary, SmallTitle, Spacer, TraningRequestCard, Wrapper, ButtonColoredSmall, MediumText, LoaderPrimary, SkeletonListVerticalPrimary, AddDataViewPrimary } from '../../../components';
 import { appStyles, Backend, colors, DummyData, routes, sizes } from '../../../services';
 
 function Trainings(props) {
@@ -91,9 +91,13 @@ function Trainings(props) {
           }}
         />
         :
-        <Wrapper flex={1} style={[appStyles.center]}>
-          <MediumText>No Trainings Found</MediumText>
-        </Wrapper>
+        // <Wrapper flex={1} style={[appStyles.center]}>
+        //   <MediumText>No Trainings Found</MediumText>
+        // </Wrapper>
+        <AddDataViewPrimary
+        title={'A Training Now'}
+        onPress={() => navigate(routes.seller.createTrainin)}
+      />
       }
       <PopupPrimary
         visible={isDeleteTraningPopupVisible}

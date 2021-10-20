@@ -61,7 +61,7 @@ function Orders(props) {
       then(async res => {
         setLoadingAcceptIndex(-1)
         if (res) {
-          await getSetOrders()
+          await Backend.getOrders()
           Toasts.success('Order has been accepted')
         }
       })
@@ -76,7 +76,7 @@ function Orders(props) {
       then(async res => {
         setLoadingCancelIndex(-1)
         if (res) {
-          await getSetOrders()
+          await Backend.getOrders()
           Toasts.success('Order has been cancelled')
         }
       })

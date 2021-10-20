@@ -3,6 +3,7 @@ import { TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native';
 import { View, Text } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
+import { useSelector } from 'react-redux';
 import { AbsoluteWrapper, ButtonColoredSmall, ButtonGradient, ComponentWrapper, IconWithText, LineHorizontal, MainWrapper, MediumText, ProductCardSecondary, RegularText, RowWrapperBasic, Spacer, TitleValue, Wrapper, OrderStatusWizard, TinyTitle, UserCardPrimary, PopupPrimary, ReviewCardPrimary, ButtonColored, OptionsPopup, Toasts, LoaderAbsolute } from '../../../components';
 import { appImages, appStyles, Backend, colors, orderStatuses, routes, sizes } from '../../../services';
 import { OrdersList } from './ordersList';
@@ -21,7 +22,9 @@ function OrderDetail(props) {
 
 
 
-
+    //redux states
+    const user = useSelector(state => state.user)
+    const { userDetail } = user
     //Local status
 
     const [order, setOrder] = useState(orderDetail)
@@ -31,7 +34,7 @@ function OrderDetail(props) {
     const [isUpdateStatusPopupVisible, setUpdateStatusPopupVisibility] = useState(false)
 
     const isNew = order.status === orderStatuses.pending
-    const isActive = order.status === orderStatuses.accepted ||order.status === orderStatuses.shipping
+    const isActive = order.status === orderStatuses.accepted || order.status === orderStatuses.shipping
     const isDelivered = order.status === orderStatuses.delivered
     const isCompleted = order.status === orderStatuses.completed
     const isCancelled = order.status === orderStatuses.cancelled
@@ -52,14 +55,25 @@ function OrderDetail(props) {
         await Backend.updateOrderStatus({
             order_id: item.id,
             status: orderStatuses.accepted
-        }).
-            then(async res => {
-                setLoadingAcceptIndex(-1)
-                if (res) {
-                    setOrder(res.order)
-                    Toasts.success('Order has been accepted')
+        }).then(async res => {
+            if (item.private_sale === false) {
+                const fulfillmentData = {
+                    dealer_id: '19',
+                    seller_id: userDetail.id,
+                    buyer_id:item.user.id,
+                    buyer_dealer_id:item.buyer_dealer_id,
+                    seller_dealer_id:'19',
+                    product_id:item.product.id,
+                    status:'shipmentPending'
                 }
-            })
+                await Backend.addFulfillment(fulfillmentData)
+            }
+            setLoadingAcceptIndex(-1)
+            if (res) {
+                setOrder(res.order)
+                Toasts.success('Order has been accepted')
+            }
+        })
     }
 
     const handleCancelOrder = async (item, index) => {
@@ -126,8 +140,8 @@ function OrderDetail(props) {
 
                 </Wrapper>
                 {
-                    isNew || isActive ?
-                        order.isPrivate ?
+                    isNew  ?
+                        order.private_sale === true ?
                             <Wrapper style={[appStyles.grayWrapper, { marginBottom: sizes.baseMargin, backgroundColor: colors.success }]}>
                                 <RowWrapperBasic>
                                     <Wrapper flex={1}>
@@ -144,7 +158,7 @@ function OrderDetail(props) {
                                 </RegularText>
                             </Wrapper>
                             :
-                            order.isPrivate === 0 ?
+                            order.private_sale === false ?
                                 <Wrapper style={[appStyles.borderedWrapper, { marginBottom: sizes.baseMargin }]}>
                                     <RowWrapperBasic>
                                         <Wrapper flex={1}>

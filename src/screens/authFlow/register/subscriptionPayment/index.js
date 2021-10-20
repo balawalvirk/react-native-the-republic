@@ -122,6 +122,8 @@ function SubscriptionPayment(props) {
     }
 
     const handleSubscribe = async (stripeCustomerObjectID, stripePaymentObjectID) => {
+        const data = await AsyncStorage.getItem(asyncConts.user_details)
+        const userData = JSON.parse(data)
         console.log('stripe Data', stripeCustomerObjectID, stripePaymentObjectID)
         await Backend.createStripeSubscription(
             isPremium ? stripeKeys.subscription_premium_price : isDealerPro ? stripeKeys.subscription_dealerPro_price : '',
@@ -132,6 +134,7 @@ function SubscriptionPayment(props) {
                 if (response.status === "active") {
                     // toggleOrderPlacedPopup()
                     await Backend.update_profile({
+                        user_id:userData.id,
                         customer_id: stripeCustomerObjectID,
                         payment_id: stripePaymentObjectID,
                         subscription_id: response.id,

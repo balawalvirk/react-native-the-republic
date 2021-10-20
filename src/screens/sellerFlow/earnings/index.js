@@ -5,7 +5,7 @@ import { FlatList } from 'react-native';
 import { View, Text } from 'react-native';
 import { width } from 'react-native-dimension';
 import { useSelector } from 'react-redux';
-import { ButtonColoredSmall, ButtonGradient, ComponentWrapper, DashboardSeller, MainWrapper, ProductCardSecondary, SkeletonListVerticalPrimary, Spacer, TinyTitle } from '../../../components';
+import { ButtonColoredSmall, ButtonGradient, ComponentWrapper, DashboardSeller, MainWrapper, NoDataViewPrimary, ProductCardSecondary, SkeletonListVerticalPrimary, Spacer, TinyTitle } from '../../../components';
 import { appImages, appStyles, Backend, DummyData, HelpingMethods, orderStatuses, routes, sizes } from '../../../services';
 
 
@@ -31,7 +31,7 @@ function Earnings(props) {
   let earningHistory = []
   const getSetEarningHistory = () => {
     let tempData = []
-    if(allOrders){
+    if (allOrders) {
       tempData = allOrders.filter(item => {
         return (
           item.status === orderStatuses.completed
@@ -70,15 +70,12 @@ function Earnings(props) {
           onPress={() => navigate(routes.seller.withdrawEarnings)}
         />
         <Spacer height={sizes.doubleBaseMargin} />
-        <ComponentWrapper>
-          <TinyTitle>Earning History</TinyTitle>
-        </ComponentWrapper>
-        <Spacer height={sizes.smallMargin} />
-        
+
+
         {allOrders ?
           <EarningHistory
             data={earningHistory}
-           // onPressItem={(item, index) => { }}
+            // onPressItem={(item, index) => { }}
             onPressItem={(item, index) => { navigate(routes.seller.OrderDetail, { order: item }) }}
           />
           :
@@ -101,70 +98,87 @@ export default Earnings;
 function EarningHistory({ data, ListHeaderComponent, ListFooterComponent, onPressItem }) {
 
   return (
-    <FlatList
-      data={data}
-      showsVerticalScrollIndicator={false}
-      key={'key'}
-      //numColumns={isGridView && 2}
-      ListHeaderComponent={ListHeaderComponent}
-      ListFooterComponent={ListFooterComponent}
-      keyExtractor={(item, index) => (index + 1).toString()}
-      renderItem={({ item, index }) => {
-        const { user } = item
+    <>
+      {
+        data.length ?
+          <FlatList
+            data={data}
+            showsVerticalScrollIndicator={false}
+            key={'key'}
+            //numColumns={isGridView && 2}
+            //ListHeaderComponent={ListHeaderComponent}
+            ListHeaderComponent={() => {
+              return (
+                <ComponentWrapper>
+                  <TinyTitle>Earning History</TinyTitle>
+                  <Spacer height={sizes.smallMargin} />
+                </ComponentWrapper>
+              )
+            }}
+            ListFooterComponent={ListFooterComponent}
+            keyExtractor={(item, index) => (index + 1).toString()}
+            renderItem={({ item, index }) => {
+              const { user } = item
 
-        //product info
-        let productImage = null
-        let productTitle = ''
-        let productAverageRating = 0
-        let productReviewsCount = ''
-        let productPrice = ''
-        let productDiscountedPrice = ''
-        if (item.product) {
-          const { product } = item
-          const images = product.images ? JSON.parse(product.images) : null
-          productImage = images ? images[0] : null
-          productTitle = product.title
-          productAverageRating = product.average_rating && product.average_rating
-          productReviewsCount = product.reviews_count && product.reviews_count
-          productPrice = product.price
-          productDiscountedPrice = product.discounted_price
-        }
+              //product info
+              let productImage = null
+              let productTitle = ''
+              let productAverageRating = 0
+              let productReviewsCount = ''
+              let productPrice = ''
+              let productDiscountedPrice = ''
+              if (item.product) {
+                const { product } = item
+                const images = product.images ? JSON.parse(product.images) : null
+                productImage = images ? images[0] : null
+                productTitle = product.title
+                productAverageRating = product.average_rating && product.average_rating
+                productReviewsCount = product.reviews_count && product.reviews_count
+                productPrice = product.price
+                productDiscountedPrice = product.discounted_price
+              }
 
 
-        //user info
-        const userImage = item.user.profile_image ? item.user.profile_image : appImages.noUser
-        const userName = item.user.first_name + ' ' + item.user.last_name
-        return (
-          <ProductCardSecondary
-            onPress={() => onPressItem(item, index)}
-            imageStyle={{ height: width(26), width: width(26) }}
-            animation={index <= 5 ? 'fadeInUp' : null}
-            duration={300 + (50 * (index + 1))}
-            containerstyle={
-              { marginBottom: sizes.marginVertical }
-            }
-            image={productImage}
-            description={productTitle}
-            oldPrice={productPrice}
-            newPrice={productDiscountedPrice}
-            //location={item.location}
-            date={HelpingMethods.formateDate1(item.date)}
-            rating={productAverageRating}
-            reviewCount={productReviewsCount}
-            moreInfo={true}
-            moreInfoImage={userImage}
-            moreInfoTitle={userName}
-            moreInfoSubTitle={'Buyer'}
-            moreInfoRight={
-              <ButtonColoredSmall
-                text={'$' + item.total}
-                buttonStyle={{ paddingHorizontal: sizes.marginHorizontalSmall / 2, borderRadius: 100, }}
-                textStyle={[appStyles.textRegular, appStyles.textWhite]}
-              />
-            }
+              //user info
+              const userImage = item.user.profile_image ? item.user.profile_image : appImages.noUser
+              const userName = item.user.first_name + ' ' + item.user.last_name
+              return (
+                <ProductCardSecondary
+                  onPress={() => onPressItem(item, index)}
+                  imageStyle={{ height: width(26), width: width(26) }}
+                  animation={index <= 5 ? 'fadeInUp' : null}
+                  duration={300 + (50 * (index + 1))}
+                  containerstyle={
+                    { marginBottom: sizes.marginVertical }
+                  }
+                  image={productImage}
+                  description={productTitle}
+                  oldPrice={productPrice}
+                  newPrice={productDiscountedPrice}
+                  //location={item.location}
+                  date={HelpingMethods.formateDate1(item.date)}
+                  rating={productAverageRating}
+                  reviewCount={productReviewsCount}
+                  moreInfo={true}
+                  moreInfoImage={userImage}
+                  moreInfoTitle={userName}
+                  moreInfoSubTitle={'Buyer'}
+                  moreInfoRight={
+                    <ButtonColoredSmall
+                      text={'$' + item.total}
+                      buttonStyle={{ paddingHorizontal: sizes.marginHorizontalSmall / 2, borderRadius: 100, }}
+                      textStyle={[appStyles.textRegular, appStyles.textWhite]}
+                    />
+                  }
+                />
+              )
+            }}
           />
-        )
-      }}
-    />
+          :
+          <NoDataViewPrimary
+            title="Earning History"
+          />
+      }
+    </>
   )
 }

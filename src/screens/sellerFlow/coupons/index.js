@@ -2,7 +2,7 @@ import { useFocusEffect } from '@react-navigation/core';
 import React, { Component, useState, useLayoutEffect } from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { height } from 'react-native-dimension';
-import { ComponentWrapper, MainWrapper, TraningSellerCard, PopupPrimary, SmallTitle, Spacer, TraningRequestCard, Wrapper, ButtonColoredSmall, CouponCard, SkeletonListVerticalPrimary, NoDataViewPrimary, Toasts } from '../../../components';
+import { ComponentWrapper, MainWrapper, TraningSellerCard, PopupPrimary, SmallTitle, Spacer, TraningRequestCard, Wrapper, ButtonColoredSmall, CouponCard, SkeletonListVerticalPrimary, NoDataViewPrimary, Toasts, AddDataViewPrimary } from '../../../components';
 import { appStyles, Backend, colors, DummyData, HelpingMethods, routes, sizes } from '../../../services';
 
 function Coupons(props) {
@@ -89,9 +89,13 @@ function Coupons(props) {
             }}
           />
           :
-          <NoDataViewPrimary
-            title="Coupons"
-          />
+          // <NoDataViewPrimary
+          //   title="Coupons"
+          // />
+          <AddDataViewPrimary
+          title={'A Coupon Now'}
+          onPress={() => navigate(routes.seller.createCoupon)}
+        />
       }
       <PopupPrimary
         visible={isDeleteCouponPopupVisible}

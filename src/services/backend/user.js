@@ -209,16 +209,16 @@ export const submit_identity = async ({ user_id, attachment }) => {
 };
 
 export const update_profile = async ({
-    first_name, last_name, username, gender, birthday, phone, image,
+    user_id, first_name, last_name, username, gender, birthday, phone, image,
     country_code, country_phone_code, fcm_token, subscription_id, cancel_subscription,
     customer_id, payment_id, user_type, subscription_plan, latitude,
     longitude, distance, default_card_id }) => {
     let response = null
     const state = store.getState()
-    const { id } = state.user.userDetail
+    const userId = user_id ? user_id : state.user.userDetail.id
     const uri = `${baseURL + endPoints.user.complete_profile}`
     const formDataObject = new FormData()
-    formDataObject.append("user_id", id)
+    formDataObject.append("user_id", userId)
     first_name && formDataObject.append("first_name", first_name)
     last_name && formDataObject.append("last_name", last_name)
     username && formDataObject.append("username", username)
