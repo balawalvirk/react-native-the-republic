@@ -14,7 +14,7 @@ import { ImageSqareRound, ImageThumbnailGrid } from '../images';
 import { TitleValue } from '../common';
 import { BallIndicator, DotIndicator, MaterialIndicator } from 'react-native-indicators';
 
-export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, image, images, containerstyle, description, onPressHeart, newPrice, oldPrice, userName, userImage, viewType, rating, reviewCount, isSponsered }) => {
+export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, image, images, containerstyle, description, onPressHeart, discountedPrice, price, userName, userImage, viewType, rating, reviewCount, isSponsered }) => {
     const defaultViewType = viewType ? viewType : 'grid'
     const isGridView = defaultViewType === 'grid'
     const isListView = defaultViewType === 'list'
@@ -71,9 +71,9 @@ export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, 
                         <Spacer height={sizes.smallMargin} />
                         <Wrapper >
                             <RowWrapperBasic>
-                                <RegularText style={[appStyles.fontBold, appStyles.textPrimaryColor]}>${newPrice}</RegularText>
+                                <RegularText style={[appStyles.fontBold, appStyles.textPrimaryColor]}>${discountedPrice}</RegularText>
                                 <Spacer width={sizes.smallMargin} />
-                                <TinyText style={[appStyles.textColorError, appStyles.textLineThrough]}>${oldPrice}</TinyText>
+                                <TinyText style={[appStyles.textColorError, appStyles.textLineThrough]}>${price}</TinyText>
                             </RowWrapperBasic>
                         </Wrapper>
                         <Spacer height={sizes.smallMargin} />
@@ -223,7 +223,7 @@ export const ReviewCardPrimary = ({ containerStyle, imageUrl, title, rating, rev
         </Wrapper>
     )
 }
-export const ProductCardSecondary = ({ perMoreInfo, content, onPress, animation, duration, image, imageStyle, containerstyle, description, newPrice, oldPrice, rating, reviewCount, moreInfo, moreInfoImage, moreInfoTitle, moreInfoSubTitle, moreInfoRight, moreInfoContainerStyle, children, date }) => {
+export const ProductCardSecondary = ({ perMoreInfo, content, onPress, animation, duration, image, imageStyle, containerstyle, description, discountedPrice, price, rating, reviewCount, moreInfo, moreInfoImage, moreInfoTitle, moreInfoSubTitle, moreInfoRight, moreInfoContainerStyle, children, date }) => {
 
     return (
         <Wrapper animation={animation} duration={duration} style={[styles.ProductCardSecondaryContainer, containerstyle]}>
@@ -247,9 +247,9 @@ export const ProductCardSecondary = ({ perMoreInfo, content, onPress, animation,
                             <Spacer height={sizes.smallMargin} />
                             <Wrapper >
                                 <RowWrapperBasic>
-                                    <RegularText style={[appStyles.fontBold, appStyles.textPrimaryColor]}>${newPrice}</RegularText>
+                                    <RegularText style={[appStyles.fontBold, appStyles.textPrimaryColor]}>${discountedPrice}</RegularText>
                                     <Spacer width={sizes.smallMargin} />
-                                    <TinyText style={[appStyles.textColorError, appStyles.textLineThrough]}>${oldPrice}</TinyText>
+                                    <TinyText style={[appStyles.textColorError, appStyles.textLineThrough]}>${price}</TinyText>
                                 </RowWrapperBasic>
                             </Wrapper>
                             {

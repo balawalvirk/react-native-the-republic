@@ -33,8 +33,8 @@ export function Purchases({ data, ListHeaderComponent, ListFooterComponent, onPr
                         onPressHeart={() => { }}
                         image={item.image}
                         description={item.description}
-                        newPrice={item.new_price}
-                        oldPrice={item.old_price}
+                        discountedPrice={item.new_price}
+                        price={item.old_price}
                         //location={item.location}
                         rating={item.rating}
                         reviewCount={item.review_count}

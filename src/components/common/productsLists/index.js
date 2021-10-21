@@ -35,8 +35,8 @@ export function Products({ data, viewType, ListHeaderComponent, ListFooterCompon
                         viewType={viewType}
                         image={item.image}
                         description={item.description}
-                        newPrice={item.new_price}
-                        oldPrice={item.old_price}
+                        discountedPrice={item.new_price}
+                        price={item.old_price}
                         location={item.location}
                         rating={item.rating}
                         reviewCount={item.review_count}
@@ -75,8 +75,8 @@ export function ProductsSecondary({ data, ListHeaderComponent, ListFooterCompone
                         image={item.image}
                         images={item.images}
                         description={item.description}
-                        newPrice={item.new_price}
-                        oldPrice={item.old_price}
+                        discountedPrice={item.new_price}
+                        price={item.old_price}
                         location={item.location}
                         rating={item.rating}
                         reviewCount={item.review_count}
@@ -122,8 +122,8 @@ export function ProductsHorizontalyPrimary({ data, ListHeaderComponent, ListFoot
                         image={item.image}
                         //images={item.images}
                         description={item.description}
-                        newPrice={item.new_price}
-                        oldPrice={item.old_price}
+                        discountedPrice={item.new_price}
+                        price={item.old_price}
                         location={item.location}
                         rating={item.rating}
                         reviewCount={item.review_count}

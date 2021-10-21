@@ -57,8 +57,8 @@ export function OrdersList({ data, onPressOrder, onpressAccept, onpressCancel, L
                         image={productImage}
                     
                         description={productTitle}
-                        oldPrice={productPrice}
-                        newPrice={productDiscountedPrice}
+                        price={productPrice}
+                        discountedPrice={productDiscountedPrice}
                         //location={item.location}
                         rating={productAverageRating}
                         reviewCount={productReviewsCount}

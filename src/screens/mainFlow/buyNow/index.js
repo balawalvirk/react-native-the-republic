@@ -30,8 +30,8 @@ function BuyNow(props) {
                 <ProductCardSecondary
                     image={product.image}
                     description={product.description}
-                    newPrice={product.new_price}
-                    oldPrice={product.old_price}
+                    discountedPrice={product.new_price}
+                    price={product.old_price}
                     rating={product.rating}
                     reviewCount={product.review_count}
                     moreInfo

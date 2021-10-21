@@ -2,8 +2,8 @@ import React, { Component, useState } from 'react';
 import { View, Text } from 'react-native';
 import { totalSize } from 'react-native-dimension';
 import { Icon } from 'react-native-elements';
-import { ButtonGradient, MainWrapper, MediumText, OptionsPopup, PopupPrimary, RegularText, RowWrapperBasic, Spacer, UserCardPrimary, Wrapper } from '../../../components';
-import { appStyles, colors, sizes } from '../../../services';
+import { ButtonGradient, MainWrapper, MediumText, OptionsPopup, PopupPrimary, RegularText, RowWrapperBasic, Spacer, Toasts, UserCardPrimary, Wrapper } from '../../../components';
+import { appImages, appStyles, Backend, colors, fulfillmentStatuses, sizes } from '../../../services';
 import { CallButton, ChatButton, FulfillmentCard } from './fulFillmentsList';
 
 function FulfillmentDetail(props) {
@@ -11,15 +11,24 @@ function FulfillmentDetail(props) {
     const { navigate, goBack } = navigation
     //navigation params
     const { item } = route.params
-    const { buyer, seller } = item
-    const buyerDealer = buyer.dealer
-    const sellerDealer = seller.dealer
-    const statuses = ['Sent For Shipment', 'Received', 'Completed']
+    const { buyer, seller, product, buyer_dealer, seller_dealer } = item
+    //const buyer_dealer = buyer.dealer
+    //const sellerDealer = seller.dealer
 
-    const isReceived = item.status === 'received'
-    const isShipmentPending = item.status === 'shipmentPending'
-    const isCompleted = item.status === 'completed'
+    //statues
+    const isInProgess = item.status === fulfillmentStatuses.inProgess
+    const isReceived = item.status === fulfillmentStatuses.received
+    const isShipmentPending = item.status === fulfillmentStatuses.shipmentPending
+    const isSentForShipment = item.status === fulfillmentStatuses.sentForShipment
+    const isDelivered = item.status === fulfillmentStatuses.delivered
+    const isCompleted = item.status === fulfillmentStatuses.completed
     const statusText = isReceived ? "Waiting for collection from Buyer" : isShipmentPending ? "Shipment Pending" : isCompleted ? "Completed" : ""
+
+    const statuses = ['Sent For Shipment', 'Received', 'Completed']
+    const buyersDealerStatuses = isInProgess ? ['Received', 'Completed'] : ['Completed']
+    const sellersDealerStatuses =isShipmentPending? ['Sent For Shipment', 'Completed']:['Completed']
+
+
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
@@ -30,10 +39,33 @@ function FulfillmentDetail(props) {
     //Local status
     const [isUpdateStatusPopupVisible, setUpdateStatusPopupVisibility] = useState(false)
     const [isNotifyBuyerPopupVisible, setNotifyBuyerPopupVisibility] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const toggleUpdateStatusPopup = () => setUpdateStatusPopupVisibility(!isUpdateStatusPopupVisible)
     const toggleNotifyBuyerPopup = () => setNotifyBuyerPopupVisibility(!isNotifyBuyerPopupVisible)
 
+
+    const productImagesParsed = JSON.parse(product.images)
+    const productImage = productImagesParsed[0]
+
+
+    const handleUpdateFulfillmentStatus = async (statusItem, index) => {
+        console.log('status-->', statusItem)
+        toggleUpdateStatusPopup()
+        const status = statusItem === 'Received' ? fulfillmentStatuses.received :
+            statusItem === 'Sent For Shipment' ? fulfillmentStatuses.sentForShipment :
+                statusItem === 'Completed' ? fulfillmentStatuses.completed : ''
+        setLoading(true)
+        await Backend.updateFulfillment({ fullfillment_id: item.id, status }).
+            then(async res => {
+                setLoading(false)
+                if (res) {
+                    await props.navigation.setParams({ item: res.fullfillment })
+                    Toasts.success('Status Updated Successfully')
+                }
+            })
+
+    }
     return (
         <MainWrapper>
             <Wrapper flex={1}>
@@ -43,15 +75,17 @@ function FulfillmentDetail(props) {
                     // containerstyle={
                     //     { marginBottom: sizes.marginVertical }
                     // }
-                    image={item.image}
-                    description={item.description}
-                    newPrice={item.new_price}
-                    oldPrice={item.old_price}
-                    sellerImage={seller.image}
-                    sellerName={seller.name}
+                    image={productImage}
+                    description={product.title}
+                    discountedPrice={product.discounted_price}
+                    price={product.price}
+                    sellerImage={seller.profile_image}
+                    sellerName={seller.first_name + ' ' + seller.last_name}
+                    sellerPhone={'+' + seller.country_phone_code + seller.phone}
                     orderNumber={item.id}
-                    buyerImage={buyer.image}
-                    buyerName={buyer.name}
+                    buyerImage={buyer.profile_image}
+                    buyerName={buyer.first_name + ' ' + buyer.last_name}
+                    buyerPhone={'+' + buyer.country_phone_code + buyer.phone}
                     // buyerAddress={'14 Wall Street, New York City, NY, USA'}
                     status={item.status}
                     showContactOptions={true}
@@ -62,19 +96,19 @@ function FulfillmentDetail(props) {
                         <Wrapper>
                             <UserCardPrimary
                                 // containerStyle={{ marginHorizontal: sizes.marginHorizontalSmall, marginBottom: sizes.marginVertical / 2 }}
-                                imageUri={buyerDealer.image}
-                                title={buyerDealer.name}
+                                imageUri={buyer_dealer.profile_image}
+                                title={buyer_dealer.first_name + ' ' + buyer_dealer.last_name}
                                 subTitle={'FFL Dealer'}
                                 top={
-                                    <RowWrapperBasic style={{marginHorizontal: sizes.marginHorizontalSmall, marginBottom: sizes.marginVertical / 2}}>
+                                    <RowWrapperBasic style={{ marginHorizontal: sizes.marginHorizontalSmall, marginBottom: sizes.marginVertical / 2 }}>
                                         <Wrapper flex={1}>
                                             <RegularText style={[appStyles.textDarkGray]}>Please send the product to this dealer</RegularText>
                                         </Wrapper>
                                         <Icon
-                                        name="info"
-                                        type="feather"
-                                        color={colors.appColor2}
-                                        size={totalSize(2)}
+                                            name="info"
+                                            type="feather"
+                                            color={colors.appColor2}
+                                            size={totalSize(2)}
                                         />
                                     </RowWrapperBasic>
                                 }
@@ -87,6 +121,53 @@ function FulfillmentDetail(props) {
                                         </Wrapper>
                                     </Wrapper>
                                 }
+                                right={
+                                    <RowWrapperBasic>
+                                        <ChatButton
+                                            onPress={() => { }}
+                                        />
+                                        <Spacer width={sizes.marginHorizontal} />
+                                        <CallButton
+                                            onPress={() => { }}
+                                        />
+                                    </RowWrapperBasic>
+                                }
+
+                            />
+                        </Wrapper>
+                        :
+                        null
+                }
+                {
+                    isInProgess ?
+                        <Wrapper>
+                            <UserCardPrimary
+                                // containerStyle={{ marginHorizontal: sizes.marginHorizontalSmall, marginBottom: sizes.marginVertical / 2 }}
+                                imageUri={seller_dealer.profile_image ? seller_dealer.profile_image : appImages.noUser}
+                                title={seller_dealer.first_name + ' ' + seller_dealer.last_name}
+                                subTitle={'FFL Dealer'}
+                                top={
+                                    <RowWrapperBasic style={{ marginHorizontal: sizes.marginHorizontalSmall, marginBottom: sizes.marginVertical / 2 }}>
+                                        <Wrapper flex={1}>
+                                            <RegularText style={[appStyles.textDarkGray]}>You will recieve product from this dealer</RegularText>
+                                        </Wrapper>
+                                        <Icon
+                                            name="info"
+                                            type="feather"
+                                            color={colors.appColor2}
+                                            size={totalSize(2)}
+                                        />
+                                    </RowWrapperBasic>
+                                }
+                                // bottom={
+                                //     <Wrapper>
+                                //         <Wrapper style={{ marginHorizontal: sizes.marginHorizontalSmall, marginTop: sizes.marginVertical / 2 }}>
+                                //             <RegularText style={[appStyles.textPrimaryColor, appStyles.fontBold]}>Delivery Address</RegularText>
+                                //             <Spacer height={sizes.smallMargin} />
+                                //             <MediumText>14 Wall Street, New York City, NY, USA </MediumText>
+                                //         </Wrapper>
+                                //     </Wrapper>
+                                // }
                                 right={
                                     <RowWrapperBasic>
                                         <ChatButton
@@ -119,11 +200,12 @@ function FulfillmentDetail(props) {
                         null
                 }
                 {
-                    isReceived || isShipmentPending ?
+                    isInProgess || isReceived || isShipmentPending || isDelivered || isSentForShipment ?
                         <>
                             <ButtonGradient
                                 text="Update Status"
                                 onPress={toggleUpdateStatusPopup}
+                                loading={loading}
                             />
                             <Spacer height={sizes.doubleBaseMargin} />
                         </>
@@ -134,11 +216,9 @@ function FulfillmentDetail(props) {
             <OptionsPopup
                 visible={isUpdateStatusPopupVisible}
                 toggle={toggleUpdateStatusPopup}
-                onPressStatus={(item, index) => {
-                    console.log('status-->', item)
-                    toggleUpdateStatusPopup()
-                }}
-                options={statuses}
+                onPressStatus={handleUpdateFulfillmentStatus}
+                //options={statuses}
+                options={isInProgess || isReceived ? buyersDealerStatuses : isShipmentPending || isSentForShipment ? sellersDealerStatuses : []}
             />
             <PopupPrimary
                 visible={isNotifyBuyerPopupVisible}

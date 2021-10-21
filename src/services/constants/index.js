@@ -253,6 +253,15 @@ export const orderStatuses={
     completed:'completed',
     cancelled:'cancelled'
 }
+export const fulfillmentStatuses={
+    inProgess:'inProgress',
+    received:'received',
+    shipmentPending:'shipmentPending',
+    sentForShipment:'sentForShipment',
+    delivered:'delivered',
+    completed:'completed',
+   
+}
 export const headers = {
     screenOptionsPrimary: {
         // headerShown: false,

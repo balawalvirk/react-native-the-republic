@@ -65,8 +65,8 @@ function Explore(props) {
                     viewType={'list'}
                     image={selectedProduct.image}
                     description={selectedProduct.description}
-                    newPrice={selectedProduct.new_price}
-                    oldPrice={selectedProduct.old_price}
+                    discountedPrice={selectedProduct.new_price}
+                    price={selectedProduct.old_price}
                     location={selectedProduct.location}
                     rating={selectedProduct.rating}
                     reviewCount={selectedProduct.review_count}

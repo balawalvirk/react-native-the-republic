@@ -447,8 +447,8 @@ function Sell(props) {
                                                 viewType={'list'}
                                                 image={imageFile ? imageFile.uri : imageUri}
                                                 description={description}
-                                                newPrice={discountedPrice}
-                                                oldPrice={price}
+                                                discountedPrice={discountedPrice}
+                                                price={price}
                                                 location={city}
                                                 rating={selectedProduct.rating}
                                                 reviewCount={selectedProduct.review_count}

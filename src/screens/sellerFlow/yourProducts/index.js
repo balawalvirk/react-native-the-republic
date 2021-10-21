@@ -87,8 +87,8 @@ function YourProducts(props) {
                   onPressHeart={() => { }}
                   image={images[0]}
                   description={item.description}
-                  oldPrice={item.price}
-                  newPrice={item.discounted_price}
+                  price={item.price}
+                  discountedPrice={item.discounted_price}
                   rating={item.average_rating}
                   reviewCount={item.reviews.length}
                   moreInfo={true}
@@ -144,8 +144,8 @@ function YourProducts(props) {
                 //onPress={() => { }}p
                 image={seletedProduct.image}
                 description={seletedProduct.description}
-                oldPrice={seletedProduct.price}
-                newPrice={seletedProduct.discounted_price}
+                price={seletedProduct.price}
+                discountedPrice={seletedProduct.discounted_price}
                 rating={seletedProduct.rating}
                 reviewCount={seletedProduct.review_count}
               />

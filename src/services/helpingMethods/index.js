@@ -1,11 +1,12 @@
 import moment from "moment";
-import { UIManager, LayoutAnimation, Platform } from "react-native";
+import { UIManager, LayoutAnimation, Platform, Linking } from "react-native";
 import dummyData from "../constants/dummyData";
 import NetInfo from "@react-native-community/netinfo";
 import store from "../store";
 import { setUserDetail } from "../store/actions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { asyncConts } from "..";
+import { Toasts } from "../../components";
 
 const { dispatch } = store
 const HelpingMethods = {
@@ -114,8 +115,8 @@ const HelpingMethods = {
         //'Fri, 4th June, 2021'
         return moment(date).format('ddd, DD MMMM, YYYY')
     },
-    formateDateToDate1:(date)=>{
-        return moment(date,'YYYY-MM-DD').format('DD / MM / YYYY')
+    formateDateToDate1: (date) => {
+        return moment(date, 'YYYY-MM-DD').format('DD / MM / YYYY')
     },
     checkInternetConnectivity: async () => {
         let isConnected = false
@@ -145,9 +146,41 @@ const HelpingMethods = {
         }
         return tempData
     },
-    getHiddenCardNumber:(cardNumber)=>{
+    getHiddenCardNumber: (cardNumber) => {
         return `**** **** **** ${cardNumber.slice(12, 16)}`
-    }
+    },
+    dialPhoneNumber: (number) => {
+        console.warn('callNumber ----> ', number);
+        let phoneNumber = number;
+        if (Platform.OS !== 'android') {
+            phoneNumber = `telprompt:${number}`;
+        }
+        else {
+            phoneNumber = `tel:${number}`;
+        }
+        Linking.canOpenURL(phoneNumber)
+            .then(supported => {
+                if (!supported) {
+                    Toasts.error('Phone number is not available');
+                } else {
+                    return Linking.openURL(phoneNumber);
+                }
+            })
+            .catch(err => console.warn(err));
+    },
+    smsComposer: (number) => {
+        const url = (Platform.OS === 'android')
+            ? `sms:${number}`
+            : `sms:${number}`
+
+        Linking.canOpenURL(url).then(supported => {
+            if (!supported) {
+                Toasts.error('Unsupported url: ' + url)
+            } else {
+                return Linking.openURL(url)
+            }
+        }).catch(err => console.error('An error occurred', err))
+    },
 }
 
 

@@ -153,8 +153,8 @@ function EarningHistory({ data, ListHeaderComponent, ListFooterComponent, onPres
                   }
                   image={productImage}
                   description={productTitle}
-                  oldPrice={productPrice}
-                  newPrice={productDiscountedPrice}
+                  price={productPrice}
+                  discountedPrice={productDiscountedPrice}
                   //location={item.location}
                   date={HelpingMethods.formateDate1(item.date)}
                   rating={productAverageRating}

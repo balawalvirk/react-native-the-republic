@@ -1,5 +1,5 @@
 import { ButtonColored, ButtonColoredSmall, IconButton, MediumText, ProductCardSecondary, RegularText, RowWrapper, RowWrapperBasic, Spacer, TinyTitle, UserCardPrimary, Wrapper } from "../../../components"
-import { appStyles, colors, fontSize, sizes } from "../../../services"
+import { appStyles, colors, fontSize, fulfillmentStatuses, HelpingMethods, sizes } from "../../../services"
 import React from 'react'
 import { FlatList } from "react-native"
 import { totalSize } from "react-native-dimension"
@@ -40,18 +40,22 @@ export const CallButton = ({ onPress }) => {
 export const FulfillmentCard = ({
     animation, duration,
     onPress, image, description,
-    newPrice, oldPrice,
-    sellerImage, sellerName, orderNumber,
-    buyerImage, buyerName, buyerAddress,
+    discountedPrice, price,
+    sellerImage, sellerName, sellerPhone,
+    orderNumber,
+    buyerImage, buyerName, buyerPhone, buyerAddress,
     containerstyle, status, showContactOptions
 }) => {
 
-    const isReceived = status === 'received'
-    const isShipmentPending = status === 'shipmentPending'
-    const isCompleted = status === 'completed'
-    const statusText = isReceived ? "Waiting for collection from Buyer" : isShipmentPending ? "Shipment Pending" : isCompleted ? "Completed" : ""
+    const isInProgess = status === fulfillmentStatuses.inProgess
+    const isReceived = status === fulfillmentStatuses.received
+    const isShipmentPending = status === fulfillmentStatuses.shipmentPending
+    const isSentForShipment = status === fulfillmentStatuses.sentForShipment
+    const isDelivered = status === fulfillmentStatuses.delivered
+    const isCompleted = status === fulfillmentStatuses.completed
+    const statusText = isInProgess ? 'In Progress' : isReceived ? "Waiting for collection from Buyer" : isShipmentPending ? "Shipment Pending" :isSentForShipment?'Sent For Shipment': isDelivered ? 'Delivered' : isCompleted ? "Completed" : ""
 
-   
+
     return (
         <ProductCardSecondary
             containerstyle={containerstyle}
@@ -61,15 +65,15 @@ export const FulfillmentCard = ({
             image={image}
             imag
             description={description}
-            newPrice={newPrice}
-            oldPrice={oldPrice}
+            discountedPrice={discountedPrice}
+            price={price}
             content={
                 <Wrapper style={{ alignItems: 'flex-end', }}>
                     <Spacer height={sizes.smallMargin} />
                     <ButtonColoredSmall
                         text={statusText}
                         buttonStyle={{ paddingHorizontal: sizes.marginHorizontalSmall, borderRadius: 100, backgroundColor: isCompleted ? colors.success : colors.appColor1, }}
-                        textStyle={{ fontSize: isReceived ? fontSize.small:fontSize.regular }}
+                        textStyle={{ fontSize: isReceived ? fontSize.small : fontSize.regular }}
                     />
                 </Wrapper>
             }
@@ -89,11 +93,11 @@ export const FulfillmentCard = ({
                         showContactOptions ?
                             <RowWrapperBasic>
                                 <ChatButton
-                                    onPress={() => { }}
+                                    onPress={() => { HelpingMethods.smsComposer(sellerPhone) }}
                                 />
                                 <Spacer width={sizes.marginHorizontal} />
                                 <CallButton
-                                    onPress={() => { }}
+                                    onPress={() => { HelpingMethods.dialPhoneNumber(sellerPhone) }}
                                 />
                             </RowWrapperBasic>
                             :
@@ -104,16 +108,16 @@ export const FulfillmentCard = ({
             moreInfoImage={buyerImage}
             moreInfoTitle={buyerName}
             moreInfoSubTitle={'Buyer'}
-            moreInfoContainerStyle={[{ marginHorizontal: sizes.marginHorizontalSmall, marginBottom: sizes.marginVertical/2 }]}
+            moreInfoContainerStyle={[{ marginHorizontal: sizes.marginHorizontalSmall, marginBottom: sizes.marginVertical / 2 }]}
             moreInfoRight={
                 showContactOptions ?
                     <RowWrapperBasic>
                         <ChatButton
-                            onPress={() => { }}
+                            onPress={() => { HelpingMethods.smsComposer(sellerPhone) }}
                         />
                         <Spacer width={sizes.marginHorizontal} />
                         <CallButton
-                            onPress={() => { }}
+                            onPress={() => { HelpingMethods.dialPhoneNumber(sellerPhone) }}
                         />
                     </RowWrapperBasic>
                     :
@@ -148,11 +152,16 @@ export function FulfillmentsList({ data, onPressOrder, ListHeaderComponent, List
             ListFooterComponent={ListFooterComponent}
             keyExtractor={(item, index) => (index + 1).toString()}
             renderItem={({ item, index }) => {
-                const { seller, buyer } = item
-                const isReceived = item.status === 'received'
-                const isShipmentPending = item.status === 'shipmentPending'
-                const isCompleted = item.status === 'completed'
-                const statusText = isReceived ? "Waiting for collection from Buyer" : isShipmentPending ? "Shipment Pending" : isCompleted ? "Completed" : ""
+                const { seller, buyer, product } = item
+                // const isInProgess = item.status === fulfillmentStatuses.inProgess
+                // const isReceived = item.status === fulfillmentStatuses.received
+                // const isShipmentPending = item.status === fulfillmentStatuses.shipmentPending
+                // const isDelivered = item.status === fulfillmentStatuses.delivered
+                // const isCompleted = item.status === fulfillmentStatuses.completed
+                // const statusText = isReceived ? "Waiting for collection from Buyer" : isShipmentPending ? "Shipment Pending" : isCompleted ? "Completed" : ""
+
+                const productImagesParsed = JSON.parse(product.images)
+                const productImage = productImagesParsed[0]
                 return (
                     <FulfillmentCard
                         onPress={() => onPressOrder(item, index)}
@@ -161,15 +170,17 @@ export function FulfillmentsList({ data, onPressOrder, ListHeaderComponent, List
                         containerstyle={
                             { marginBottom: sizes.marginVertical }
                         }
-                        image={item.image}
-                        description={item.description}
-                        newPrice={item.new_price}
-                        oldPrice={item.old_price}
-                        sellerImage={seller.image}
-                        sellerName={seller.name}
+                        image={productImage}
+                        description={product.title}
+                        discountedPrice={product.discounted_price}
+                        price={product.price}
+                        sellerImage={seller.profile_image}
+                        sellerName={seller.first_name + ' ' + seller.last_name}
+                        //sellerPhone={'+' + seller.country_phone_code + seller.phone}
                         orderNumber={item.id}
-                        buyerImage={buyer.image}
-                        buyerName={buyer.name}
+                        buyerImage={buyer.profile_image}
+                        buyerName={buyer.first_name + ' ' + buyer.last_name}
+                        //buyerPhone={'+' + buyer.country_phone_code + buyer.phone}
                         buyerAddress={'14 Wall Street, New York City, NY, USA'}
                         status={item.status}
                     />

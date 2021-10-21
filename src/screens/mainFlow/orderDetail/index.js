@@ -82,8 +82,8 @@ function OrderDetail(props) {
             <ProductCardSecondary
                 image={order.image}
                 description={order.description}
-                newPrice={order.new_price}
-                oldPrice={order.old_price}
+                discountedPrice={order.new_price}
+                price={order.old_price}
                 rating={order.rating}
                 reviewCount={order.review_count}
                 moreInfo

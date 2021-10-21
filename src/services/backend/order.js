@@ -86,7 +86,7 @@ export const updateOrder = async ({
     address && [params['address'] = address]
     console.log('updateOrder Params', params);
     await axios
-        .post(`${baseURL + endPoints.order.create_order}`, params)
+        .post(`${baseURL + endPoints.order.update_order}`, params)
         .then(async responseJson => {
             const tempResponseData = responseJson.data
             console.log('updateOrder Response', tempResponseData);
