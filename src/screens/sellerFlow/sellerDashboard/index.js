@@ -77,8 +77,8 @@ function SellerDashboard(props) {
           title4="Earned Overall"
           value1={reports && reports.orders}
           value2={reports && reports.completed_orders}
-          value3={reports && reports.earned_thisMonth}
-          value4={reports && reports.earned_overall}
+          value3={reports && `$${reports.earned_thisMonth}`}
+          value4={reports && `$${reports.earned_overall}`}
         />
         <Spacer height={sizes.baseMargin} />
         <OptionsListPrimary

@@ -57,10 +57,10 @@ function Earnings(props) {
           title2="Earned Overall"
           title3="Pending for Clearance"
           title4="Available for Withdrawal"
-          value1={reports && reports.earned_thisMonth}
-          value2={reports && reports.earned_overall}
-          value3="$877"
-          value4="$934"
+          value1={reports && `$${reports.earned_thisMonth}`}
+          value2={reports && `$${reports.earned_overall}`}
+          value3={reports && `$${reports.clearance_pending}`}
+          value4={reports && `$${reports.available_withdraw}`}
 
         />
         <Spacer height={sizes.doubleBaseMargin} />

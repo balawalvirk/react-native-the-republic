@@ -9,7 +9,7 @@ import { setCreditCards, setUserDetail } from "../store/actions";
 const { dispatch } = store
 
 
-export const addFulfillment = async ({ dealer_id, seller_id, buyer_id, seller_dealer_id, buyer_dealer_id, product_id, status }) => {
+export const addFulfillment = async ({ dealer_id, seller_id, buyer_id, seller_dealer_id, buyer_dealer_id, product_id,order_id, status ,type}) => {
     let response = null
     //const state = store.getState()
     //const userId = user_id ? user_id : state.user.userDetail.id
@@ -21,7 +21,9 @@ export const addFulfillment = async ({ dealer_id, seller_id, buyer_id, seller_de
         seller_dealer_id,
         buyer_dealer_id,
         product_id,
-        status
+        order_id,
+        status,
+        type
     }
     console.log('addFulfillment Params', params);
     await axios

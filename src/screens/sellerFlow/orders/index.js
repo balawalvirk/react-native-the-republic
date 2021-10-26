@@ -5,7 +5,7 @@ import { View, Text } from 'react-native';
 import { height, width } from 'react-native-dimension';
 import { useSelector } from 'react-redux';
 import { ButtonColored, ButtonColoredSmall, ButtonGroupAnimated, MainWrapper, MediumText, NoDataViewPrimary, ProductCardSecondary, Purchases, RegularText, RowWrapper, RowWrapperBasic, SkeletonListVerticalPrimary, Spacer, TitleInfoPrimary, TitlePrimary, TitleValue, Toasts, Wrapper } from '../../../components';
-import { appStyles, Backend, colors, orderStatuses, routes, sizes } from '../../../services';
+import { appStyles, Backend, colors, fulfillmentStatuses, fulfillmentTypes, orderStatuses, routes, sizes } from '../../../services';
 import dummyData from '../../../services/constants/dummyData';
 import { OrdersList } from './ordersList';
 
@@ -37,7 +37,11 @@ function Orders(props) {
 
   //redux states
   const order = useSelector(state => state.order)
+  const user = useSelector(state => state.user)
   const { allOrders } = order
+  const { userDetail } = user
+  const { default_dealer_id, default_dealer } = userDetail
+
 
   //local states
   const [selectedTabIndex, setSelectedTabIndex] = useState(0)
@@ -51,20 +55,47 @@ function Orders(props) {
     }, [])
   )
 
-
+  const validateOrder = (item, index) => {
+    if (item.private_sale === true) {
+      return true
+    } else if (item.private_sale === false) {
+      if (default_dealer_id) {
+        return true
+      } else {
+        Toasts.error('Please select your nearest FFL Dealer')
+      }
+    }
+  }
   const handleAcceptOrder = async (item, index) => {
-    setLoadingAcceptIndex(index)
-    await Backend.updateOrderStatus({
-      order_id: item.id,
-      status: orderStatuses.accepted
-    }).
-      then(async res => {
-        setLoadingAcceptIndex(-1)
-        if (res) {
+    if (validateOrder(item)) {
+      setLoadingAcceptIndex(index)
+      await Backend.updateOrderStatus({
+        order_id: item.id,
+        status: orderStatuses.accepted
+      }).
+        then(async res => {
+          if (item.private_sale === false && default_dealer_id) {
+            await Backend.updateOrder({ order_id: item.id, seller_dealer_id: default_dealer_id })
+            const fulfillmentData = {
+              dealer_id: default_dealer_id,
+              seller_id: userDetail.id,
+              buyer_id: item.user.id,
+              // buyer_dealer_id: item.buyer_dealer_id,
+              // seller_dealer_id: '18',
+              product_id: item.product.id,
+              order_id:item.id,
+              status: fulfillmentStatuses.shipmentPending,
+              type:fulfillmentTypes.sellerDealer
+            }
+            await Backend.addFulfillment(fulfillmentData)
+          }
           await Backend.getOrders()
-          Toasts.success('Order has been accepted')
-        }
-      })
+          setLoadingAcceptIndex(-1)
+          if (res) {
+            Toasts.success('Order has been accepted')
+          }
+        })
+    }
   }
 
   const handleCancelOrder = async (item, index) => {
@@ -74,9 +105,9 @@ function Orders(props) {
       status: orderStatuses.cancelled
     }).
       then(async res => {
+        await Backend.getOrders()
         setLoadingCancelIndex(-1)
         if (res) {
-          await Backend.getOrders()
           Toasts.success('Order has been cancelled')
         }
       })
@@ -112,39 +143,39 @@ function Orders(props) {
   }
   return (
     <MainWrapper>
-     {
-       allOrders.length?
-       <>
-        <ButtonGroupAnimated
-        data={tabs}
-        initalIndex={selectedTabIndex}
-        text='title'
-        onPressButton={(item, index) => setSelectedTabIndex(index)}
-        containerStyle={[{ backgroundColor: 'transparent', marginHorizontal: 0, borderBottomWidth: 1, borderBottomColor: colors.appBgColor3 }]}
-        inActiveButtonStyle={{ width: width(100) / 4, paddingVertical: height(1.75), backgroundColor: 'transparent', paddingHorizontal: 0, }}
-        activeButtonForceStyle={{ position: 'absolute', height: 4, bottom: 0, backgroundColor: colors.appColor1, borderRadius: 5, width: (width((100 / 4))), }}
-        // activeButtonContent={<Wrapper></Wrapper>}
-        activeTextStyle={[appStyles.textMedium, appStyles.textPrimaryColor]}
-        inActiveTextStyle={[appStyles.textMedium, appStyles.textLightGray]}
+      {
+        allOrders.length ?
+          <>
+            <ButtonGroupAnimated
+              data={tabs}
+              initalIndex={selectedTabIndex}
+              text='title'
+              onPressButton={(item, index) => setSelectedTabIndex(index)}
+              containerStyle={[{ backgroundColor: 'transparent', marginHorizontal: 0, borderBottomWidth: 1, borderBottomColor: colors.appBgColor3 }]}
+              inActiveButtonStyle={{ width: width(100) / 4, paddingVertical: height(1.75), backgroundColor: 'transparent', paddingHorizontal: 0, }}
+              activeButtonForceStyle={{ position: 'absolute', height: 4, bottom: 0, backgroundColor: colors.appColor1, borderRadius: 5, width: (width((100 / 4))), }}
+              // activeButtonContent={<Wrapper></Wrapper>}
+              activeTextStyle={[appStyles.textMedium, appStyles.textPrimaryColor]}
+              inActiveTextStyle={[appStyles.textMedium, appStyles.textLightGray]}
 
-      />
-      <OrdersList
-        data={filteredOrders}
-        onPressOrder={(item, index) => { navigate(routes.seller.OrderDetail, { order: item }) }}
-        onpressAccept={handleAcceptOrder}
-        onpressCancel={handleCancelOrder}
-        loadingAcceptIndex={loadingAcceptIndex}
-        loadingCancelIndex={loadingCancelIndex}
-        ListHeaderComponent={() => <Spacer height={sizes.baseMargin} />}
-        ListFooterComponent={() => <Spacer height={sizes.doubleBaseMargin} />}
-      />
-       </>
-       :
-       <NoDataViewPrimary
-       title="Order"
-       />
-       
-     }
+            />
+            <OrdersList
+              data={filteredOrders}
+              onPressOrder={(item, index) => { navigate(routes.seller.OrderDetail, { order: item }) }}
+              onpressAccept={handleAcceptOrder}
+              onpressCancel={handleCancelOrder}
+              loadingAcceptIndex={loadingAcceptIndex}
+              loadingCancelIndex={loadingCancelIndex}
+              ListHeaderComponent={() => <Spacer height={sizes.baseMargin} />}
+              ListFooterComponent={() => <Spacer height={sizes.doubleBaseMargin} />}
+            />
+          </>
+          :
+          <NoDataViewPrimary
+            title="Order"
+          />
+
+      }
 
     </MainWrapper>
   );

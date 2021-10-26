@@ -12,12 +12,12 @@ import { useSelector } from 'react-redux';
 const ReportGraph = ({ title, subTitle, status, percentage, data, }) => {
 
 
- 
+
   //local states
   const [selectedType, selectType] = useState(1)
-  
-  
-  
+
+
+
   //contstants
   const types = ['Week', 'All Time']
 
@@ -39,7 +39,7 @@ const ReportGraph = ({ title, subTitle, status, percentage, data, }) => {
       </LinearGradient>
     </Defs>
   )
-  
+
   return (
     <Wrapper>
       <Wrapper style={{ marginHorizontal: sizes.marginHorizontalSmall }}>
@@ -97,7 +97,7 @@ const ReportGraph = ({ title, subTitle, status, percentage, data, }) => {
               //  fontWeight: '900'
             }}
             numberOfTicks={5}
-            formatLabel={(value) => `${title==='Sales Report'?'$':''}${value}`}
+            formatLabel={(value) => `${title === 'Sales Report' ? '$' : ''}${value}`}
           />
           <Wrapper flex={1} style={{ width: '100%', paddingHorizontal: sizes.marginHorizontal / 2 }}>
             <AreaChart
@@ -112,13 +112,13 @@ const ReportGraph = ({ title, subTitle, status, percentage, data, }) => {
             </AreaChart>
             <XAxis
               style={{}}
-              data={selectedType===0?weekDays:months}
-             // data={weekDays}
+              data={selectedType === 0 ? weekDays : months}
+              // data={weekDays}
               xAccessor={({ index }) => index}
               //scale={scale.scaleBand}
               //formatLabel={(value, index) => index}
               //formatLabel={(value) => `${value}%`}
-              formatLabel={(_, index) => selectedType===0?weekDays[index]:months[index]}
+              formatLabel={(_, index) => selectedType === 0 ? weekDays[index] : months[index]}
               spacing={0.2}
               contentInset={{ left: 15, right: 15, }}
               svg={{
@@ -144,7 +144,7 @@ function Reports() {
   const user = useSelector(state => state.user)
   const { userDetail, reports } = user
 
-  
+
   useEffect(() => {
     getSetSellerReports()
   }, [])
@@ -160,9 +160,9 @@ function Reports() {
 
   return (
     <MainWrapper>
-     <ScrollView showsVerticalScrollIndicator={false}>
-     <Spacer height={sizes.baseMargin} />
-     <DashboardSeller
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Spacer height={sizes.baseMargin} />
+        <DashboardSeller
           isLoading={!reports}
           title1="Orders Received"
           title2="Orders Completed"
@@ -170,27 +170,27 @@ function Reports() {
           title4="Earned Overall"
           value1={reports && reports.orders}
           value2={reports && reports.completed_orders}
-          value3={reports && reports.earned_thisMonth}
-          value4={reports && reports.earned_overall}
+          value3={reports && `$${reports.earned_thisMonth}`}
+          value4={reports && `$${reports.earned_overall}`}
         />
-      <Spacer height={sizes.doubleBaseMargin} />
-      <ReportGraph
-        title="Sales Report"
-        subTitle="$1,400"
-        percentage="1.36"
-        data={salesReport}
-        status={'lose'}
-      />
         <Spacer height={sizes.doubleBaseMargin} />
-      <ReportGraph
-        title="Orders"
-        subTitle="25"
-        percentage="2.43"
-        data={orders}
-        status={'success'}
-      />
-       <Spacer height={sizes.doubleBaseMargin} />
-     </ScrollView>
+        <ReportGraph
+          title="Sales Report"
+          subTitle="$1,400"
+          percentage="1.36"
+          data={salesReport}
+          status={'lose'}
+        />
+        <Spacer height={sizes.doubleBaseMargin} />
+        <ReportGraph
+          title="Orders"
+          subTitle="25"
+          percentage="2.43"
+          data={orders}
+          status={'success'}
+        />
+        <Spacer height={sizes.doubleBaseMargin} />
+      </ScrollView>
 
     </MainWrapper>
   );

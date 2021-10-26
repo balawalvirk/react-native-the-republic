@@ -6,6 +6,7 @@ import { Keyboard } from 'react-native';
 import { View, Text, FlatList } from 'react-native';
 import { height, totalSize } from 'react-native-dimension';
 import { Icon } from 'react-native-elements';
+import { useSelector } from 'react-redux';
 import { ButtonBordered, ButtonGradient, CardWrapper, ColoredWrapper, ComponentWrapper, LargeText, LargeTitle, MainWrapper, MediumText, MediumTitle, PickerPrimary, PickerSearchable, PopupPrimary, RegularText, RowWrapper, RowWrapperBasic, SkeletonListVerticalSecondary, SkeletonPrimary, SmallTitle, Spacer, TextInputUnderlined, TinyTitle, Toasts, Wrapper, XLTitle, XXLTitle } from '../../../components';
 import { appStyles, Backend, colors, HelpingMethods, sizes } from '../../../services';
 
@@ -27,6 +28,10 @@ function WithdrawEarnings(props) {
     const [bankAccounts, setBackAccounts] = useState(null)
     const [loadingAddBankAccount, setLoadingAddBankAccount] = useState(false)
     const [isAddBankAccountPopupVisible, setAddBankAccountPopupVisibility] = useState(false)
+
+     //redux states
+  const user = useSelector(state => state.user)
+  const { reports } = user
 
     const toggleAddBankAccountPopup = () => setAddBankAccountPopupVisibility(!isAddBankAccountPopupVisible)
 
@@ -68,7 +73,7 @@ function WithdrawEarnings(props) {
             <ComponentWrapper style={[appStyles.center]}>
                 <MediumText> Available for Withdrawal </MediumText>
                 <Spacer height={sizes.baseMargin} />
-                <XXLTitle style={appStyles.textPrimaryColor}>$9,999</XXLTitle>
+                <XXLTitle style={appStyles.textPrimaryColor}>${reports.available_withdraw}</XXLTitle>
             </ComponentWrapper>
             <Spacer height={sizes.doubleBaseMargin} />
 

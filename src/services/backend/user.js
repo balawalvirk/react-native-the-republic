@@ -212,7 +212,7 @@ export const update_profile = async ({
     user_id, first_name, last_name, username, gender, birthday, phone, image,
     country_code, country_phone_code, fcm_token, subscription_id, cancel_subscription,
     customer_id, payment_id, user_type, subscription_plan, latitude,
-    longitude, distance, default_card_id }) => {
+    longitude, distance, default_card_id ,default_dealer_id}) => {
     let response = null
     const state = store.getState()
     const userId = user_id ? user_id : state.user.userDetail.id
@@ -242,6 +242,8 @@ export const update_profile = async ({
     longitude && formDataObject.append("longitude", longitude)
     distance && formDataObject.append("distance", distance)
     default_card_id && formDataObject.append("default_card_id", default_card_id)
+    default_dealer_id && formDataObject.append("default_dealer_id", default_dealer_id)
+
 
     console.log('update_profile\nuri: ', uri, '\nParams: ', formDataObject);
     await axios
@@ -280,7 +282,7 @@ export const getSellerReports = async () => {
             console.log('Response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
-                dispatch(setReports(tempResponseData.reports))
+                dispatch(setReports({...tempResponseData.reports,...tempResponseData.earnings}))
             } else {
                 Toasts.error(tempResponseData.message)
             }

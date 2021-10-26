@@ -130,7 +130,7 @@ export const FulfillmentCard = ({
                             <Wrapper style={{ marginHorizontal: sizes.marginHorizontalSmall, marginTop: sizes.marginVertical / 2 }}>
                                 <RegularText style={[appStyles.textPrimaryColor, appStyles.fontBold]}>Delivery Address</RegularText>
                                 <Spacer height={sizes.smallMargin} />
-                                <MediumText>14 Wall Street, New York City, NY, USA </MediumText>
+                                <MediumText>{buyerAddress}</MediumText>
                             </Wrapper>
                             :
                             null
@@ -152,7 +152,8 @@ export function FulfillmentsList({ data, onPressOrder, ListHeaderComponent, List
             ListFooterComponent={ListFooterComponent}
             keyExtractor={(item, index) => (index + 1).toString()}
             renderItem={({ item, index }) => {
-                const { seller, buyer, product } = item
+                const { seller, buyer, product,order } = item
+                //const {buyer_dealer,seller_dealer}=order
                 // const isInProgess = item.status === fulfillmentStatuses.inProgess
                 // const isReceived = item.status === fulfillmentStatuses.received
                 // const isShipmentPending = item.status === fulfillmentStatuses.shipmentPending
@@ -177,11 +178,11 @@ export function FulfillmentsList({ data, onPressOrder, ListHeaderComponent, List
                         sellerImage={seller.profile_image}
                         sellerName={seller.first_name + ' ' + seller.last_name}
                         //sellerPhone={'+' + seller.country_phone_code + seller.phone}
-                        orderNumber={item.id}
+                        orderNumber={order&&order.order_no}
                         buyerImage={buyer.profile_image}
                         buyerName={buyer.first_name + ' ' + buyer.last_name}
                         //buyerPhone={'+' + buyer.country_phone_code + buyer.phone}
-                        buyerAddress={'14 Wall Street, New York City, NY, USA'}
+                        buyerAddress={order&&order.address}
                         status={item.status}
                     />
 

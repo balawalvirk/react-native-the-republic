@@ -289,7 +289,7 @@ const TextInputUnderlined = ({ onPress, inputRef, autoFocus, left, keyboardType,
     );
 }
 
-export const SearchTextinput = ({ value, placeholder, inputContainerStyle, onChangeText }) => {
+export const SearchTextinput = ({ value, placeholder, inputContainerStyle, onChangeText,right,onPressCross }) => {
     return (
         <TextInputColored
             value={value}
@@ -298,6 +298,10 @@ export const SearchTextinput = ({ value, placeholder, inputContainerStyle, onCha
             iconTypeLeft="feather"
             placeholder={placeholder ? placeholder : "Search"}
             inputContainerStyle={inputContainerStyle}
+            iconNameRight={value&&onPressCross&&'close-circle'}
+            iconTypeRight="ionicon"
+            onPressIconRight={onPressCross}
+            right={right}
         />
     )
 }

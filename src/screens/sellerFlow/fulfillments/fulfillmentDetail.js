@@ -2,7 +2,7 @@ import React, { Component, useState } from 'react';
 import { View, Text } from 'react-native';
 import { totalSize } from 'react-native-dimension';
 import { Icon } from 'react-native-elements';
-import { ButtonGradient, MainWrapper, MediumText, OptionsPopup, PopupPrimary, RegularText, RowWrapperBasic, Spacer, Toasts, UserCardPrimary, Wrapper } from '../../../components';
+import { BorderedWrapper, ButtonGradient, ColoredWrapper, MainWrapper, MediumText, OptionsPopup, PopupPrimary, RegularText, RowWrapperBasic, Spacer, Toasts, UserCardPrimary, Wrapper } from '../../../components';
 import { appImages, appStyles, Backend, colors, fulfillmentStatuses, sizes } from '../../../services';
 import { CallButton, ChatButton, FulfillmentCard } from './fulFillmentsList';
 
@@ -11,9 +11,9 @@ function FulfillmentDetail(props) {
     const { navigate, goBack } = navigation
     //navigation params
     const { item } = route.params
-    const { buyer, seller, product, buyer_dealer, seller_dealer } = item
-    //const buyer_dealer = buyer.dealer
-    //const sellerDealer = seller.dealer
+    const { buyer, seller, product, order } = item
+    const buyer_dealer = order && order.buyer_dealer
+    const seller_dealer = order && order.seller_dealer
 
     //statues
     const isInProgess = item.status === fulfillmentStatuses.inProgess
@@ -26,13 +26,13 @@ function FulfillmentDetail(props) {
 
     const statuses = ['Sent For Shipment', 'Received', 'Completed']
     const buyersDealerStatuses = isInProgess ? ['Received', 'Completed'] : ['Completed']
-    const sellersDealerStatuses =isShipmentPending? ['Sent For Shipment', 'Completed']:['Completed']
+    const sellersDealerStatuses = isShipmentPending ? ['Sent For Shipment', 'Completed'] : ['Completed']
 
 
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
-            title: 'Order #' + item.id,
+            title: 'Order #' + (order&&order.order_no),
         });
     }, [navigation]);
 
@@ -82,7 +82,7 @@ function FulfillmentDetail(props) {
                     sellerImage={seller.profile_image}
                     sellerName={seller.first_name + ' ' + seller.last_name}
                     sellerPhone={'+' + seller.country_phone_code + seller.phone}
-                    orderNumber={item.id}
+                    orderNumber={order && order.order_no}
                     buyerImage={buyer.profile_image}
                     buyerName={buyer.first_name + ' ' + buyer.last_name}
                     buyerPhone={'+' + buyer.country_phone_code + buyer.phone}
@@ -93,94 +93,95 @@ function FulfillmentDetail(props) {
                 <Spacer height={sizes.baseMargin} />
                 {
                     isShipmentPending ?
-                        <Wrapper>
-                            <UserCardPrimary
-                                // containerStyle={{ marginHorizontal: sizes.marginHorizontalSmall, marginBottom: sizes.marginVertical / 2 }}
-                                imageUri={buyer_dealer.profile_image}
-                                title={buyer_dealer.first_name + ' ' + buyer_dealer.last_name}
-                                subTitle={'FFL Dealer'}
-                                top={
-                                    <RowWrapperBasic style={{ marginHorizontal: sizes.marginHorizontalSmall, marginBottom: sizes.marginVertical / 2 }}>
-                                        <Wrapper flex={1}>
-                                            <RegularText style={[appStyles.textDarkGray]}>Please send the product to this dealer</RegularText>
+                        buyer_dealer ?
+                            <Wrapper>
+                                <UserCardPrimary
+                                    // containerStyle={{ marginHorizontal: sizes.marginHorizontalSmall, marginBottom: sizes.marginVertical / 2 }}
+                                    imageUri={buyer_dealer.profile_image}
+                                    title={buyer_dealer.first_name + ' ' + buyer_dealer.last_name}
+                                    subTitle={'FFL Dealer'}
+                                    top={
+                                        <RowWrapperBasic style={{ marginHorizontal: sizes.marginHorizontalSmall, marginBottom: sizes.marginVertical / 2 }}>
+                                            <Wrapper flex={1}>
+                                                <RegularText style={[appStyles.textDarkGray]}>Please send the product to this dealer</RegularText>
+                                            </Wrapper>
+                                            <Icon
+                                                name="info"
+                                                type="feather"
+                                                color={colors.appColor2}
+                                                size={totalSize(2)}
+                                            />
+                                        </RowWrapperBasic>
+                                    }
+                                    bottom={
+                                        <Wrapper>
+                                            <Wrapper style={{ marginHorizontal: sizes.marginHorizontalSmall, marginTop: sizes.marginVertical / 2 }}>
+                                                <RegularText style={[appStyles.textPrimaryColor, appStyles.fontBold]}>Delivery Address</RegularText>
+                                                <Spacer height={sizes.smallMargin} />
+                                                <MediumText>{order && order.address}</MediumText>
+                                            </Wrapper>
                                         </Wrapper>
-                                        <Icon
-                                            name="info"
-                                            type="feather"
-                                            color={colors.appColor2}
-                                            size={totalSize(2)}
-                                        />
-                                    </RowWrapperBasic>
-                                }
-                                bottom={
-                                    <Wrapper>
-                                        <Wrapper style={{ marginHorizontal: sizes.marginHorizontalSmall, marginTop: sizes.marginVertical / 2 }}>
-                                            <RegularText style={[appStyles.textPrimaryColor, appStyles.fontBold]}>Delivery Address</RegularText>
-                                            <Spacer height={sizes.smallMargin} />
-                                            <MediumText>14 Wall Street, New York City, NY, USA </MediumText>
-                                        </Wrapper>
-                                    </Wrapper>
-                                }
-                                right={
-                                    <RowWrapperBasic>
-                                        <ChatButton
-                                            onPress={() => { }}
-                                        />
-                                        <Spacer width={sizes.marginHorizontal} />
-                                        <CallButton
-                                            onPress={() => { }}
-                                        />
-                                    </RowWrapperBasic>
-                                }
+                                    }
+                                    right={
+                                        <RowWrapperBasic>
+                                            <ChatButton
+                                                onPress={() => { }}
+                                            />
+                                            <Spacer width={sizes.marginHorizontal} />
+                                            <CallButton
+                                                onPress={() => { }}
+                                            />
+                                        </RowWrapperBasic>
+                                    }
 
-                            />
-                        </Wrapper>
+                                />
+                            </Wrapper>
+                            :
+                            null
                         :
                         null
                 }
                 {
                     isInProgess ?
                         <Wrapper>
-                            <UserCardPrimary
-                                // containerStyle={{ marginHorizontal: sizes.marginHorizontalSmall, marginBottom: sizes.marginVertical / 2 }}
-                                imageUri={seller_dealer.profile_image ? seller_dealer.profile_image : appImages.noUser}
-                                title={seller_dealer.first_name + ' ' + seller_dealer.last_name}
-                                subTitle={'FFL Dealer'}
-                                top={
-                                    <RowWrapperBasic style={{ marginHorizontal: sizes.marginHorizontalSmall, marginBottom: sizes.marginVertical / 2 }}>
-                                        <Wrapper flex={1}>
-                                            <RegularText style={[appStyles.textDarkGray]}>You will recieve product from this dealer</RegularText>
-                                        </Wrapper>
-                                        <Icon
-                                            name="info"
-                                            type="feather"
-                                            color={colors.appColor2}
-                                            size={totalSize(2)}
-                                        />
-                                    </RowWrapperBasic>
-                                }
-                                // bottom={
-                                //     <Wrapper>
-                                //         <Wrapper style={{ marginHorizontal: sizes.marginHorizontalSmall, marginTop: sizes.marginVertical / 2 }}>
-                                //             <RegularText style={[appStyles.textPrimaryColor, appStyles.fontBold]}>Delivery Address</RegularText>
-                                //             <Spacer height={sizes.smallMargin} />
-                                //             <MediumText>14 Wall Street, New York City, NY, USA </MediumText>
-                                //         </Wrapper>
-                                //     </Wrapper>
-                                // }
-                                right={
-                                    <RowWrapperBasic>
-                                        <ChatButton
-                                            onPress={() => { }}
-                                        />
-                                        <Spacer width={sizes.marginHorizontal} />
-                                        <CallButton
-                                            onPress={() => { }}
-                                        />
-                                    </RowWrapperBasic>
-                                }
+                           {
+                               seller_dealer?
+                               <UserCardPrimary
+                               // containerStyle={{ marginHorizontal: sizes.marginHorizontalSmall, marginBottom: sizes.marginVertical / 2 }}
+                               imageUri={seller_dealer.profile_image ? seller_dealer.profile_image : appImages.noUser}
+                               title={seller_dealer.first_name + ' ' + seller_dealer.last_name}
+                               subTitle={'FFL Dealer'}
+                               top={
+                                   <RowWrapperBasic style={{ marginHorizontal: sizes.marginHorizontalSmall, marginBottom: sizes.marginVertical / 2 }}>
+                                       <Wrapper flex={1}>
+                                           <RegularText style={[appStyles.textDarkGray]}>You will recieve product from this dealer</RegularText>
+                                       </Wrapper>
+                                       <Icon
+                                           name="info"
+                                           type="feather"
+                                           color={colors.appColor2}
+                                           size={totalSize(2)}
+                                       />
+                                   </RowWrapperBasic>
+                               }
+                               right={
+                                   <RowWrapperBasic>
+                                       <ChatButton
+                                           onPress={() => { }}
+                                       />
+                                       <Spacer width={sizes.marginHorizontal} />
+                                       <CallButton
+                                           onPress={() => { }}
+                                       />
+                                   </RowWrapperBasic>
+                               }
 
-                            />
+                           />
+                           :
+                           <ColoredWrapper>
+                               <MediumText>No Dealer has been selected by the seller yet</MediumText>
+                           </ColoredWrapper>
+                           }
                         </Wrapper>
                         :
                         null

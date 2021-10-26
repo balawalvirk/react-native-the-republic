@@ -25,6 +25,8 @@ function OrderDetail(props) {
     //redux states
     const user = useSelector(state => state.user)
     const { userDetail } = user
+    const { default_dealer_id, default_dealer } = userDetail
+
     //Local status
 
     const [order, setOrder] = useState(orderDetail)
@@ -50,31 +52,45 @@ function OrderDetail(props) {
         });
     }, [navigation]);
 
+    const validateOrder = (item, index) => {
+        if (item.private_sale === true) {
+            return true
+        } else if (item.private_sale === false) {
+            if (default_dealer_id) {
+                return true
+            } else {
+                Toasts.error('Please select your nearest FFL Dealer')
+            }
+        }
+    }
     const handleAcceptOrder = async (item, index) => {
-        setLoadingAcceptIndex(index)
-        await Backend.updateOrderStatus({
-            order_id: item.id,
-            status: orderStatuses.accepted
-        }).then(async res => {
-            if (item.private_sale === false) {
-                 await Backend.updateOrder({order_id:item.id,seller_dealer_id:'18'})
-                // const fulfillmentData = {
-                //     dealer_id: '18',
-                //     seller_id: userDetail.id,
-                //     buyer_id:item.user.id,
-                //     buyer_dealer_id:item.buyer_dealer_id,
-                //     seller_dealer_id:'18',
-                //     product_id:item.product.id,
-                //     status:fulfillmentStatuses.shipmentPending
-                // }
-                // await Backend.addFulfillment(fulfillmentData)
-            }
-            setLoadingAcceptIndex(-1)
-            if (res) {
-                setOrder(res.order)
-                Toasts.success('Order has been accepted')
-            }
-        })
+        if (validateOrder(item, index)) {
+            setLoadingAcceptIndex(index)
+            await Backend.updateOrderStatus({
+                order_id: item.id,
+                status: orderStatuses.accepted
+            }).then(async res => {
+                if (item.private_sale === false && default_dealer_id) {
+                    await Backend.updateOrder({ order_id: item.id, seller_dealer_id: default_dealer_id })
+                    const fulfillmentData = {
+                        dealer_id: default_dealer_id,
+                        seller_id: userDetail.id,
+                        buyer_id: item.user.id,
+                        // buyer_dealer_id: item.buyer_dealer_id,
+                        // seller_dealer_id: '18',
+                        product_id: item.product.id,
+                        order_id:item.id,
+                        status: fulfillmentStatuses.shipmentPending
+                    }
+                    await Backend.addFulfillment(fulfillmentData)
+                }
+                setLoadingAcceptIndex(-1)
+                if (res) {
+                    setOrder(res.order)
+                    Toasts.success('Order has been accepted')
+                }
+            })
+        }
     }
 
     const handleCancelOrder = async (item, index) => {
@@ -141,57 +157,50 @@ function OrderDetail(props) {
 
                 </Wrapper>
                 {
-                    isNew  ?
-                        order.private_sale === true ?
-                            <Wrapper style={[appStyles.grayWrapper, { marginBottom: sizes.baseMargin, backgroundColor: colors.success }]}>
-                                <RowWrapperBasic>
-                                    <Wrapper flex={1}>
-                                        <TinyTitle style={[appStyles.textWhite]}>Private Sale</TinyTitle>
-                                    </Wrapper>
-                                    {/* <SwitchPrimary
-                                    value={privateSale}
-                                    onPress={() => setPrivateSale(!privateSale)}
-                                /> */}
-                                </RowWrapperBasic>
-                                <Spacer height={sizes.baseMargin} />
-                                <RegularText style={[appStyles.textWhite]}>
-                                    The buyer want this sale to be private.
-                                </RegularText>
-                            </Wrapper>
-                            :
-                            order.private_sale === false ?
-                                <Wrapper style={[appStyles.borderedWrapper, { marginBottom: sizes.baseMargin }]}>
-                                    <RowWrapperBasic>
-                                        <Wrapper flex={1}>
-                                            <TinyTitle>Select Your Nearest Dealer</TinyTitle>
-                                        </Wrapper>
-                                        {/* <SwitchPrimary
-                                    value={privateSale}
-                                    onPress={() => setPrivateSale(!privateSale)}
-                                /> */}
-                                    </RowWrapperBasic>
-                                    <Spacer height={sizes.baseMargin} />
-                                    <RegularText style={[appStyles.textDarkGray]}>
-                                        The buyer opted to this sale through FFL Dealer. Please select you nearest FFL Dealer to deliver the product.
-                                    </RegularText>
-                                    <Wrapper>
-                                        <Spacer height={sizes.baseMargin} />
-                                        <UserCardPrimary
-                                            containerStyle={{ marginHorizontal: 0 }}
-                                            imageSize={totalSize(4.5)}
-                                            imageUri={appImages.user5}
-                                            title={'Alex Huck'}
-                                            subTitle={'3 miles away'}
-                                            right={
-                                                <TinyTitle onPress={() => navigate(routes.fflDealers)} style={[appStyles.textPrimaryColor]}>Change</TinyTitle>
-                                            }
-                                        />
-                                    </Wrapper>
+                    isNew ?
+                        // order.private_sale === true ?
+                        //     <Wrapper style={[appStyles.grayWrapper, { marginBottom: sizes.baseMargin, backgroundColor: colors.success }]}>
+                        //         <RowWrapperBasic>
+                        //             <Wrapper flex={1}>
+                        //                 <TinyTitle style={[appStyles.textWhite]}>Private Sale</TinyTitle>
+                        //             </Wrapper>
+                        //         </RowWrapperBasic>
+                        //         <Spacer height={sizes.baseMargin} />
+                        //         <RegularText style={[appStyles.textWhite]}>
+                        //             The buyer want this sale to be private.
+                        //         </RegularText>
+                        //     </Wrapper>
+                        //     :
+                        //     order.private_sale === false ?
+                        //         <Wrapper style={[appStyles.borderedWrapper, { marginBottom: sizes.baseMargin }]}>
+                        //             <RowWrapperBasic>
+                        //                 <Wrapper flex={1}>
+                        //                     <TinyTitle>Select Your Nearest Dealer</TinyTitle>
+                        //                 </Wrapper>
+                        //             </RowWrapperBasic>
+                        //             <Spacer height={sizes.baseMargin} />
+                        //             <RegularText style={[appStyles.textDarkGray]}>
+                        //                 The buyer opted to this sale through FFL Dealer. Please select you nearest FFL Dealer to deliver the product.
+                        //             </RegularText>
+                        //             <Wrapper>
+                        //                 <Spacer height={sizes.baseMargin} />
+                        //                 <UserCardPrimary
+                        //                     containerStyle={{ marginHorizontal: 0 }}
+                        //                     imageSize={totalSize(4.5)}
+                        //                     imageUri={appImages.user5}
+                        //                     title={'Alex Huck'}
+                        //                     subTitle={'3 miles away'}
+                        //                     right={
+                        //                         <TinyTitle onPress={() => navigate(routes.fflDealers)} style={[appStyles.textPrimaryColor]}>Change</TinyTitle>
+                        //                     }
+                        //                 />
+                        //             </Wrapper>
 
-                                </Wrapper>
-                                :
-                                null
-                        :
+                        //         </Wrapper>
+                        //         :
+                        //         null
+                        // :
+                        <></> :
                         isDelivered || isCompleted ?
                             order.review ?
                                 <ReviewCardPrimary

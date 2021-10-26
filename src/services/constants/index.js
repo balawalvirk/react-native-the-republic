@@ -144,6 +144,10 @@ export const endPoints = {
         get_earnings_reports: 'get-earnings',
         weekly_reports: 'weekly-reports',
     },
+    dealer:{
+        get_dealers:'get-dealers',
+        search_dealers:'search-dealers'
+    },
     bank:{
         add_bank_account:'add-bank-account',
         get_bank_accounts:'get-bank-accounts',
@@ -260,7 +264,10 @@ export const fulfillmentStatuses={
     sentForShipment:'sentForShipment',
     delivered:'delivered',
     completed:'completed',
-   
+}
+export const fulfillmentTypes={
+    buyerDealer:'buyerDealer',
+    sellerDealer:'sellerDealer'
 }
 export const headers = {
     screenOptionsPrimary: {
