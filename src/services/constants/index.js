@@ -143,6 +143,7 @@ export const endPoints = {
         get_invoice: 'get-invoice',
         get_earnings_reports: 'get-earnings',
         weekly_reports: 'weekly-reports',
+        advance_reports:'advance-reports'
     },
     dealer:{
         get_dealers:'get-dealers',
