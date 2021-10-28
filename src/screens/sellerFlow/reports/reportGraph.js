@@ -12,7 +12,8 @@ import SkeletonPlaceholder from './skeletonPlaceholder';
 
 export default function ReportGraph({ title, subTitle, status, percentage, data, onPressType }) {
 
-
+    const reportResults = Object.keys(data).map((key) => data[key]);
+    const reportKeys = Object.keys(data).map((key) => key);
     //contstants
     const types = ['Week', 'All Time']
     //local states
@@ -88,8 +89,8 @@ export default function ReportGraph({ title, subTitle, status, percentage, data,
                 </RowWrapperBasic>
                 <Wrapper style={{ flexDirection: 'row', height: height(27.5), paddingVertical: 20, }}>
                     <YAxis
-                        data={data}
-                        contentInset={{ top: 20, bottom: 0, }}
+                        data={reportResults}
+                        contentInset={{ top: 20, bottom: 20, }}
                         svg={{
                             fill: colors.appTextColor4,
                             fontSize: fontSize.small,
@@ -102,23 +103,22 @@ export default function ReportGraph({ title, subTitle, status, percentage, data,
                     <Wrapper flex={1} style={{ width: '100%', paddingHorizontal: sizes.marginHorizontal / 2 }}>
                         <AreaChart
                             style={{ height: height(22) }}
-                            data={data}
-                            contentInset={{ top: 20, bottom: 5, right: -2.5, left: -2.5 }}
+                            data={reportResults}
+                            contentInset={{ top: 20, bottom: 10, right: -2.5, left: -2.5 }}
                             svg={{ fill: 'url(#stockPricegradient)', strokeWidth: 1, stroke: 'url(#stockPricegradientStroke)', }}
                             curve={shape.curveNatural}
-
                         >
                             <StockPriceGradient />
                         </AreaChart>
                         <XAxis
                             style={{}}
-                            data={selectedTypeIndex === 0 ? weekDays : months}
+                            data={reportKeys}
                             // data={weekDays}
                             xAccessor={({ index }) => index}
                             //scale={scale.scaleBand}
                             //formatLabel={(value, index) => index}
                             //formatLabel={(value) => `${value}%`}
-                            formatLabel={(_, index) => selectedTypeIndex === 0 ? weekDays[index] : months[index]}
+                            formatLabel={(_, index) => reportKeys[index].slice(0,3)}
                             spacing={0.2}
                             contentInset={{ left: 15, right: 15, }}
                             svg={{

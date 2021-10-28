@@ -31,6 +31,7 @@ function Invoices(props) {
   if (!invoices) {
     return (
       <>
+      <Spacer height={sizes.baseMargin}/>
         {[1, 2, 3, 4, 5].map((item, index) => {
           return (
             <SkeletonPrimary itemStyle={{ height: height(18), marginBottom: sizes.smallMargin }} />

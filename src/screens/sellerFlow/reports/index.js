@@ -54,7 +54,9 @@ function Reports() {
   const orders = [50, 10, 40, 95, 85, 91, 35, 53, 24, 50, 20, 80]
   const salesReport = [100, 200, 400, 300, 500, 300, 900, 1000, 500,]
 
+  //const result = Object.keys(weeklySales.reports).map((key) => key);
 
+  //console.log(result);
 
   return (
     <MainWrapper>
@@ -79,7 +81,8 @@ function Reports() {
                 title="Sales Report"
                 subTitle={"$" + (salesReportsType === 'Week' ? weeklySales.total : allTimeSales.total_sales)}
                 percentage={salesReportsType === 'Week' ? weeklySales.change : allTimeSales.change}
-                data={salesReport}
+                //data={salesReport}
+                data={salesReportsType === 'Week' ? weeklySales.reports : allTimeSales.reports}
                 status={salesReportsType === 'Week' ? weeklySales.change_type : allTimeSales.change_type}
                 onPressType={(item, index) => setSalesReportsType(item)}
               />
@@ -88,7 +91,8 @@ function Reports() {
                 title="Orders"
                 subTitle={orderReportsType === 'Week' ? weeklyOrders.total_orders : alltimeOrders.total_orders}
                 percentage={orderReportsType === 'Week' ? weeklyOrders.change : alltimeOrders.change}
-                data={orders}
+                //data={orders}
+                data={orderReportsType === 'Week' ? weeklyOrders.reports : alltimeOrders.reports}
                 status={orderReportsType === 'Week' ? weeklyOrders.change_type : alltimeOrders.change_type}
                 onPressType={(item, index) => setOrderReportsType(item)}
               />
