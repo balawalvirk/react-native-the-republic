@@ -1,11 +1,35 @@
 import React, { Component, useState } from 'react';
 import { View, Text } from 'react-native';
 import { height } from 'react-native-dimension';
-import { ButtonGradient, KeyboardAvoidingScrollView, MainWrapper, Spacer, TextInputUnderlined, Wrapper } from '../../../components';
-import { appStyles, sizes } from '../../../services';
+import { ButtonGradient, KeyboardAvoidingScrollView, MainWrapper, Spacer, TextInputUnderlined, Toasts, Wrapper } from '../../../components';
+import { appStyles, Backend, HelpingMethods, sizes } from '../../../services';
 
-function ContactUs() {
+function ContactUs({ navigation }) {
+    const { goBack } = navigation
     const [comment, setComment] = useState('')
+    const [commentError, setCommentError] = useState('')
+    const [loading, setLoading] = useState('')
+
+    const validation = () => {
+        HelpingMethods.handleAnimation()
+        !comment ? setCommentError('Please write message') : setCommentError('')
+        if (comment) {
+            return true
+        }
+    }
+    const handleSendMessage = async () => {
+        if (validation()) {
+            setLoading(true)
+            await Backend.contactUs(comment).
+                then(res => {
+                    setLoading(false)
+                    if (res) {
+                        goBack()
+                        Toasts.success('Message has been sent.')
+                    }
+                })
+        }
+    }
     return (
         <MainWrapper>
             <Wrapper flex={1}>
@@ -13,12 +37,16 @@ function ContactUs() {
                     <Spacer height={sizes.baseMargin * 2} />
                     <TextInputUnderlined
                         titleStatic="Write your message"
-                        //placeholder="Write here..."
                         placeholderTextColor={appStyles.textLightGray.color}
                         value={comment}
-                        onChangeText={t => setComment(t)}
+                        onChangeText={t => {
+                            commentError && setCommentError('');
+                            setComment(t)
+                        }}
                         multiline
                         inputStyle={{ backgroundColor: 'transparent', height: height(12.5), marginTop: sizes.smallMargin, textAlignVertical: 'top' }}
+                        autoCapitalize='sentences'
+                        error={commentError}
                     />
                 </KeyboardAvoidingScrollView>
             </Wrapper>
@@ -26,6 +54,8 @@ function ContactUs() {
                 <Spacer height={sizes.baseMargin} />
                 <ButtonGradient
                     text="Send Message"
+                    onPress={handleSendMessage}
+                    loading={loading}
                 />
                 <Spacer height={sizes.doubleBaseMargin} />
             </Wrapper>

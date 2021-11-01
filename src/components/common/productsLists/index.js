@@ -1,6 +1,6 @@
 import React from 'react'
 import { FlatList } from "react-native-gesture-handler";
-import { HelpingMethods, sizes } from '../../../services';
+import { appImages, HelpingMethods, sizes } from '../../../services';
 import { ProductCardPrimary } from "../../cards";
 import { Wrapper } from '../../wrappers';
 import styles from './styles'
@@ -27,21 +27,21 @@ export function Products({ data, viewType, ListHeaderComponent, ListFooterCompon
                         animation={index <= 5 && isGridView ? 'fadeInUp' : 'fadeInRight'}
                         duration={300 + (50 * (index + 1))}
                         containerstyle={
-                            isGridView ? [styles.productContainerGrid, { marginRight: (index + 1) % 2 ? 0 : null, marginleft: !(index + 1) % 2 ? 0 : null }] :
+                            isGridView ? [styles.productContainerGrid, { marginRight: data.length===1?null:(index + 1) % 2 ? 0 : null, marginleft: !(index + 1) % 2 ? 0 : null }] :
                                 isListView ? [styles.productContainerList] : null
                         }
                         isFavourite={HelpingMethods.checkIsProductFavourite(item.id)}
                         onPressHeart={() => { }}
                         viewType={viewType}
-                        image={item.image}
-                        description={item.description}
-                        discountedPrice={item.new_price}
-                        price={item.old_price}
-                        location={item.location}
-                        rating={item.rating}
-                        reviewCount={item.review_count}
-                        userImage={user.image}
-                        userName={user.name}
+                        image={item.images ? JSON.parse(item.images)[0] : appImages.noImageAvailable}
+                        description={item.title}
+                        discountedPrice={item.discounted_price}
+                        price={item.price}
+                        location={item.address}
+                        rating={item.average_rating}
+                        reviewCount={item.reviews_count}
+                        userImage={user.profile_image}
+                        userName={user.first_name + ' ' + user.last_name}
                     />
                 )
             }}
@@ -102,33 +102,35 @@ export function ProductsHorizontalyPrimary({ data, ListHeaderComponent, ListFoot
             keyExtractor={(item, index) => (index + 1).toString()}
             renderItem={({ item, index }) => {
                 const { user } = item
+                //index === 0 && console.log('product item-->', user.first_name)
+                const productImages = JSON.parse(item.images)
                 return (
                     <ProductCardPrimary
+                        animation
                         containerstyle={
                             [
                                 styles.ProductHorizontalyPrimaryContainer,
                                 {
                                     marginLeft: index === 0 ? sizes.marginHorizontal : 0,
-                                    marginRight:sizes.marginHorizontalSmall
+                                    marginRight: sizes.marginHorizontalSmall
                                 }
                             ]
                         }
                         onPress={() => onPressProduct(item, index)}
                         animation={'fadeInUp'}
                         duration={300 + (50 * (index + 1))}
-
                         isFavourite={HelpingMethods.checkIsProductFavourite(item.id)}
                         onPressHeart={() => { }}
-                        image={item.image}
+                        image={productImages ? productImages[0] : appImages.noImageAvailable}
                         //images={item.images}
-                        description={item.description}
-                        discountedPrice={item.new_price}
-                        price={item.old_price}
+                        description={item.title}
+                        price={item.price}
+                        discountedPrice={item.discounted_price}
                         location={item.location}
-                        rating={item.rating}
-                        reviewCount={item.review_count}
-                        userImage={user.image}
-                        userName={user.name}
+                        rating={item.average_rating}
+                        reviewCount={item.reviews_count}
+                        userName={user.first_name + ' ' + user.last_name}
+                        userImage={user.profile_image}
                         isSponsered={item.isSponsered}
                     />
                 )

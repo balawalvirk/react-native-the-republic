@@ -8,19 +8,27 @@ import { useSelector } from 'react-redux';
 import { IconWithText, ImageSqareRound, LoaderAbsolute, MainWrapper, ProductsHorizontalyPrimary, ProductsSecondary, RegularText, Spacer, TitlePrimary, Wrapper } from '../../../components';
 import { appStyles, Backend, colors, DummyData, routes, sizes } from '../../../services';
 import TopCategories from './topCategories';
+import Skeleton from './skeleton'
 function RenderProducts({ title, onPressViewAll, data, onPressProduct }) {
     return (
-        <Wrapper>
-            <TitlePrimary
-                title={title}
-                onPressRight={onPressViewAll}
-            />
-            <Spacer height={sizes.smallMargin} />
-            <ProductsHorizontalyPrimary
-                data={data}
-                onPressProduct={onPressProduct}
-            />
-        </Wrapper>
+        <>
+            {
+                data.length ?
+                    <Wrapper>
+                        <TitlePrimary
+                            title={title}
+                            onPressRight={onPressViewAll}
+                        />
+                        <Spacer height={sizes.smallMargin} />
+                        <ProductsHorizontalyPrimary
+                            data={data}
+                            onPressProduct={onPressProduct}
+                        />
+                    </Wrapper>
+                    :
+                    null
+            }
+        </>
     )
 }
 function MarketPlace(props) {
@@ -31,6 +39,10 @@ function MarketPlace(props) {
     const product = useSelector(state => state.product)
     const { categories } = product
     //local states
+    const [featuredProducts, setFeaturedProducts] = useState([])
+    const [popularProducts, setPopularProducts] = useState([])
+    const [nearYouProducts, setNearYouProducts] = useState([])
+    const [topRatedProducts, setTopRatedProducts] = useState([])
     const [isLoading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -38,49 +50,64 @@ function MarketPlace(props) {
     }, [])
 
     const getSetData = async () => {
-        await Backend.get_credit_cards()
         await Backend.get_product_categories()
+        await Backend.getFeaturedProducts().
+            then(res => {
+                if (res) {
+                    setFeaturedProducts(res.products)
+                }
+            })
+        await Backend.getPoluparProducts().
+            then(res => {
+                if (res) {
+                    setPopularProducts(res.products)
+                }
+            })
+        await Backend.getNearByProducts().
+            then(res => {
+                if (res) {
+                    setNearYouProducts(res.nearbyProducts)
+                }
+            })
+        // await Backend.getTopRatedProducts().
+        //     then(res => {
+        //         if (res) {
+        //             setTopRatedProducts(res.products)
+        //         }
+        //     })
+        await Backend.get_credit_cards()
         await Backend.get_product_items()
         await Backend.get_product_manufacturers()
         await Backend.get_product_calibers()
         await Backend.get_product_actions()
         await Backend.get_product_conditions()
-        await Backend.get_product_conditions()
         setLoading(false)
     }
 
-    //const categories = DummyData.categories.slice()
-
-    const addSponseredProduct = () => {
-        let products = []
-        DummyData.products.forEach((item, index) => {
-            let obj = {
-                ...item,
-                isSponsered: index === 0 ? true : false
-            }
-            products.push(obj)
-        })
-        return (products)
-    }
 
     const mainOptions = [
         {
             title: 'Featured',
-            data: addSponseredProduct()
+            data: featuredProducts
         },
         {
             title: 'Popular',
-            data: DummyData.products.slice().reverse()
+            data: popularProducts
         },
         {
             title: 'Near You',
-            data: DummyData.products.slice()
+            data: nearYouProducts
         },
         {
             title: 'Top Rated',
-            data: DummyData.products.slice().reverse()
+            data: topRatedProducts
         }
     ]
+    if (isLoading) {
+        return (
+            <Skeleton />
+        )
+    }
     return (
         <MainWrapper>
             <ScrollView
@@ -89,7 +116,7 @@ function MarketPlace(props) {
                 <Spacer height={sizes.baseMargin} />
                 <TopCategories
                     data={categories}
-                    onPressCategory={(item, index) => { navigate(routes.CategoryDetail, { item }) }}
+                    onPressCategory={(item, index) => { navigate(routes.CategoryDetail, { category:item }) }}
                     onPressViewAll={() => navigate(routes.categories)}
                 />
                 {
@@ -101,20 +128,13 @@ function MarketPlace(props) {
                                     title={item.title}
                                     data={item.data}
                                     onPressProduct={(item, index) => navigate(routes.productDetail, { product: item })}
-                                    onPressViewAll={() => { navigate(routes.CategoryDetail, { item }) }}
+                                    onPressViewAll={() => { navigate(routes.CategoryDetail, { type: item }) }}
                                 />
                             </>
                         )
                     })
                 }
-
-
             </ScrollView>
-            <LoaderAbsolute
-                isVisible={isLoading}
-                title="Getting all data"
-                info="Please wait..."
-            />
         </MainWrapper>
     );
 }

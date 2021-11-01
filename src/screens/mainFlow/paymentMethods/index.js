@@ -37,6 +37,7 @@ function PaymentMethods(props) {
     const toggleAddPaymentModal = () => setAddPaymentModalVisibility(!isAddPaymentModalVisible)
 
     const handleAddPaymentMethod = async (cardDetails) => {
+        // console.log('cardDetails-->', cardDetails)
         setLoadingAddCard(true)
         await Backend.add_credit_card(cardDetails).
             then(async res => {

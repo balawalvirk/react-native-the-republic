@@ -148,6 +148,7 @@ const HelpingMethods = {
     },
     getHiddenCardNumber: (cardNumber) => {
         return `**** **** **** ${cardNumber.slice(12, 16)}`
+       // return cardNumber
     },
     dialPhoneNumber: (number) => {
         console.warn('callNumber ----> ', number);

@@ -212,7 +212,7 @@ export const update_profile = async ({
     user_id, first_name, last_name, username, gender, birthday, phone, image,
     country_code, country_phone_code, fcm_token, subscription_id, cancel_subscription,
     customer_id, payment_id, user_type, subscription_plan, latitude,
-    longitude, distance, default_card_id ,default_dealer_id}) => {
+    longitude, distance, default_card_id, default_dealer_id }) => {
     let response = null
     const state = store.getState()
     const userId = user_id ? user_id : state.user.userDetail.id
@@ -282,7 +282,70 @@ export const getSellerReports = async () => {
             console.log('Response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
-                dispatch(setReports({...tempResponseData.reports,...tempResponseData.earnings}))
+                dispatch(setReports({ ...tempResponseData.reports, ...tempResponseData.earnings }))
+            } else {
+                Toasts.error(tempResponseData.message)
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};
+
+export const submitAppFeedback = async ({ feature, comment, images }) => {
+    let response = null
+    const state = store.getState()
+    const { id } = state.user.userDetail
+    const uri = `${baseURL + endPoints.submit_app_feedback}`
+    const formDataObject = new FormData()
+    formDataObject.append("user_id", id)
+    formDataObject.append("feature", feature)
+    formDataObject.append("comment", comment)
+    if (images) {
+        if (images.length) {
+            for (const item of images) {
+                formDataObject.append("image[]", item)
+            }
+        }
+    }
+    console.log('submitAppFeedback \nuri', uri, '\nParams', formDataObject);
+    await axios
+        .post(uri, formDataObject)
+        .then(async responseJson => {
+            const tempResponseData = responseJson.data
+            console.log('Response', tempResponseData);
+            if (tempResponseData.success) {
+                response = tempResponseData
+            } else {
+                Toasts.error(tempResponseData.message)
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};
+
+export const contactUs = async (message) => {
+    let response = null
+    const state = store.getState()
+    const { id } = state.user.userDetail
+    const uri = `${baseURL + endPoints.contact_us}`
+    let params = {
+        user_id: id,
+        message
+    }
+    console.log('contactUs \nuri', uri, '\nParams', params);
+    await axios
+        .post(uri, params)
+        .then(async responseJson => {
+            const tempResponseData = responseJson.data
+            console.log('Response', tempResponseData);
+            if (tempResponseData.success) {
+                response = tempResponseData
             } else {
                 Toasts.error(tempResponseData.message)
             }

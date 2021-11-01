@@ -91,6 +91,10 @@ export const endPoints = {
         show_calibers: 'show-calibers',
         show_actions: 'show-actions',
         show_conditions: 'show-conditions',
+        toprated_products:'toprated-products',
+        popular_products:'popular-products',
+        nearby_products:'nearby-products',
+        featured_products:'featured-products'
     },
     post: {
         add_post: 'add-post',

@@ -134,7 +134,15 @@ const TextInputBordered = ({ iconName, iconType, placeholder, placeholderTextCol
         </View>
     );
 }
-const TextInputUnderlined = ({ onPress, inputRef, autoFocus, left, keyboardType, right, error, editable, titleStyle, title, maxLength, customIconLeft, iconNameLeft, multiline, iconNameRight, placeholderTextColor, iconTypeLeft, iconTypeRight, iconSizeLeft, iconSizeRight, iconColorLeft, iconColorRight, iconStyleLeft, iconStyleRight, onPressIconLeft, onPressIconRight, placeholder, onFocus, onBlur, onChangeText, secureTextEntry, value, containerStyle, inputContainerStyle, inputStyle, titleStatic }) => {
+const TextInputUnderlined = ({
+    onPress, inputRef, autoFocus, left, keyboardType, right, error,
+    editable, titleStyle, title, maxLength, customIconLeft,
+    iconNameLeft, multiline, iconNameRight, placeholderTextColor,
+    iconTypeLeft, iconTypeRight, iconSizeLeft, iconSizeRight,
+    iconColorLeft, iconColorRight, iconStyleLeft, iconStyleRight,
+    onPressIconLeft, onPressIconRight, placeholder, onFocus, onBlur,
+    onChangeText, secureTextEntry, value, containerStyle, inputContainerStyle,
+    inputStyle, titleStatic, autoCapitalize }) => {
     const [titleMarginBottom] = useState(new Animated.Value(0))
     //const [titleSize] = useState(new Animated.Value(fontSize.regular))
     const FocusedTitleMarginBottom = Platform.OS === 'ios' ? height(5) : height(5)
@@ -236,6 +244,7 @@ const TextInputUnderlined = ({ onPress, inputRef, autoFocus, left, keyboardType,
                                     keyboardType={keyboardType}
                                     placeholder={placeholder}
                                     autoFocus={autoFocus}
+                                    autoCapitalize={autoCapitalize?autoCapitalize:'none'}
                                     onFocus={() => {
                                         onFocusInput();
                                         onFocus ? onFocus() : null
@@ -289,7 +298,7 @@ const TextInputUnderlined = ({ onPress, inputRef, autoFocus, left, keyboardType,
     );
 }
 
-export const SearchTextinput = ({ value, placeholder, inputContainerStyle, onChangeText,right,onPressCross }) => {
+export const SearchTextinput = ({ value, placeholder, inputContainerStyle, onChangeText, right, onPressCross }) => {
     return (
         <TextInputColored
             value={value}
@@ -298,7 +307,7 @@ export const SearchTextinput = ({ value, placeholder, inputContainerStyle, onCha
             iconTypeLeft="feather"
             placeholder={placeholder ? placeholder : "Search"}
             inputContainerStyle={inputContainerStyle}
-            iconNameRight={value&&onPressCross&&'close-circle'}
+            iconNameRight={value && onPressCross && 'close-circle'}
             iconTypeRight="ionicon"
             onPressIconRight={onPressCross}
             right={right}
@@ -333,7 +342,7 @@ export const TextInputChat = props => {
                 { marginLeft: sizes.marginHorizontal, alignItems: 'flex-end', marginVertical: height(2), backgroundColor: 'transparent' },
             ]}
             iconStyleRight={{ marginVertical: height(1), marginLeft: sizes.marginHorizontalSmall, transform: [{ rotate: '-45deg' }] }}
-            containerStyle={{ borderTopWidth: 1, borderColor: colors.appBgColor3, backgroundColor: 'transparent', marginHorizontal: 0,backgroundColor:colors.appBgColor1 }}
+            containerStyle={{ borderTopWidth: 1, borderColor: colors.appBgColor3, backgroundColor: 'transparent', marginHorizontal: 0, backgroundColor: colors.appBgColor1 }}
             value={value}
             onChangeText={onChangeText}
             onPressIcon={onSend}

@@ -88,7 +88,7 @@ function Categories(props) {
             <Spacer height={sizes.baseMargin} />
             <RenderAllCategories
                 data={filteredCategories}
-                onPressCategory={(item, index) => { navigate(routes.CategoryDetail, { item }) }}
+                onPressCategory={(item, index) => { navigate(routes.CategoryDetail, { category:item }) }}
             />
         </MainWrapper>
     );

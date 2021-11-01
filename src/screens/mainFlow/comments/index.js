@@ -1,36 +1,44 @@
 import React, { Component, useEffect, useState } from 'react';
-import { KeyboardAvoidingView } from 'react-native';
+import { KeyboardAvoidingView, TextInput } from 'react-native';
 import { View, Text } from 'react-native';
 import { height } from 'react-native-dimension';
-import { ComponentWrapper, ImagesPrimary, KeyboardAvoidingScrollView, MainWrapper, MediumTitle, PickerPrimary, SmallTitle, Spacer, TextInputUnderlined, TinyTitle, TitlePrimary } from '../../../components';
-import { appStyles, sizes } from '../../../services';
+import { ButtonColored, ButtonGradient, ComponentWrapper, ImagesPrimary, KeyboardAvoidingScrollView, MainWrapper, MediumTitle, PickerPrimary, SmallTitle, Spacer, TextInputUnderlined, TinyTitle, TitlePrimary, Toasts } from '../../../components';
+import { appStyles, Backend, HelpingMethods, sizes } from '../../../services';
 import ImageCropPicker from 'react-native-image-crop-picker';
 
 const features = [
     {
         label: 'Searching Product',
-        value: 212
+        value: 'Searching Product'
     },
     {
         label: 'Add Product',
-        value: 345
+        value: 'Add Product'
     },
     {
         label: 'Registration',
-        value: 543
+        value: 'Registration',
+    },
+    {
+        label: 'Subscription',
+        value: 'Subscription',
     }
 ]
-function Comments() {
+function Comments(props) {
+    const { goBack } = props.navigation
     const [selectedFeature, selectFeature] = useState('')
+    const [featureError, setFeatureError] = useState('')
     const [comment, setComment] = useState('')
+    const [commentError, setCommentError] = useState('')
     const [images, setImages] = useState([])
+    const [loading, setLoading] = useState(false)
 
 
     const takePics = () => {
         ImageCropPicker.openPicker({
-            quality: 9,
-            compressImageMaxHeight: 700,
-            compressImageMaxWidth: 800,
+            quality: 5,
+            compressImageMaxHeight: 500,
+            compressImageMaxWidth: 500,
             cropping: false,
             multiple: true,
         }).then(response => {
@@ -38,9 +46,12 @@ function Comments() {
             //this.setState({ ImageSource: response });
             let photos = []
             for (const item of response) {
+                let pathParts = item.path.split('/');
                 const tempObj = {
-                    ...item,
-                    uri: item.path
+                    // ...item,
+                    uri: item.path,
+                    type: item.mime,
+                    name: pathParts[pathParts.length - 1]
                 }
                 photos.push(tempObj);
             }
@@ -48,6 +59,29 @@ function Comments() {
         });
     }
 
+
+    const validations = () => {
+        HelpingMethods.handleAnimation()
+        !selectedFeature ? setFeatureError('Please Select Feature / Functionality') : setFeatureError('')
+        !comment ? setCommentError('Please wirte your comment') : setCommentError('')
+        if (selectedFeature && comment) {
+            return true
+        }
+    }
+    const handleSubmitFeedback = async () => {
+        console.log('images-->',images)
+        if (validations()) {
+            setLoading(true)
+            await Backend.submitAppFeedback({ feature: selectedFeature, comment, images }).
+                then(res => {
+                    setLoading(true)
+                    if (res) {
+                        goBack()
+                        Toasts.success('Your comment submitted.')
+                    }
+                })
+        }
+    }
     return (
         <MainWrapper>
             <KeyboardAvoidingScrollView>
@@ -60,7 +94,11 @@ function Comments() {
                     title="Feature / Functionality"
                     value={selectedFeature}
                     data={features}
-                    onChange={(value, index) => selectFeature(value)}
+                    onChange={(value, index) => {
+                        featureError && setFeatureError('')
+                        selectFeature(value)
+                    }}
+                    error={featureError}
                 />
                 <Spacer height={sizes.baseMargin * 2} />
                 <TextInputUnderlined
@@ -68,9 +106,14 @@ function Comments() {
                     //placeholder="Write here..."
                     placeholderTextColor={appStyles.textLightGray.color}
                     value={comment}
-                    onChangeText={t => setComment(t)}
+                    onChangeText={t => {
+                        commentError && setCommentError('')
+                        setComment(t)
+                    }}
                     multiline
                     inputStyle={{ backgroundColor: 'transparent', height: height(12.5), marginTop: sizes.smallMargin, textAlignVertical: 'top' }}
+                    error={commentError}
+                    autoCapitalize="sentences"
                 />
                 <Spacer height={sizes.baseMargin * 2} />
                 <ComponentWrapper>
@@ -88,6 +131,13 @@ function Comments() {
                         setImages(newImages)
                     }}
                 />
+                <Spacer height={sizes.doubleBaseMargin} />
+                <ButtonColored
+                    text="Submit"
+                    onPress={handleSubmitFeedback}
+                    isLoading={loading}
+                />
+                <Spacer height={sizes.doubleBaseMargin} />
             </KeyboardAvoidingScrollView>
         </MainWrapper>
     );

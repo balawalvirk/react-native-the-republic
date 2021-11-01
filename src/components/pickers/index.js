@@ -14,7 +14,8 @@ import { MaterialIndicator } from 'react-native-indicators';
 export const PickerPrimary = ({
     onDonePress, containerStyle, data, title, onChange,
     placeholder, error, value, itemKey,
-    left, customIconLeft, iconSizeLeft, iconColorLeft, iconStyleLeft, iconNameLeft
+    left, customIconLeft, iconSizeLeft, iconColorLeft,
+    iconStyleLeft, iconNameLeft, mainContainerStyle
 }) => {
     const placeholderObject = {
         label: placeholder, value: 'placeholder', color: '#909090',
@@ -44,7 +45,9 @@ export const PickerPrimary = ({
         value === 'placeholder' ? moveTitleDown() : moveTitleUp()
     }
     return (
-        <Wrapper>
+        <Wrapper
+            style={[{ marginHorizontal: sizes.marginHorizontalLarge }, mainContainerStyle]}
+        >
             {/* <ComponentWrapper>
                 <InputTitle>{title}</InputTitle>
             </ComponentWrapper>
@@ -53,7 +56,7 @@ export const PickerPrimary = ({
                 //borderRadius: sizes.b,
                 borderBottomWidth: 1,
                 borderBottomColor: colors.appBgColor4,
-                marginHorizontal: sizes.marginHorizontalLarge
+                marginHorizontal: 0
             }, containerStyle]}>
                 {
                     left ?
