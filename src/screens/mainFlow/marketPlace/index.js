@@ -6,7 +6,7 @@ import { View, Text } from 'react-native';
 import { totalSize, width } from 'react-native-dimension';
 import { useSelector } from 'react-redux';
 import { IconWithText, ImageSqareRound, LoaderAbsolute, MainWrapper, ProductsHorizontalyPrimary, ProductsSecondary, RegularText, Spacer, TitlePrimary, Wrapper } from '../../../components';
-import { appStyles, Backend, colors, DummyData, routes, sizes } from '../../../services';
+import { appStyles, Backend, colors, DummyData, HelpingMethods, routes, sizes } from '../../../services';
 import TopCategories from './topCategories';
 import Skeleton from './skeleton'
 function RenderProducts({ title, onPressViewAll, data, onPressProduct }) {
@@ -50,23 +50,24 @@ function MarketPlace(props) {
     }, [])
 
     const getSetData = async () => {
+        await HelpingMethods.RequestLocationAccess()
         await Backend.get_product_categories()
         await Backend.getFeaturedProducts().
             then(res => {
                 if (res) {
-                    setFeaturedProducts(res.products)
+                    setFeaturedProducts(res.products.data)
                 }
             })
         await Backend.getPoluparProducts().
             then(res => {
                 if (res) {
-                    setPopularProducts(res.products)
+                    setPopularProducts(res.products.data)
                 }
             })
         await Backend.getNearByProducts().
             then(res => {
                 if (res) {
-                    setNearYouProducts(res.nearbyProducts)
+                    setNearYouProducts(res.nearbyProducts.data)
                 }
             })
         // await Backend.getTopRatedProducts().
@@ -116,7 +117,7 @@ function MarketPlace(props) {
                 <Spacer height={sizes.baseMargin} />
                 <TopCategories
                     data={categories}
-                    onPressCategory={(item, index) => { navigate(routes.CategoryDetail, { category:item }) }}
+                    onPressCategory={(item, index) => { navigate(routes.CategoryDetail, { category: item }) }}
                     onPressViewAll={() => navigate(routes.categories)}
                 />
                 {

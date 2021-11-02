@@ -15,6 +15,8 @@ export const stripeKeys = {
     subscription_premium_price: 'price_1JfK93LAATci74dLdguEUbWK'
 }
 export const baseURL = 'https://republic-backend.herokuapp.com/api/'
+export const GOOGLE_MAPS_APIKEY='AIzaSyA2mTVqK-uOK_Pbo0tTXyUtUP84cClbS9Q&v'
+export const google_places_api_key='AIzaSyAyItdXh8Zmxa7iCAyDVPH_UAJ5iUTGtEA'
 export const endPoints = {
     user: {
         login: 'login',

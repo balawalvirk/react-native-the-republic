@@ -1,51 +1,97 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FlatList } from "react-native-gesture-handler";
 import { appImages, HelpingMethods, sizes } from '../../../services';
 import { ProductCardPrimary } from "../../cards";
 import { Wrapper } from '../../wrappers';
 import styles from './styles'
 import * as RootNavigation from '../../../services/navigation/rootNavigation'
+import { SkeletonProductsGrid, Spacer } from '../..';
+import { NoDataViewPrimary } from '..';
 
-export function Products({ data, viewType, ListHeaderComponent, ListFooterComponent, onPressProduct }) {
+export function Products({ data, viewType, ListHeaderComponent, ListFooterComponent, onPressProduct, isLoading, isLoadingMore, onEndReached }) {
     const isGridView = viewType === 'grid'
     const isListView = viewType === 'list'
     const { navigate } = RootNavigation
+
+    //local states
+    const [onEndReachedCalledDuringMomentum, setOnEndReachedCalledDuringMomentum] = useState(false)
     return (
-        <FlatList
-            data={data}
-            showsVerticalScrollIndicator={false}
-            key={viewType}
-            numColumns={isGridView && 2}
-            ListHeaderComponent={ListHeaderComponent}
-            ListFooterComponent={ListFooterComponent}
-            keyExtractor={(item, index) => viewType + (index + 1).toString()}
-            renderItem={({ item, index }) => {
-                const { user } = item
-                return (
-                    <ProductCardPrimary
-                        onPress={() => onPressProduct(item, index)}
-                        animation={index <= 5 && isGridView ? 'fadeInUp' : 'fadeInRight'}
-                        duration={300 + (50 * (index + 1))}
-                        containerstyle={
-                            isGridView ? [styles.productContainerGrid, { marginRight: data.length===1?null:(index + 1) % 2 ? 0 : null, marginleft: !(index + 1) % 2 ? 0 : null }] :
-                                isListView ? [styles.productContainerList] : null
-                        }
-                        isFavourite={HelpingMethods.checkIsProductFavourite(item.id)}
-                        onPressHeart={() => { }}
-                        viewType={viewType}
-                        image={item.images ? JSON.parse(item.images)[0] : appImages.noImageAvailable}
-                        description={item.title}
-                        discountedPrice={item.discounted_price}
-                        price={item.price}
-                        location={item.address}
-                        rating={item.average_rating}
-                        reviewCount={item.reviews_count}
-                        userImage={user.profile_image}
-                        userName={user.first_name + ' ' + user.last_name}
-                    />
-                )
-            }}
-        />
+        <>
+            {
+                isLoading ?
+                    <SkeletonProductsGrid />
+                    :
+                    data.length ?
+                        <FlatList
+                            data={data}
+                            showsVerticalScrollIndicator={false}
+                            key={viewType}
+                            numColumns={isGridView && 2}
+                            onEndReached={(data) => {
+                                if (!onEndReachedCalledDuringMomentum) {
+                                    if (onEndReached) {
+                                        onEndReached(data)
+                                        setOnEndReachedCalledDuringMomentum(true)
+                                    }
+                                }
+                            }}
+                            //onEndReached={onEndReached}
+                            onEndReachedThreshold={0.5}
+                            onMomentumScrollBegin={() => { setOnEndReachedCalledDuringMomentum(false) }}
+                            ListHeaderComponent={ListHeaderComponent}
+                            keyExtractor={(item, index) => viewType + (index + 1).toString()}
+                            renderItem={({ item, index }) => {
+                                const { user } = item
+                                return (
+                                    <ProductCardPrimary
+                                        onPress={() => onPressProduct(item, index)}
+                                        animation={index <= 5 && (isGridView ? 'fadeInUp' : 'fadeInRight')}
+                                        duration={300 + (50 * (index + 1))}
+                                        containerstyle={
+                                            isGridView ? [styles.productContainerGrid, { marginRight: data.length === 1 ? null : (index + 1) % 2 ? 0 : null, marginleft: !(index + 1) % 2 ? 0 : null }] :
+                                                isListView ? [styles.productContainerList] : null
+                                        }
+                                        isFavourite={HelpingMethods.checkIsProductFavourite(item.id)}
+                                        onPressHeart={() => { }}
+                                        viewType={viewType}
+                                        image={item.images ? JSON.parse(item.images)[0] : appImages.noImageAvailable}
+                                        description={item.title}
+                                        discountedPrice={item.discounted_price}
+                                        price={item.price}
+                                        location={item.address}
+                                        rating={item.average_rating}
+                                        reviewCount={item.reviews_count}
+                                        userImage={user ? user.profile_image : appImages.noUser}
+                                        userName={user ? (user.first_name + ' ' + user.last_name) : 'Anonymouse'}
+                                    />
+                                )
+                            }}
+                            ListFooterComponent={ListFooterComponent ? ListFooterComponent : () => {
+                                return (
+                                    <>
+                                        {isLoadingMore ?
+                                            <>
+                                                <Spacer height={sizes.baseMargin} />
+                                                <SkeletonProductsGrid
+                                                    NumOfItems={2}
+                                                />
+                                                <Spacer height={sizes.baseMargin} />
+
+                                            </>
+                                            :
+                                            null
+                                        }
+                                    </>
+                                )
+                            }}
+
+                        />
+                        :
+                        <NoDataViewPrimary
+                            title="Products"
+                        />
+            }
+        </>
     )
 }
 
@@ -129,8 +175,8 @@ export function ProductsHorizontalyPrimary({ data, ListHeaderComponent, ListFoot
                         location={item.location}
                         rating={item.average_rating}
                         reviewCount={item.reviews_count}
-                        userName={user.first_name + ' ' + user.last_name}
-                        userImage={user.profile_image}
+                        userName={user ? (user.first_name + ' ' + user.last_name) : 'Anonymous'}
+                        userImage={user ? user.profile_image : appImages.noUser}
                         isSponsered={item.isSponsered}
                     />
                 )

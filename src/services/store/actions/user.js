@@ -1,7 +1,8 @@
 import {
     SET_USER_DETAIL,
     SET_CREDIT_CARDS,
-    SET_REPORTS
+    SET_REPORTS,
+    SET_CURRENT_LOCATION
 } from '../actionTypes'
 
 
@@ -22,6 +23,15 @@ export const setCreditCards = data => {
 export const setReports = data => {
     return {
         type: SET_REPORTS,
+        payload: data,
+    };
+};
+
+
+
+export const setCurrentLocation = data => {
+    return {
+        type: SET_CURRENT_LOCATION,
         payload: data,
     };
 };

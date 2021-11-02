@@ -37,8 +37,8 @@ const drawerScreens = [
 function BottomTabScreens() {
     const tabIconSize = totalSize(3)
     //const colors = useSelector(state => state.theme.appTheme)
-    const user=useSelector(state=>state.user)
-    const {userDetail}=user
+    const user = useSelector(state => state.user)
+    const { userDetail } = user
     return (
         <BottomTab.Navigator
             tabBarOptions={{
@@ -102,7 +102,7 @@ function BottomTabScreens() {
                     tabBarLabel: "Profile",
                     tabBarIcon: ({ color, size, focused }) => {
                         //return <CustomIcon icon={appIcons.marketplace} size={tabIconSize} color={color} focused={focused} />
-                        return <ImageRound source={{ uri: userDetail?userDetail.profile_image?userDetail.profile_image:appImages.noUser:appImages.noUser }} size={tabIconSize} style={{ opacity: focused ? 1 : 0.5, borderColor: colors.appColor1 }} />
+                        return <ImageRound source={{ uri: userDetail ? userDetail.profile_image ? userDetail.profile_image : appImages.noUser : appImages.noUser }} size={tabIconSize} style={{ opacity: focused ? 1 : 0.5, borderColor: colors.appColor1 }} />
                     },
                 })}
             />
@@ -122,7 +122,8 @@ function BottomTabStackScreens() {
                     headerTitle: () => <Wrapper style={{ alignItems: 'flex-start', }}>
                         <LocationPickerButton
                             onPress={() => navigation.navigate(routes.myLocation)}
-                            text="Broklyn, NYC" />
+                        // text="Broklyn, NYC" 
+                        />
                     </Wrapper>,
                     headerRight: () =>
                         <RowWrapper style={[{ marginRight: sizes.marginHorizontal }]}>
@@ -259,7 +260,8 @@ const AppNavigation = () => {
                         <ComponentWrapper >
                             <LocationPickerButton
                                 onPress={() => navigation.navigate(routes.myLocation)}
-                                text="Broklyn, NYC" />
+                            // text="Broklyn, NYC" 
+                            />
                         </ComponentWrapper>,
 
                 })}
@@ -271,7 +273,8 @@ const AppNavigation = () => {
                         <ComponentWrapper >
                             <LocationPickerButton
                                 onPress={() => navigation.navigate(routes.myLocation)}
-                                text="Broklyn, NYC" />
+                            // text="Broklyn, NYC"
+                            />
                         </ComponentWrapper>,
 
                 })}
@@ -315,7 +318,8 @@ const AppNavigation = () => {
                         <ComponentWrapper >
                             <LocationPickerButton
                                 onPress={() => navigation.navigate(routes.myLocation)}
-                                text="Broklyn, NYC" />
+                                //text="Broklyn, NYC" 
+                                />
                         </ComponentWrapper>,
 
                 })}
@@ -528,7 +532,7 @@ const AppNavigation = () => {
                 options={{
                     // headerShown: false,
                     title: 'Order Detail',
-                   // headerTitleAlign: 'center'
+                    // headerTitleAlign: 'center'
                 }}
             />
 
@@ -550,17 +554,17 @@ const AppNavigation = () => {
                 options={{
                     // headerShown: false,
                     title: 'Trainings',
-                  //  headerTitleAlign: 'center'
+                    //  headerTitleAlign: 'center'
                 }}
             />
-             <AppStack.Screen name={routes.seller.createTrainin} component={Seller.CreateTraining}
+            <AppStack.Screen name={routes.seller.createTrainin} component={Seller.CreateTraining}
                 options={{
                     // headerShown: false,
                     title: 'Create Trainin',
                     headerTitleAlign: 'center'
                 }}
             />
-             <AppStack.Screen name={routes.seller.selectDateTime} component={Seller.SelectDateTime}
+            <AppStack.Screen name={routes.seller.selectDateTime} component={Seller.SelectDateTime}
                 options={{
                     // headerShown: false,
                     title: 'Select Date and Time',
@@ -571,7 +575,7 @@ const AppNavigation = () => {
                 options={{
                     // headerShown: false,
                     title: 'Coupons',
-                   // headerTitleAlign: 'center'
+                    // headerTitleAlign: 'center'
                 }}
             />
             <AppStack.Screen name={routes.seller.createCoupon} component={Seller.CreateCoupon}
@@ -604,7 +608,7 @@ const AppNavigation = () => {
                     headerTitleAlign: 'center'
                 }}
             />
-             <AppStack.Screen name={routes.dealer.fulfillmentDetail} component={Seller.FulfillmentDetail}
+            <AppStack.Screen name={routes.dealer.fulfillmentDetail} component={Seller.FulfillmentDetail}
                 options={{
                     // headerShown: false,
                     title: 'Fulfillment Detail',

@@ -43,14 +43,13 @@ const GooglePlacesInput = ({ onPressItem, value, textInputContainer, leftIcon,pl
                         //onPressCross={() => deletingArea(item)}
                         icon={appIcons.map_pin}
                         hideLine
-                        containerStyle={{ marginVertical: sizes.marginVertical / 2 }}
+                        containerStyle={{ marginVertical: sizes.marginVertical / 2,marginHorizontal:0 }}
                     // onPress={() => addingArea(item)}
                     />
 
                 </Wrapper>
 
             )}
-            
             textInputProps={{
                 InputComp: Input,
                 leftIcon: leftIcon === null ? null : leftIcon ? leftIcon : {

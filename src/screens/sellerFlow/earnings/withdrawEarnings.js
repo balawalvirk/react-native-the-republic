@@ -228,8 +228,6 @@ function AddBankAccountPopup({ visible, toggle, onPressDone, isLoading }) {
                         setBank('')
                     }
                 }}
-                //placeholder="Your Shoe Size"
-                // error={sizeError}
                 onPressItem={(item, index) => {
                     setBank(item)
                     console.log('item', item)

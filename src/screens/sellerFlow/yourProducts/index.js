@@ -32,7 +32,7 @@ function YourProducts(props) {
     Backend.get_user_products().
       then(async res => {
         if (res) {
-          setProducts(res.products)
+          setProducts(res.products.data)
         }
       })
   }
@@ -86,7 +86,7 @@ function YourProducts(props) {
                   }
                   onPressHeart={() => { }}
                   image={images[0]}
-                  description={item.description}
+                  description={item.title}
                   price={item.price}
                   discountedPrice={item.discounted_price}
                   rating={item.average_rating}

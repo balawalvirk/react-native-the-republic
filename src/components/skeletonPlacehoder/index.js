@@ -69,9 +69,9 @@ export const SkeletonListVerticalPrimary = ({ itemStyle }) => {
                         <Wrapper style={[{ marginLeft: sizes.marginHorizontal, marginTop: sizes.marginVertical, }, itemStyle]}>
                             <Wrapper style={{ height: height(2), width: width(40), borderRadius: sizes.cardRadius, marginBottom: sizes.smallMargin }} />
                             <Wrapper style={[{ height: height(20), width: width(90), borderRadius: sizes.cardRadius }]} />
-                            <Wrapper style={{marginHorizontal:sizes.marginHorizontal, flexDirection: 'row',justifyContent: 'flex-end', marginVertical: sizes.smallMargin, alignItems: 'center', }}>
-                                <Wrapper style={[{ height: height(5), width: totalSize(7), borderRadius: sizes.cardRadius,  }]} />
-                               <Wrapper style={[styles.horizontalMarginBase]}/>
+                            <Wrapper style={{ marginHorizontal: sizes.marginHorizontal, flexDirection: 'row', justifyContent: 'flex-end', marginVertical: sizes.smallMargin, alignItems: 'center', }}>
+                                <Wrapper style={[{ height: height(5), width: totalSize(7), borderRadius: sizes.cardRadius, }]} />
+                                <Wrapper style={[styles.horizontalMarginBase]} />
                                 <Wrapper style={[{ height: height(5), width: totalSize(7), borderRadius: sizes.cardRadius, }]} />
 
                             </Wrapper>
@@ -188,4 +188,26 @@ export const SupportSkeleton = ({ }) => {
             <SkeletonListVerticalPrimary itemStyle={{ height: height(8) }} />
         </MainWrapper>
     )
+}
+
+export const SkeletonProductsGrid = ({ NumOfItems }) => {
+
+    const defaultItems = NumOfItems ? NumOfItems : 6
+    const PlaceholderItems = Array.from(Array(defaultItems).keys())
+
+    return (
+        <MainWrapper>
+            <RowWrapper style={{ flexWrap: 'wrap', }}>
+                {
+                    PlaceholderItems.map((item, index) => {
+                        return (
+                            <SkeletonPrimary
+                                itemStyle={{ marginHorizontal: 0, width: width(42.5), height: height(35), marginVertical: sizes.marginVertical / 2 }}
+                            />
+                        )
+                    })
+                }
+            </RowWrapper>
+        </MainWrapper>
+    );
 }

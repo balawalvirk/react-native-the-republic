@@ -218,7 +218,7 @@ export function PickerSearchable({ placeholder, error, data, value, inputStyle, 
                 }}
                 onChangeText={text => {
                     setSearchQuery(text);
-                    onChangeText ? onChangeText() : null
+                    onChangeText ? onChangeText(text) : null
                 }}
                 inputStyle={inputStyle}
                 error={error}

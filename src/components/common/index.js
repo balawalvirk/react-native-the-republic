@@ -28,6 +28,7 @@ import { ScrollView } from 'react-native'
 import { StyleSheet } from 'react-native'
 import { LineVertical } from '../lines'
 import GoogleAutoComplete from './googleAutoComplete'
+import { useSelector } from 'react-redux'
 
 export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconColor, iconContainerColor, iconContainerSize, iconSize, disableSwipe, disableBackDropPress, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, loadingButton1, loadinButton2, topMargin, children, scrollEnabled, button1Style, keyboardShouldPersistTaps }) => {
     const defaultTopMargin = Platform.OS === 'ios' ? height(55) : height(45)
@@ -178,12 +179,15 @@ export const SwitchPrimary = ({ value, onPress }) => {
 }
 
 export const LocationPickerButton = ({ text, onPress }) => {
+    const user=useSelector(state=>state.user)
+    const {userDetail}=user
+    const userAddress=text?text:userDetail.address?userDetail.address:'Current Location'
     return (
         <TouchableOpacity disabled={!onPress} onPress={onPress} activeOpacity={1}>
             <RowWrapperBasic style={{ padding: sizes.smallMargin, backgroundColor: colors.appBgColor3, borderRadius: 100 }}>
                 <IconWithText
                     customIcon={appIcons.map_pin_outline}
-                    text={text.slice(0, 12) + '..'}
+                    text={userAddress.slice(0, 12) + '..'}
                     tintColor={colors.appTextColor1}
                     iconSize={totalSize(2)}
                     textStyle={[appStyles.textRegular]}

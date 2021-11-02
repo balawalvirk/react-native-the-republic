@@ -1,12 +1,13 @@
 import moment from "moment";
-import { UIManager, LayoutAnimation, Platform, Linking } from "react-native";
+import { UIManager, LayoutAnimation, Platform, Linking, PermissionsAndroid } from "react-native";
 import dummyData from "../constants/dummyData";
 import NetInfo from "@react-native-community/netinfo";
 import store from "../store";
-import { setUserDetail } from "../store/actions";
+import { setCurrentLocation, setUserDetail } from "../store/actions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { asyncConts } from "..";
 import { Toasts } from "../../components";
+import Geolocation from 'react-native-geolocation-service';
 
 const { dispatch } = store
 const HelpingMethods = {
@@ -182,7 +183,52 @@ const HelpingMethods = {
             }
         }).catch(err => console.error('An error occurred', err))
     },
+    RequestLocationAccess: async () => {
+        if (Platform.OS === 'ios') {
+            getUserLocation();
+        } else {
+            try {
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                    {
+                        title: 'Device current location permission',
+                        message:
+                            'Allow app to get your current location',
+                        buttonNeutral: 'Ask Me Later',
+                        buttonNegative: 'Cancel',
+                        buttonPositive: 'OK',
+                    },
+                );
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    getUserLocation();
+                } else {
+                    console.log('Location permission denied');
+                }
+            } catch (err) {
+                console.warn(err);
+            }
+        }
+    },
+    
 }
 
 
 export default HelpingMethods
+
+const getUserLocation = async () => {
+    Platform.OS === 'ios' && await Geolocation.requestAuthorization('always')
+    Geolocation.getCurrentPosition(
+        (position) => {
+            // setTimeout(() => {
+            //     console.log("position==>", position);
+            // }, 10000);
+            console.log('User Location Saved--->', position)
+            dispatch(setCurrentLocation(position))
+        },
+        (error) => {
+            // See error code charts below.
+            console.log('See error code charts below', error.code, error.message);
+        },
+        { enableHighAccuracy: false, timeout: 15000, maximumAge: 10000 }
+    );
+}

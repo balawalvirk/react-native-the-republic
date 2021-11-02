@@ -1,13 +1,15 @@
 import {
     SET_USER_DETAIL,
     SET_CREDIT_CARDS,
-    SET_REPORTS
+    SET_REPORTS,
+    SET_CURRENT_LOCATION
 } from '../actionTypes'
 
 const INITIAL_STATE = {
     userDetail: null,
     creditCards: [],
-    reports: null
+    reports: null,
+    currentLocation: null
 
 };
 
@@ -27,6 +29,11 @@ const userReducers = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 reports: action.payload,
+            };
+        case SET_CURRENT_LOCATION:
+            return {
+                ...state,
+                currentLocation: action.payload,
             };
         default:
             return state;

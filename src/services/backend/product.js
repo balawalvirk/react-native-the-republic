@@ -8,7 +8,12 @@ import HelpingMethods from "../helpingMethods";
 import { setProductActions, setProductCalibers, setProductCategories, setProductConditions, setProductItems, setProductManufacturers, setUserDetail } from "../store/actions";
 const { dispatch } = store
 
-export const add_Product = async ({ title, item, type, manufacturer, caliber, action, condition, description, city, statee, zip_code, price, discounted_price, latitude, longitude, image }) => {
+export const add_Product = async ({
+    title, item, type, manufacturer, caliber,
+    action, condition, description, city, statee,
+    zip_code, price, discounted_price, latitude,
+    longitude, image, address
+}) => {
     let response = null
     const state = store.getState()
     const { id } = state.user.userDetail
@@ -24,6 +29,7 @@ export const add_Product = async ({ title, item, type, manufacturer, caliber, ac
     formDataObject.append("action", action)
     formDataObject.append("condition", condition)
     formDataObject.append("description", description)
+    formDataObject.append("address", address)
     formDataObject.append("city", city)
     formDataObject.append("state", statee)
     formDataObject.append("zip_code", zip_code)
@@ -78,7 +84,12 @@ export const get_user_products = async (userId) => {
     return response
 };
 
-export const edit_Product = async ({ product_id, title, item, type, manufacturer, caliber, action, condition, description, city, statee, zip_code, price, discounted_price, latitude, longitude, image }) => {
+export const edit_Product = async ({
+    product_id, title, item, type, manufacturer,
+    caliber, action, condition, description, city,
+    statee, zip_code, price, discounted_price,
+    latitude, longitude, image, address
+}) => {
     let response = null
     const state = store.getState()
     const { id } = state.user.userDetail
@@ -95,6 +106,7 @@ export const edit_Product = async ({ product_id, title, item, type, manufacturer
     formDataObject.append("action", action)
     formDataObject.append("condition", condition)
     formDataObject.append("description", description)
+    formDataObject.append("address", address)
     formDataObject.append("city", city)
     formDataObject.append("state", statee)
     formDataObject.append("zip_code", zip_code)
@@ -148,8 +160,9 @@ export const delete_product = async (product_id) => {
 };
 
 
-export const getFeaturedProducts = async () => {
+export const getFeaturedProducts = async (page) => {
     let response = null
+    const defaultPage = page ? page : 1
     const state = store.getState()
     const { id } = state.user.userDetail
     const params = {
@@ -158,7 +171,7 @@ export const getFeaturedProducts = async () => {
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios
-            .post(`${baseURL + endPoints.product.featured_products}`, params)
+            .post(`${baseURL + endPoints.product.featured_products}?page=${defaultPage}`, params)
             .then(async responseJson => {
                 const tempResponseData = responseJson.data
                 console.log('getFeaturedProducts Response', tempResponseData);
@@ -176,8 +189,9 @@ export const getFeaturedProducts = async () => {
     return response
 };
 
-export const getPoluparProducts = async () => {
+export const getPoluparProducts = async (page) => {
     let response = null
+    const defaultPage = page ? page : 1
     const state = store.getState()
     const { id } = state.user.userDetail
     const params = {
@@ -186,7 +200,7 @@ export const getPoluparProducts = async () => {
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios
-            .post(`${baseURL + endPoints.product.popular_products}`, params)
+            .post(`${baseURL + endPoints.product.popular_products}?page=${defaultPage}`, params)
             .then(async responseJson => {
                 const tempResponseData = responseJson.data
                 console.log('getPoluparProducts Response', tempResponseData);
@@ -204,20 +218,25 @@ export const getPoluparProducts = async () => {
     return response
 };
 
-export const getNearByProducts = async () => {
+export const getNearByProducts = async (page) => {
     let response = null
+    const defaultPage = page ? page : 1
     const state = store.getState()
-    const { id } = state.user.userDetail
+    const { userDetail, currentLocation } = state.user
+    const { coords } = currentLocation
+    const latitude = userDetail.latitude ? userDetail.latitude : coords.latitude
+    const longitude = userDetail.longitude ? userDetail.longitude : coords.longitude
+    const { id } = userDetail
     const params = {
         user_id: id,
         city: 'Daska',
-        longitude: '',
-        latitude: '',
+        latitude,
+        longitude,
     }
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios
-            .post(`${baseURL + endPoints.product.nearby_products}`, params)
+            .post(`${baseURL + endPoints.product.nearby_products}?page=${defaultPage}`, params)
             .then(async responseJson => {
                 const tempResponseData = responseJson.data
                 console.log('getNearByProducts Response', tempResponseData);
@@ -235,8 +254,9 @@ export const getNearByProducts = async () => {
     return response
 };
 
-export const getTopRatedProducts = async () => {
+export const getTopRatedProducts = async (page) => {
     let response = null
+    const defaultPage = page ? page : 1
     const state = store.getState()
     const { id } = state.user.userDetail
     const params = {
@@ -245,7 +265,7 @@ export const getTopRatedProducts = async () => {
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios
-            .post(`${baseURL + endPoints.product.toprated_products}`, params)
+            .post(`${baseURL + endPoints.product.toprated_products}?page=${defaultPage}`, params)
             .then(async responseJson => {
                 const tempResponseData = responseJson.data
                 console.log('getTopRatedProducts Response', tempResponseData);
@@ -468,15 +488,16 @@ export const get_product_conditions = async () => {
 };
 
 
-export const getProductsByCategory = async (category) => {
+export const getProductsByCategory = async ({ page, category }) => {
     let response = null
-    const params={
+    const defaultPage = page ? page : 1
+    const params = {
         category
     }
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios
-            .post(`${baseURL + endPoints.product.category_products}`,params)
+            .post(`${baseURL + endPoints.product.category_products}?page=${defaultPage}`, params)
             .then(async responseJson => {
                 const tempResponseData = responseJson.data
                 console.log('Response', tempResponseData);
@@ -491,6 +512,6 @@ export const getProductsByCategory = async (category) => {
                 Toasts.error(error.response.data.message)
                 console.error(error);
             });
-    } 
+    }
     return response
 };

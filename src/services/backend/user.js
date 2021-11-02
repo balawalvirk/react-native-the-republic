@@ -212,7 +212,7 @@ export const update_profile = async ({
     user_id, first_name, last_name, username, gender, birthday, phone, image,
     country_code, country_phone_code, fcm_token, subscription_id, cancel_subscription,
     customer_id, payment_id, user_type, subscription_plan, latitude,
-    longitude, distance, default_card_id, default_dealer_id }) => {
+    longitude, distance, default_card_id, default_dealer_id,address }) => {
     let response = null
     const state = store.getState()
     const userId = user_id ? user_id : state.user.userDetail.id
@@ -238,6 +238,7 @@ export const update_profile = async ({
     payment_id && formDataObject.append("payment_id", payment_id)
     cancel_subscription && formDataObject.append("subscription_id", '')
     //location configs
+    address && formDataObject.append("address", address)
     latitude && formDataObject.append("latitude", latitude)
     longitude && formDataObject.append("longitude", longitude)
     distance && formDataObject.append("distance", distance)

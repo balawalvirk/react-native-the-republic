@@ -2,13 +2,14 @@ import React, { Component, useEffect, useState } from 'react';
 import { View, Text, Platform, TouchableOpacity, Image, Animated } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
 import { Icon } from 'react-native-elements';
-import { AbsoluteWrapper, ArmerInfo, BackIcon, ButtonGradient, ComponentWrapper, IconWithText, ImagePickerPopup, KeyboardAvoidingScrollView, LoaderAbsolute, MainWrapper, MediumText, PickerPrimary, ProductCardPrimary, RegularText, RenderTags, RowWrapper, Spacer, SwitchPrimary, TextInputUnderlined, Toasts, Wrapper } from '../../../components';
+import { AbsoluteWrapper, ArmerInfo, BackIcon, ButtonGradient, ComponentWrapper, ErrorText, GoogleAutoComplete, IconWithText, ImagePickerPopup, InputTitle, KeyboardAvoidingScrollView, LoaderAbsolute, MainWrapper, MediumText, PickerPrimary, PickerSearchable, ProductCardPrimary, RegularText, RenderTags, RowWrapper, Spacer, SwitchPrimary, TextInputUnderlined, Toasts, Wrapper } from '../../../components';
 import { appStyles, Backend, colors, DummyData, HelpingMethods, sizes } from '../../../services';
 import styles from './styles'
 import * as ImagePicker from 'react-native-image-picker';
 import { check, PERMISSIONS, RESULTS, request } from 'react-native-permissions';
 import { TextInput } from 'react-native';
 import { useSelector } from 'react-redux';
+import { MaterialIndicator } from 'react-native-indicators';
 const options = {
     title: 'Select Photo',
     quality: 1,
@@ -20,12 +21,21 @@ const options = {
         path: 'images',
     },
 };
-
+const addresses = [
+    {
+        label: 'Awami road',
+        value: 'Awami road'
+    },
+    {
+        label: 'Nisbat road',
+        value: 'Nisbat road'
+    },
+]
 function Sell(props) {
     const { navigation, route } = props
     const { goBack, navigate } = navigation
     const { params } = route
-    const productDetail =params? params.productDetail ? params.productDetail : null:null
+    const productDetail = params ? params.productDetail ? params.productDetail : null : null
 
     //redux states
     const product = useSelector(state => state.product)
@@ -40,17 +50,58 @@ function Sell(props) {
             goBack() :
             [
                 setStep(step - 1),
-                handleChangeStep(singleStepIndicatorWith * (step - 1))
+                handleChangeStep(singleStepIndicatorWdith * (step - 1))
             ]
     }
+    const goToNext = () => {
+        setStep(step + 1)
+        handleChangeStep(singleStepIndicatorWdith * (step + 1))
+    }
     const handleOnNextStep = () => {
-        step < 5 ? [
-            setStep(step + 1),
-            handleChangeStep(singleStepIndicatorWith * (step + 1))
-        ] :
-            [
-                productDetail ? handleEditProduct() : handleAddNewProduct()
-            ]
+        if (step < 5) {
+            HelpingMethods.handleAnimation()
+            if (step === 1) {
+                !imageFile && !imageUri ? setImageError('Please add image') : setImageError('')
+                !title ? setTitleError('Please add title') : setTitleError('')
+                if ((imageFile || imageUri) && title) {
+                    goToNext()
+                }
+            } else if (step === 2) {
+                !item ? setitemError('Please select item') : setitemError('')
+                !type ? settypeError('Please select type') : settypeError('')
+                !manufacturer ? setmanufacturerError('Please select manufacturer') : setmanufacturerError('')
+                !caliber ? setCalibreError('Please select caliber') : setCalibreError('')
+                !action ? setactionError('Please select action') : setactionError('')
+                !condition ? setConditionError('Please select condition') : setConditionError('')
+                !description ? setDescriptionError('Please enter description') : setDescriptionError('')
+                if (item && type && manufacturer && caliber && action && condition && description) {
+                    goToNext()
+                }
+            } else if (step === 3) {
+                !address ? setAddressError('Please add address') : setAddressError('')
+                !city ? setCityError('Please add city') : setCityError('')
+                !state ? setStateError('Please add state') : setStateError('')
+                !zipcode ? setZipcodeError('Please add zipcode') : setZipcodeError('')
+                if (address && city && state && zipcode) {
+                    goToNext()
+                }
+            } else if (step === 4) {
+                !price ? setPriceError('Please enter price') : setPriceError('')
+                isDiscountedPriceVisible && !discountedPrice ? setDiscountedPriceError('Please enter discounted price') : setDiscountedPriceError('')
+                if (price) {
+                    if (!isDiscountedPriceVisible) {
+                        goToNext()
+                    } else {
+                        if (discountedPrice) {
+                            goToNext()
+                        }
+                    }
+                }
+            }
+        } else {
+            productDetail ? handleEditProduct() : handleAddNewProduct()
+        }
+
     }
     //configure Header
     React.useLayoutEffect(() => {
@@ -132,31 +183,48 @@ function Sell(props) {
     }
 
 
-    const singleStepIndicatorWith = width(100) / 5
-    const [stepIndicatorWidth, setStepIndicatorWidth] = useState(new Animated.Value(singleStepIndicatorWith))
+    const singleStepIndicatorWdith = width(100) / 5
+    const [stepIndicatorWidth, setStepIndicatorWidth] = useState(new Animated.Value(singleStepIndicatorWdith))
     const [title, setTitle] = useState('')
+    const [titleError, setTitleError] = useState('')
     const [imageUri, setImageUri] = useState(null)
     const [imageFile, setImageFile] = useState(null)
+    const [imageError, setImageError] = useState('')
     const [isImagePickerPopupVisible, setImagePickerPopupVisibility] = useState(false);
     const toggleImagePickerPopup = () => setImagePickerPopupVisibility(!isImagePickerPopupVisible)
 
     const [item, setitem] = useState('')
+    const [itemError, setitemError] = useState('')
     const [type, settype] = useState('')
+    const [typeError, settypeError] = useState('')
     const [manufacturer, setmanufacturer] = useState('')
+    const [manufacturerError, setmanufacturerError] = useState('')
     const [caliber, setCalibre] = useState('')
+    const [caliberError, setCalibreError] = useState('')
     const [action, setaction] = useState('')
+    const [actionError, setactionError] = useState('')
     const [condition, setCondition] = useState('')
+    const [conditionError, setConditionError] = useState('')
     const [description, setDescription] = useState('')
+    const [descriptionError, setDescriptionError] = useState('')
 
+    const [address, setAddress] = useState('')
+    const [addressError, setAddressError] = useState('')
     const [city, setCity] = useState('')
+    const [cityError, setCityError] = useState('')
     const [state, setState] = useState('')
+    const [stateError, setStateError] = useState('')
     const [zipcode, setZipcode] = useState('')
-    const [latitude, setLatitude] = useState('78.090909')
-    const [longitude, setLongitude] = useState('-102.09876')
+    const [zipcodeError, setZipcodeError] = useState('')
+    const [latitude, setLatitude] = useState('')
+    const [longitude, setLongitude] = useState('')
+    const [loadingAddressComp, setLoadingAddressComp] = useState(false)
 
     const [price, setPrice] = useState('')
+    const [priceError, setPriceError] = useState('')
     const [isDiscountedPriceVisible, setDiscountedPriceVisibility] = useState('')
     const [discountedPrice, setDiscountedPrice] = useState('')
+    const [discountedPriceError, setDiscountedPriceError] = useState('')
 
     const [selectedProduct, setProduct] = useState(DummyData.products[0])
     const tags = ['Handguns', 'Semi Automatic', 'Suppressor']
@@ -186,6 +254,7 @@ function Sell(props) {
                     name: response.fileName,
                     type: response.type
                 }
+                imageError && setImageError('')
                 setImageFile(tempFile)
             }
         });
@@ -238,6 +307,7 @@ function Sell(props) {
             price,
             discounted_price: discountedPrice,
             image: imageFile,
+            address,
             latitude,
             longitude
         }).then(res => {
@@ -266,6 +336,7 @@ function Sell(props) {
             price,
             discounted_price: discountedPrice,
             image: imageFile,
+            address,
             latitude,
             longitude
         }).then(res => {
@@ -275,6 +346,47 @@ function Sell(props) {
             }
         })
         setLoading(false)
+    }
+    const handleSetAddress = async (details, location) => {
+        console.log('details', details)
+        //console.log('main_text_matched_substrings', details.main_text_matched_substrings)
+        console.log('location', location)
+        const { structured_formatting } = details
+        //setAddress(details.description)
+        addressError && setAddressError('')
+        setAddress(structured_formatting.main_text)
+        setLatitude(location.lat)
+        setLongitude(location.lng)
+        setLoadingAddressComp(true)
+        await Backend.getLocationDetailsFromLatLong({ latitude: location.lat, longitude: location.lng }).
+            then(res => {
+                console.log('getLocationDetailsFromLatLong details ', res)
+                cityError && setCityError('')
+                stateError && setStateError('')
+                zipcodeError && setZipcodeError('')
+                res.address && setAddress(res.address)
+                setZipcode(res.zipcode)
+                setCity(res.city)
+                setState(res.state)
+            })
+
+        setLoadingAddressComp(false)
+
+    }
+    const AddressLoaders = () => {
+        return (
+            <>
+                {
+                    loadingAddressComp ?
+                        <MaterialIndicator
+                            size={totalSize(2)}
+                            color={colors.appTextColor4}
+                        />
+                        :
+                        null
+                }
+            </>
+        )
     }
     return (
         <MainWrapper>
@@ -315,12 +427,18 @@ function Sell(props) {
                                     />
                                 </AbsoluteWrapper>
                             </TouchableOpacity>
-
+                            <ComponentWrapper style={[appStyles.center]}>
+                                <ErrorText text={imageError} />
+                            </ComponentWrapper>
                             <Spacer height={sizes.baseMargin} />
                             <TextInputUnderlined
                                 title="Add a Title"
                                 value={title}
-                                onChangeText={text => setTitle(text)}
+                                onChangeText={text => {
+                                    titleError && setTitleError('')
+                                    setTitle(text)
+                                }}
+                                error={titleError}
                             />
                             <Spacer height={sizes.baseMargin} />
                         </Wrapper>
@@ -332,7 +450,11 @@ function Sell(props) {
                                     // placeholder="No Selected"
                                     data={items}
                                     value={item}
-                                    onChange={(value, index) => setitem(value)}
+                                    onChange={(value, index) => {
+                                        itemError && setitemError('')
+                                        setitem(value)
+                                    }}
+                                    error={itemError}
                                 />
                                 <Spacer height={sizes.baseMargin} />
                                 <PickerPrimary
@@ -340,7 +462,12 @@ function Sell(props) {
                                     // placeholder="No Selected"
                                     data={categories}
                                     value={type}
-                                    onChange={(value, index) => settype(value)}
+                                    onChange={(value, index) => {
+                                        typeError && settypeError('')
+                                        settype(value)
+                                    }
+                                    }
+                                    error={typeError}
                                 />
                                 <Spacer height={sizes.baseMargin} />
                                 <PickerPrimary
@@ -348,7 +475,11 @@ function Sell(props) {
                                     // placeholder="No Selected"
                                     data={manufacturers}
                                     value={manufacturer}
-                                    onChange={(value, index) => setmanufacturer(value)}
+                                    onChange={(value, index) => {
+                                        manufacturerError && setmanufacturerError('')
+                                        setmanufacturer(value)
+                                    }}
+                                    error={manufacturerError}
                                 />
                                 <Spacer height={sizes.baseMargin} />
                                 <PickerPrimary
@@ -356,7 +487,11 @@ function Sell(props) {
                                     // placeholder="No Selected"
                                     data={calibers}
                                     value={caliber}
-                                    onChange={(value, index) => setCalibre(value)}
+                                    onChange={(value, index) => {
+                                        caliberError && setCalibreError('')
+                                        setCalibre(value)
+                                    }}
+                                    error={caliberError}
                                 />
                                 <Spacer height={sizes.baseMargin} />
                                 <PickerPrimary
@@ -364,7 +499,11 @@ function Sell(props) {
                                     // placeholder="No Selected"
                                     data={actions}
                                     value={action}
-                                    onChange={(value, index) => setaction(value)}
+                                    onChange={(value, index) => {
+                                        actionError && setactionError('')
+                                        setaction(value)
+                                    }}
+                                    error={actionError}
                                 />
                                 <Spacer height={sizes.baseMargin} />
                                 <PickerPrimary
@@ -372,37 +511,71 @@ function Sell(props) {
                                     // placeholder="No Selected"
                                     data={conditions}
                                     value={condition}
-                                    onChange={(value, index) => setCondition(value)}
+                                    onChange={(value, index) => {
+                                        conditionError && setConditionError('')
+                                        setCondition(value)
+                                    }}
+                                    error={conditionError}
                                 />
                                 <Spacer height={sizes.baseMargin} />
                                 <TextInputUnderlined
                                     titleStatic="Description"
                                     value={description}
-                                    onChangeText={text => setDescription(text)}
+                                    onChangeText={text => {
+                                        descriptionError && setDescriptionError('')
+                                        setDescription(text)
+                                    }}
                                     multiline
                                     inputStyle={{ height: height(15), textAlignVertical: 'top' }}
+                                    error={descriptionError}
                                 />
                                 <Spacer height={sizes.baseMargin} />
                             </Wrapper>
                             :
                             step === 3 ?
                                 <Wrapper flex={1}>
+                                    <ComponentWrapper style={{ marginHorizontal: sizes.marginHorizontalLarge }}>
+                                        <InputTitle>Address</InputTitle>
+                                        <GoogleAutoComplete
+                                            onPressItem={handleSetAddress}
+                                            value={address}
+                                            leftIcon={null}
+                                            textInputContainer={{
+                                                borderWidth: 0,
+                                                borderRadius: 0,
+                                                borderBottomWidth: 1,
+                                                borderColor: colors.appBgColor4,
+                                                marginHorizontal: 0,
+                                                paddingHorizontal: 0,
+                                            }}
+                                            placeholder="Type here..."
+                                        />
+                                        <ErrorText text={addressError} />
+                                    </ComponentWrapper>
+                                    <Spacer height={sizes.baseMargin} />
+
                                     <TextInputUnderlined
                                         title="City"
                                         value={city}
                                         onChangeText={text => setCity(text)}
+                                        right={<AddressLoaders />}
+                                        error={cityError}
                                     />
                                     <Spacer height={sizes.baseMargin} />
                                     <TextInputUnderlined
                                         title="State"
                                         value={state}
                                         onChangeText={text => setState(text)}
+                                        right={<AddressLoaders />}
+                                        error={stateError}
                                     />
                                     <Spacer height={sizes.baseMargin} />
                                     <TextInputUnderlined
                                         title="Zipcode"
                                         value={zipcode}
                                         onChangeText={text => setZipcode(text)}
+                                        right={<AddressLoaders />}
+                                        error={zipcodeError}
                                     />
                                     <Spacer height={sizes.baseMargin} />
                                 </Wrapper>
@@ -411,9 +584,13 @@ function Sell(props) {
                                     <Wrapper flex={1}>
                                         <TextInputUnderlined
                                             value={`${(price.length ? '$' : '') + price}`}
-                                            onChangeText={(text) => setPrice(text.replace('$', ''))}
+                                            onChangeText={(text) => {
+                                                priceError && setPriceError('')
+                                                setPrice(text.replace('$', ''))
+                                            }}
                                             placeholder="Price"
                                             inputStyle={[{ textAlign: 'center' }, appStyles.h3, appStyles.textPrimaryColor]}
+                                            error={priceError}
                                         />
                                         <Spacer height={sizes.baseMargin * 2} />
                                         <RowWrapper>
@@ -429,9 +606,13 @@ function Sell(props) {
                                                     <Spacer height={sizes.baseMargin * 1.5} />
                                                     <TextInputUnderlined
                                                         value={`${(discountedPrice.length ? '$' : '') + discountedPrice}`}
-                                                        onChangeText={(text) => setDiscountedPrice(text.replace('$', ''))}
+                                                        onChangeText={(text) => {
+                                                            discountedPriceError && setDiscountedPriceError('')
+                                                            setDiscountedPrice(text.replace('$', ''))
+                                                        }}
                                                         placeholder="Discounted Price"
                                                         inputStyle={[{ textAlign: 'center' }, appStyles.h3, appStyles.textPrimaryColor]}
+                                                        error={discountedPriceError}
                                                     />
                                                 </>
                                                 :
