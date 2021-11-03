@@ -224,8 +224,8 @@ export const getNearByProducts = async (page) => {
     const state = store.getState()
     const { userDetail, currentLocation } = state.user
     const { coords } = currentLocation
-    const latitude = userDetail.latitude ? userDetail.latitude : coords.latitude
-    const longitude = userDetail.longitude ? userDetail.longitude : coords.longitude
+    const latitude = userDetail.latitude ? userDetail.latitude : coords ? coords.latitude : ''
+    const longitude = userDetail.longitude ? userDetail.longitude : coords ? coords.longitude : ''
     const { id } = userDetail
     const params = {
         user_id: id,
@@ -282,7 +282,35 @@ export const getTopRatedProducts = async (page) => {
     }
     return response
 };
-
+export const getRelatedProducts = async ({ product_id, page }) => {
+    let response = null
+    const defaultPage = page ? page : 1
+    const state = store.getState()
+    const { userDetail, currentLocation } = state.user
+    const { id } = userDetail
+    const params = {
+        product_id
+    }
+    const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    if (isInternetAvailable) {
+        await axios
+            .post(`${baseURL + endPoints.product.related_products}?page=${defaultPage}`, params)
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('getNearByProducts Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
+    }
+    return response
+};
 export const get_product_items = async () => {
     let response = null
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
@@ -515,3 +543,165 @@ export const getProductsByCategory = async ({ page, category }) => {
     }
     return response
 };
+
+export const addFavouriteProduct = async (product_id) => {
+    let response = null
+    const state = store.getState()
+    const { userDetail, currentLocation } = state.user
+    const user_id = userDetail.id
+    const params = {
+        user_id,
+        product_id
+    }
+    const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    if (isInternetAvailable) {
+        await axios
+            .post(`${baseURL + endPoints.product.add_favorite_product}`, params)
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('addFavouriteProducts Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
+    }
+    return response
+};
+
+export const removeFavouriteProduct = async (product_id) => {
+    let response = null
+    const state = store.getState()
+    const { userDetail } = state.user
+    const user_id = userDetail.id
+    const params = {
+        user_id,
+        product_id
+    }
+    const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    if (isInternetAvailable) {
+        await axios
+            .post(`${baseURL + endPoints.product.remove_favorite_product}`, params)
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('removeFavouriteProduct Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
+    }
+    return response
+};
+
+export const getFavouriteProducts = async () => {
+    let response = null
+    const state = store.getState()
+    const { userDetail } = state.user
+    const user_id = userDetail.id
+    const params = {
+        user_id,
+    }
+    const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    if (isInternetAvailable) {
+        await axios
+            .post(`${baseURL + endPoints.product.show_favorite_products}`, params)
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('getFavouriteProducts Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
+    }
+    return response
+};
+
+export const addProductReview = async ({ product_id, order_id, rating, comment }) => {
+    let response = null
+    const state = store.getState()
+    const { userDetail } = state.user
+    const user_id = userDetail.id
+    const params = {
+        user_id,
+        product_id,
+        order_id,
+        rating,
+        comment
+    }
+    const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    if (isInternetAvailable) {
+        await axios
+            .post(`${baseURL + endPoints.product.product_review}`, params)
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('addProductReview Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
+    }
+    return response
+};
+
+export const getProductReviews = async (product_id) => {
+    let response = null
+    // const state = store.getState()
+    // const { userDetail } = state.user
+    // const user_id = userDetail.id
+    const params = {
+        product_id,
+    }
+    const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    if (isInternetAvailable) {
+        await axios
+            .post(`${baseURL + endPoints.product.show_reviews}`, params)
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('getProductReviews Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
+    }
+    return response
+};
+
+export const handleFavouriteProduct = async (product_id) => {
+    let response = null
+    if (HelpingMethods.checkIsProductFavourite(product_id)) {
+       await removeFavouriteProduct(product_id)
+    }else{
+        await addFavouriteProduct(product_id)
+    }
+    return response
+};
+

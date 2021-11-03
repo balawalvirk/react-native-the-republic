@@ -149,7 +149,7 @@ const HelpingMethods = {
     },
     getHiddenCardNumber: (cardNumber) => {
         return `**** **** **** ${cardNumber.slice(12, 16)}`
-       // return cardNumber
+        // return cardNumber
     },
     dialPhoneNumber: (number) => {
         console.warn('callNumber ----> ', number);
@@ -209,7 +209,10 @@ const HelpingMethods = {
             }
         }
     },
-    
+    getRoundedValue: (value) => {
+        return Math.round(value * 10) / 10
+    }
+
 }
 
 

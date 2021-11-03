@@ -120,6 +120,7 @@ function Explore(props) {
                         customMapStyle={mapStyles.light}
                         initialRegion={currentlocation}
                         showsUserLocation={true}
+                        animationEnabled={false}
                     >
                         {
                             markers.map((selectedProduct, key) => {

@@ -19,22 +19,26 @@ export const createOrder = async ({
         user_id: userId,
         product_id,
         sub_total,
+        tax,
+        transaction_charges,
+        total,
         private_sale,
+        address,
         house,
         street,
         city,
         state,
         zip_code,
         seller_id,
-        tax,
-        transaction_charges,
-        total,
-        seller_dealer_id,
-        buyer_dealer_id,
-        seller_fullfillment_id,
-        buyer_fullfillment_id,
-        address
+        //seller_dealer_id
+        //buyer_dealer_id
+        //seller_fullfillment_id,
+        //buyer_fullfillment_id,
     }
+    seller_dealer_id && [params['seller_dealer_id'] = seller_dealer_id]
+    buyer_dealer_id && [params['buyer_dealer_id'] = buyer_dealer_id]
+    seller_fullfillment_id && [params['seller_fullfillment_id'] = seller_fullfillment_id]
+    buyer_fullfillment_id && [params['buyer_fullfillment_id'] = buyer_fullfillment_id]
     console.log('createOrder Params', params);
     await axios
         .post(`${baseURL + endPoints.order.create_order}`, params)
@@ -131,10 +135,10 @@ export const getOrders = async (user_id) => {
     return response
 };
 
-export const updateOrderStatus = async ({order_id,status}) => {
+export const updateOrderStatus = async ({ order_id, status }) => {
     let response = null
     //const state = store.getState()
-   // const userId = user_id ? user_id : state.user.userDetail.id
+    // const userId = user_id ? user_id : state.user.userDetail.id
     let params = {
         order_id,
         status
@@ -163,7 +167,7 @@ export const updateOrderStatus = async ({order_id,status}) => {
 export const getInvoices = async () => {
     let response = null
     const state = store.getState()
-    const userId =  state.user.userDetail.id
+    const userId = state.user.userDetail.id
     let params = {
         seller_id: userId,
     }
@@ -188,7 +192,7 @@ export const getInvoices = async () => {
 export const getAdvanceReports = async () => {
     let response = null
     const state = store.getState()
-    const user_id =  state.user.userDetail.id
+    const user_id = state.user.userDetail.id
     let params = {
         user_id,
     }

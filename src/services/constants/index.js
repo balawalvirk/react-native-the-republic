@@ -27,7 +27,8 @@ export const endPoints = {
         submit_identity: 'submit-identity',
         approve_identity: 'approve-identity',
         reject_identity: 'reject-identity',
-        check_user: 'check-user'
+        check_user: 'check-user',
+        update_delivery_address:'update-delivery_address'
     },
     creditCard: {
         add_card: 'add-card',
@@ -96,7 +97,8 @@ export const endPoints = {
         toprated_products:'toprated-products',
         popular_products:'popular-products',
         nearby_products:'nearby-products',
-        featured_products:'featured-products'
+        featured_products:'featured-products',
+        related_products:'related-products'
     },
     post: {
         add_post: 'add-post',

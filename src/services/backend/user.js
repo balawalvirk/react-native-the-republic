@@ -357,3 +357,35 @@ export const contactUs = async (message) => {
         });
     return response
 };
+export const updateDeliveryAddress = async ({house,street,city,state,zip_code}) => {
+    let response = null
+    const reduxState = store.getState()
+    const { id } = reduxState.user.userDetail
+    const uri = `${baseURL + endPoints.user.update_delivery_address}`
+    let params = {
+        user_id: id,
+        house,
+        street,
+        city,
+        state,
+        zip_code
+    }
+    console.log('updateDeliveryAddress \nuri', uri, '\nParams', params);
+    await axios
+        .post(uri, params)
+        .then(async responseJson => {
+            const tempResponseData = responseJson.data
+            console.log('Response', tempResponseData);
+            if (tempResponseData.success) {
+                response = tempResponseData
+                dispatch(setUserDetail(tempResponseData.user))
+            } else {
+                Toasts.error(tempResponseData.message)
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};
