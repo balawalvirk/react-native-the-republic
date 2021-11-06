@@ -37,7 +37,9 @@ function MarketPlace(props) {
 
     //redux states
     const product = useSelector(state => state.product)
+    const user = useSelector(state => state.product)
     const { categories } = product
+    const { currentLocation } = user
     //local states
     const [featuredProducts, setFeaturedProducts] = useState([])
     const [popularProducts, setPopularProducts] = useState([])
@@ -64,18 +66,20 @@ function MarketPlace(props) {
                     setPopularProducts(res.products.data)
                 }
             })
-        await Backend.getNearByProducts().
+
+        await Backend.getTopRatedProducts().
+            then(res => {
+                if (res) {
+                    setTopRatedProducts(res.products.data)
+                }
+            })
+         await Backend.getNearByProducts().
             then(res => {
                 if (res) {
                     setNearYouProducts(res.nearbyProducts.data)
                 }
             })
-        // await Backend.getTopRatedProducts().
-        //     then(res => {
-        //         if (res) {
-        //             setTopRatedProducts(res.products)
-        //         }
-        //     })
+
         await Backend.get_credit_cards()
         await Backend.get_product_items()
         await Backend.get_product_manufacturers()

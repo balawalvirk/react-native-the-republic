@@ -2,30 +2,31 @@ import React, { Component, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, TextInput } from 'react-native';
 import { View, Text } from 'react-native';
 import { height } from 'react-native-dimension';
-import { ButtonColored, ButtonGradient, ComponentWrapper, ImagesPrimary, KeyboardAvoidingScrollView, MainWrapper, MediumTitle, PickerPrimary, SmallTitle, Spacer, TextInputUnderlined, TinyTitle, TitlePrimary, Toasts } from '../../../components';
+import { ButtonColored, ButtonGradient, ComponentWrapper, ImagesPrimary, KeyboardAvoidingScrollView, MainWrapper, MediumTitle, PickerPrimary, SkeletonPrimary, SmallTitle, Spacer, TextInputUnderlined, TinyTitle, TitlePrimary, Toasts } from '../../../components';
 import { appStyles, Backend, HelpingMethods, sizes } from '../../../services';
 import ImageCropPicker from 'react-native-image-crop-picker';
 
-const features = [
-    {
-        label: 'Searching Product',
-        value: 'Searching Product'
-    },
-    {
-        label: 'Add Product',
-        value: 'Add Product'
-    },
-    {
-        label: 'Registration',
-        value: 'Registration',
-    },
-    {
-        label: 'Subscription',
-        value: 'Subscription',
-    }
-]
+// const features = [
+//     {
+//         label: 'Searching Product',
+//         value: 'Searching Product'
+//     },
+//     {
+//         label: 'Add Product',
+//         value: 'Add Product'
+//     },
+//     {
+//         label: 'Registration',
+//         value: 'Registration',
+//     },
+//     {
+//         label: 'Subscription',
+//         value: 'Subscription',
+//     }
+// ]
 function Comments(props) {
     const { goBack } = props.navigation
+    const [features, setFeatures] = useState(null)
     const [selectedFeature, selectFeature] = useState('')
     const [featureError, setFeatureError] = useState('')
     const [comment, setComment] = useState('')
@@ -33,7 +34,29 @@ function Comments(props) {
     const [images, setImages] = useState([])
     const [loading, setLoading] = useState(false)
 
+    useEffect(() => {
+        getSetFeatures()
+    }, [])
 
+    const getSetFeatures = () => {
+        Backend.getFeatures().
+            then(res => {
+                if (res) {
+                    let tempFeatures = []
+                    if (res.features.length) {
+                        for (const item of res.features) {
+                            const tempObj = {
+                                ...item,
+                                label: item.name,
+                                value: item.name
+                            }
+                            tempFeatures.push(tempObj)
+                        }
+                    }
+                    setFeatures(tempFeatures)
+                }
+            })
+    }
     const takePics = () => {
         ImageCropPicker.openPicker({
             quality: 5,
@@ -69,7 +92,7 @@ function Comments(props) {
         }
     }
     const handleSubmitFeedback = async () => {
-        console.log('images-->',images)
+        console.log('images-->', images)
         if (validations()) {
             setLoading(true)
             await Backend.submitAppFeedback({ feature: selectedFeature, comment, images }).
@@ -90,16 +113,21 @@ function Comments(props) {
                     <SmallTitle style={[appStyles.textPrimaryColor]}>Your comments about the app functionality and features will help us improve it</SmallTitle>
                 </ComponentWrapper>
                 <Spacer height={sizes.baseMargin} />
-                <PickerPrimary
-                    title="Feature / Functionality"
-                    value={selectedFeature}
-                    data={features}
-                    onChange={(value, index) => {
-                        featureError && setFeatureError('')
-                        selectFeature(value)
-                    }}
-                    error={featureError}
-                />
+                {
+                    features ?
+                        <PickerPrimary
+                            title="Feature / Functionality"
+                            value={selectedFeature}
+                            data={features}
+                            onChange={(value, index) => {
+                                featureError && setFeatureError('')
+                                selectFeature(value)
+                            }}
+                            error={featureError}
+                        />
+                        :
+                        <SkeletonPrimary />
+                }
                 <Spacer height={sizes.baseMargin * 2} />
                 <TextInputUnderlined
                     titleStatic="Your Comments"

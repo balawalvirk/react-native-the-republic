@@ -5,7 +5,7 @@ import { ProductCardPrimary } from "../../cards";
 import { Wrapper } from '../../wrappers';
 import styles from './styles'
 import * as RootNavigation from '../../../services/navigation/rootNavigation'
-import { SkeletonProductsGrid, Spacer } from '../..';
+import { SkeletonPrimary, SkeletonProductsGrid, Spacer } from '../..';
 import { NoDataViewPrimary } from '..';
 
 export function Products({ data, viewType, ListHeaderComponent, ListFooterComponent, onPressProduct, isLoading, isLoadingMore, onEndReached }) {
@@ -19,7 +19,21 @@ export function Products({ data, viewType, ListHeaderComponent, ListFooterCompon
         <>
             {
                 isLoading ?
-                    <SkeletonProductsGrid />
+                    <>
+                        {
+                            isGridView ?
+                                <SkeletonProductsGrid />
+                                :
+                                isListView ?
+                                    [1, 2, 3, 4, 5, 6].map((item, index) => {
+                                        return (
+                                            <SkeletonPrimary itemStyle={{ marginTop: sizes.marginVertical }} />
+                                        )
+                                    })
+                                    :
+                                    null
+                        }
+                    </>
                     :
                     data.length ?
                         <FlatList
@@ -72,9 +86,14 @@ export function Products({ data, viewType, ListHeaderComponent, ListFooterCompon
                                         {isLoadingMore ?
                                             <>
                                                 <Spacer height={sizes.baseMargin} />
-                                                <SkeletonProductsGrid
-                                                    NumOfItems={2}
-                                                />
+                                                {
+                                                    isGridView ?
+                                                        <SkeletonProductsGrid
+                                                            NumOfItems={2}
+                                                        />
+                                                        :
+                                                        <SkeletonPrimary  />
+                                                }
                                                 <Spacer height={sizes.baseMargin} />
 
                                             </>

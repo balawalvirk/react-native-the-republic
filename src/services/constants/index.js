@@ -94,11 +94,14 @@ export const endPoints = {
         show_calibers: 'show-calibers',
         show_actions: 'show-actions',
         show_conditions: 'show-conditions',
-        toprated_products:'toprated-products',
+        top_rated_products:'top-rated-products',
         popular_products:'popular-products',
         nearby_products:'nearby-products',
         featured_products:'featured-products',
-        related_products:'related-products'
+        related_products:'related-products',
+        get_all_products:'get-all-products',
+        get_map_products:'get-map-products',
+        get_product_detail:'single-product'
     },
     post: {
         add_post: 'add-post',
@@ -161,6 +164,10 @@ export const endPoints = {
         add_bank_account:'add-bank-account',
         get_bank_accounts:'get-bank-accounts',
         get_banks:'get-banks'
+    },
+    feature:{
+        add_feature:'add-feature',
+        show_features:'show-features',
     },
     contact_us: 'contact-us',
     add_card: 'add-card',

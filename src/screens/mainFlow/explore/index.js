@@ -1,8 +1,8 @@
-import React, { Component, useRef, useState } from 'react';
+import React, { Component, useEffect, useRef, useState } from 'react';
 import { View, Text } from 'react-native';
 import { height, totalSize } from 'react-native-dimension';
 import { MainWrapper, Products, RowWrapper, Wrapper, ButtonGroupAnimated, CustomIcon, AbsoluteWrapper, ButtonColoredSmall, Spacer, ProductCardPrimary, TitleInfoPrimary, ButtonGradient, ArmerInfo, Toasts, MediumText, FilterButton } from '../../../components';
-import { appIcons, appStyles, colors, DummyData, HelpingMethods, mapStyles, routes, sizes } from '../../../services';
+import { appIcons, appStyles, Backend, colors, DummyData, HelpingMethods, mapStyles, routes, sizes } from '../../../services';
 import MapView from "react-native-map-clustering";
 import { Marker } from "react-native-maps";
 import BottomSheet from 'reanimated-bottom-sheet';
@@ -35,20 +35,57 @@ const topTabs = [
 ]
 function Explore(props) {
     const { navigate } = props.navigation
+
+
+
+    //Refs
+    const mapRef = useRef(null)
+    const sheetRef = useRef(null);
+
+    //local states
+    const [allProducts, setAllProducts] = useState([])
+    const [currentPage, setCurrentPage] = useState(1)
+    const [loading, setLoading] = useState(true)
+    const [loadingMore, setLoadingMore] = useState(false)
+    const [allItemsLoaded, setAllItemsLoaded] = useState(false)
+
+    const [mapProducts, setMapProducts] = useState(null)
     const [selectedViewIndex, setViewIndex] = useState(0)
     const [selectedTabIndex, setSelectedTabIndex] = useState(0)
     const [currentlocation, setCurrentLocation] = useState(defaultLocation)
     const [markers, setMarkers] = useState(DummyData.products)
     const [selectedProduct, setProduct] = useState(DummyData.products[0])
 
-    //Refs
-    const mapRef = useRef(null)
-    const sheetRef = useRef(null);
+    useEffect(() => {
+        getInitialData()
+    }, [])
 
-    const allProducts = DummyData.products
+
+    const getInitialData = async () => {
+        await getSetAllProducts()
+        setLoading(false)
+    }
+    const handleLoadingMore = async () => {
+        if (!allItemsLoaded) {
+            setLoadingMore(true)
+            await getSetAllProducts()
+            setCurrentPage(currentPage + 1)
+            setLoadingMore(false)
+        }
+    }
+    const getSetAllProducts = async () => {
+        await Backend.getAllProducts(currentPage).
+            then(res => {
+                if (res) {
+                    setAllProducts([...allProducts, ...res.products.data])
+                    !res.products.next_page_url && setAllItemsLoaded(true)
+                }
+            })
+    }
+
+    // const allProducts = DummyData.products
 
     const renderContent = () => (
-
         <View
             style={{
                 backgroundColor: 'transparent',
@@ -98,21 +135,21 @@ function Explore(props) {
         <MainWrapper>
             {
                 selectedTabIndex === 0 ?
-                    <Products
-                        data={allProducts}
-                        onPressProduct={(item, index) => navigate(routes.productDetail, { product: item })}
-                        viewType={selectedViewIndex === 0 ? 'grid' : 'list'}
-                        ListHeaderComponent={() => {
-                            return <Spacer height={sizes.baseMargin * 4} />
-                        }}
-                        ListFooterComponent={() => {
-                            return <Spacer height={sizes.baseMargin * 4} />
-                        }}
-                    />
+                < Products
+                data={allProducts}
+                onPressProduct={(item, index) => navigate(routes.productDetail, { product: item })}
+                viewType={selectedViewIndex === 0 ? 'grid' : 'list'}
+                ListHeaderComponent={() => {
+                    return <Spacer height={sizes.baseMargin * 4} />
+                }}
+                isLoading={loading}
+                isLoadingMore={loadingMore}
+                onEndReached={(data) => {
+                    console.log('onEndReached Data --->', data)
+                    handleLoadingMore()
+                }}
+            />
                     :
-                    // <Map
-                    //     data={allProducts}
-                    // />
                     <MapView
                         ref={mapRef}
                         style={styles.map}
@@ -153,19 +190,19 @@ function Explore(props) {
                             initalIndex={selectedViewIndex}
                             text='title'
                             onPressButton={(item, index) => setViewIndex(index)}
-                            containerStyle={[{ backgroundColor: 'white', borderRadius: 100, opacity: selectedTabIndex === 0 ? 1 : 0,borderWidth:1,borderColor:colors.appBgColor3 }]}
+                            containerStyle={[{ backgroundColor: 'white', borderRadius: 100, opacity: selectedTabIndex === 0 ? 1 : 0, borderWidth: 1, borderColor: colors.appBgColor3 }]}
                             inActiveButtonStyle={{ backgroundColor: 'transparent', marginRight: 0, marginLeft: 0, paddingHorizontal: sizes.marginHorizontal / 1.5, paddingVertical: sizes.smallMargin, }}
                             iconSize={totalSize(2)}
                         />
 
                     </Wrapper>
                     <FilterButton
-                    onPress={() => navigate(routes.sortFilter, {
-                        clearFilter: () => { Toasts.success('Filter cleared') },
-                        applyFilter: () => { Toasts.success('Filter applied') }
-                    })}
-                    buttonStyle={{marginHorizontal:0}}
-                />
+                        onPress={() => navigate(routes.sortFilter, {
+                            clearFilter: () => { Toasts.success('Filter cleared') },
+                            applyFilter: () => { Toasts.success('Filter applied') }
+                        })}
+                        buttonStyle={{ marginHorizontal: 0 }}
+                    />
                 </RowWrapper>
                 <Spacer height={sizes.baseMargin} />
             </AbsoluteWrapper>
@@ -176,9 +213,9 @@ function Explore(props) {
                         initalIndex={selectedTabIndex}
                         text='title'
                         onPressButton={(item, index) => setSelectedTabIndex(index)}
-                        containerStyle={[{ backgroundColor: 'white', borderRadius: 100,borderWidth:1,borderColor:colors.appBgColor1 }, appStyles.shadow]}
-                        inActiveButtonStyle={{ backgroundColor: 'transparent', marginRight: 0, marginLeft: 0, paddingHorizontal: sizes.marginHorizontal * 2,paddingVertical:0 }}
-                        activeButtonStyle={{backgroundColor:colors.appColor2}}
+                        containerStyle={[{ backgroundColor: 'white', borderRadius: 100, borderWidth: 1, borderColor: colors.appBgColor1 }, appStyles.shadow]}
+                        inActiveButtonStyle={{ backgroundColor: 'transparent', marginRight: 0, marginLeft: 0, paddingHorizontal: sizes.marginHorizontal * 2, paddingVertical: 0 }}
+                        activeButtonStyle={{ backgroundColor: colors.appColor2 }}
                     />
                 </Wrapper>
             </AbsoluteWrapper>

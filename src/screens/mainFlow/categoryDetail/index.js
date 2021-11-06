@@ -100,7 +100,7 @@ function CategoryDetail(props) {
             await Backend.getTopRatedProducts(currentPage).
                 then(res => {
                     if (res) {
-                        setProducts([...products, ...res.nearbyProducts.data])
+                        setProducts([...products, ...res.products.data])
 
                         !res.products.next_page_url && setAllItemsLoaded(true)
 

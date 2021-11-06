@@ -158,7 +158,82 @@ export const delete_product = async (product_id) => {
     }
     return response
 };
-
+export const getProductDetail = async (product_id) => {
+    let response = null
+    const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    if (isInternetAvailable) {
+        await axios
+            .post(`${baseURL + endPoints.product.get_product_detail}`, { product_id })
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
+    }
+    return response
+};
+export const getAllProducts = async (page) => {
+    let response = null
+    const defaultPage = page ? page : 1
+    // const state = store.getState()
+    // const { id } = state.user.userDetail
+    const params = {
+    }
+    const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    if (isInternetAvailable) {
+        await axios
+            .post(`${baseURL + endPoints.product.get_all_products}?page=${defaultPage}`, params)
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('getAllProducts Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
+    }
+    return response
+};
+export const getMapProducts = async (page) => {
+    let response = null
+    const defaultPage = page ? page : 1
+    // const state = store.getState()
+    // const { id } = state.user.userDetail
+    const params = {
+    }
+    const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    if (isInternetAvailable) {
+        await axios
+            .post(`${baseURL + endPoints.product.get_map_products}`, params)
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('getMapProducts Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
+    }
+    return response
+};
 
 export const getFeaturedProducts = async (page) => {
     let response = null
@@ -265,7 +340,7 @@ export const getTopRatedProducts = async (page) => {
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios
-            .post(`${baseURL + endPoints.product.toprated_products}?page=${defaultPage}`, params)
+            .post(`${baseURL + endPoints.product.top_rated_products}?page=${defaultPage}`, params)
             .then(async responseJson => {
                 const tempResponseData = responseJson.data
                 console.log('getTopRatedProducts Response', tempResponseData);

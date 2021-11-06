@@ -5,7 +5,7 @@ import {
     SET_CURRENT_LOCATION
 } from '../actionTypes'
 
-const INITIAL_STATE = {
+const INITIAL_STATE = {        
     userDetail: null,
     creditCards: [],
     reports: null,

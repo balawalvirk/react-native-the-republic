@@ -53,7 +53,7 @@ function MyLocation(props) {
         latitude ? setLatitude(latitude) : setLatitude(coords.latitude)
         longitude ? setLongitude(longitude) : setLongitude(coords.longitude)
         address && setAddress(address) 
-        distance && setDistance(distance)
+        distance && setDistance(Number(distance))
     }
 
     const handleSetAddress = (details, location) => {
