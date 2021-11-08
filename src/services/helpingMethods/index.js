@@ -47,12 +47,59 @@ const HelpingMethods = {
     },
     checkIsProductFavourite: (productId) => {
         let isFavourite = false
-        const favouritProducts = dummyData.userData.favourite_products
-        const favProduct = favouritProducts.find(item => {
-            return item === productId
-        })
-        if (favProduct) isFavourite = true
+        const state = store.getState()
+        const { favorite_products } = state.user.userDetail
+        if (favorite_products) {
+            if (favorite_products.length) {
+                const matchedId = favorite_products.find(id => id === productId)
+                if (matchedId) {
+                    isFavourite = true
+                }
+            }
+        }
         return isFavourite
+    },
+    checkIfDealerFavourite: (dealerId) => {
+        let isFavourite = false
+        const state = store.getState()
+        const { favorite_dealers } = state.user.userDetail
+        if (favorite_dealers) {
+            if (favorite_dealers.length) {
+                const matchedId = favorite_dealers.find(id => id === dealerId)
+                if (matchedId) {
+                    isFavourite = true
+                }
+            }
+        }
+        return isFavourite
+    },
+    checkIfFollowingUser: (userId) => {
+        let isFollowing = false
+        const state = store.getState()
+        const { following_ids } = state.user.userDetail
+        if (following_ids) {
+            if (following_ids.length) {
+                const matchedId = following_ids.find(id => id === userId)
+                if (matchedId) {
+                    isFollowing = true
+                }
+            }
+        }
+        return isFollowing
+    },
+    checkIfFollowRequestSent: (userId) => {
+        let isRequestSent = false
+        const state = store.getState()
+        const { follow_request_sent } = state.user.userDetail
+        if (follow_request_sent) {
+            if (follow_request_sent.length) {
+                const matchedId = follow_request_sent.find(id => id === userId)
+                if (matchedId) {
+                    isRequestSent = true
+                }
+            }
+        }
+        return isRequestSent
     },
     checkIsPostLiked: (postId) => {
         let isLiked = false
@@ -182,6 +229,23 @@ const HelpingMethods = {
                 return Linking.openURL(url)
             }
         }).catch(err => console.error('An error occurred', err))
+    },
+    getMyLocation: () => {
+        let latitude = ''
+        let longitude = ''
+        let userCurrentLocation = null
+        const state = store.getState()
+        const { userDetail, currentLocation } = state.user
+       // const { latitude, longitude, distance, address } = userDetail
+        currentLocation && [userCurrentLocation = currentLocation.coords]
+        console.log('currentLocation', currentLocation)
+        latitude = userDetail.latitude ? userDetail.latitude : userCurrentLocation ? userCurrentLocation.latitude : ''
+        longitude = userDetail.longitude ? userDetail.longitude : userCurrentLocation ? userCurrentLocation.longitude : ''
+        if (latitude && longitude) {
+            return { latitude, longitude }
+        } else {
+            return null
+        }
     },
     RequestLocationAccess: async () => {
         if (Platform.OS === 'ios') {

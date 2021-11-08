@@ -53,13 +53,13 @@ function DeliveryAddress(props) {
 
     const getSetDeliveryAddressData = () => {
         if (delivery_address) {
-            const { address, house, street, city, state, zipcode } = delivery_address
+            const { address, house, street, city, state, zip_code } = delivery_address
             address && setAddress(address)
             house && setHouse(house)
             street && setStreet(street)
             city && setCity(city)
             state && setState(state)
-            zipcode && setZip(zipcode)
+            zip_code && setZip(zip_code)
         }
     }
     const validations = () => {

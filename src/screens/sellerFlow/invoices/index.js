@@ -23,7 +23,7 @@ function Invoices(props) {
     await Backend.getInvoices().
       then(res => {
         if (res) {
-          setInvoices(res.invoices)
+          setInvoices(res.data)
         }
       })
   }

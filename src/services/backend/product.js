@@ -207,9 +207,8 @@ export const getAllProducts = async (page) => {
     }
     return response
 };
-export const getMapProducts = async (page) => {
+export const getMapProducts = async () => {
     let response = null
-    const defaultPage = page ? page : 1
     // const state = store.getState()
     // const { id } = state.user.userDetail
     const params = {
@@ -397,7 +396,7 @@ export const get_product_items = async () => {
                 console.log('Response', tempResponseData);
                 if (tempResponseData.success) {
                     response = tempResponseData
-                    let tempData = HelpingMethods.getPickerData(tempResponseData.items)
+                    let tempData = HelpingMethods.getPickerData(tempResponseData.data)
                     dispatch(setProductItems(tempData))
                     //Saving in local storage
                     AsyncStorage.setItem(asyncConts.product_items, JSON.stringify(tempData))
@@ -431,7 +430,7 @@ export const get_product_categories = async () => {
                 console.log('Response', tempResponseData);
                 if (tempResponseData.success) {
                     response = tempResponseData
-                    const tempData = HelpingMethods.getPickerData(tempResponseData.categories)
+                    const tempData = HelpingMethods.getPickerData(tempResponseData.data)
                     dispatch(setProductCategories(tempData))
                     //Saving in local storage
                     AsyncStorage.setItem(asyncConts.product_categories, JSON.stringify(tempData))
@@ -465,7 +464,7 @@ export const get_product_manufacturers = async () => {
                 console.log('Response', tempResponseData);
                 if (tempResponseData.success) {
                     response = tempResponseData
-                    const tempData = HelpingMethods.getPickerData(tempResponseData.manufacturers)
+                    const tempData = HelpingMethods.getPickerData(tempResponseData.data)
                     dispatch(setProductManufacturers(tempData))
                     //Saving in local storage
                     AsyncStorage.setItem(asyncConts.product_manufacturers, JSON.stringify(tempData))
@@ -499,7 +498,7 @@ export const get_product_calibers = async () => {
                 console.log('Response', tempResponseData);
                 if (tempResponseData.success) {
                     response = tempResponseData
-                    const tempData = HelpingMethods.getPickerData(tempResponseData.calibers)
+                    const tempData = HelpingMethods.getPickerData(tempResponseData.data)
                     dispatch(setProductCalibers(tempData))
                     //Saving in local storage
                     AsyncStorage.setItem(asyncConts.product_calibers, JSON.stringify(tempData))
@@ -533,7 +532,7 @@ export const get_product_actions = async () => {
                 console.log('Response', tempResponseData);
                 if (tempResponseData.success) {
                     response = tempResponseData
-                    const tempData = HelpingMethods.getPickerData(tempResponseData.actions)
+                    const tempData = HelpingMethods.getPickerData(tempResponseData.data)
                     dispatch(setProductActions(tempData))
                     //Saving in local storage
                     AsyncStorage.setItem(asyncConts.product_actions, JSON.stringify(tempData))
@@ -567,7 +566,7 @@ export const get_product_conditions = async () => {
                 console.log('Response', tempResponseData);
                 if (tempResponseData.success) {
                     response = tempResponseData
-                    const tempData = HelpingMethods.getPickerData(tempResponseData.conditions)
+                    const tempData = HelpingMethods.getPickerData(tempResponseData.data)
                     dispatch(setProductConditions(tempData))
                     //Saving in local storage
                     AsyncStorage.setItem(asyncConts.product_conditions, JSON.stringify(tempData))
@@ -770,11 +769,11 @@ export const getProductReviews = async (product_id) => {
     return response
 };
 
-export const handleFavouriteProduct = async (product_id) => {
+export const handleAddRemoveFavouriteProduct = async (product_id) => {
     let response = null
     if (HelpingMethods.checkIsProductFavourite(product_id)) {
-       await removeFavouriteProduct(product_id)
-    }else{
+        await removeFavouriteProduct(product_id)
+    } else {
         await addFavouriteProduct(product_id)
     }
     return response

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { FlatList } from "react-native-gesture-handler";
-import { appImages, HelpingMethods, sizes } from '../../../services';
+import { appImages, Backend, HelpingMethods, sizes } from '../../../services';
 import { ProductCardPrimary } from "../../cards";
 import { Wrapper } from '../../wrappers';
 import styles from './styles'
@@ -66,7 +66,7 @@ export function Products({ data, viewType, ListHeaderComponent, ListFooterCompon
                                                 isListView ? [styles.productContainerList] : null
                                         }
                                         isFavourite={HelpingMethods.checkIsProductFavourite(item.id)}
-                                        onPressHeart={() => { }}
+                                        onPressHeart={() => Backend.handleAddRemoveFavouriteProduct(item.id)}
                                         viewType={viewType}
                                         image={item.images ? JSON.parse(item.images)[0] : appImages.noImageAvailable}
                                         description={item.title}
@@ -92,7 +92,7 @@ export function Products({ data, viewType, ListHeaderComponent, ListFooterCompon
                                                             NumOfItems={2}
                                                         />
                                                         :
-                                                        <SkeletonPrimary  />
+                                                        <SkeletonPrimary />
                                                 }
                                                 <Spacer height={sizes.baseMargin} />
 
@@ -136,7 +136,7 @@ export function ProductsSecondary({ data, ListHeaderComponent, ListFooterCompone
                             styles.productContainerGrid
                         }
                         isFavourite={HelpingMethods.checkIsProductFavourite(item.id)}
-                        onPressHeart={() => { }}
+                        onPressHeart={() => Backend.handleAddRemoveFavouriteProduct(item.id)}
                         image={item.image}
                         images={item.images}
                         description={item.description}
@@ -185,7 +185,7 @@ export function ProductsHorizontalyPrimary({ data, ListHeaderComponent, ListFoot
                         animation={'fadeInUp'}
                         duration={300 + (50 * (index + 1))}
                         isFavourite={HelpingMethods.checkIsProductFavourite(item.id)}
-                        onPressHeart={() => { }}
+                        onPressHeart={() => Backend.handleAddRemoveFavouriteProduct(item.id)}
                         image={productImages ? productImages[0] : appImages.noImageAvailable}
                         //images={item.images}
                         description={item.title}

@@ -43,7 +43,7 @@ function WithdrawEarnings(props) {
         await Backend.getBankAccounts().
             then(res => {
                 if (res) {
-                    setBackAccounts(res.bankAccounts)
+                    setBackAccounts(res.data)
                 }
             })
     }

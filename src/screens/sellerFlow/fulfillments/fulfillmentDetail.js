@@ -60,7 +60,7 @@ function FulfillmentDetail(props) {
             then(async res => {
                 setLoading(false)
                 if (res) {
-                    await props.navigation.setParams({ item: res.fullfillment })
+                    await props.navigation.setParams({ item: res.data })
                     Toasts.success('Status Updated Successfully')
                 }
             })

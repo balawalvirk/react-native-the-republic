@@ -43,8 +43,8 @@ function Comments(props) {
             then(res => {
                 if (res) {
                     let tempFeatures = []
-                    if (res.features.length) {
-                        for (const item of res.features) {
+                    if (res.data.length) {
+                        for (const item of res.data) {
                             const tempObj = {
                                 ...item,
                                 label: item.name,

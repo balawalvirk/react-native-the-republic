@@ -32,7 +32,7 @@ function YourProducts(props) {
     Backend.get_user_products().
       then(async res => {
         if (res) {
-          setProducts(res.products.data)
+          setProducts(res.data.data)
         }
       })
   }

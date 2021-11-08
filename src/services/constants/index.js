@@ -28,7 +28,7 @@ export const endPoints = {
         approve_identity: 'approve-identity',
         reject_identity: 'reject-identity',
         check_user: 'check-user',
-        update_delivery_address:'update-delivery_address'
+        update_delivery_address:'update-delivery-address'
     },
     creditCard: {
         add_card: 'add-card',
@@ -45,7 +45,11 @@ export const endPoints = {
         accept_follow_request: 'accept-follow-request',
         decline_follow_request: 'decline-follow-request',
         show_followers: 'show-followers',
-        unfollow_user: 'unfollow-user'
+        //unfollow_user: 'unfollow-user',
+        unfollow_follower:'unfollow-follower',
+        show_followings:'show-followings',
+        unfollow_following:'unfollow-following'
+
     },
     training: {
         show_trainings: 'show-trainings',
@@ -158,7 +162,9 @@ export const endPoints = {
     },
     dealer:{
         get_dealers:'get-dealers',
-        search_dealers:'search-dealers'
+        search_dealers:'search-dealers',
+        add_favorite_dealer:'add-favorite-dealer',
+        remove_favorite_dealer:'remove-favorite-dealer'
     },
     bank:{
         add_bank_account:'add-bank-account',

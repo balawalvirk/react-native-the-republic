@@ -25,7 +25,7 @@ const SkeletonItemPrimary = ({ style, h, w }) => {
         </Wrapper>
     )
 }
-export const SkeletonServiceDetails = ({ itemStyle }) => {
+export const SkeletonProductDetails = ({ itemStyle }) => {
     return (
         <SkeletonPlaceholder>
 
@@ -59,7 +59,7 @@ export const SkeletonServiceDetails = ({ itemStyle }) => {
         </SkeletonPlaceholder>
     )
 }
-export const SkeletonListVerticalPrimary = ({ itemStyle }) => {
+export const SkeletonListVerticalPrimary = ({ itemStyle,itemHeight }) => {
     const list = [1, 2, 3,]
     return (
         <SkeletonPlaceholder>
@@ -68,12 +68,11 @@ export const SkeletonListVerticalPrimary = ({ itemStyle }) => {
                     return (
                         <Wrapper style={[{ marginLeft: sizes.marginHorizontal, marginTop: sizes.marginVertical, }, itemStyle]}>
                             <Wrapper style={{ height: height(2), width: width(40), borderRadius: sizes.cardRadius, marginBottom: sizes.smallMargin }} />
-                            <Wrapper style={[{ height: height(20), width: width(90), borderRadius: sizes.cardRadius }]} />
+                            <Wrapper style={[{ height: itemHeight?itemHeight:height(20), width: width(90), borderRadius: sizes.cardRadius }]} />
                             <Wrapper style={{ marginHorizontal: sizes.marginHorizontal, flexDirection: 'row', justifyContent: 'flex-end', marginVertical: sizes.smallMargin, alignItems: 'center', }}>
                                 <Wrapper style={[{ height: height(5), width: totalSize(7), borderRadius: sizes.cardRadius, }]} />
                                 <Wrapper style={[styles.horizontalMarginBase]} />
                                 <Wrapper style={[{ height: height(5), width: totalSize(7), borderRadius: sizes.cardRadius, }]} />
-
                             </Wrapper>
                         </Wrapper>
                     )

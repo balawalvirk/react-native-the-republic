@@ -1,72 +1,92 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, Image } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
-import { AbsoluteWrapper, RenderTags, MainWrapper, Spacer, ButtonGradient, Wrapper, IconHeart, ComponentWrapper, SmallTitle, RowWrapperBasic, MediumText, RegularText, TinyText, SmallText, TinyTitle, RenderKeyPoints, UserCardPrimary, ArmerInfo, KeyboardAvoidingScrollView, Reviews, Products, TitlePrimary, IconButton, BackIconAbsolute, RowWrapper, SkeletonServiceDetails } from '../../../components';
+import { AbsoluteWrapper, RenderTags, MainWrapper, Spacer, ButtonGradient, Wrapper, IconHeart, ComponentWrapper, SmallTitle, RowWrapperBasic, MediumText, RegularText, TinyText, SmallText, TinyTitle, RenderKeyPoints, UserCardPrimary, ArmerInfo, KeyboardAvoidingScrollView, Reviews, Products, TitlePrimary, IconButton, BackIconAbsolute, RowWrapper, SkeletonProductDetails } from '../../../components';
 import { appIcons, appImages, appStyles, Backend, colors, HelpingMethods, routes, sizes } from '../../../services';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 import dummyData from '../../../services/constants/dummyData';
+import { useFocusEffect } from '@react-navigation/core';
 
 
 
 function ProductDetail(props) {
+    //navigation states
     const { navigation, route } = props
     const { navigate, replace, push, goBack } = navigation
-    const { product } = route.params
-    //const { info, user } = product
-    const tags = ['Handguns', 'Semi Automatic', 'Suppressor']
-    const keyPoints = [
-        {
-            title: 'See the light.',
-            description: 'This is the detail and modal description for the following point lorem ipsum'
-        },
-        {
-            title: 'See the light.',
-            description: 'This is the detail and modal description for the following point lorem ipsum'
-        },
-        {
-            title: 'See the light.',
-            description: 'This is the detail and modal description for the following point lorem ipsum'
-        },
-        {
-            title: 'See the light.',
-            description: 'This is the detail and modal description for the following point lorem ipsum'
-        }
-    ]
-    const reviews = dummyData.reviews
-    //const relatedProducts = dummyData.products.slice().reverse()
+    const { product, productId } = route.params
+    const product_id = productId ? productId : product ? product.id : ''
 
     //local states
     const [isLoading, setLoading] = useState(true)
     const [productDetail, setProductDetail] = useState(null)
-    // const [productReviews, setProductReviews] = useState(null)
+    const [productReviews, setProductReviews] = useState([])
     const [relatedProducts, setRelatedProducts] = useState([])
+
+    //constants
     let user = {}
     let productInfo = {}
-    let productReviews = []
+    //let productReviews = []
     let productImage = null
-    let productTags=[]
+    let productTags = []
+
+
     useEffect(() => {
         getSetData()
     }, [])
 
+    useFocusEffect(
+        React.useCallback(() => {
+            if (props.route.params) {
+                const { product, productId } = props.route.params
+                const new_product_id = productId ? productId : product ? product.id : ''
+                console.log('New Params --->', props.route.params)
+                console.log('new_product_id --->', new_product_id)
+                console.log('old_product_id --->', product_id)
+                if (productDetail) {
+                    console.log('productDetail_id --->', productDetail.id)
 
+                    if (productDetail.id != product_id) {
+                        setLoading(true)
+                        // props.navigation.setParams({ product: product && product, productId: productId && productId })
+                        getSetData()
+                    }
+
+                }
+            }
+        }, [props, productDetail])
+    )
     const getSetData = async () => {
-        if (product) {
-            setProductDetail(product)
-            //setProductReviews(product.reviews)
-            await Backend.getRelatedProducts({ product_id: product.id }).
+        if (productId) {
+            await Backend.getProductDetail(productId).
                 then(res => {
                     if (res) {
-                        setRelatedProducts(res.relatedProducts.data)
+                        setProductDetail(res.data)
                     }
                 })
+            setProductReviews(product.reviews)
+
+        } else if (product) {
+            setProductDetail(product)
         }
+        await Backend.getProductReviews(product_id).
+            then(res => {
+                if (res) {
+                    setProductReviews(res.data)
+                }
+            })
+        await Backend.getRelatedProducts({ product_id }).
+            then(res => {
+                if (res) {
+                    setRelatedProducts(res.data.data)
+                }
+            })
         setLoading(false)
     }
+
     if (isLoading) {
         return (
-            <SkeletonServiceDetails />
+            <SkeletonProductDetails />
         )
     } else if (productDetail) {
         const { item, type, manufacturer, caliber, action, condition, images, reviews } = productDetail
@@ -77,8 +97,8 @@ function ProductDetail(props) {
             item, type, manufacturer, caliber, action, condition
         }
         productInfo = tempProdInfo
-        productTags=Object.keys(tempProdInfo).map((key) =>  tempProdInfo[key])
-        productReviews = reviews
+        productTags = Object.keys(tempProdInfo).map((key) => tempProdInfo[key])
+        //productReviews = reviews
     }
     return (
         <MainWrapper>
@@ -101,7 +121,7 @@ function ProductDetail(props) {
                             containerStyle={{ position: 'absolute', bottom: sizes.smallMargin, right: sizes.marginHorizontalSmall }}
                             containerSize={totalSize(4.5)}
                             containerColor={colors.appBgColor1}
-                            onPress={()=>Backend.handleFavouriteProduct(productDetail.id)}
+                            onPress={() => Backend.handleAddRemoveFavouriteProduct(productDetail.id)}
                         />
                     </AbsoluteWrapper>
                 </Wrapper>
@@ -128,15 +148,15 @@ function ProductDetail(props) {
                         <SmallText>{productDetail.rating} ({productDetail.reviews_count})</SmallText>
                     </RowWrapperBasic>
                     <Spacer height={sizes.baseMargin} />
-                    <RenderTags tags={productTags.slice(0,3)} />
+                    <RenderTags tags={productTags.slice(0, 3)} />
                 </ComponentWrapper>
                 <Spacer height={sizes.baseMargin} />
                 <UserCardPrimary
                     imageUri={user ? user.profile_image ? user.profile_image : appImages.noUser : appImages.noUser}
-                    title={user.first_name + ' ' + user.last_name}
+                    title={user?user.first_name + ' ' + user.last_name:'Anonynous'}
                     subTitle={'3 miles away'}
                     gradiant
-                    onPressViewProfile={() => { }}
+                    onPressViewProfile={() => navigate(routes.userProfile, { user })}
                 />
                 <Spacer height={sizes.baseMargin} />
                 <ArmerInfo
@@ -153,7 +173,7 @@ function ProductDetail(props) {
                 <TitlePrimary
                     title="Reviews"
                     onPressRight={() => navigate(routes.reviews)}
-                    rightText={<RegularText style={[appStyles.fontBold,appStyles.textGray]}>Not Reviewed Yet</RegularText>}
+                    rightText={<RegularText style={[appStyles.fontBold, appStyles.textGray]}>Not Reviewed Yet</RegularText>}
                 />
                 <Spacer height={sizes.smallMargin} />
                 {
@@ -163,9 +183,9 @@ function ProductDetail(props) {
                         />
 
                         :
-                       <ComponentWrapper>
-                            <RegularText style={[appStyles.textGray,appStyles.textCenter]}>No Reviews Found</RegularText>
-                       </ComponentWrapper>
+                        <ComponentWrapper>
+                            <RegularText style={[appStyles.textGray, appStyles.textCenter]}>No Reviews Found</RegularText>
+                        </ComponentWrapper>
                 }
                 <Spacer height={sizes.baseMargin} />
                 <TitlePrimary

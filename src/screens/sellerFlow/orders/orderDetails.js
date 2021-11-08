@@ -86,7 +86,7 @@ function OrderDetail(props) {
                 }
                 setLoadingAcceptIndex(-1)
                 if (res) {
-                    setOrder(res.order)
+                    setOrder(res.data)
                     Toasts.success('Order has been accepted')
                 }
             })
@@ -102,7 +102,7 @@ function OrderDetail(props) {
             then(async res => {
                 setLoadingCancelIndex(-1)
                 if (res) {
-                    setOrder(res.order)
+                    setOrder(res.data)
                     Toasts.success('Order has been cancelled')
                 }
             })
@@ -121,7 +121,7 @@ function OrderDetail(props) {
             then(async res => {
                 setLoadingStatus(false)
                 if (res) {
-                    setOrder(res.order)
+                    setOrder(res.data)
                     Toasts.success('Order status updated')
                 }
             })

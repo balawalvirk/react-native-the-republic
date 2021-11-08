@@ -25,4 +25,15 @@ export const Toasts = {
             // shadowColor: colors.appBgColor1
         })
     },
+    warn: (text) => {
+        Keyboard.dismiss()
+        Toast.show(text ? text : 'Toast Message', {
+            backgroundColor: colors.bloodOrange,
+            textColor: colors.appTextColor6,
+            textStyle: [appStyles.textMedium,appStyles.textWhite],
+            duration: 2000,
+            shadow: false,
+            // shadowColor: colors.appBgColor1
+        })
+    },
 }

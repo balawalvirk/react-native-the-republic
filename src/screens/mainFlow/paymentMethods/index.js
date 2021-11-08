@@ -43,7 +43,7 @@ function PaymentMethods(props) {
             then(async res => {
                 if (res) {
                     await Backend.get_credit_cards()
-                    await Backend.update_profile({ default_card_id: res.card.id })
+                    await Backend.update_profile({ default_card_id: res.data.id })
                     toggleAddPaymentModal()
                     Toasts.success('Payment methode added')
                 }

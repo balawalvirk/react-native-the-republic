@@ -55,7 +55,7 @@ export const get_credit_cards = async (user_id) => {
             console.log('get_credit_cards response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
-                dispatch(setCreditCards(tempResponseData.cards))
+                dispatch(setCreditCards(tempResponseData.data))
             } else {
                 Toasts.error(tempResponseData.message)
             }

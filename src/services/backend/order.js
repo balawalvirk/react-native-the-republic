@@ -122,7 +122,7 @@ export const getOrders = async (user_id) => {
             console.log('getOrders Response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
-                dispatch(setAllOrders(tempResponseData.orders))
+                dispatch(setAllOrders(tempResponseData.data))
                 //tempResponseData.orders
             } else {
                 Toasts.error(tempResponseData.message)
@@ -151,7 +151,7 @@ export const updateOrderStatus = async ({ order_id, status }) => {
             console.log('updateOrderStatus response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
-                dispatch(setCreditCards(tempResponseData.cards))
+                //dispatch(setCreditCards(tempResponseData.cards))
             } else {
                 Toasts.error(tempResponseData.message)
             }

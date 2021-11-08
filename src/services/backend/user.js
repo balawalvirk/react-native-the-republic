@@ -23,7 +23,7 @@ export const login = async (email, password) => {
             console.log('Response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
-                const userDetail = tempResponseData.user
+                const userDetail = tempResponseData.data
                 dispatch(setUserDetail(userDetail))
                 //Saving in local storage
                 AsyncStorage.setItem(asyncConts.user_credentials, JSON.stringify(params))
@@ -84,7 +84,7 @@ export const auto_login = async (email, password) => {
                 console.log('Response', tempResponseData);
                 if (tempResponseData.success) {
                     response = tempResponseData
-                    const userDetail = tempResponseData.user
+                    const userDetail = tempResponseData.data
                     dispatch(setUserDetail(userDetail))
                     //Saving in local storage
                     AsyncStorage.setItem(asyncConts.user_details, JSON.stringify(userDetail))
@@ -169,7 +169,7 @@ export const complete_profile = async ({ user_id, first_name, last_name, usernam
             console.log('complete_profile Response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
-                AsyncStorage.setItem(asyncConts.user_details, JSON.stringify(tempResponseData.user))
+                AsyncStorage.setItem(asyncConts.user_details, JSON.stringify(tempResponseData.data))
             } else {
                 Toasts.error(tempResponseData.message)
             }
@@ -212,7 +212,7 @@ export const update_profile = async ({
     user_id, first_name, last_name, username, gender, birthday, phone, image,
     country_code, country_phone_code, fcm_token, subscription_id, cancel_subscription,
     customer_id, payment_id, user_type, subscription_plan, latitude,
-    longitude, distance, default_card_id, default_dealer_id,address }) => {
+    longitude, distance, default_card_id, default_dealer_id, address }) => {
     let response = null
     const state = store.getState()
     const userId = user_id ? user_id : state.user.userDetail.id
@@ -254,8 +254,8 @@ export const update_profile = async ({
             console.log('response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
-                dispatch(setUserDetail(tempResponseData.user))
-                AsyncStorage.setItem(asyncConts.user_details, JSON.stringify(tempResponseData.user))
+                dispatch(setUserDetail(tempResponseData.data))
+                AsyncStorage.setItem(asyncConts.user_details, JSON.stringify(tempResponseData.data))
             } else {
                 Toasts.error(tempResponseData.message)
             }
@@ -357,18 +357,22 @@ export const contactUs = async (message) => {
         });
     return response
 };
-export const updateDeliveryAddress = async ({house,street,city,state,zip_code}) => {
+export const updateDeliveryAddress = async ({ house, street, address, city, state, zip_code, latitude, longitude }) => {
     let response = null
     const reduxState = store.getState()
-    const { id } = reduxState.user.userDetail
+    const { userDetail } = reduxState.user
+    const { id } = userDetail
     const uri = `${baseURL + endPoints.user.update_delivery_address}`
     let params = {
         user_id: id,
+        address,
         house,
         street,
         city,
         state,
-        zip_code
+        zip_code,
+        latitude,
+        longitude
     }
     console.log('updateDeliveryAddress \nuri', uri, '\nParams', params);
     await axios
@@ -378,7 +382,8 @@ export const updateDeliveryAddress = async ({house,street,city,state,zip_code}) 
             console.log('Response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
-                dispatch(setUserDetail(tempResponseData.user))
+                const newDeliveryAddress = tempResponseData.data
+                dispatch(setUserDetail({ ...userDetail, delivery_address: newDeliveryAddress }))
             } else {
                 Toasts.error(tempResponseData.message)
             }

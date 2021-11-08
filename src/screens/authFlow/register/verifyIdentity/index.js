@@ -98,7 +98,7 @@ function VerifyIdentity(props) {
         await Backend.user_register({ email, password, password_confirmation: password })
             .then(async res => {
                 if (res) {
-                    const tempUserId = res.user.id
+                    const tempUserId = res.data.id
                     const completeProfileParams = {
                         user_id: tempUserId,
                         first_name: firstName,

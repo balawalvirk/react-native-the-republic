@@ -30,7 +30,7 @@ function Requests() {
     Backend.get_trainer_traning_requests().
       then(async res => {
         if (res) {
-          setTrainingRequests(res.trainingRequests)
+          setTrainingRequests(res.data)
         }
       })
   }

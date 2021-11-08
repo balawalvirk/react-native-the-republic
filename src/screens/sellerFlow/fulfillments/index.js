@@ -53,7 +53,7 @@ function Fulfillments(props) {
     Backend.getFulfillments().
       then(res => {
         if (res) {
-          setFulfillments(res.fullfillments)
+          setFulfillments(res.data)
         }
       })
   }

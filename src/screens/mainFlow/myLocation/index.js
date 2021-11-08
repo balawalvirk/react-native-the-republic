@@ -3,18 +3,12 @@ import { View, Text } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
 import MapView, { PROVIDER_GOOGLE, Marker, Circle, Callout } from 'react-native-maps';
 import { AbsoluteWrapper, ButtonGradient, ComponentWrapper, CustomIcon, GoogleAutoComplete, MainWrapper, MediumText, RowWrapper, SearchTextinput, Spacer, TinyTitle, Toasts, Wrapper } from '../../../components';
-import { appIcons, appStyles, Backend, colors, mapStyles, sizes } from '../../../services';
+import { appIcons, appStyles, Backend, colors, HelpingMethods, mapStyles, sizes } from '../../../services';
 import styles from './styles';
 import Slider from '@react-native-community/slider';
 import { useSelector } from 'react-redux';
 const delta = 0.9
 const ASPECT_RATIO = width(100) / height(100)
-const defaultLocation = {
-    latitude: 51.5359,
-    longitude: 0.1236,
-    latitudeDelta: 0.015,
-    longitudeDelta: 0.0121,
-}
 const locationDelta = {
     latitudeDelta: delta,
     longitudeDelta: delta * ASPECT_RATIO,
@@ -47,12 +41,20 @@ function MyLocation(props) {
     }, [])
 
     const getSetData = () => {
-        const { latitude, longitude, distance,address } = userDetail
-        const { coords } = currentLocation
-        console.log('currentLocation', currentLocation)
-        latitude ? setLatitude(latitude) : setLatitude(coords.latitude)
-        longitude ? setLongitude(longitude) : setLongitude(coords.longitude)
-        address && setAddress(address) 
+        // const { latitude, longitude, distance,address } = userDetail
+        // const { coords } = currentLocation
+        // console.log('currentLocation', currentLocation)
+        // latitude ? setLatitude(latitude) : setLatitude(coords.latitude)
+        // longitude ? setLongitude(longitude) : setLongitude(coords.longitude)
+        const tempMyLocation = HelpingMethods.getMyLocation()
+        console.log('tempMyLocation -->', tempMyLocation)
+        if (tempMyLocation) {
+            // console.log('setMyLocation -->', { ...tempMyLocation, ...locationDelta })
+            const { latitude, longitude } = tempMyLocation
+            setLatitude(latitude)
+            setLongitude(longitude)
+        }
+        address && setAddress(address)
         distance && setDistance(Number(distance))
     }
 
@@ -71,7 +73,7 @@ function MyLocation(props) {
 
     const handleUpdateLocation = async () => {
         setLoading(true)
-        await Backend.update_profile({ address,latitude, longitude, distance }).
+        await Backend.update_profile({ address, latitude, longitude, distance }).
             then(res => {
                 setLoading(true)
                 if (res) {

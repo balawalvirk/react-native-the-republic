@@ -49,7 +49,7 @@ function FflDealers(props) {
         await Backend.getDealers().
             then(res => {
                 if (res) {
-                    setFflDealers(res.dealers)
+                    setFflDealers(res.data)
                 }
             })
     }
@@ -61,7 +61,7 @@ function FflDealers(props) {
             await Backend.searchDealers(query).
                 then(res => {
                     if (res) {
-                        setSearchedFflDealers(res.dealers)
+                        setSearchedFflDealers(res.data)
                     }
                 })
             setLoadingSearch(false)

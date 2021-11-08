@@ -1,6 +1,6 @@
 import React, { Component, useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
-import { ButtonColoredSmall, ComponentWrapper, DashboardSeller, IconWithText, LineHorizontal, MainWrapper, MediumTitle, RowWrapperBasic, SkeletonListVerticalPrimary, SkeletonPrimary, SkeletonServiceDetails, SmallTitle, Spacer, TinyTitle, TitlePrimary, Wrapper } from '../../../components';
+import { ButtonColoredSmall, ComponentWrapper, DashboardSeller, IconWithText, LineHorizontal, MainWrapper, MediumTitle, RowWrapperBasic, SkeletonListVerticalPrimary, SkeletonPrimary, SkeletonProductDetails, SmallTitle, Spacer, TinyTitle, TitlePrimary, Wrapper } from '../../../components';
 import { appStyles, Backend, colors, fontFamily, fontSize, sizes } from '../../../services';
 import { Text as TextSvg, LinearGradient, Stop, Defs, Rect } from 'react-native-svg'
 import { BarChart, Grid, YAxis, XAxis, PieChart, AreaChart } from 'react-native-svg-charts'

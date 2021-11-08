@@ -20,6 +20,11 @@ function BuyNow(props) {
     const userData = useSelector(state => state.user)
     const { userDetail, creditCards } = userData
     const { default_dealer, default_dealer_id, delivery_address } = userDetail
+    let deliveryAddress = ''
+    if (delivery_address) {
+        const { address, house, street, city, state, zip_code } = delivery_address
+        deliveryAddress = house + ', ' + street + ', ' + city + ', ' + zip_code + ', ' + state
+    }
     //local states
     const [coupon, setCoupon] = useState('')
     const [privateSale, setPrivateSale] = useState(false)
@@ -71,7 +76,7 @@ function BuyNow(props) {
         }
     }
     const handleBuyNow = async () => {
-        if (1 === 1) {
+        if (validations()) {
             setLoadingBuy(true)
             await Backend.createOrder({
                 product_id: product.id,
@@ -84,10 +89,10 @@ function BuyNow(props) {
                 street: delivery_address ? delivery_address.street : 's#1',
                 city: delivery_address ? delivery_address.city : 'Daska',
                 state: delivery_address ? delivery_address.state : 'Punjab',
-                zip_code: delivery_address ? delivery_address.zipcode : '51010',
+                zip_code: delivery_address ? delivery_address.zip_code : '51010',
                 seller_id: user.id,
                 buyer_dealer_id: !privateSale ? default_dealer_id ? default_dealer_id : '' : '',
-                address: delivery_address ? delivery_address.address : 'Awami road'
+                address: delivery_address ? (delivery_address.house + ', ' + delivery_address.street + ', ' + delivery_address.city + ', ' + delivery_address.zip_code + ', ' + delivery_address.state) : ''
             }).then(async res => {
                 if (res) {
                     if (!privateSale && default_dealer_id) {
@@ -98,7 +103,7 @@ function BuyNow(props) {
                             // buyer_dealer_id: item.buyer_dealer_id,
                             // seller_dealer_id: '18',
                             product_id: product.id,
-                            order_id: res.order.id,
+                            order_id: res.data.id,
                             status: fulfillmentStatuses.inProgess,
                             type: fulfillmentTypes.buyerDealer
                         }
@@ -203,7 +208,7 @@ function BuyNow(props) {
                                 delivery_address ?
                                     <>
                                         <Spacer height={sizes.baseMargin} />
-                                        <MediumText numberOfLines={1}>14 Wall Street, New York, United states of america</MediumText>
+                                        <MediumText numberOfLines={1}>{deliveryAddress}</MediumText>
                                     </>
                                     :
                                     null

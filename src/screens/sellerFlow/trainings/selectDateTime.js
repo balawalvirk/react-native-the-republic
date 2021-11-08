@@ -126,8 +126,8 @@ function SelectDateTime(props) {
         await Backend.add_traning({title,description,duration,location,charges,spots,latitude,longitude,status:'active'}).
             then(async res => {
                 if (res) {
-                    if (res.training.id) {
-                        const training_id = res.training.id
+                    if (res.data.id) {
+                        const training_id = res.data.id
                         for (const timeSlotItem of timeSlots) {
                             const { date, start_time, end_time } = timeSlotItem
                             await Backend.add_traning_timeSlots({ training_id, date, start_time, end_time })

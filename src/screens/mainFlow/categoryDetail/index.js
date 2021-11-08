@@ -63,8 +63,8 @@ function CategoryDetail(props) {
         await Backend.getProductsByCategory({ category: category.name, page: currentPage }).
             then(res => {
                 if (res) {
-                    setProducts([...products, ...res.products.data])
-                    !res.products.next_page_url && setAllItemsLoaded(true)
+                    setProducts([...products, ...res.data.data])
+                    !res.data.next_page_url && setAllItemsLoaded(true)
                 }
             })
     }
@@ -74,16 +74,16 @@ function CategoryDetail(props) {
             await Backend.getFeaturedProducts(currentPage).
                 then(res => {
                     if (res) {
-                        setProducts([...products, ...res.products.data])
-                        !res.products.next_page_url && setAllItemsLoaded(true)
+                        setProducts([...products, ...res.data.data])
+                        !res.data.next_page_url && setAllItemsLoaded(true)
                     }
                 })
         } else if (title === 'Popular') {
             await Backend.getPoluparProducts(currentPage).
                 then(res => {
                     if (res) {
-                        setProducts([...products, ...res.products.data])
-                        !res.products.next_page_url && setAllItemsLoaded(true)
+                        setProducts([...products, ...res.data.data])
+                        !res.data.next_page_url && setAllItemsLoaded(true)
 
                     }
                 })
@@ -91,8 +91,8 @@ function CategoryDetail(props) {
             await Backend.getNearByProducts(currentPage).
                 then(res => {
                     if (res) {
-                        setProducts([...products, ...res.nearbyProducts.data])
-                        !res.nearbyProducts.next_page_url && setAllItemsLoaded(true)
+                        setProducts([...products, ...res.data.data])
+                        !res.data.next_page_url && setAllItemsLoaded(true)
 
                     }
                 })
@@ -100,9 +100,9 @@ function CategoryDetail(props) {
             await Backend.getTopRatedProducts(currentPage).
                 then(res => {
                     if (res) {
-                        setProducts([...products, ...res.products.data])
+                        setProducts([...products, ...res.data.data])
 
-                        !res.products.next_page_url && setAllItemsLoaded(true)
+                        !res.data.next_page_url && setAllItemsLoaded(true)
 
                     }
                 })

@@ -6,7 +6,7 @@ import { colors, appStyles, fontSize, sizes } from '../../services';
 import { ButtonTextRegular, ButtonTextMedium } from '../text';
 import { color } from 'react-native-reanimated';
 import { CustomIcon } from '../icons';
-import { Wrapper, RowWrapperBasic, RowWrapper, ComponentWrapper } from '../wrappers';
+import { Wrapper, RowWrapperBasic, RowWrapper, ComponentWrapper ,AbsoluteWrapper} from '../wrappers';
 import LinearGradient from 'react-native-linear-gradient';
 import { MaterialIndicator } from 'react-native-indicators';
 import ButtonGroupAnimated from './animatedButtonGroup'
@@ -52,7 +52,7 @@ export const ButtonColored = ({
     );
 }
 
-export const ButtonColoredSmall = ({ text, onPress, disabled, buttonStyle, customIcon, direction, textStyle, iconName, iconType, iconSize, iconColor, iconStyle }) => {
+export const ButtonColoredSmall = ({ text, onPress, disabled, buttonStyle, customIcon, direction, textStyle, iconName, iconType, iconSize, iconColor, iconStyle,isLoading,tintColor }) => {
     return (
         <TouchableOpacity disabled={disabled} onPress={onPress} style={[{ borderRadius: 15, paddingHorizontal: width(5), paddingVertical: height(1), backgroundColor: colors.appColor1 }, buttonStyle]}>
             <View style={{ flexDirection: direction ? direction : 'row', alignItems: 'center' }}>
@@ -75,7 +75,20 @@ export const ButtonColoredSmall = ({ text, onPress, disabled, buttonStyle, custo
                             :
                             null
                 }
-                <ButtonTextRegular style={[{ color: colors.appTextColor6, }, textStyle]}>  {text}  </ButtonTextRegular>
+                 <Wrapper>
+                    <ButtonTextRegular style={[{ color: tintColor ? tintColor : colors.appTextColor6,opacity:isLoading?0:1 }, textStyle]}>  {text}  </ButtonTextRegular>
+                    {
+                        isLoading ?
+                            <AbsoluteWrapper style={{ right:0,bottom:0,left:0,top:0,...appStyles.center }}>
+                                <MaterialIndicator
+                                    color={tintColor ? tintColor : colors.appTextColor6}
+                                    size={totalSize(1.5)}
+                                />
+                            </AbsoluteWrapper>
+                            :
+                            null
+                    }
+                </Wrapper>
             </View>
         </TouchableOpacity>
     );

@@ -42,7 +42,7 @@ function Trainings(props) {
       Backend.get_user_tranings().
         then(res => {
           if (res) {
-            setTrainings(res.trainings)
+            setTrainings(res.data)
           }
         })
     }, [])

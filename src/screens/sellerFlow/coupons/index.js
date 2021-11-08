@@ -43,7 +43,7 @@ function Coupons(props) {
     Backend.get_user_coupons().
       then(res => {
         if (res) {
-          setCoupons(res.coupons)
+          setCoupons(res.data)
         }
       })
   }
