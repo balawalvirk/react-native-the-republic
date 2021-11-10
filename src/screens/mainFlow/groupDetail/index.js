@@ -1,29 +1,43 @@
-import React, { Component, useLayoutEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/core';
+import React, { Component, useLayoutEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native';
 import { View, Text } from 'react-native';
-import { totalSize } from 'react-native-dimension';
+import { height, totalSize } from 'react-native-dimension';
 import { Badge, Icon } from 'react-native-elements';
-import { ComponentWrapper, MainWrapper, ButtonColoredSmall, ProfileTop, Spacer, ShareSomethingButton, Posts, RowWrapper, Wrapper, AbsoluteWrapper } from '../../../components';
-import { appStyles, colors, DummyData, routes, sizes } from '../../../services';
+import { useSelector } from 'react-redux';
+import { ComponentWrapper, MainWrapper, ButtonColoredSmall, ProfileTop, Spacer, ShareSomethingButton, Posts, RowWrapper, Wrapper, AbsoluteWrapper, SkeletonProductDetails } from '../../../components';
+import { appStyles, Backend, colors, DummyData, routes, sizes } from '../../../services';
 
 function GroupDetail(props) {
+    //redux states
+    const user = useSelector(state => state.user)
+    const { userDetail } = user
+
     const { navigation, route } = props
-    const { navigate,replace } = navigation
-    const { item, myGroup } = route.params
+    const { navigate, replace } = navigation
+    const { group } = route.params
+    const group_id = group.id
+    const isMyGroup = group.user_id === userDetail.id
     const isJoined = true
     const allPosts = DummyData.posts.slice(0, 2)
+
+    //local states
+    const [loading, setLoading] = useState(true)
+    const [joinRequests, setJoinRequests] = useState([])
+
+
     //configure Header
     useLayoutEffect(() => {
         navigation.setOptions({
-            title: myGroup ? "Your Group" : "Group",
+            title: isMyGroup ? "Your Group" : "Group",
             headerRight: () => (
                 <>
                     {
-                        myGroup ?
+                        isMyGroup ?
                             <RowWrapper>
                                 <TouchableOpacity
-                                onPress={()=>navigate(routes.groupMemberRequests)}
+                                    onPress={() => navigate(routes.groupMemberRequests,{requests:joinRequests})}
                                 >
                                     <Icon
                                         name="users"
@@ -31,12 +45,18 @@ function GroupDetail(props) {
                                         size={totalSize(2.5)}
                                         color={colors.appTextColor1}
                                     />
-                                    <AbsoluteWrapper style={{ right: -7.5, top: -7.5 }}>
-                                        <Badge
-                                            value={'21'}
-                                            status="error"
-                                        />
-                                    </AbsoluteWrapper>
+                                    {
+                                        joinRequests.length ?
+                                            <AbsoluteWrapper style={{ right: -7.5, top: -7.5 }}>
+                                                <Badge
+                                                    value={joinRequests.length}
+                                                    status="error"
+                                                />
+                                            </AbsoluteWrapper>
+                                            :
+                                            null
+                                    }
+
                                 </TouchableOpacity>
                                 <Spacer width={sizes.marginHorizontalLarge} />
                                 <Icon
@@ -44,7 +64,7 @@ function GroupDetail(props) {
                                     type="feather"
                                     size={totalSize(2.5)}
                                     color={colors.appTextColor1}
-                                    onPress={()=>navigate(routes.createGroup,{groupData:item})}
+                                    onPress={() => navigate(routes.createGroup, { groupData: group })}
                                 />
                             </RowWrapper>
                             :
@@ -61,21 +81,42 @@ function GroupDetail(props) {
                 </>
             )
         });
-    }, [navigation]);
+    }, [navigation, joinRequests]);
 
+    useFocusEffect(
+        React.useCallback(() => {
+            getSetData()
+        }, [])
+    )
+
+    const getSetData = async () => {
+        await Backend.getGroupJoinReuqests(group_id).
+            then(res => {
+                if (res) {
+                    setJoinRequests(res.data)
+                }
+            })
+        setLoading(false)
+    }
+
+    if (loading) {
+        return (
+            <SkeletonProductDetails itemStyle={{ height: height(25) }} />
+        )
+    }
     return (
         <MainWrapper>
             <ScrollView
                 showsVerticalScrollIndicator={false}
             >
                 <ProfileTop
-                    imageUri={item.image}
-                    title={item.name}
-                    subTitle={'324 members'}
+                    imageUri={group.icon}
+                    title={group.name}
+                    subTitle={group.users.length + ' members'}
                 />
                 <Spacer height={sizes.smallMargin} />
                 <ShareSomethingButton
-                    imageUri={DummyData.userData.image}
+                    imageUri={userDetail.profile_image}
                     onPress={() => { }}
                 />
                 <Spacer height={sizes.smallMargin} />

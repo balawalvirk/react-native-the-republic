@@ -170,7 +170,7 @@ export const ButtonArrowColored = ({ text, onPress, animation, buttonStyle, text
 export function ButtonGradient({ text, animation, onPress, buttonStyle, textStyle, iconName, iconType, iconSize, buttonColor, iconStyle, tintColor, loading, shadow, gradiantContainerStyle }) {
 
     return (
-        <TouchableOpacity disabled={loading} onPress={onPress} style={[{ backgroundColor: 'white', height: height(7), borderRadius: sizes.buttonRadius, marginHorizontal: sizes.marginHorizontalXLarge }, shadow && appStyles.shadow, buttonStyle]}>
+        <TouchableOpacity disabled={loading} onPress={onPress} style={[{ backgroundColor: 'white', height: height(6), borderRadius: sizes.buttonRadius, marginHorizontal: sizes.marginHorizontalXLarge }, shadow && appStyles.shadow, buttonStyle]}>
             <LinearGradient
                 colors={colors.appGradiantColors}
                 start={{ x: 0.0, y: 0.25 }} end={{ x: 0.5, y: 1.0 }}

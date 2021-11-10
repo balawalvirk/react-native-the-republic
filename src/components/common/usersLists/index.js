@@ -63,7 +63,7 @@ export const Dealers = ({ data, onPress, onPressHeart, ListHeaderComponent, List
 
     )
 }
-export const Groups = ({ data, onPress, handleJoin, ListHeaderComponent, ListFooterComponent }) => {
+export const Groups = ({ data, onPress, handleJoin, ListHeaderComponent, ListFooterComponent, right }) => {
     return (
         <FlatList
             data={data}
@@ -78,23 +78,24 @@ export const Groups = ({ data, onPress, handleJoin, ListHeaderComponent, ListFoo
                         containerStyle={{ backgroundColor: colors.appBgColor1, borderWidth: 1, borderColor: colors.appBgColor3, marginBottom: sizes.marginVertical / 2 }}
                         onPress={() => onPress(item, index)}
                         title={item.name}
-                        imageUri={item.image}
-                        subTitle={(index % 2 ? (index + 1) * 9 : (index + 1) * 7) + ' members'}
+                        imageUri={item.icon}
+                        subTitle={item.users.length + ' members'}
                         right={
-                            isJoined ?
-                                <ButtonColoredSmall
-                                    text="Joined"
-                                    onPress={() => handleJoin(item, index)}
-                                    buttonStyle={[styles.joinButton, { backgroundColor: colors.appColor1 + '40' }]}
-                                    textStyle={[appStyles.textRegular, appStyles.textPrimaryColor]}
-                                />
-                                :
-                                <ButtonColoredSmall
-                                    text="Join"
-                                    onPress={() => handleJoin(item, index)}
-                                    buttonStyle={[styles.joinButton,]}
-                                    textStyle={[appStyles.textRegular, appStyles.textWhite]}
-                                />
+                            right ? right(item, index) :
+                                isJoined ?
+                                    <ButtonColoredSmall
+                                        text="Joined"
+                                        onPress={() => handleJoin(item, index)}
+                                        buttonStyle={[styles.joinButton, { backgroundColor: colors.appColor1 + '40' }]}
+                                        textStyle={[appStyles.textRegular, appStyles.textPrimaryColor]}
+                                    />
+                                    :
+                                    <ButtonColoredSmall
+                                        text="Join"
+                                        onPress={() => handleJoin(item, index)}
+                                        buttonStyle={[styles.joinButton,]}
+                                        textStyle={[appStyles.textRegular, appStyles.textWhite]}
+                                    />
                         }
                     />
                 )

@@ -2,50 +2,49 @@ import React, { Component, useState } from 'react';
 import { View, Text } from 'react-native';
 import { totalSize } from 'react-native-dimension';
 import { ButtonGradient, ComponentWrapper, IconButton, LineHorizontal, MainWrapper, Spacer, TinyTitle, UserCardPrimary, Wrapper } from '../../../components';
-import { colors, sizes } from '../../../services';
+import { colors, groupJoinPrivacies, groupPostPrivacies, sizes } from '../../../services';
 
 const joinOptions = [
     {
         title: 'Everyone',
-        subTitle: 'People can search and join this group'
+        subTitle: 'People can search and join this group',
+        value: groupJoinPrivacies.everyone
     },
     {
         title: 'Only Approved Members',
-        subTitle: 'People can search and request to join this group'
+        subTitle: 'People can search and request to join this group',
+        value: groupJoinPrivacies.onlyApprovedMembers
     },
     {
         title: 'Only Invited People',
-        subTitle: 'No one can search this group, only invited members are allowed in this group'
+        subTitle: 'No one can search this group, only invited members are allowed in this group',
+        value: groupJoinPrivacies.onlyInvitedPeople
     }
 ]
 const postOptions = [
     {
         title: 'Everyone',
-        subTitle: 'Any member can post in this group'
+        subTitle: 'Any member can post in this group',
+        value: groupPostPrivacies.everyone
     },
     {
         title: 'Only Admins',
-        subTitle: 'Only admins can post in this group'
+        subTitle: 'Only admins can post in this group',
+        value: groupPostPrivacies.onlyAdmin
     },
 ]
-const Options = ({ data, onPressOption, activeIndex }) => {
+const Options = ({ data, onPressOption, value }) => {
     return (
         <>
             {
                 data.map((item, index) => {
-                    const isSelected = activeIndex === index
+                    const isSelected = value === item.value
                     return (
                         <UserCardPrimary
                             onPress={() => onPressOption(item, index)}
                             containerStyle={{ marginHorizontal: 0, borderRadius: 0, paddingHorizontal: sizes.marginHorizontalSmall, backgroundColor: 'transparent', borderBottomWidth: 1, borderColor: colors.appBgColor3 }}
                             title={item.title}
                             subTitle={item.subTitle}
-                            // right={
-                            //     <ButtonColoredSmall
-                            //         text="View Profile"
-                            //         buttonStyle={{ paddingHorizontal: sizes.marginHorizontalSmall, borderRadius: 100, backgroundColor: colors.appColor2 }}
-                            //     />
-                            // }
                             left={
                                 <IconButton
                                     iconName="circle"
@@ -64,9 +63,14 @@ const Options = ({ data, onPressOption, activeIndex }) => {
     )
 }
 
-function PrivacySettings() {
-    const [joinOptionsActiveIndex, setJoinOptionsActiveIndex] = useState(0)
-    const [postOptionsActiveIndex, setPostOptionsActiveIndex] = useState(0)
+function PrivacySettings({ navigation, route }) {
+    const { navigate, goBack, setParams } = navigation
+    const {
+        groupJoinPrivacy,
+        groupPostPrivacy,
+        handleSetGroupJoinPrivacy,
+        handleSetGroupPostPrivacy } = route.params
+
 
     return (
         <MainWrapper>
@@ -79,8 +83,11 @@ function PrivacySettings() {
                 <LineHorizontal />
                 <Options
                     data={joinOptions}
-                    activeIndex={joinOptionsActiveIndex}
-                    onPressOption={(item, index) => setJoinOptionsActiveIndex(index)}
+                    onPressOption={(item, index) => {
+                        setParams({ groupJoinPrivacy: item.value })
+                        handleSetGroupJoinPrivacy(item.value)
+                    }}
+                    value={groupJoinPrivacy}
                 />
                 <Spacer height={sizes.baseMargin * 2} />
                 <ComponentWrapper>
@@ -90,14 +97,18 @@ function PrivacySettings() {
                 <LineHorizontal />
                 <Options
                     data={postOptions}
-                    activeIndex={postOptionsActiveIndex}
-                    onPressOption={(item, index) => setPostOptionsActiveIndex(index)}
+                    onPressOption={(item, index) => {
+                        setParams({ groupPostPrivacy: item.value })
+                        handleSetGroupPostPrivacy(item.value)
+                    }}
+                    value={groupPostPrivacy}
                 />
             </Wrapper>
             <Wrapper style={{}}>
                 <Spacer height={sizes.baseMargin} />
                 <ButtonGradient
                     text="Done"
+                    onPress={goBack}
                 />
                 <Spacer height={sizes.baseMargin} />
             </Wrapper>

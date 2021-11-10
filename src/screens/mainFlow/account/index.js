@@ -51,7 +51,7 @@ function Account(props) {
     //local states
     const [selectedTabIndex, setSelectedTabIndex] = useState(0)
     if(!userDetail){
-        return <MainWrapper/>
+        return null
     }
     return (
         <MainWrapper>

@@ -9,6 +9,7 @@ import {
 } from '@react-navigation/drawer';
 import { header, routes, headers, tabs } from '../../constants';
 import * as MainApp from '../../../screens/mainFlow';
+import * as CommunityScreens from '../../../screens/mainFlow/community';
 import * as Seller from '../../../screens/sellerFlow';
 import { CustomIcon, ImageRound, ComponentWrapper, MediumText, Spacer, Wrapper, RowWrapper, AbsoluteWrapper, ImageProfile, SmallTitle, LogoMain, LocationPickerButton } from '../../../components';
 import { appIcons, appImages, appStyles, colors, fontFamily, fontSize, sizes } from '../../utilities';
@@ -17,11 +18,15 @@ import { Badge, Icon } from 'react-native-elements';
 import { FlatList, TouchableOpacity } from 'react-native';
 import styles from './styles'
 import { useSelector } from 'react-redux';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import CommunityCustomTopTab from './communityCustomTopTab';
 
 const AppStack = createStackNavigator();
-const BottomTab = createBottomTabNavigator();
-const BottomTabStack = createStackNavigator();
+const MainBottomTab = createBottomTabNavigator();
+const MainBottomTabStack = createStackNavigator();
 const MainDrawer = createDrawerNavigator();
+const CommunityTopTab = createMaterialTopTabNavigator();
+
 
 
 const drawerScreens = [
@@ -34,20 +39,35 @@ const drawerScreens = [
     { screen: 'Contact Us', route: routes.contactUs },
 ];
 
+const CommunityTopTabScreens = ({ navigation }) => {
+    return (
+        <CommunityTopTab.Navigator
+            tabBar={(props) => <CommunityCustomTopTab {...props} />}
+            swipeEnabled={false}
+            initialRouteName={routes.communitySubscribed}
+        >
+            <CommunityTopTab.Screen name={routes.communitySubscribed} component={CommunityScreens.Subscribed} />
+            <CommunityTopTab.Screen name={routes.communityDealers} component={CommunityScreens.Dealers} />
+            <CommunityTopTab.Screen name={routes.communityGroups} component={CommunityScreens.Groups} />
+            <CommunityTopTab.Screen name={routes.communityYourGroups} component={CommunityScreens.yourGroups} />
+        </CommunityTopTab.Navigator>
+    )
+}
+
 function BottomTabScreens() {
     const tabIconSize = totalSize(3)
     //const colors = useSelector(state => state.theme.appTheme)
     const user = useSelector(state => state.user)
     const { userDetail } = user
     return (
-        <BottomTab.Navigator
+        <MainBottomTab.Navigator
             tabBarOptions={{
                 ...tabs.tabBarOptions,
 
             }}
         //initialRouteName={routes.welcome}
         >
-            <BottomTab.Screen
+            <MainBottomTab.Screen
                 name={routes.marketPlace}
                 component={MainApp.MarketPlace}
                 options={() => ({
@@ -57,7 +77,7 @@ function BottomTabScreens() {
                     },
                 })}
             />
-            <BottomTab.Screen
+            <MainBottomTab.Screen
                 name={routes.explore}
                 component={MainApp.Explore}
                 options={() => ({
@@ -67,7 +87,7 @@ function BottomTabScreens() {
                     },
                 })}
             />
-            <BottomTab.Screen
+            <MainBottomTab.Screen
                 name={'null'}
                 component={() => null}
                 options={() => ({
@@ -84,7 +104,7 @@ function BottomTabScreens() {
                     }
                 })}
             />
-            <BottomTab.Screen
+            {/* <MainBottomTab.Screen
                 name={routes.community}
                 component={MainApp.Community}
                 options={() => ({
@@ -93,9 +113,19 @@ function BottomTabScreens() {
                         return <CustomIcon icon={appIcons.users} size={tabIconSize} color={color} focused={focused} />
                     },
                 })}
+            /> */}
+              <MainBottomTab.Screen
+                name={routes.community}
+                component={CommunityTopTabScreens}
+                options={() => ({
+                    tabBarLabel: "Community",
+                    tabBarIcon: ({ color, size, focused }) => {
+                        return <CustomIcon icon={appIcons.users} size={tabIconSize} color={color} focused={focused} />
+                    },
+                })}
             />
 
-            <BottomTab.Screen
+            <MainBottomTab.Screen
                 name={routes.account}
                 component={MainApp.Account}
                 options={() => ({
@@ -106,17 +136,17 @@ function BottomTabScreens() {
                     },
                 })}
             />
-        </BottomTab.Navigator>
+        </MainBottomTab.Navigator>
     )
 }
 
 function BottomTabStackScreens() {
     return (
-        <BottomTabStack.Navigator
+        <MainBottomTabStack.Navigator
             screenOptions={headers.screenOptionsSecondary}
             initialRouteName={routes.mainBottomTab}
         >
-            <BottomTabStack.Screen name={routes.mainBottomTab} component={BottomTabScreens}
+            <MainBottomTabStack.Screen name={routes.mainBottomTab} component={BottomTabScreens}
                 options={({ navigation, route }) => ({
                     title: '',
                     headerTitle: () => <Wrapper style={{ alignItems: 'flex-start', }}>
@@ -142,7 +172,7 @@ function BottomTabStackScreens() {
                     </RowWrapper>
                 })}
             />
-        </BottomTabStack.Navigator>
+        </MainBottomTabStack.Navigator>
     )
 }
 const CustomDrawerContent = props => {
@@ -318,8 +348,8 @@ const AppNavigation = () => {
                         <ComponentWrapper >
                             <LocationPickerButton
                                 onPress={() => navigation.navigate(routes.myLocation)}
-                                //text="Broklyn, NYC" 
-                                />
+                            //text="Broklyn, NYC" 
+                            />
                         </ComponentWrapper>,
 
                 })}

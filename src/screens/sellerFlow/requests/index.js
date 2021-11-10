@@ -4,7 +4,6 @@ import { View, Text, FlatList } from 'react-native';
 import { height } from 'react-native-dimension';
 import { ComponentWrapper, MainWrapper, NoDataViewPrimary, PopupPrimary, SkeletonListVerticalPrimary, SkeletonListVerticalSecondary, SmallTitle, Spacer, Toasts, TraningRequestCard, Wrapper } from '../../../components';
 import { appStyles, Backend, DummyData, sizes } from '../../../services';
-import NoDataView from '../../mainFlow/community/noDataView';
 
 function Requests() {
 

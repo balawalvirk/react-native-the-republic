@@ -340,7 +340,7 @@ export const ShareSomethingButton = ({ onPress, imageUri, title }) => {
         <TouchableOpacity activeOpacity={1} onPress={onPress} style={{ marginHorizontal: sizes.marginHorizontalSmall, borderWidth: 1, borderColor: colors.appBgColor3, borderRadius: sizes.baseRadius, paddingVertical: defaultVerticalSpacer, paddingHorizontal: sizes.marginHorizontalSmall }}>
             <RowWrapperBasic>
                 <ImageRound
-                    source={{ uri: imageUri }}
+                    source={{ uri: imageUri?imageUri:appImages.noUser }}
                     size={totalSize(5)}
                 />
                 <Spacer width={sizes.marginHorizontal} />
@@ -373,6 +373,7 @@ export const ShareSomethingButton = ({ onPress, imageUri, title }) => {
         </TouchableOpacity>
     )
 }
+
 export const TitleValue = ({ title, value, titleStyle, valueStyle, containerStyle, direction }) => {
     return (
         <RowWrapper style={[{}, containerStyle]}>

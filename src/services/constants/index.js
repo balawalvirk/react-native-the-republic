@@ -15,8 +15,8 @@ export const stripeKeys = {
     subscription_premium_price: 'price_1JfK93LAATci74dLdguEUbWK'
 }
 export const baseURL = 'https://republic-backend.herokuapp.com/api/'
-export const GOOGLE_MAPS_APIKEY='AIzaSyA2mTVqK-uOK_Pbo0tTXyUtUP84cClbS9Q&v'
-export const google_places_api_key='AIzaSyAyItdXh8Zmxa7iCAyDVPH_UAJ5iUTGtEA'
+export const GOOGLE_MAPS_APIKEY = 'AIzaSyA2mTVqK-uOK_Pbo0tTXyUtUP84cClbS9Q&v'
+export const google_places_api_key = 'AIzaSyAyItdXh8Zmxa7iCAyDVPH_UAJ5iUTGtEA'
 export const endPoints = {
     user: {
         login: 'login',
@@ -28,7 +28,7 @@ export const endPoints = {
         approve_identity: 'approve-identity',
         reject_identity: 'reject-identity',
         check_user: 'check-user',
-        update_delivery_address:'update-delivery-address'
+        update_delivery_address: 'update-delivery-address'
     },
     creditCard: {
         add_card: 'add-card',
@@ -37,7 +37,7 @@ export const endPoints = {
     fullfillment: {
         add_fullfillment: 'add-fullfillment',
         update_fullfillment: 'update-fullfillment',
-        get_fullfillments:'get-fullfillments'
+        get_fullfillments: 'get-fullfillments'
     },
     follow: {
         send_follow_request: 'send-follow-request',
@@ -46,9 +46,9 @@ export const endPoints = {
         decline_follow_request: 'decline-follow-request',
         show_followers: 'show-followers',
         //unfollow_user: 'unfollow-user',
-        unfollow_follower:'unfollow-follower',
-        show_followings:'show-followings',
-        unfollow_following:'unfollow-following'
+        unfollow_follower: 'unfollow-follower',
+        show_followings: 'show-followings',
+        unfollow_following: 'unfollow-following'
 
     },
     training: {
@@ -98,14 +98,15 @@ export const endPoints = {
         show_calibers: 'show-calibers',
         show_actions: 'show-actions',
         show_conditions: 'show-conditions',
-        top_rated_products:'top-rated-products',
-        popular_products:'popular-products',
-        nearby_products:'nearby-products',
-        featured_products:'featured-products',
-        related_products:'related-products',
-        get_all_products:'get-all-products',
-        get_map_products:'get-map-products',
-        get_product_detail:'single-product'
+        top_rated_products: 'top-rated-products',
+        popular_products: 'popular-products',
+        nearby_products: 'nearby-products',
+        featured_products: 'featured-products',
+        related_products: 'related-products',
+        get_all_products: 'get-all-products',
+        get_map_products: 'get-map-products',
+        get_product_detail: 'single-product',
+
     },
     post: {
         add_post: 'add-post',
@@ -120,7 +121,13 @@ export const endPoints = {
         show_comments: 'show-comments',
         edit_comment: 'edit-comment',
         delete_comment: 'delete-comment',
-        report_comment: 'report-comment'
+        report_comment: 'report-comment',
+        get_group_posts: 'get-group-posts',
+        get_following_posts: 'get-following-posts',
+        get_joined_groups_posts: 'get-joined-groups-posts',
+        get_subscribed_posts: 'get-subscribed-posts',
+        get_user_posts: 'get-user-posts'
+
     },
     chat: {
         show_conversations: 'show-conversations',
@@ -146,7 +153,11 @@ export const endPoints = {
         decline_request: 'decline-request',
         show_group_members: 'show-group-members',
         remove_group_member: 'remove-group-member',
-        show_members_requests: 'show-members-requests'
+        show_members_requests: 'show-members-requests',
+        search_groups: 'search-groups',
+        get_user_groups: 'get-user-groups',
+        get_joined_groups: 'get-joined-groups',
+        get_group_detail: 'get-group-detail'
     },
     order: {
         create_order: 'create-order',
@@ -158,22 +169,22 @@ export const endPoints = {
         get_invoice: 'get-invoice',
         get_earnings_reports: 'get-earnings',
         weekly_reports: 'weekly-reports',
-        advance_reports:'advance-reports'
+        advance_reports: 'advance-reports'
     },
-    dealer:{
-        get_dealers:'get-dealers',
-        search_dealers:'search-dealers',
-        add_favorite_dealer:'add-favorite-dealer',
-        remove_favorite_dealer:'remove-favorite-dealer'
+    dealer: {
+        get_dealers: 'get-dealers',
+        search_dealers: 'search-dealers',
+        add_favorite_dealer: 'add-favorite-dealer',
+        remove_favorite_dealer: 'remove-favorite-dealer'
     },
-    bank:{
-        add_bank_account:'add-bank-account',
-        get_bank_accounts:'get-bank-accounts',
-        get_banks:'get-banks'
+    bank: {
+        add_bank_account: 'add-bank-account',
+        get_bank_accounts: 'get-bank-accounts',
+        get_banks: 'get-banks'
     },
-    feature:{
-        add_feature:'add-feature',
-        show_features:'show-features',
+    feature: {
+        add_feature: 'add-feature',
+        show_features: 'show-features',
     },
     contact_us: 'contact-us',
     add_card: 'add-card',
@@ -196,6 +207,10 @@ export const routes = {
     mainDrawer: 'mainDrawer',
     home: 'home',
     community: 'community',
+    communitySubscribed: 'communitySubscribed',
+    communityDealers: 'communityDealers',
+    communityGroups: 'communityGroups',
+    communityYourGroups: 'communityYourGroups',
     explore: 'explore',
     marketPlace: 'marketPlace',
     account: 'account',
@@ -271,25 +286,40 @@ export const asyncConts = {
     product_actions: 'PRODUCT_ACTIONS',
     product_conditions: 'PRODUCT_CONDITIONS',
 }
-export const orderStatuses={
-    pending:'pending',
-    accepted:'accepted',
-    shipping:'shipping',
-    delivered:'delivered',
-    completed:'completed',
-    cancelled:'cancelled'
+export const orderStatuses = {
+    pending: 'pending',
+    accepted: 'accepted',
+    shipping: 'shipping',
+    delivered: 'delivered',
+    completed: 'completed',
+    cancelled: 'cancelled'
 }
-export const fulfillmentStatuses={
-    inProgess:'inProgress',
-    received:'received',
-    shipmentPending:'shipmentPending',
-    sentForShipment:'sentForShipment',
-    delivered:'delivered',
-    completed:'completed',
+export const fulfillmentStatuses = {
+    inProgess: 'inProgress',
+    received: 'received',
+    shipmentPending: 'shipmentPending',
+    sentForShipment: 'sentForShipment',
+    delivered: 'delivered',
+    completed: 'completed',
 }
-export const fulfillmentTypes={
-    buyerDealer:'buyerDealer',
-    sellerDealer:'sellerDealer'
+export const fulfillmentTypes = {
+    buyerDealer: 'buyerDealer',
+    sellerDealer: 'sellerDealer'
+}
+export const postTypes = {
+    post: 'post',
+    product: 'product',
+    group: 'group',
+    groupProduct: 'groupProduct'
+}
+export const groupJoinPrivacies = {
+    everyone: 'everyone',
+    onlyApprovedMembers: 'onlyApprovedMembers',
+    onlyInvitedPeople: 'onlyInvitedPeople',
+}
+export const groupPostPrivacies = {
+    everyone: 'everyone',
+    onlyAdmin: 'onlyAdmin',
 }
 export const headers = {
     screenOptionsPrimary: {

@@ -9,7 +9,7 @@ const appImages = {
     verify_phone_number: require('../../../assets/images/verify-phone-number.png'),
 
     //card types
-    masterLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/2560px-MasterCard_Logo.svg.png',
+    masterLogo: 'https://logos-world.net/wp-content/uploads/2020/09/Mastercard-Logo.png',
     visaLogo: 'https://logosvector.net/wp-content/uploads/2013/06/visa-card-vector-logo.png',
     //dummy users 
     user1: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80',

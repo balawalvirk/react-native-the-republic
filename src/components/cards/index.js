@@ -144,14 +144,10 @@ export const UserCardPrimary = ({ containerStyle, imageSize, imageUri, title, su
                     }
                     <Wrapper flex={1}>
                         <RowWrapperBasic>
-                            {
-                                imageUri ?
-                                    <ImageRound
-                                        source={{ uri: imageUri }}
-                                        size={imageSize}
-                                    /> : null
-                            }
-
+                            <ImageRound
+                                source={{ uri: imageUri ? imageUri : appImages.noUser }}
+                                size={imageSize}
+                            />
                             <Spacer width={sizes.smallMargin} />
                             <Wrapper flex={1}>
                                 <MediumText numberOfLines={1} style={[gradiant && appStyles.textWhite]}>{title}</MediumText>
@@ -362,7 +358,7 @@ export const CreditCardPrimary = ({ containerStyle, name, cardNumber, expiry, on
                     </Wrapper>
                 </RowWrapperBasic>
                 <Spacer height={sizes.smallMargin} />
-                 <SmallTitle style={[{ color: appStyles.textWhite.color }, appStyles.fontMedium]}>{HelpingMethods.getHiddenCardNumber(cardNumber)}</SmallTitle> 
+                <SmallTitle style={[{ color: appStyles.textWhite.color }, appStyles.fontMedium]}>{HelpingMethods.getHiddenCardNumber(cardNumber)}</SmallTitle>
                 <Spacer height={sizes.baseMargin} />
                 <RowWrapperBasic>
                     <Wrapper flex={1}>
