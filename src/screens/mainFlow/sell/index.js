@@ -305,7 +305,7 @@ function Sell(props) {
             statee: state,
             zip_code: zipcode,
             price,
-            discounted_price: discountedPrice,
+            discounted_price: isDiscountedPriceVisible && discountedPrice ? discountedPrice : null,
             image: imageFile,
             address,
             latitude,
@@ -628,7 +628,7 @@ function Sell(props) {
                                                 viewType={'list'}
                                                 image={imageFile ? imageFile.uri : imageUri}
                                                 description={description}
-                                                discountedPrice={discountedPrice}
+                                                discountedPrice={isDiscountedPriceVisible&&discountedPrice?discountedPrice:''}
                                                 price={price}
                                                 location={city}
                                                 rating={selectedProduct.rating}

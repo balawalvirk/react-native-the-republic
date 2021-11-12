@@ -132,6 +132,7 @@ function CreateGroup(props) {
             await Backend.createGroup(groupDetails).
                 then(res => {
                     if (res) {
+                        setNewlyCreateGroup(res.data)
                         toggleGroupCreatedPopup()
                     }
                 })
@@ -267,7 +268,7 @@ function CreateGroup(props) {
                 buttonText1="Continue"
                 onPressButton1={() => {
                     toggleGroupCreatedPopup();
-                    replace(routes.groupDetail, { item: DummyData.groups[1], myGroup: true })
+                    newlyCreateGroup ? replace(routes.groupDetail, { group: newlyCreateGroup }) : goBack()
                 }}
                 topMargin={height(60)}
             />

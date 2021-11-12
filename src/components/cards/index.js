@@ -71,9 +71,16 @@ export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, 
                         <Spacer height={sizes.smallMargin} />
                         <Wrapper >
                             <RowWrapperBasic>
-                                <RegularText style={[appStyles.fontBold, appStyles.textPrimaryColor]}>${discountedPrice}</RegularText>
-                                <Spacer width={sizes.smallMargin} />
-                                <TinyText style={[appStyles.textColorError, appStyles.textLineThrough]}>${price}</TinyText>
+                                <RegularText style={[appStyles.fontBold, appStyles.textPrimaryColor]}>${discountedPrice ? discountedPrice : price ? price : ''}</RegularText>
+                                {
+                                    discountedPrice && price ?
+                                        <>
+                                            <Spacer width={sizes.smallMargin} />
+                                            <TinyText style={[appStyles.textColorError, appStyles.textLineThrough]}>${price}</TinyText>
+                                        </>
+                                        :
+                                        null
+                               }
                             </RowWrapperBasic>
                         </Wrapper>
                         <Spacer height={sizes.smallMargin} />

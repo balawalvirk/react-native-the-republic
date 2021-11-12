@@ -59,7 +59,7 @@ export const SkeletonProductDetails = ({ itemStyle }) => {
         </SkeletonPlaceholder>
     )
 }
-export const SkeletonListVerticalPrimary = ({ itemStyle,itemHeight }) => {
+export const SkeletonListVerticalPrimary = ({ itemStyle, itemHeight }) => {
     const list = [1, 2, 3,]
     return (
         <SkeletonPlaceholder>
@@ -68,7 +68,7 @@ export const SkeletonListVerticalPrimary = ({ itemStyle,itemHeight }) => {
                     return (
                         <Wrapper style={[{ marginLeft: sizes.marginHorizontal, marginTop: sizes.marginVertical, }, itemStyle]}>
                             <Wrapper style={{ height: height(2), width: width(40), borderRadius: sizes.cardRadius, marginBottom: sizes.smallMargin }} />
-                            <Wrapper style={[{ height: itemHeight?itemHeight:height(20), width: width(90), borderRadius: sizes.cardRadius }]} />
+                            <Wrapper style={[{ height: itemHeight ? itemHeight : height(20), width: width(90), borderRadius: sizes.cardRadius }]} />
                             <Wrapper style={{ marginHorizontal: sizes.marginHorizontal, flexDirection: 'row', justifyContent: 'flex-end', marginVertical: sizes.smallMargin, alignItems: 'center', }}>
                                 <Wrapper style={[{ height: height(5), width: totalSize(7), borderRadius: sizes.cardRadius, }]} />
                                 <Wrapper style={[styles.horizontalMarginBase]} />
@@ -207,6 +207,26 @@ export const SkeletonProductsGrid = ({ NumOfItems }) => {
                     })
                 }
             </RowWrapper>
+        </MainWrapper>
+    );
+}
+
+export const SkeletonPrimaryList = ({ NumOfItems, itemHeight, itemStyle }) => {
+
+    const defaultItems = NumOfItems ? NumOfItems : 6
+    const PlaceholderItems = Array.from(Array(defaultItems).keys())
+
+    return (
+        <MainWrapper>
+            {
+                PlaceholderItems.map((item, index) => {
+                    return (
+                        <SkeletonPrimary
+                            itemStyle={[{ height: itemHeight ? itemHeight : height(10), marginVertical: sizes.marginVertical / 2 }, itemStyle]}
+                        />
+                    )
+                })
+            }
         </MainWrapper>
     );
 }

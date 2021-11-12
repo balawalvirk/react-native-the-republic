@@ -2,17 +2,23 @@ import { useFocusEffect } from '@react-navigation/core';
 import React, { Component, useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { height, totalSize } from 'react-native-dimension';
+import { useDispatch, useSelector } from 'react-redux';
 import { ButtonGradient, CustomIcon, MediumText, Spacer, TinyTitle, Wrapper, Groups, ButtonColoredSmall, IconButton, SkeletonPrimary } from '../../../components';
 import { appIcons, appStyles, Backend, colors, routes, sizes } from '../../../services';
 import dummyData from '../../../services/constants/dummyData';
 import { navigate } from '../../../services/navigation/rootNavigation';
+import { setMyGroups } from '../../../services/store/actions';
 
 
 export default function YourGroups({ tab }) {
 
-    const dummyGroups = [...dummyData.groups]
+    //redux states
+    const dispatch=useDispatch()
+    const group = useSelector(state => state.group)
+    const { myGroups } = group
 
-    const [groups, setGroups] = useState(null)
+    //local states
+    //const [groups, setGroups] = useState(null)
 
 
     useFocusEffect(
@@ -22,14 +28,15 @@ export default function YourGroups({ tab }) {
     )
 
     const getSetGroups = async () => {
-        Backend.searchGroups('guns').
+        Backend.getUserGroups().
             then(res => {
                 if (res) {
-                    setGroups(res.data)
+                    //setGroups(res.data)
+                    dispatch(setMyGroups(res.data))
                 }
             })
     }
-    if (!groups) {
+    if (!myGroups) {
         return (
             <>
                 <Spacer height={sizes.baseMargin} />
@@ -46,10 +53,10 @@ export default function YourGroups({ tab }) {
     return (
         <Wrapper flex={1} >
             {
-                dummyGroups.length ?
+                myGroups.length ?
                     <Wrapper>
                         <Groups
-                            data={groups}
+                            data={myGroups}
                             onPress={(item, index) => navigate(routes.groupDetail, { group: item })}
                             handleJoin={(item, index) => { }}
                             ListHeaderComponent={() => <Spacer height={sizes.baseMargin} />}
@@ -84,12 +91,11 @@ export default function YourGroups({ tab }) {
     );
 }
 
-function NoDataView({ tab }) {
+function NoDataView() {
 
 
     return (
         <Wrapper flex={1} >
-
             <Wrapper flex={1} style={[{ justifyContent: 'center', }]}>
                 <Wrapper style={[appStyles.center]}>
                     <CustomIcon

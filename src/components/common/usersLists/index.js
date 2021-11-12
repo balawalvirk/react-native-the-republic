@@ -79,7 +79,7 @@ export const Groups = ({ data, onPress, handleJoin, ListHeaderComponent, ListFoo
                         onPress={() => onPress(item, index)}
                         title={item.name}
                         imageUri={item.icon}
-                        subTitle={item.users.length + ' members'}
+                        subTitle={item.users.length + ' ' + 'member' + (item.users.length <= 1 ? '' : 's')}
                         right={
                             right ? right(item, index) :
                                 isJoined ?

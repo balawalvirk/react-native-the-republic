@@ -45,6 +45,10 @@ function UserProfile(props) {
     console.log('params user', user)
     console.log('params userId', userId)
 
+    //redux state
+    const userData = useSelector(state => state.user)
+    const myProfileDetails = userData.userDetail
+    console.log('myProfileDetails --> ',myProfileDetails.follow_request_sent)
 
     //local states
     const [selectedTabIndex, setSelectedTabIndex] = useState(0)
@@ -123,7 +127,7 @@ function UserProfile(props) {
                             onPress={async () => {
                                 setLoadingFollow(true)
                                 await Backend.handleFollowUnfollowFollowing(user_id)
-                                setLoadingFollow(true)
+                                setLoadingFollow(false)
                             }}
                             isLoading={loadingFollow}
 

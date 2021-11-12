@@ -179,26 +179,28 @@ function BuyNow(props) {
                     </RowWrapperBasic>
                 </Wrapper>
                 <Spacer height={sizes.baseMargin} />
-                {
-                    defaultCreditCard ?
+               
                         <Wrapper style={[appStyles.grayWrapper, {}]}>
                             <RowWrapperBasic>
                                 <Wrapper flex={1}>
                                     <RegularText>Payment Method</RegularText>
-                                    <Spacer height={sizes.smallMargin} />
-                                    <MediumText>{HelpingMethods.getHiddenCardNumber(defaultCreditCard.card_number)}</MediumText>
+                                    {
+                                        defaultCreditCard ?
+                                            <>
+                                                <Spacer height={sizes.smallMargin} />
+                                                <MediumText>{HelpingMethods.getHiddenCardNumber(defaultCreditCard.card_number)}</MediumText>
+                                            </>
+                                            :
+                                            null
+                                    }
+
                                 </Wrapper>
                                 <TinyTitle
                                     onPress={() => navigate(routes.paymentMethods)}
-                                    style={[appStyles.textPrimaryColor]}>Change</TinyTitle>
+                                    style={[appStyles.textPrimaryColor]}>{defaultCreditCard?'Change':'Add'}</TinyTitle>
                             </RowWrapperBasic>
                         </Wrapper>
-                        :
-                        <ButtonGradient
-                            text="Add Payment Method"
-                            onPress={() => navigate(routes.paymentMethods)}
-                        />
-                }
+                       
                 <Spacer height={sizes.baseMargin} />
                 <Wrapper style={[appStyles.grayWrapper, {}]}>
                     <RowWrapperBasic>
@@ -242,7 +244,7 @@ function BuyNow(props) {
                                     containerStyle={{ marginHorizontal: 0 }}
                                     imageSize={totalSize(4.5)}
                                     imageUri={default_dealer ? default_dealer.profile_image : appImages.noUser}
-                                    title={default_dealer ? (default_dealer.first_name + ' ' + default_dealer.last_name) : 'No Dealer Select'}
+                                    title={default_dealer ? (default_dealer.first_name + ' ' + default_dealer.last_name) : 'Dealer'}
                                     subTitle={default_dealer_id ? '3 miles away' : ''}
                                     right={
                                         <TinyTitle onPress={() => navigate(routes.fflDealers)} style={[appStyles.textPrimaryColor]}>{default_dealer ? 'Change' : 'Select'}</TinyTitle>

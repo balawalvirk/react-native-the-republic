@@ -3,15 +3,19 @@ import { View, Text } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
 import MapView, { PROVIDER_GOOGLE, Marker, Circle, Callout } from 'react-native-maps';
 import { AbsoluteWrapper, ButtonColoredSmall, ButtonGradient, ComponentWrapper, CustomIcon, IconButton, ImageRound, KeyboardAvoidingScrollView, MainWrapper, MediumText, NoDataViewPrimary, PopupPrimary, RowWrapper, SearchTextinput, SkeletonPrimary, Spacer, TextInputUnderlined, TinyTitle, UserCardPrimary, Wrapper } from '../../../components';
-import { appIcons, appStyles, Backend, colors, DummyData, mapStyles, routes, sizes } from '../../../services';
+import { appIcons, appStyles, Backend, colors, DummyData, HelpingMethods, mapStyles, routes, sizes } from '../../../services';
 import styles from './styles';
 import Slider from '@react-native-community/slider';
 import { ScrollView } from 'react-native';
-import { navigate } from '../../../services/navigation/rootNavigation';
 import { useSelector } from 'react-redux';
 import { DotIndicator, MaterialIndicator } from 'react-native-indicators';
 
-
+const delta = 0.9
+const ASPECT_RATIO = width(100) / height(100)
+const locationDelta = {
+    latitudeDelta: delta,
+    longitudeDelta: delta * ASPECT_RATIO,
+}
 const defaultLocation = {
     latitude: 51.5359,
     longitude: 0.1236,
@@ -24,25 +28,27 @@ const defaultMarker = {
         longitude: 0.1236
     }
 }
-function FflDealers(props) {
-    const { navigate } = props
+function FflDealers({ navigation }) {
+    const { navigate } = navigation
 
 
     //redux states
     const user = useSelector(state => state.user)
-    const { default_dealer_id } = user.userDetail
+    const { default_dealer_id, latitude, longitude } = user.userDetail
 
     //local states
+    const [myLocation, setMyLocation] = useState(null)
     const [fflDealers, setFflDealers] = useState(null)
     const [searchedFflDealers, setSearchedFflDealers] = useState(null)
     const [searchQuery, setSearchQuery] = useState('')
     const [selectedDealerIndex, selectDealerIndex] = useState(1)
-    const [loadingDealerIndex, setLoadingDealerIndex] = useState(-1)
+    const [loadingDealerId, setLoadingDealerId] = useState(null)
     const [loadingSearch, setLoadingSearch] = useState(false)
 
 
     useEffect(() => {
         getSetFflDealers()
+        getSetMyLocation()
     }, [])
 
     const getSetFflDealers = async () => {
@@ -53,7 +59,16 @@ function FflDealers(props) {
                 }
             })
     }
+    const getSetMyLocation = () => {
+        const tempMyLocation = HelpingMethods.getMyLocation()
+        console.log('tempMyLocation -->', tempMyLocation)
+        if (tempMyLocation) {
+            // console.log('setMyLocation -->', { ...tempMyLocation, ...locationDelta })
+            setMyLocation({ ...tempMyLocation, ...locationDelta })
+        }
+    }
 
+    getMarkers
     const searchFflDealers = async (query) => {
         setSearchQuery(query)
         if (query.length) {
@@ -71,9 +86,9 @@ function FflDealers(props) {
     }
 
     const selectDefaultDealer = async (item, index) => {
-        setLoadingDealerIndex(index)
+        setLoadingDealerId(item.id)
         await Backend.update_profile({ default_dealer_id: item.id })
-        setLoadingDealerIndex(-1)
+        setLoadingDealerId(null)
     }
 
     const getSetDealers = () => {
@@ -97,6 +112,17 @@ function FflDealers(props) {
 
     const dealers = searchQuery ? getSetDealers() : getSetDealers().reverse()
     const filteredDealers = searchQuery ? searchedFflDealers ? searchedFflDealers : fflDealers : fflDealers
+
+    const getMarkers = () => {
+        let tempdata = []
+        if (filteredDealers) {
+            if (filteredDealers.length) {
+                tempdata = filteredDealers.filter(item => item.latitude && item.longitude)
+            }
+        }
+        return tempdata
+    }
+    const mapMarkers = getMarkers()
     if (!fflDealers) {
         return (
             <>
@@ -119,42 +145,59 @@ function FflDealers(props) {
             <ScrollView
             >
                 <Wrapper >
-                    <MapView
-                        style={{
-                            height: height(45)
-                        }}
-                        clusterColor={colors.appColor1}
-                        // provider = { MapView.PROVIDER_GOOGLE }
-                        customMapStyle={mapStyles.light}
-                        initialRegion={defaultLocation}
-                    // showsUserLocation={true}
-                    >
+                    <Wrapper style={{
+                        height: height(45)
+                    }}>
                         {
-                            dealers.map((item, index) => {
-                                return (
-                                    <Marker
-                                        coordinate={item.cooards}
-                                        onPress={() => selectDealerIndex(index)}
+                            myLocation ?
+                                <MapView
+                                    style={{
+                                        flex: 1
+                                    }}
+                                    clusterColor={colors.appColor1}
+                                    // provider = { MapView.PROVIDER_GOOGLE }
+                                    customMapStyle={mapStyles.light}
+                                    initialRegion={myLocation}
+                                // showsUserLocation={true}
+                                >
+                                    {
+                                        mapMarkers.map((item, index) => {
+                                            const isSelected = item.id === default_dealer_id
+                                            const isLoading = item.id === loadingDealerId
+                                            const { latitude, longitude } = item
+                                            return (
+                                                <Marker
+                                                    coordinate={{ latitude, longitude }}
+                                                //onPress={() => selectDealerIndex(index)}
+                                                onPress={() => selectDefaultDealer(item, index)}
+                                                >
+                                                    <Wrapper
+                                                        style={[{ borderRadius: 100, borderWidth: 2, borderColor: isSelected ? colors.appColor1 : colors.appBgColor1 }, appStyles.shadowColored,appStyles.center]}
+                                                    >
+                                                        <ImageRound
+                                                            source={{ uri: item.profile_image }}
+                                                        />
+                                                        {isLoading ?
+                                                            <AbsoluteWrapper >
+                                                                <MaterialIndicator
+                                                                    size={totalSize(2.25)}
+                                                                    color={colors.appBgColor1}
+                                                                />
+                                                            </AbsoluteWrapper>
+                                                            :
+                                                            null
+                                                        }
+                                                    </Wrapper>
+                                                </Marker>
+                                            )
+                                        })
+                                    }
 
-                                    >
-                                        {/* <CustomIcon
-                                    icon={appIcons.map_pin}
-                                    size={totalSize(6)}
-                                /> */}
-                                        <Wrapper
-                                            style={[{ borderRadius: 100, borderWidth: 2, borderColor: selectedDealerIndex === index ? colors.appColor1 : colors.appBgColor1 }, appStyles.shadowColored]}
-                                        >
-                                            <ImageRound
-                                                source={{ uri: item.image }}
-
-                                            />
-                                        </Wrapper>
-                                    </Marker>
-                                )
-                            })
+                                </MapView>
+                                :
+                                null
                         }
-
-                    </MapView>
+                    </Wrapper>
                     <AbsoluteWrapper style={{ top: 0, right: 0, left: 0 }}>
                         <Spacer height={sizes.baseMargin} />
                         <SearchTextinput
@@ -165,9 +208,9 @@ function FflDealers(props) {
                             onPressCross={() => { setSearchQuery(null); setSearchedFflDealers(null) }}
                             right={
                                 loadingSearch ?
-                                   <ComponentWrapper>
-                                        <MaterialIndicator size={totalSize(2.25)} color={colors.appTextColor4}/>
-                                   </ComponentWrapper>
+                                    <ComponentWrapper>
+                                        <MaterialIndicator size={totalSize(2.25)} color={colors.appTextColor4} />
+                                    </ComponentWrapper>
                                     :
                                     null
                             }
@@ -187,7 +230,7 @@ function FflDealers(props) {
                         filteredDealers.map((item, index) => {
                             //const isSelected = index === selectedDealerIndex
                             const isSelected = item.id === default_dealer_id
-                            const isLoading = index === loadingDealerIndex
+                            const isLoading = item.id === loadingDealerId
                             return (
                                 <UserCardPrimary
                                     onPress={() => selectDefaultDealer(item, index)}
@@ -199,6 +242,7 @@ function FflDealers(props) {
                                         <ButtonColoredSmall
                                             text="View Profile"
                                             buttonStyle={{ paddingHorizontal: sizes.marginHorizontalSmall, borderRadius: 100, backgroundColor: colors.appColor2 }}
+                                            onPress={() => navigate(routes.userProfile, { user: item })}
                                         />
                                     }
                                     left={

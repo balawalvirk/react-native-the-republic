@@ -25,6 +25,9 @@ export const sendFollowRequest = async ({ following_id }) => {
             console.log('sendFollowRequest Response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
+                const { follow_request_sent } = tempResponseData.data
+                setUserDetail({ ...user.userDetail, follow_request_sent })
+                console.log('New User Detail-- > ', { ...user.userDetail, follow_request_sent })
             } else {
                 Toasts.error(tempResponseData.message)
             }
@@ -147,7 +150,8 @@ export const unfollowFollowing = async ({ following_id }) => {
     let response = null
     const state = store.getState()
     const { user } = state
-    const user_id = user.userDetail.id
+    const { userDetail } = user
+    const user_id = userDetail.id
     const params = {
         user_id,
         following_id
@@ -159,6 +163,8 @@ export const unfollowFollowing = async ({ following_id }) => {
             console.log('unfollowUser Response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
+                const { following_ids } = tempResponseData.data
+                setUserDetail({ ...userDetail, following_ids })
             } else {
                 Toasts.error(tempResponseData.message)
             }
@@ -171,6 +177,7 @@ export const unfollowFollowing = async ({ following_id }) => {
 };
 
 export const handleFollowUnfollowFollowing = async (userId) => {
+    let response = null
     if (!HelpingMethods.checkIfFollowRequestSent(userId)) {
         if (!HelpingMethods.checkIfFollowingUser(userId)) {
             await sendFollowRequest({ following_id: userId })
@@ -180,4 +187,5 @@ export const handleFollowUnfollowFollowing = async (userId) => {
     } else {
         Toasts.warn('Follow request already send')
     }
+    return response
 }

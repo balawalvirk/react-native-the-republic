@@ -15,9 +15,9 @@ function GroupDetail(props) {
     const { userDetail } = user
 
     const { navigation, route } = props
-    const { navigate, replace } = navigation
-    const { group } = route.params
-    const group_id = group.id
+    const { navigate, replace, setParams } = navigation
+    const { group, groupId } = route.params
+    const group_id = groupId ? groupId : group ? group.id : ''
     const isMyGroup = group.user_id === userDetail.id
     const isJoined = true
     const allPosts = DummyData.posts.slice(0, 2)
@@ -37,7 +37,7 @@ function GroupDetail(props) {
                         isMyGroup ?
                             <RowWrapper>
                                 <TouchableOpacity
-                                    onPress={() => navigate(routes.groupMemberRequests,{requests:joinRequests})}
+                                    onPress={() => navigate(routes.groupMemberRequests, { group_id })}
                                 >
                                     <Icon
                                         name="users"
@@ -46,10 +46,10 @@ function GroupDetail(props) {
                                         color={colors.appTextColor1}
                                     />
                                     {
-                                        joinRequests.length ?
+                                        getPendingRequests().length ?
                                             <AbsoluteWrapper style={{ right: -7.5, top: -7.5 }}>
                                                 <Badge
-                                                    value={joinRequests.length}
+                                                    value={getPendingRequests().length}
                                                     status="error"
                                                 />
                                             </AbsoluteWrapper>
@@ -81,7 +81,7 @@ function GroupDetail(props) {
                 </>
             )
         });
-    }, [navigation, joinRequests]);
+    }, [props, group]);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -89,14 +89,25 @@ function GroupDetail(props) {
         }, [])
     )
 
+
     const getSetData = async () => {
-        await Backend.getGroupJoinReuqests(group_id).
+        await Backend.getGroupDetail(group_id).
             then(res => {
                 if (res) {
-                    setJoinRequests(res.data)
+                    setParams({ group: res.data })
                 }
             })
-        setLoading(false)
+        loading && setLoading(false)
+    }
+
+    const getPendingRequests = () => {
+        let tempData = []
+        if (group.group_requests) {
+            if (group.group_requests.length) {
+                tempData = group.group_requests.filter(item => item.status === 'pending')
+            }
+        }
+        return tempData
     }
 
     if (loading) {
@@ -112,12 +123,13 @@ function GroupDetail(props) {
                 <ProfileTop
                     imageUri={group.icon}
                     title={group.name}
-                    subTitle={group.users.length + ' members'}
+                    //subTitle={group.users.length + ' members'}
+                    subTitle={group.users.length + ' ' + 'member' + (group.users.length <= 1 ? '' : 's')}
                 />
                 <Spacer height={sizes.smallMargin} />
                 <ShareSomethingButton
                     imageUri={userDetail.profile_image}
-                    onPress={() => { }}
+                    onPress={() => navigate(routes.shareApost,{group})}
                 />
                 <Spacer height={sizes.smallMargin} />
                 <Posts

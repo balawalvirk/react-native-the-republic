@@ -252,3 +252,106 @@ export const searchGroups = async (query) => {
         });
     return response
 };
+
+export const getGroupDetail = async (group_id) => {
+    let response = null
+    // const state = store.getState()
+    // const user_id = state.user.userDetail.id
+    let params = {
+        group_id
+    }
+    console.log('getGroupDetail Params', params);
+    await axios
+        .post(`${baseURL + endPoints.group.get_group_detail}`, params)
+        .then(async responseJson => {
+            const tempResponseData = responseJson.data
+            console.log('getGroupDetail response', tempResponseData);
+            if (tempResponseData.success) {
+                response = tempResponseData
+            } else {
+                Toasts.error(tempResponseData.message)
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};
+
+export const getJoinedGroups = async () => {
+    let response = null
+     const state = store.getState()
+     const user_id = state.user.userDetail.id
+    let params = {
+        user_id
+    }
+    console.log('getJoinedGroups Params', params);
+    await axios
+        .post(`${baseURL + endPoints.group.get_joined_groups}`, params)
+        .then(async responseJson => {
+            const tempResponseData = responseJson.data
+            console.log('getJoinedGroups response', tempResponseData);
+            if (tempResponseData.success) {
+                response = tempResponseData
+            } else {
+                Toasts.error(tempResponseData.message)
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};
+
+export const getUserGroups = async (userId) => {
+    let response = null
+     const state = store.getState()
+     const user_id =userId?userId: state.user.userDetail.id
+    let params = {
+        user_id
+    }
+    console.log('getUserGroups Params', params);
+    await axios
+        .post(`${baseURL + endPoints.group.get_user_groups}`, params)
+        .then(async responseJson => {
+            const tempResponseData = responseJson.data
+            console.log('getUserGroups response', tempResponseData);
+            if (tempResponseData.success) {
+                response = tempResponseData
+            } else {
+                Toasts.error(tempResponseData.message)
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};
+export const getUserJoinedGroups = async (userId) => {
+    let response = null
+     const state = store.getState()
+     const user_id =userId?userId: state.user.userDetail.id
+    let params = {
+        user_id
+    }
+    console.log('getUserJoinedGroups Params', params);
+    await axios
+        .post(`${baseURL + endPoints.group.get_joined_groups}`, params)
+        .then(async responseJson => {
+            const tempResponseData = responseJson.data
+            console.log('getUserJoinedGroups response', tempResponseData);
+            if (tempResponseData.success) {
+                response = tempResponseData
+            } else {
+                Toasts.error(tempResponseData.message)
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};

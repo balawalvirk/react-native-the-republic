@@ -1,29 +1,78 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { View, Text } from 'react-native';
 import { height } from 'react-native-dimension';
+import { useDispatch, useSelector } from 'react-redux';
 import { ComponentWrapper, MediumText, MediumTitle, ModalSwipeablePrimary, Spacer, TinyTitle, TitleInfoPrimary, UserCardPrimary, Wrapper } from '../../../components';
-import { appStyles, colors, DummyData, sizes } from '../../../services';
+import { appImages, appStyles, Backend, colors, DummyData, sizes } from '../../../services';
+import { setMyGroups, setMyJoinedGroups } from '../../../services/store/actions';
 
-function ShareOnPopup({ visible, toggle, onPressItem }) {
+function ShareOnPopup({ visible, toggle, onPressItem, selectedGroupId }) {
+
+  //redux states
+  const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
+  const group = useSelector(state => state.group)
+  const { userDetail } = user
+  const { myGroups, myJoinedGroups } = group
+
+  //local states
   const [selectedIndex, selectIndex] = useState(0)
   //const groups = [...DummyData.groups]
   //const data = [DummyData.userData, ...DummyData.groups]
   let data = []
 
+  useEffect(() => {
+    getSetSelectedGroup()
+  }, [selectedGroupId,myGroups,myGroups])
+
+  useEffect(() => {
+    getSetGroups()
+  }, [])
+
+  const getSetGroups = async () => {
+    await Backend.getUserGroups().
+      then(res => {
+        if (res) {
+          dispatch(setMyGroups(res.data))
+        }
+      })
+    Backend.getJoinedGroups().
+      then(res => {
+        if (res) {
+          dispatch(setMyJoinedGroups(res.data.joined_groups))
+        }
+      })
+  }
+
+  const getSetSelectedGroup = () => {
+    if (selectedGroupId) {
+      const tempData = getSetData()
+      const tempObj = tempData.find(item => item.id === selectedGroupId)
+      if (tempObj) {
+        const tempIndex = tempData.indexOf(tempObj)
+        if (tempIndex >= 0) {
+          selectIndex(tempIndex)
+        }
+      }
+    }
+  }
+
   const getSetData = () => {
     let tempGroups = []
     const topItem = {
-      ...DummyData.userData,
+      image: userDetail.profile_image ? userDetail.profile_image : appImages.noUser,
       title: 'Share on my profile',
       subTitle: 'Your followers will be able to see this post.',
+      id: null
     }
-    for (const item of DummyData.groups) {
+    for (const item of [...myGroups]) {
       const obj = {
-        ...item,
+        image: item.icon,
         title: item.name,
-        subTitle: '483 members will be able to see this post.'
+        subTitle: item.users.length + ' members will be able to see this post.',
+        id: item.id
       }
       tempGroups.push(obj)
     }

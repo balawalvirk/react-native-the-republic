@@ -4,11 +4,12 @@ import { FlatList } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { View, Text } from 'react-native';
 import { totalSize, width } from 'react-native-dimension';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IconWithText, ImageSqareRound, LoaderAbsolute, MainWrapper, ProductsHorizontalyPrimary, ProductsSecondary, RegularText, Spacer, TitlePrimary, Wrapper } from '../../../components';
 import { appStyles, Backend, colors, DummyData, HelpingMethods, routes, sizes } from '../../../services';
 import TopCategories from './topCategories';
 import Skeleton from './skeleton'
+import { setMyGroups } from '../../../services/store/actions';
 function RenderProducts({ title, onPressViewAll, data, onPressProduct }) {
     return (
         <>
@@ -36,6 +37,7 @@ function MarketPlace(props) {
 
 
     //redux states
+    const dispatch = useDispatch()
     const product = useSelector(state => state.product)
     const user = useSelector(state => state.user)
     const { categories } = product
@@ -82,6 +84,7 @@ function MarketPlace(props) {
                     setTopRatedProducts(res.data.data)
                 }
             })
+        
 
 
         await Backend.get_credit_cards()

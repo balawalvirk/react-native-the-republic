@@ -179,9 +179,9 @@ export const SwitchPrimary = ({ value, onPress }) => {
 }
 
 export const LocationPickerButton = ({ text, onPress }) => {
-    const user=useSelector(state=>state.user)
-    const {userDetail}=user
-    const userAddress=text?text:userDetail.address?userDetail.address:'Current Location'
+    const user = useSelector(state => state.user)
+    const { userDetail } = user
+    const userAddress = text ? text : userDetail.address ? userDetail.address : 'Current Location'
     return (
         <TouchableOpacity disabled={!onPress} onPress={onPress} activeOpacity={1}>
             <RowWrapperBasic style={{ padding: sizes.smallMargin, backgroundColor: colors.appBgColor3, borderRadius: 100 }}>
@@ -215,16 +215,25 @@ export const MenuOption = ({ title, onPress }) => {
     )
 }
 
-export const RenderTags = ({ tags }) => {
+export const RenderTags = ({ tags, value, ContainerStyle, tagStyle, TextStyle, onPress, onPressCross }) => {
     return (
-        <RowWrapperBasic>
+        <RowWrapperBasic style={[ContainerStyle]}>
             {
                 tags.map((item, index) => {
                     return (
                         <ButtonColoredSmall
-                            text={item}
-                            buttonStyle={{ backgroundColor: colors.appBgColor3, paddingHorizontal: sizes.TinyMargin, marginRight: sizes.marginHorizontalSmall, paddingVertical: sizes.TinyMargin }}
-                            textStyle={[appStyles.textSmall, appStyles.textDarkGray]}
+                            onPress={() => {
+                                onPress && onPress(item, index)
+                                onPressCross && onPressCross(item, index)
+                            }}
+                            disabled={!onPress&&!onPressCross}
+                            text={value ? item[value] : item}
+                            buttonStyle={[{ backgroundColor: colors.appBgColor3, paddingHorizontal: sizes.TinyMargin, marginRight: sizes.marginHorizontalSmall, paddingVertical: sizes.TinyMargin }, tagStyle]}
+                            textStyle={[appStyles.textSmall, appStyles.textDarkGray, TextStyle]}
+                            iconName={onPressCross && 'close-circle'}
+                            iconSize={totalSize(2.5)}
+                            iconColor={colors.error}
+                            direction={'row-reverse'}
                         />
                     )
                 })
@@ -340,7 +349,7 @@ export const ShareSomethingButton = ({ onPress, imageUri, title }) => {
         <TouchableOpacity activeOpacity={1} onPress={onPress} style={{ marginHorizontal: sizes.marginHorizontalSmall, borderWidth: 1, borderColor: colors.appBgColor3, borderRadius: sizes.baseRadius, paddingVertical: defaultVerticalSpacer, paddingHorizontal: sizes.marginHorizontalSmall }}>
             <RowWrapperBasic>
                 <ImageRound
-                    source={{ uri: imageUri?imageUri:appImages.noUser }}
+                    source={{ uri: imageUri ? imageUri : appImages.noUser }}
                     size={totalSize(5)}
                 />
                 <Spacer width={sizes.marginHorizontal} />
@@ -400,7 +409,7 @@ export const DashboardSeller = ({
         <>
             {
                 isLoading ?
-                    <SkeletonPrimary itemStyle={{height:height(22.5)}}/>
+                    <SkeletonPrimary itemStyle={{ height: height(22.5) }} />
                     :
                     <Wrapper style={{ ...appStyles.grayWrapper, paddingVertical: 0, paddingHorizontal: 0, height: height(22.5), backgroundColor: colors.appColor1 }}>
                         <Wrapper flex={1} >

@@ -772,9 +772,19 @@ export const getProductReviews = async (product_id) => {
 export const handleAddRemoveFavouriteProduct = async (product_id) => {
     let response = null
     if (HelpingMethods.checkIsProductFavourite(product_id)) {
-        await removeFavouriteProduct(product_id)
+        await removeFavouriteProduct(product_id).
+            then(res => res && [response = res])
     } else {
-        await addFavouriteProduct(product_id)
+        await addFavouriteProduct(product_id).
+            then(res => res && [response = res])
+    }
+    if (response) {
+        const { favorite_products } = response.data
+        const state = store.getState()
+        const { userDetail } = state.user
+        if (favorite_products) {
+            setUserDetail({ ...userDetail, favorite_products })
+        }
     }
     return response
 };
