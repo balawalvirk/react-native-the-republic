@@ -1,10 +1,10 @@
-import React, { Component, useLayoutEffect, useState } from 'react';
+import React, { Component, useEffect, useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { View, Text } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
 import { useSelector } from 'react-redux';
 import { ComponentWrapper, MainWrapper, ButtonColoredSmall, ProfileTop, Spacer, ShareSomethingButton, Posts, Wrapper, ButtonGroupAnimated } from '../../../components';
-import { appStyles, colors, DummyData, routes, sizes } from '../../../services';
+import { appStyles, Backend, colors, DummyData, routes, sizes } from '../../../services';
 import dummyData from '../../../services/constants/dummyData';
 import More from './more';
 
@@ -19,38 +19,58 @@ const tabs = [
 ]
 
 
-function Account(props) {
+function Profile(props) {
     const { navigation, route } = props
     const { navigate } = navigation
     //const isJoined = true
 
     const allPosts = DummyData.posts.slice(0, 4)
-    //configure Header
-    // useLayoutEffect(() => {
-    //     navigation.setOptions({
-    //         headerRight: () => (
-    //             <ComponentWrapper>
-    //                 <ButtonColoredSmall
-    //                     text={isJoined ? "Joined" : "join"}
-    //                     onPress={() => {
-    //                     }}
-    //                     buttonStyle={{ paddingHorizontal: sizes.marginHorizontal, paddingVertical: sizes.marginVertical / 2, backgroundColor: isJoined ? colors.appColor1 + '20' : colors.appColor1 }}
-    //                     textStyle={[appStyles.textRegular, isJoined ? appStyles.textPrimaryColor : appStyles.textWhite]}
-    //                 />
-    //             </ComponentWrapper>
-    //         )
-    //     });
-    // }, [navigation]);
 
 
     //redux states
-    const user=useSelector(state=>state.user)
-    const {userDetail}=user
+    const user = useSelector(state => state.user)
+    const { userDetail } = user
     //const fullName=userDetail.first_name+' '+userDetail.last_name
 
     //local states
+    const [myPosts, setMyPosts] = useState([])
+    const [isLoadingMyPosts, setLoadingMyPosts] = useState(true)
+    const [isLoadingMoreMyPosts, setLoadingMoreMyPosts] = useState(false)
+    const [isMyAllPostsLoaded, setMyAllPostsLoaded] = useState(false)
+    const [myPostsCurrentPage, setMyPostsCurrentPage] = useState(1)
     const [selectedTabIndex, setSelectedTabIndex] = useState(0)
-    if(!userDetail){
+
+
+    useEffect(() => {
+        getInitialData()
+    }, [])
+
+    const getInitialData = async () => {
+        await getSetMyPosts()
+        setLoadingMyPosts(false)
+    }
+    
+    const handleLoadMorePosts = async (data) => {
+        if (!isMyAllPostsLoaded) {
+            setLoadingMoreMyPosts(true)
+            await getSetMyPosts()
+            setMyPostsCurrentPage(myPostsCurrentPage + 1)
+            setLoadingMoreMyPosts(false)
+        }
+    }
+
+
+    const getSetMyPosts = async () => {
+        await Backend.getUserPosts({ page: myPostsCurrentPage }).
+            then(res => {
+                if (res) {
+                    setMyPosts([...myPosts, ...res.data.data])
+                    !res.data.next_page_url && setMyAllPostsLoaded(true)
+                }
+            })
+    }
+
+    if (!userDetail) {
         return null
     }
     return (
@@ -60,8 +80,8 @@ function Account(props) {
             >
                 <ProfileTop
                     imageUri={userDetail.profile_image}
-                    title={userDetail.first_name+' '+userDetail.last_name}
-                    subTitle={'@'+userDetail.username}
+                    title={userDetail.first_name + ' ' + userDetail.last_name}
+                    subTitle={'@' + userDetail.username}
                     content={
                         <Wrapper style={{ alignItems: 'flex-start', }}>
                             <Spacer height={sizes.smallMargin} />
@@ -72,7 +92,7 @@ function Account(props) {
                                 buttonStyle={{ paddingHorizontal: sizes.marginHorizontalSmall }}
                                 textStyle={[appStyles.textMedium, appStyles.textWhite]}
                                 iconSize={totalSize(2.5)}
-                                onPress={()=>navigate(routes.seller.sellerDashboard)}
+                                onPress={() => navigate(routes.seller.sellerDashboard)}
                             />
                         </Wrapper>
                     }
@@ -99,7 +119,11 @@ function Account(props) {
                             />
                             <Spacer height={sizes.smallMargin} />
                             <Posts
-                                data={allPosts}
+                                data={myPosts}
+                                isLoadingMore={isLoadingMoreMyPosts}
+                                isLoading={isLoadingMyPosts}
+                                onEndReached={handleLoadMorePosts}
+                                updateData={(data) => setMyPosts(data)}
                             />
                         </Wrapper>
                         :
@@ -113,4 +137,4 @@ function Account(props) {
     );
 }
 
-export default Account;
+export default Profile;

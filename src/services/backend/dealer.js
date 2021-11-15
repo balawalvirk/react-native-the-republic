@@ -114,21 +114,26 @@ export const removeFavouriteDealer = async (dealer_id) => {
 
 export const handleAddRemoveFavouriteDealer = async (dealer_id) => {
     let response = null
-
+    const state = store.getState()
+    const { userDetail } = state.user
     if (HelpingMethods.checkIfDealerFavourite(dealer_id)) {
+        const newFavDealers=userDetail.favorite_dealers.filter(favDealerId=>favDealerId!=dealer_id)
+        dispatch(setUserDetail({...userDetail,favorite_dealers:newFavDealers}))
         await removeFavouriteDealer(dealer_id).
         then(res=>res&&[response=res])
     } else {
+        const newFavDealers=[...userDetail.favorite_dealers,dealer_id]
+        dispatch(setUserDetail({...userDetail,favorite_dealers:newFavDealers}))
         await addFavouriteDealer(dealer_id).
         then(res=>res&&[response=res])
     }
     if (response) {
-        const state = store.getState()
-        const { userDetail } = state.user
-        const { favorite_dealers } = response.data
-        if (favorite_dealers) {
-            setUserDetail({ ...userDetail, favorite_dealers })
-        }
+        // const state = store.getState()
+        // const { userDetail } = state.user
+        // const { favorite_dealers } = response.data
+        // if (favorite_dealers) {
+        //     dispatch(setUserDetail({ ...userDetail, favorite_dealers }))
+        // }
     }
     return response
 };

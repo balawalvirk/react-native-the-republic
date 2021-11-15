@@ -140,10 +140,137 @@ export const getAllPosts = async (page) => {
     let response = null
     const defaultPage = page ? page : 1
     await axios
-        .get(`${baseURL + endPoints.post.show_posts}?page=${page}`)
+        .get(`${baseURL + endPoints.post.show_posts}?page=${defaultPage}`)
         .then(async responseJson => {
             const tempResponseData = responseJson.data
             console.log('getAllPosts response', tempResponseData);
+            if (tempResponseData.success) {
+                response = tempResponseData
+            } else {
+                Toasts.error(tempResponseData.message)
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};
+
+export const getUserPosts = async (data) => {
+    const userId = data ? data.userId ? data.userId : null : null
+    const page = data ? data.page ? data.page : null : null
+    let response = null
+    const state = store.getState()
+    const user_id = userId ? userId : state.user.userDetail.id
+    const defaultPage = page ? page : 1
+    const params = {
+        user_id
+    }
+    await axios
+        .post(`${baseURL + endPoints.post.get_user_posts}?page=${defaultPage}`, params)
+        .then(async responseJson => {
+            const tempResponseData = responseJson.data
+            console.log('getUserPosts response', tempResponseData);
+            if (tempResponseData.success) {
+                response = tempResponseData
+            } else {
+                Toasts.error(tempResponseData.message)
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};
+
+export const getSubscribedPosts = async (page) => {
+    let response = null
+    const state = store.getState()
+    const user_id = state.user.userDetail.id
+    const defaultPage = page ? page : 1
+    const params = {
+        user_id
+    }
+    await axios
+        .post(`${baseURL + endPoints.post.get_subscribed_posts}?page=${defaultPage}`, params)
+        .then(async responseJson => {
+            const tempResponseData = responseJson.data
+            console.log('getSubscribedPosts response', tempResponseData);
+            if (tempResponseData.success) {
+                response = tempResponseData
+            } else {
+                Toasts.error(tempResponseData.message)
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};
+export const getFollowingsPosts = async (page) => {
+    let response = null
+    const state = store.getState()
+    const user_id = state.user.userDetail.id
+    const defaultPage = page ? page : 1
+    const params = {
+        user_id
+    }
+    await axios
+        .post(`${baseURL + endPoints.post.get_following_posts}?page=${defaultPage}`, params)
+        .then(async responseJson => {
+            const tempResponseData = responseJson.data
+            console.log('getFollowingsPosts response', tempResponseData);
+            if (tempResponseData.success) {
+                response = tempResponseData
+            } else {
+                Toasts.error(tempResponseData.message)
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};
+export const getJoinedGroupsPosts = async (page) => {
+    let response = null
+    const state = store.getState()
+    const user_id = state.user.userDetail.id
+    const defaultPage = page ? page : 1
+    const params = {
+        user_id
+    }
+    await axios
+        .post(`${baseURL + endPoints.post.get_joined_groups_posts}?page=${defaultPage}`, params)
+        .then(async responseJson => {
+            const tempResponseData = responseJson.data
+            console.log('getJoinedGroupsPosts response', tempResponseData);
+            if (tempResponseData.success) {
+                response = tempResponseData
+            } else {
+                Toasts.error(tempResponseData.message)
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};
+export const getGroupPosts = async ({ group_id, page }) => {
+    let response = null
+    const defaultPage = page ? page : 1
+    const params = {
+        group_id
+    }
+    await axios
+        .post(`${baseURL + endPoints.post.get_group_posts}?page=${defaultPage}`, params)
+        .then(async responseJson => {
+            const tempResponseData = responseJson.data
+            console.log('getGroupPosts response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
             } else {
@@ -346,15 +473,15 @@ export const deleteCommentOfPost = async (comment_id) => {
     return response
 };
 
-export const reportCommentOfPost = async ({ comment_id,comment}) => {
+export const reportCommentOfPost = async ({ comment_id, comment }) => {
     let response = null
-     const state = store.getState()
-     const user_id = state.user.userDetail.id
+    const state = store.getState()
+    const user_id = state.user.userDetail.id
     let params = {
         user_id,
         comment_id,
     }
-    comment&&[params['comment']=comment]
+    comment && [params['comment'] = comment]
     console.log('reportCommentOfPost Params', params);
     await axios
         .post(`${baseURL + endPoints.post.report_comment}`, params)

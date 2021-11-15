@@ -114,7 +114,7 @@ function BottomTabScreens() {
                     },
                 })}
             /> */}
-              <MainBottomTab.Screen
+            <MainBottomTab.Screen
                 name={routes.community}
                 component={CommunityTopTabScreens}
                 options={() => ({
@@ -126,8 +126,8 @@ function BottomTabScreens() {
             />
 
             <MainBottomTab.Screen
-                name={routes.account}
-                component={MainApp.Account}
+                name={routes.profile}
+                component={MainApp.Profile}
                 options={() => ({
                     tabBarLabel: "Profile",
                     tabBarIcon: ({ color, size, focused }) => {

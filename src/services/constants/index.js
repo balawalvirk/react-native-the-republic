@@ -28,7 +28,8 @@ export const endPoints = {
         approve_identity: 'approve-identity',
         reject_identity: 'reject-identity',
         check_user: 'check-user',
-        update_delivery_address: 'update-delivery-address'
+        update_delivery_address: 'update-delivery-address',
+        show_user_profile:'show-user-profile',
     },
     creditCard: {
         add_card: 'add-card',
@@ -124,7 +125,7 @@ export const endPoints = {
         report_comment: 'report-comment',
         get_group_posts: 'get-group-posts',
         get_following_posts: 'get-following-posts',
-        get_joined_groups_posts: 'get-joined-groups-posts',
+        get_joined_groups_posts: 'get-joined-group-posts',
         get_subscribed_posts: 'get-subscribed-posts',
         get_user_posts: 'get-user-posts'
 
@@ -213,7 +214,7 @@ export const routes = {
     communityYourGroups: 'communityYourGroups',
     explore: 'explore',
     marketPlace: 'marketPlace',
-    account: 'account',
+    profile: 'profile',
     followRequests: 'followRequests',
     dealers: 'dealers',
     trainings: 'trainings',

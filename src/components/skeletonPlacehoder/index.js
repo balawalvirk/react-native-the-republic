@@ -230,3 +230,36 @@ export const SkeletonPrimaryList = ({ NumOfItems, itemHeight, itemStyle }) => {
         </MainWrapper>
     );
 }
+
+export const PostSkeletons = ({ NumOfItems, itemStyle }) => {
+    const defaultItems = NumOfItems ? NumOfItems : 3
+    const PlaceholderItems = Array.from(Array(defaultItems).keys())
+    return (
+        <SkeletonPlaceholder>
+            {
+                PlaceholderItems.map((item, index) => {
+                    return (
+                        <Wrapper style={[{ marginVertical: sizes.marginVertical / 2, marginHorizontal: sizes.marginHorizontalSmall }]}>
+                            <Wrapper style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Wrapper style={{ height: totalSize(5), width: totalSize(5), borderRadius: 100 }} />
+                                <Wrapper style={{ marginHorizontal: sizes.smallMargin }}>
+                                    <Wrapper style={{ height: height(2), width: width(40), borderRadius: sizes.cardRadius, marginBottom: sizes.smallMargin }} />
+                                    <Wrapper style={{ height: height(0.5), width: width(15), borderRadius: sizes.cardRadius }} />
+                                </Wrapper>
+                            </Wrapper>
+                            <Wrapper style={{ height: height(1), borderRadius: sizes.cardRadius, marginVertical: sizes.smallMargin }} />
+                            <Wrapper style={{ height: height(1), width: width(60), borderRadius: sizes.cardRadius }} />
+                            <Wrapper style={[{ height: height(35), borderRadius: sizes.cardRadius, marginVertical: sizes.smallMargin }]} />
+                            <Wrapper style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: sizes.marginHorizontal, justifyContent: 'space-between', }}>
+                                <Wrapper style={{ height: height(3), width: width(12.50), borderRadius: sizes.cardRadius, }} />
+                                <Wrapper style={{ height: height(3), width: width(12.50), borderRadius: sizes.cardRadius, }} />
+                                <Wrapper style={{ height: height(3), width: width(12.50), borderRadius: sizes.cardRadius, }} />
+                            </Wrapper>
+                            <Wrapper style={{ height: height(7), borderRadius: sizes.cardRadius, marginVertical: sizes.smallMargin }} />
+                        </Wrapper>
+                    )
+                })
+            }
+        </SkeletonPlaceholder >
+    )
+}

@@ -46,7 +46,7 @@ export const Dealers = ({ data, onPress, onPressHeart, ListHeaderComponent, List
                                         right={
                                             <IconHeart
                                                 size={totalSize(2)}
-                                                value={HelpingMethods.checkIsProductFavourite(item.id)}
+                                                value={HelpingMethods.checkIfDealerFavourite(item.id)}
                                                 onPress={() => Backend.handleAddRemoveFavouriteDealer(item.id)}
                                             />
                                         }

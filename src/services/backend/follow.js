@@ -26,7 +26,7 @@ export const sendFollowRequest = async ({ following_id }) => {
             if (tempResponseData.success) {
                 response = tempResponseData
                 const { follow_request_sent } = tempResponseData.data
-                setUserDetail({ ...user.userDetail, follow_request_sent })
+                dispatch(setUserDetail({ ...user.userDetail, follow_request_sent }))
                 console.log('New User Detail-- > ', { ...user.userDetail, follow_request_sent })
             } else {
                 Toasts.error(tempResponseData.message)
@@ -164,7 +164,7 @@ export const unfollowFollowing = async ({ following_id }) => {
             if (tempResponseData.success) {
                 response = tempResponseData
                 const { following_ids } = tempResponseData.data
-                setUserDetail({ ...userDetail, following_ids })
+                dispatch(setUserDetail({ ...userDetail, following_ids }))
             } else {
                 Toasts.error(tempResponseData.message)
             }

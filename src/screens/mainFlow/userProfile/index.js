@@ -48,18 +48,21 @@ function UserProfile(props) {
     //redux state
     const userData = useSelector(state => state.user)
     const myProfileDetails = userData.userDetail
-    console.log('myProfileDetails --> ',myProfileDetails.follow_request_sent)
+    console.log('myProfileDetails --> ', myProfileDetails.follow_request_sent)
 
     //local states
     const [selectedTabIndex, setSelectedTabIndex] = useState(0)
     const [userDetail, setUserDetail] = useState(null)
     const [userProducts, setUserProducts] = useState([])
-    const [userPosts, setUserPosts] = useState([])
     const [isLoading, setLoading] = useState(true)
     const [loadingFollow, setLoadingFollow] = useState(false)
+    //manage posts
+    const [userPosts, setUserPosts] = useState([])
+    const [isLoadingUserPosts, setLoadingUserPosts] = useState(true)
+    const [isLoadingMoreUserPosts, setLoadingMoreUserPosts] = useState(false)
+    const [isUserAllPostsLoaded, setUserAllPostsLoaded] = useState(false)
+    const [myPostsCurrentPage, setUserPostsCurrentPage] = useState(1)
 
-    const dummyUserPosts = DummyData.posts
-    const dummyUserProducts = DummyData.products.slice().reverse()
 
 
     useEffect(() => {
@@ -69,14 +72,44 @@ function UserProfile(props) {
 
     const getSetData = async () => {
         if (userId) {
-
+            await Backend.getUserProfileDetail(userId).
+                then(res => {
+                    if (res) {
+                        setUserDetail(res.data)
+                    }
+                })
         } else if (user) {
             setUserDetail(user)
         }
         await handleGetUserProducts()
+        getInitialUserPosts()
         setLoading(false)
     }
 
+    const getInitialUserPosts = async () => {
+        await getSetUserPosts()
+        setLoadingUserPosts(false)
+    }
+
+    const handleLoadMoreUserPosts = async (data) => {
+        if (!isUserAllPostsLoaded) {
+            setLoadingMoreUserPosts(true)
+            await getSetUserPosts()
+            setUserPostsCurrentPage(myPostsCurrentPage + 1)
+            setLoadingMoreUserPosts(false)
+        }
+    }
+
+
+    const getSetUserPosts = async () => {
+        await Backend.getUserPosts({ userId: user_id, page: myPostsCurrentPage }).
+            then(res => {
+                if (res) {
+                    setUserPosts([...userPosts, ...res.data.data])
+                    !res.data.next_page_url && setUserAllPostsLoaded(true)
+                }
+            })
+    }
 
     const handleGetUserProducts = async () => {
         await Backend.get_user_products(user_id).
@@ -130,7 +163,6 @@ function UserProfile(props) {
                                 setLoadingFollow(false)
                             }}
                             isLoading={loadingFollow}
-
                         />
                         <Spacer height={sizes.baseMargin} />
                         <RowWrapperBasic>
@@ -158,8 +190,9 @@ function UserProfile(props) {
                         <LineHorizontal height={1} />
                     </ComponentWrapper>
                     <IconHeart
-                        value={false}
+                        value={HelpingMethods.checkIfDealerFavourite(user_id)}
                         containerStyle={{ position: 'absolute', right: sizes.marginHorizontal, top: 0 }}
+                        onPress={() => Backend.handleAddRemoveFavouriteDealer(user_id)}
                     />
                 </Wrapper>
                 <ButtonGroupAnimated
@@ -179,11 +212,14 @@ function UserProfile(props) {
                 {
                     selectedTabIndex === 0 ?
                         <Posts
-                            data={dummyUserPosts}
+                            data={userPosts}
                             scrollEnabled={false}
                             ListFooterComponent={() => {
                                 return <Spacer height={sizes.doubleBaseMargin * 2} />
                             }}
+                            isLoading={isLoadingUserPosts}
+                            isLoadingMore={isLoadingMoreUserPosts}
+                            onEndReached={handleLoadMoreUserPosts}
                         />
                         :
                         <Products

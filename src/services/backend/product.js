@@ -770,21 +770,36 @@ export const getProductReviews = async (product_id) => {
 };
 
 export const handleAddRemoveFavouriteProduct = async (product_id) => {
+    const state = store.getState()
+    const { userDetail } = state.user
     let response = null
+    //let new_favorite_products = []
+    console.log('old favorite_products ',[...userDetail.favorite_products])
+
     if (HelpingMethods.checkIsProductFavourite(product_id)) {
+        //favorite_products = [...userDetail.favorite_products, product_id]
+        const new_favorite_products = userDetail.favorite_products.filter(favProdId => favProdId != product_id)
+        console.log('new favorite_products ',new_favorite_products)
+        dispatch(setUserDetail({ ...userDetail, favorite_products:new_favorite_products }))
         await removeFavouriteProduct(product_id).
             then(res => res && [response = res])
     } else {
+       // favorite_products = userDetail.favorite_products.filter(favProdId => favProdId != product_id)
+       const new_favorite_products=[...userDetail.favorite_products, product_id]
+        console.log('new favorite_products ',new_favorite_products)
+        dispatch(setUserDetail({ ...userDetail, favorite_products:new_favorite_products}))
         await addFavouriteProduct(product_id).
             then(res => res && [response = res])
     }
     if (response) {
-        const { favorite_products } = response.data
-        const state = store.getState()
-        const { userDetail } = state.user
-        if (favorite_products) {
-            setUserDetail({ ...userDetail, favorite_products })
-        }
+        // const { favorite_products } = response.data
+        // const state = store.getState()
+        // const { userDetail } = state.user
+        // if (favorite_products) {
+        //     dispatch(setUserDetail({ ...userDetail, favorite_products }))
+        // }
+
+        // dispatch(setUserDetail({ ...userDetail, favorite_products }))
     }
     return response
 };

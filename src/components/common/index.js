@@ -12,7 +12,7 @@ import { ComponentWrapper, RowWrapper, Wrapper, RowWrapperBasic } from '../wrapp
 import EditProfileComp from './editProfileCom'
 import VerificationCodeSentPopup from './verificationCodeSentPopup'
 import ImagePickerPopup from './imagePickerPopup'
-import Posts from './posts'
+import { Posts, PostCard } from './postslists'
 import MenuPopup from './menuPopup'
 import RenderComments from './renderComments'
 import { Products, ProductsSecondary, ProductsHorizontalyPrimary } from './productsLists'
@@ -226,7 +226,7 @@ export const RenderTags = ({ tags, value, ContainerStyle, tagStyle, TextStyle, o
                                 onPress && onPress(item, index)
                                 onPressCross && onPressCross(item, index)
                             }}
-                            disabled={!onPress&&!onPressCross}
+                            disabled={!onPress && !onPressCross}
                             text={value ? item[value] : item}
                             buttonStyle={[{ backgroundColor: colors.appBgColor3, paddingHorizontal: sizes.TinyMargin, marginRight: sizes.marginHorizontalSmall, paddingVertical: sizes.TinyMargin }, tagStyle]}
                             textStyle={[appStyles.textSmall, appStyles.textDarkGray, TextStyle]}
@@ -565,9 +565,10 @@ export const AddDataViewPrimary = ({ title, iconName, iconType, onPress }) => {
 
 export {
     EditProfileComp, VerificationCodeSentPopup, ImagePickerPopup,
-    Posts, MenuPopup, RenderComments, Products, ArmerInfo,
+    Posts, PostCard, MenuPopup, RenderComments, Products, ArmerInfo,
     Reviews, ProductsSecondary, ProductsHorizontalyPrimary, Dealers, Groups,
-    Purchases, AddPaymentMethodModal, FollowRequestsList, GoogleAutoComplete
+    Purchases, AddPaymentMethodModal, FollowRequestsList, GoogleAutoComplete,
+
 }
 
 export * from './imagesList'

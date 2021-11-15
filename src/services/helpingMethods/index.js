@@ -159,9 +159,22 @@ const HelpingMethods = {
     formateDate1: (date) => {
         return moment(date).format('DD / MM / YYYY')
     },
+    formateDateFromNow: (date) => {
+        return moment(date).fromNow()
+    },
     formateDate2: (date) => {
         //'Fri, 4th June, 2021'
         return moment(date).format('ddd, DD MMMM, YYYY')
+    },
+    formateDate3: (date) => {
+        //'Fri, 4th June, 2021'
+        return moment(date).format('DD MMMM, YYYY')
+    },
+    formateDatePost: (date) => {
+        return moment(date).fromNow()
+    },
+    formateDateComment:(date) => {
+        return moment(date).fromNow()
     },
     formateDateToDate1: (date) => {
         return moment(date, 'YYYY-MM-DD').format('DD / MM / YYYY')

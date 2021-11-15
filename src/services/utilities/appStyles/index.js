@@ -372,5 +372,22 @@ borderedWrapper: {
     borderWidth: 1,
     borderColor: colors.appBgColor3,
     borderRadius: sizes.cardRadius,
-}
+},
+menuContainer: {
+  backgroundColor: colors.appBgColor1,
+  borderRadius: sizes.buttonRadius,
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 2,
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 3.84,
+
+  elevation: 5,
+  paddingHorizontal: sizes.marginHorizontalSmall*1.5,
+  paddingVertical: sizes.marginVertical,
+  margin: sizes.baseMargin
+},
+menuMainContainer:{ backgroundColor: 'transparent', shadowOpacity: 0, elevation: 0 }
 })

@@ -41,7 +41,7 @@ function MarketPlace(props) {
     const product = useSelector(state => state.product)
     const user = useSelector(state => state.user)
     const { categories } = product
-    const { currentLocation } = user
+    const { currentLocation,userDetail } = user
     //local states
     const [featuredProducts, setFeaturedProducts] = useState([])
     const [popularProducts, setPopularProducts] = useState([])

@@ -394,3 +394,30 @@ export const updateDeliveryAddress = async ({ house, street, address, city, stat
         });
     return response
 };
+
+export const getUserProfileDetail = async (userId) => {
+    let response = null
+    const state = store.getState()
+    const user_id = userId ? userId : state.user.userDetail.id
+    const uri = `${baseURL + endPoints.user.show_user_profile}`
+    let params = {
+        user_id
+    }
+    console.log('getUserDetail \nuri', uri, '\nParams', params);
+    await axios
+        .post(uri, params)
+        .then(async responseJson => {
+            const tempResponseData = responseJson.data
+            console.log('getUserDetail Response', tempResponseData);
+            if (tempResponseData.success) {
+                response = tempResponseData
+            } else {
+                Toasts.error(tempResponseData.message)
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};

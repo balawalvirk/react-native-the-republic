@@ -7,6 +7,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 import dummyData from '../../../services/constants/dummyData';
 import { useFocusEffect } from '@react-navigation/core';
+import { useSelector } from 'react-redux';
 
 
 
@@ -16,6 +17,10 @@ function ProductDetail(props) {
     const { navigate, replace, push, goBack } = navigation
     const { product, productId } = route.params
     const product_id = productId ? productId : product ? product.id : ''
+
+    //redux states
+    const userData = useSelector(state => state.user)
+    const { userDetail } = userData
 
     //local states
     const [isLoading, setLoading] = useState(true)
@@ -153,7 +158,7 @@ function ProductDetail(props) {
                 <Spacer height={sizes.baseMargin} />
                 <UserCardPrimary
                     imageUri={user ? user.profile_image ? user.profile_image : appImages.noUser : appImages.noUser}
-                    title={user?user.first_name + ' ' + user.last_name:'Anonynous'}
+                    title={user ? user.first_name + ' ' + user.last_name : 'Anonynous'}
                     subTitle={'3 miles away'}
                     gradiant
                     onPressViewProfile={() => navigate(routes.userProfile, { user })}

@@ -1,7 +1,7 @@
 import Community from './community'
 import Explore from './explore'
 import MarketPlace from './marketPlace'
-import Account from './account'
+import Profile from './profile'
 import FollowRequests from './followRequests'
 import Dealers from './dealers'
 import Trainings from './trainings'
@@ -42,7 +42,7 @@ import PrivacySettings from './createGroup/privacySettings'
 import MemberRequests from './groupDetail/memberRequests'
 
 export {
-    Community, Explore, MarketPlace, Account,
+    Community, Explore, MarketPlace, Profile,
     FollowRequests, Dealers, Trainings, Comments,
     TheRepublicNews, ContactUs, SubscriptionPlan,
     Chats, Notifications, ShareAPost, MyLocation, Search,
