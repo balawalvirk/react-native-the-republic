@@ -124,7 +124,7 @@ function BuyNow(props) {
                     description={product.title}
                     price={product.price}
                     discountedPrice={product.discounted_price}
-                    rating={product.average_rating}
+                    rating={product.avg_rating}
                     reviewCount={product.reviews_count}
                     moreInfo
                     moreInfoImage={user ? user.profile_image ? user.profile_image : appImages.noUser : appImages.noUser}

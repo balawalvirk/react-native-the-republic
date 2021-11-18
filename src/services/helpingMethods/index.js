@@ -8,6 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { asyncConts } from "..";
 import { Toasts } from "../../components";
 import Geolocation from 'react-native-geolocation-service';
+import Share from 'react-native-share';
 
 const { dispatch } = store
 const HelpingMethods = {
@@ -103,12 +104,45 @@ const HelpingMethods = {
     },
     checkIsPostLiked: (postId) => {
         let isLiked = false
-        const likedPosts = dummyData.userData.liked_posts
-        const likedPost = likedPosts.find(item => {
-            return item === postId
-        })
-        if (likedPost) isLiked = true
+        const state = store.getState()
+        const reacted_posts = state.user.userDetail.reacted_posts ? state.user.userDetail.reacted_posts : []
+        if (reacted_posts) {
+            if (reacted_posts.length) {
+                const matchedId = reacted_posts.find(id => id === postId)
+                if (matchedId) {
+                    isLiked = true
+                }
+            }
+        }
         return isLiked
+    },
+    checkIfGroupJoined: (groupId) => {
+        let isJoined = false
+        const state = store.getState()
+        const { joined_groups } = state.user.userDetail
+        if (joined_groups) {
+            if (joined_groups.length) {
+                const matchedId = joined_groups.find(id => id === groupId)
+                if (matchedId) {
+                    isJoined = true
+                }
+            }
+        }
+        return isJoined
+    },
+    checkIfGroupJoinRequested: (groupId) => {
+        let isJoinRequested = false
+        const state = store.getState()
+        const { join_requested_groups } = state.user.userDetail
+        if (join_requested_groups) {
+            if (join_requested_groups.length) {
+                const matchedId = join_requested_groups.find(id => id === groupId)
+                if (matchedId) {
+                    isJoinRequested = true
+                }
+            }
+        }
+        return isJoinRequested
     },
     getCardType: (number) => {
         // visa
@@ -173,7 +207,7 @@ const HelpingMethods = {
     formateDatePost: (date) => {
         return moment(date).fromNow()
     },
-    formateDateComment:(date) => {
+    formateDateComment: (date) => {
         return moment(date).fromNow()
     },
     formateDateToDate1: (date) => {
@@ -249,7 +283,7 @@ const HelpingMethods = {
         let userCurrentLocation = null
         const state = store.getState()
         const { userDetail, currentLocation } = state.user
-       // const { latitude, longitude, distance, address } = userDetail
+        // const { latitude, longitude, distance, address } = userDetail
         currentLocation && [userCurrentLocation = currentLocation.coords]
         console.log('currentLocation', currentLocation)
         latitude = userDetail.latitude ? userDetail.latitude : userCurrentLocation ? userCurrentLocation.latitude : ''
@@ -288,6 +322,36 @@ const HelpingMethods = {
     },
     getRoundedValue: (value) => {
         return Math.round(value * 10) / 10
+    },
+    handleShare: (url) => {
+        console.log('url --> ', url)
+        const shareOptions = {
+            //title: 'Share via',
+            //message: 'some message',
+            url: url,
+            //social: Share.Social.WHATSAPP,
+            //  whatsAppNumber: "9199999999",  // country code + phone number
+            //  filename: 'test' , // only for base64 file in Android
+        };
+
+        Share.open(shareOptions)
+            .then((res) => { console.log(res) })
+            .catch((err) => { err && console.log(err); });
+    },
+    handleReplacePost: (allPosts, post) => {
+        let tempData = allPosts.slice()
+        const tempDataObj = tempData.find(item => item.id === post.id)
+        if (tempDataObj) {
+            const tempDataObjIndex = tempData.indexOf(tempDataObj)
+            if (tempDataObjIndex >= 0) {
+                tempData[tempDataObjIndex] = post
+            }
+        }
+        return tempData
+    },
+    handleRemovePost: (allPosts, post) => {
+        const tempData = allPosts.filter(item => item.id != post.id)
+        return tempData
     }
 
 }

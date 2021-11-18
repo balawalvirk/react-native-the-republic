@@ -40,6 +40,8 @@ import Payment from './trainings/payment'
 import CreateGroup from './createGroup'
 import PrivacySettings from './createGroup/privacySettings'
 import MemberRequests from './groupDetail/memberRequests'
+import PostDetail from './postDetail'
+import ReportContent from './reportContent'
 
 export {
     Community, Explore, MarketPlace, Profile,
@@ -52,6 +54,6 @@ export {
     ChatScreen, TagFriends, BuyNow, DeliveryAddress, FflDealers,
     OrderDetail, OrderInvoice, UpgradeSubscriptionPlan,
     SelectDateTime, Payment,
-    CreateGroup,PrivacySettings,MemberRequests
+    CreateGroup, PrivacySettings, MemberRequests, PostDetail, ReportContent
 
 }

@@ -158,7 +158,7 @@ function Explore(props) {
                                     price={selectedProduct.price}
                                     discountedPrice={selectedProduct.discounted_price}
                                     location={selectedProduct.address}
-                                    rating={selectedProduct.average_rating}
+                                    rating={selectedProduct.avg_rating}
                                     reviewCount={selectedProduct.reviews_count}
                                     userImage={selectedProduct.user.profile_image}
                                     userName={selectedProduct.user.first_name}

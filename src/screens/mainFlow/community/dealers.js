@@ -2,7 +2,7 @@ import React, { Component, useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { totalSize } from 'react-native-dimension';
 import { ButtonGradient, CustomIcon, MainWrapper, MediumText, Posts, Spacer, TinyTitle, Wrapper } from '../../../components';
-import { appIcons, appStyles, Backend, DummyData, routes, sizes } from '../../../services';
+import { appIcons, appStyles, Backend, DummyData, HelpingMethods, routes, sizes } from '../../../services';
 import { navigate } from '../../../services/navigation/rootNavigation';
 
 
@@ -55,6 +55,20 @@ export default function Dealers({ tab }) {
                 isLoading={isLoadingMyPosts}
                 onEndReached={handleLoadMorePosts}
                 updateData={(data) => setMyPosts(data)}
+                onPressPost={(item, index) => navigate(routes.postDetail, {
+                    post: item,
+                    postId: item.id,
+                    updateData: ({ updatedPost, deletePost }) => {
+                        updatedPost ?
+                            setMyPosts(HelpingMethods.handleReplacePost(myPosts, updatedPost))
+                            :
+                            deletePost ?
+                                setMyPosts(HelpingMethods.handleRemovePost(myPosts, deletePost))
+                                :
+                                null
+
+                    },
+                })}
             />
         </MainWrapper>
     );

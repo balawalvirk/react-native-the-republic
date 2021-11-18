@@ -2,7 +2,7 @@ import React, { Component, useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { totalSize } from 'react-native-dimension';
 import { ButtonGradient, CustomIcon, MainWrapper, MediumText, Posts, Spacer, TinyTitle, Wrapper } from '../../../components';
-import { appIcons, appStyles, Backend, DummyData, routes, sizes } from '../../../services';
+import { appIcons, appStyles, Backend, DummyData, HelpingMethods, routes, sizes } from '../../../services';
 import { navigate } from '../../../services/navigation/rootNavigation';
 
 
@@ -13,11 +13,6 @@ export default function Subscribed({ tab }) {
     const [isLoadingMoreMyPosts, setLoadingMoreMyPosts] = useState(false)
     const [isMyAllPostsLoaded, setMyAllPostsLoaded] = useState(false)
     const [myPostsCurrentPage, setMyPostsCurrentPage] = useState(1)
-    const allPosts = DummyData.posts
-
-    let posts = []
-
-    posts = allPosts
 
     useEffect(() => {
         getInitialData()
@@ -37,7 +32,6 @@ export default function Subscribed({ tab }) {
         }
     }
 
-
     const getSetMyPosts = async () => {
         await Backend.getSubscribedPosts({ page: myPostsCurrentPage }).
             then(res => {
@@ -47,6 +41,7 @@ export default function Subscribed({ tab }) {
                 }
             })
     }
+
     return (
         <MainWrapper flex={1} >
             <Posts
@@ -55,6 +50,20 @@ export default function Subscribed({ tab }) {
                 isLoading={isLoadingMyPosts}
                 onEndReached={handleLoadMorePosts}
                 updateData={(data) => setMyPosts(data)}
+                onPressPost={(item, index) => navigate(routes.postDetail, {
+                    post: item,
+                    postId: item.id,
+                    updateData: ({ updatedPost, deletePost }) => {
+                        updatedPost ?
+                            setMyPosts(HelpingMethods.handleReplacePost(myPosts, updatedPost))
+                            :
+                            deletePost ?
+                                setMyPosts(HelpingMethods.handleRemovePost(myPosts, deletePost))
+                                :
+                                null
+
+                    },
+                })}
             />
         </MainWrapper>
     );

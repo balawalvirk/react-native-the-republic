@@ -23,7 +23,11 @@ const TextInputColored = ({
     iconColorLeft, iconStyleLeft, onPressIconLeft
 }) => {
     return (
-        <TouchableOpacity activeOpacity={1} onPress={onPress} style={[{ marginHorizontal: sizes.marginHorizontal }, containerStyle]}>
+        <TouchableOpacity 
+        activeOpacity={1}
+         onPress={onPress} 
+         disabled={!onPress}
+         style={[{ marginHorizontal: sizes.marginHorizontal }, containerStyle]}>
             {
                 title ?
                     <ComponentWrapper style={{ marginHorizontal: 0 }}>
@@ -56,11 +60,9 @@ const TextInputColored = ({
                 }
                 <View style={{ flex: 1 }}>
                     {
-                        isButton ?
-                            <ComponentWrapper>
-                                <Spacer height={sizes.baseMargin} />
+                        onPress ?
+                            <ComponentWrapper style={{height: height(7),justifyContent: 'center',}}>
                                 <RegularText style={value ? null : appStyles.textGray}>{value ? value : placeholder}</RegularText>
-                                <Spacer height={sizes.baseMargin} />
                             </ComponentWrapper>
                             :
                             <TextInput

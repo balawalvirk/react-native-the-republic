@@ -1,10 +1,11 @@
-import React, { Component, useEffect, useLayoutEffect, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/core';
+import React, { Component, useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { View, Text } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
 import { useSelector } from 'react-redux';
 import { ComponentWrapper, MainWrapper, ButtonColoredSmall, ProfileTop, Spacer, ShareSomethingButton, Posts, Wrapper, ButtonGroupAnimated } from '../../../components';
-import { appStyles, Backend, colors, DummyData, routes, sizes } from '../../../services';
+import { appStyles, Backend, colors, DummyData, HelpingMethods, routes, sizes } from '../../../services';
 import dummyData from '../../../services/constants/dummyData';
 import More from './more';
 
@@ -44,12 +45,18 @@ function Profile(props) {
     useEffect(() => {
         getInitialData()
     }, [])
+    // useFocusEffect(
+    //     useCallback(() => {
+    //         getInitialData()
+    //     }, [])
+    // )
 
     const getInitialData = async () => {
         await getSetMyPosts()
-        setLoadingMyPosts(false)
+        isLoadingMyPosts && setLoadingMyPosts(false)
+        myPostsCurrentPage > 1 && setMyPostsCurrentPage(1)
     }
-    
+
     const handleLoadMorePosts = async (data) => {
         if (!isMyAllPostsLoaded) {
             setLoadingMoreMyPosts(true)
@@ -115,7 +122,9 @@ function Profile(props) {
                         <Wrapper flex={1}>
                             <ShareSomethingButton
                                 imageUri={userDetail.profile_image}
-                                onPress={() => navigate(routes.shareApost)}
+                                onPress={() => navigate(routes.shareApost, {
+                                    updateData: (updatedPost) => setMyPosts([...myPosts, updatedPost]),
+                                })}
                             />
                             <Spacer height={sizes.smallMargin} />
                             <Posts
@@ -124,6 +133,20 @@ function Profile(props) {
                                 isLoading={isLoadingMyPosts}
                                 onEndReached={handleLoadMorePosts}
                                 updateData={(data) => setMyPosts(data)}
+                                onPressPost={(item, index) => navigate(routes.postDetail, {
+                                    post: item,
+                                    postId: item.id,
+                                    updateData: ({ updatedPost, deletePost }) => {
+                                        updatedPost ?
+                                            setMyPosts(HelpingMethods.handleReplacePost(myPosts, updatedPost))
+                                            :
+                                            deletePost ?
+                                                setMyPosts(HelpingMethods.handleRemovePost(myPosts, deletePost))
+                                                :
+                                                null
+
+                                    },
+                                })}
                             />
                         </Wrapper>
                         :

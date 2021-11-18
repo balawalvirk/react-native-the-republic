@@ -254,6 +254,8 @@ export const routes = {
     createGroup: 'createGroup',
     groupPrivacySettings: 'privacySettings',
     groupMemberRequests: 'memberRequests',
+    postDetail:'postDetail',
+    reportContent:'reportContent',
     seller: {
         sellerDashboard: 'sellerDashboard',
         yourProducts: 'yourProducts',

@@ -43,7 +43,7 @@ export function OrdersList({ data, onPressOrder, onpressAccept, onpressCancel, L
                     const images = product.images ? JSON.parse(product.images) : null
                     productImage = images ? images[0] : null
                     productTitle = product.title
-                    productAverageRating = product.average_rating && product.average_rating
+                    productAverageRating = product.avg_rating && product.avg_rating
                     productReviewsCount = product.reviews_count && product.reviews_count
                     productPrice = product.price
                     productDiscountedPrice = product.discounted_price

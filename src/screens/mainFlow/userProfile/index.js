@@ -220,6 +220,21 @@ function UserProfile(props) {
                             isLoading={isLoadingUserPosts}
                             isLoadingMore={isLoadingMoreUserPosts}
                             onEndReached={handleLoadMoreUserPosts}
+                            updateData={data=>setUserPosts(data)}
+                            onPressPost={(item, index) => navigate(routes.postDetail, {
+                                post: item,
+                                postId: item.id,
+                                updateData: ({ updatedPost, deletePost }) => {
+                                    updatedPost ?
+                                        setUserPosts(HelpingMethods.handleReplacePost(userPosts, updatedPost))
+                                        :
+                                        deletePost ?
+                                        setUserPosts(HelpingMethods.handleRemovePost(userPosts, deletePost))
+                                            :
+                                            null
+
+                                },
+                            })}
                         />
                         :
                         <Products

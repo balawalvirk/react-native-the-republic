@@ -66,7 +66,7 @@ export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, 
                     <Spacer height={sizes.smallMargin} />
                     <Wrapper style={[styles.smallMarginHorizontal,]}>
                         <Wrapper style={isListView ? { width: width(60) } : null}>
-                            <RegularText numberOfLines={2}>{description}</RegularText>
+                            <RegularText numberOfLines={1}>{description}</RegularText>
                         </Wrapper>
                         <Spacer height={sizes.smallMargin} />
                         <Wrapper >
@@ -80,7 +80,7 @@ export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, 
                                         </>
                                         :
                                         null
-                               }
+                                }
                             </RowWrapperBasic>
                         </Wrapper>
                         <Spacer height={sizes.smallMargin} />
@@ -93,18 +93,32 @@ export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, 
                             <Wrapper style={{ alignItems: 'flex-start', }}>
                                 <RegularText>{userName}</RegularText>
                                 <Spacer height={sizes.TinyMargin} />
-                                <RowWrapperBasic>
-                                    <StarRating
-                                        disabled={false}
-                                        maxStars={5}
-                                        rating={rating}
-                                        fullStarColor={colors.rating}
-                                        starSize={totalSize(0.75)}
-                                        starStyle={{ marginRight: totalSize(0.2) }}
-                                    />
-                                    <Spacer width={sizes.TinyMargin} />
-                                    <TinyText>{rating} ({reviewCount})</TinyText>
-                                </RowWrapperBasic>
+                                {
+                                    rating && reviewCount ?
+                                        <RowWrapperBasic>
+                                            <StarRating
+                                                disabled={false}
+                                                maxStars={5}
+                                                rating={rating}
+                                                fullStarColor={colors.rating}
+                                                starSize={totalSize(0.75)}
+                                                starStyle={{ marginRight: totalSize(0.2) }}
+                                            />
+                                            <Spacer width={sizes.TinyMargin} />
+                                            <TinyText>{rating} ({reviewCount})</TinyText>
+                                        </RowWrapperBasic>
+                                        :
+                                        //  <TinyText style={[appStyles.textGray]}>Not Rated</TinyText>
+                                         <IconWithText
+                                         iconName="star"
+                                         text="Not Rated"
+                                         iconSize={totalSize(1.5)}
+                                         tintColor={colors.appTextColor5}
+                                         textStyle={[appStyles.textTiny,appStyles.textLightGray]}
+                                         textContainerStyle={{marginHorizontal:sizes.marginHorizontalSmall/2}}
+                                         />
+                                }
+
                             </Wrapper>
                         </RowWrapperBasic>
                     </Wrapper>

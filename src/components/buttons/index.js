@@ -18,7 +18,7 @@ export const ButtonColored = ({
 }) => {
     return (
         <TouchableOpacity onPress={onPress} disabled={isLoading ? true : disabled}>
-            <Wrapper animation={animation} style={[appStyles.buttonColord, { borderRadius: sizes.buttonRadius, height: height(7), backgroundColor: disabled ? colors.appColor1 + '80' : buttonColor ? buttonColor : colors.appColor1, marginHorizontal: sizes.marginHorizontalXLarge }, buttonStyle]}>
+            <Wrapper animation={animation} style={[appStyles.buttonColord, { borderRadius: sizes.buttonRadius, height: height(6), backgroundColor: disabled ? colors.appColor1 + '80' : buttonColor ? buttonColor : colors.appColor1, marginHorizontal: sizes.marginHorizontalXLarge }, buttonStyle]}>
                 <View style={{ flexDirection: direction ? direction : 'row', alignItems: 'center' }}>
                     {
                         customIcon ?
@@ -96,7 +96,7 @@ export const ButtonColoredSmall = ({ text, onPress, disabled, buttonStyle, custo
 
 export const ButtonBordered = ({ text, onPress, buttonStyle, textStyle, iconName, customIcon, iconType, iconSize, iconColor, iconStyle, tintColor }) => {
     return (
-        <TouchableOpacity onPress={onPress} style={[appStyles.buttonBorderd, { borderRadius: sizes.buttonRadius, height: height(7), borderColor: tintColor ? tintColor : colors.appColor1 }, buttonStyle]}>
+        <TouchableOpacity onPress={onPress} style={[appStyles.buttonBorderd, { borderRadius: sizes.buttonRadius, height: height(6), borderColor: tintColor ? tintColor : colors.appColor1 }, buttonStyle]}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 {
                     customIcon ?

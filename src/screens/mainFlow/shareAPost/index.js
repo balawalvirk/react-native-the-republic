@@ -23,10 +23,12 @@ const options = {
 };
 function ShareAPost({ navigation, route }) {
     //navigation props
-    const { navigate ,goBack} = navigation
+    const { navigate, goBack } = navigation
     const group = route.params ? route.params.group ? route.params.group : null : null
 
     const product = route.params ? route.params.product ? route.params.product : null : null
+
+    const updateData = route.params ? route.params.updateData ? route.params.updateData : null : null
 
     //redux states
     const dispatch = useDispatch()
@@ -64,7 +66,7 @@ function ShareAPost({ navigation, route }) {
                 </ComponentWrapper>
             )
         });
-    }, [navigation, postText, postTextError, images, tags,friends, groupId, productId, loadingPost]);
+    }, [navigation, postText, postTextError, images, tags, friends, groupId, productId, loadingPost]);
 
     useEffect(() => {
         getSetInitialData()
@@ -200,12 +202,13 @@ function ShareAPost({ navigation, route }) {
             await Backend.addPost({
                 title: postText,
                 images,
-                tags:getTaggedFriendsIds(),
+                tags: getTaggedFriendsIds(),
                 group_id: groupId,
                 product_id: productId
             }).then(res => {
                 setLoadingPost(false)
                 if (res) {
+                    updateData&&updateData(res.post)
                     goBack()
                     Toasts.success('Your post has been shared')
                 }
@@ -276,7 +279,7 @@ function ShareAPost({ navigation, route }) {
                                     ContainerStyle={{ flexWrap: 'wrap', }}
                                     tags={getTaggedFriendsNameList()}
                                     value='name'
-                                    tagStyle={{ backgroundColor: colors.appColor2 + '20',marginBottom:sizes.TinyMargin }}
+                                    tagStyle={{ backgroundColor: colors.appColor2 + '20', marginBottom: sizes.TinyMargin }}
                                     TextStyle={[appStyles.textRegular, { color: colors.appColor1 }]}
                                     onPressCross={handleUntagFriend}
                                 />

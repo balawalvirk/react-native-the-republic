@@ -144,7 +144,7 @@ function ProductDetail(props) {
                         <StarRating
                             disabled={false}
                             maxStars={5}
-                            rating={productDetail.average_rating}
+                            rating={productDetail.avg_rating}
                             fullStarColor={colors.rating}
                             starSize={totalSize(1.75)}
                             starStyle={{ marginRight: totalSize(0.2) }}

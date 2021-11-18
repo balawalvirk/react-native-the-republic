@@ -527,6 +527,32 @@ const AppNavigation = () => {
                     headerTitleAlign: 'center'
                 }}
             />
+            <AppStack.Screen name={routes.postDetail} component={MainApp.PostDetail}
+                options={{
+                    // headerShown: false,
+                    title: '',
+                    headerTitleAlign: 'center'
+                }}
+            />
+            <AppStack.Screen name={routes.reportContent} component={MainApp.ReportContent}
+                // options={{
+                //     // headerShown: false,
+                //     title: 'Report',
+                //     headerTitleAlign: 'center'
+                // }}
+                options={({ navigation, route }) => ({
+                    title: 'Report ' + (route.params.post ? 'Post' : 'Comment'),
+                    headerTitleAlign: 'center'
+                    // headerRight: () =>
+                    //     <ComponentWrapper >
+                    //         <LocationPickerButton
+                    //             onPress={() => navigation.navigate(routes.myLocation)}
+                    //         //text="Broklyn, NYC" 
+                    //         />
+                    //     </ComponentWrapper>,
+
+                })}
+            />
 
 
             {/* Seller screen */}

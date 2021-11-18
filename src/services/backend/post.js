@@ -314,9 +314,10 @@ export const addReactionToPost = async ({ post_id, reaction }) => {
 
 export const deleteReactionOfPost = async (reaction_id) => {
     let response = null
-    //  const state = store.getState()
-    //  const user_id = state.user.userDetail.id
+      const state = store.getState()
+      const user_id = state.user.userDetail.id
     let params = {
+        user_id,
         reaction_id
     }
     console.log('deleteReactionOfPost Params', params);

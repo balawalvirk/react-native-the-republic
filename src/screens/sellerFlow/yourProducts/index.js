@@ -89,7 +89,7 @@ function YourProducts(props) {
                   description={item.title}
                   price={item.price}
                   discountedPrice={item.discounted_price}
-                  rating={item.average_rating}
+                  rating={item.avg_rating}
                   reviewCount={item.reviews.length}
                   moreInfo={true}
                   moreInfoRight={

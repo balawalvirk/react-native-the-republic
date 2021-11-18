@@ -73,7 +73,7 @@ export function Products({ data, viewType, ListHeaderComponent, ListFooterCompon
                                         discountedPrice={item.discounted_price}
                                         price={item.price}
                                         location={item.address}
-                                        rating={item.average_rating}
+                                        rating={item.avg_rating}
                                         reviewCount={item.reviews_count}
                                         userImage={user ? user.profile_image : appImages.noUser}
                                         userName={user ? (user.first_name + ' ' + user.last_name) : 'Anonymouse'}
@@ -192,7 +192,7 @@ export function ProductsHorizontalyPrimary({ data, ListHeaderComponent, ListFoot
                         price={item.price}
                         discountedPrice={item.discounted_price}
                         location={item.location}
-                        rating={item.average_rating}
+                        rating={item.avg_rating}
                         reviewCount={item.reviews_count}
                         userName={user ? (user.first_name + ' ' + user.last_name) : 'Anonymous'}
                         userImage={user ? user.profile_image : appImages.noUser}
