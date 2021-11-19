@@ -1,5 +1,5 @@
-import React from 'react'
-import { Platform, TouchableOpacity, ImageBackground } from 'react-native'
+import React, { useState,useEffect } from 'react'
+import { Platform, TouchableOpacity, ImageBackground, Keyboard } from 'react-native'
 import { height, totalSize, width } from 'react-native-dimension'
 import { ModalSwipeablePrimary, SkeletonPrimary } from '..'
 import { appIcons, appImages, appStyles, colors, HelpingMethods, sizes } from '../../services'
@@ -20,7 +20,6 @@ import ArmerInfo from './armerInfo'
 import Reviews from './reviews'
 import { LineHorizontal } from '..'
 import { Dealers, Groups, FollowRequestsList } from './usersLists'
-import { Purchases } from './ordersLists'
 import AddPaymentMethodModal from './addPaymentMethodModal'
 import { ImageProfile, ImageRound } from '../images'
 import { KeyboardAvoidingScrollView } from '../scrollViews'
@@ -31,8 +30,22 @@ import GoogleAutoComplete from './googleAutoComplete'
 import { useSelector } from 'react-redux'
 
 export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconColor, iconContainerColor, iconContainerSize, iconSize, disableSwipe, disableBackDropPress, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, loadingButton1, loadinButton2, topMargin, children, scrollEnabled, button1Style, keyboardShouldPersistTaps }) => {
+
+
+    // manage keyboard
+    const [keyboardVisible, setKeyboardVisible] = useState(false)
+    let keyboardDidShowListener
+    let keyboardDidHideListener
+    
+    useEffect(() => {
+        keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => { HelpingMethods.handleAnimation(); setKeyboardVisible(true) });
+        keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => { HelpingMethods.handleAnimation(); setKeyboardVisible(false) });
+    })
+
     const defaultTopMargin = Platform.OS === 'ios' ? height(55) : height(45)
-    const customTopMargin = topMargin ? Platform.OS === 'ios' ? topMargin : topMargin - height(10) : defaultTopMargin
+    const customTopMargin = keyboardVisible ? height(10) : topMargin ? Platform.OS === 'ios' ? topMargin : topMargin - height(10) : defaultTopMargin
+
+
     return (
         <ModalSwipeablePrimary
             visible={visible}
@@ -44,10 +57,11 @@ export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconColor
 
         >
             <Wrapper flex={1}>
-                <ScrollView
-                    keyboardShouldPersistTaps={keyboardShouldPersistTaps}
-                    showsVerticalScrollIndicator={false}
-                    scrollEnabled={scrollEnabled}>
+                <KeyboardAvoidingScrollView
+                   // keyboardShouldPersistTaps={keyboardShouldPersistTaps}
+                    //showsVerticalScrollIndicator={false}
+                    scrollEnabled={scrollEnabled}
+                    >
                     <Spacer height={sizes.baseMargin * 1.5} />
                     {
                         iconName || customIcon ?
@@ -139,7 +153,7 @@ export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconColor
                         }
                     </RowWrapper>
                     <Spacer height={sizes.doubleBaseMargin} />
-                </ScrollView>
+                </KeyboardAvoidingScrollView>
             </Wrapper>
         </ModalSwipeablePrimary>
     )
@@ -527,26 +541,34 @@ export const OptionsPopup = ({ options, visible, toggle, onPressStatus, titleSty
         </PopupPrimary>
     )
 }
-export const NoDataViewPrimary = ({ title }) => {
+export const NoDataViewPrimary = ({ title, showIcon, iconName, iconType, }) => {
     return (
         <Wrapper flex={1} style={[appStyles.center]}>
+            {
+                showIcon ?
+                    <>
+                        <IconButton
+                            iconName={iconName ? iconName : 'playlist-remove'}
+                            iconType={iconType ? iconType : "material-community"}
+                            iconSize={totalSize(12.5)}
+                            buttonSize={totalSize(20)}
+                            iconColor={colors.appTextColor4}
+                            buttonColor={colors.appBgColor3}
+                        />
+                        <Spacer height={sizes.baseMargin} />
+                    </>
+                    :
+                    null
+
+            }
             <MediumText style={[appStyles.textGray]}>No {title ? title : 'Data'} Found</MediumText>
-        </Wrapper>
+        </Wrapper >
     )
 }
 export const AddDataViewPrimary = ({ title, iconName, iconType, onPress }) => {
     return (
         <Wrapper flex={1} style={[appStyles.center]}>
-            {/* <IconWithText
-                iconName={iconName ? iconName : 'add-circle'}
-                iconType={iconType ? iconType : "ionicon"}
-                text={'Add ' + title}
-                direction="column"
-                iconSize={totalSize(15)}
-                tintColor={colors.appTextColor4}
-                textStyle={[appStyles.textMedium, appStyles.textGray]}
-                onPress={onPress}
-            /> */}
+
             <TouchableOpacity activeOpacity={1} onPress={onPress} style={[appStyles.center]}>
                 <IconButton
                     iconName={iconName ? iconName : 'add'}
@@ -567,7 +589,7 @@ export {
     EditProfileComp, VerificationCodeSentPopup, ImagePickerPopup,
     Posts, PostCard, MenuPopup, RenderComments, Products, ArmerInfo,
     Reviews, ProductsSecondary, ProductsHorizontalyPrimary, Dealers, Groups,
-    Purchases, AddPaymentMethodModal, FollowRequestsList, GoogleAutoComplete,
+    AddPaymentMethodModal, FollowRequestsList, GoogleAutoComplete,
 
 }
 

@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { height } from 'react-native-dimension';
-import { KeyboardAvoidingScrollView, MainWrapper, PostCard, Posts, PostSkeletons, SkeletonPrimaryList, Spacer } from '../../../components';
+import { KeyboardAvoidingScrollView, MainWrapper, NoDataViewPrimary, PostCard, Posts, PostSkeletons, SkeletonPrimaryList, Spacer } from '../../../components';
 import { Backend, routes, sizes } from '../../../services';
 
 export default function PostDetail({ navigation, route }) {
@@ -62,7 +62,18 @@ export default function PostDetail({ navigation, route }) {
                 <SkeletonPrimaryList itemHeight={height(8)} itemStyle={{ marginHorizontal: sizes.marginHorizontalSmall }} />
             </MainWrapper>
         )
+    } else if (!postDetail) {
+        return (
+            <MainWrapper>
+                <NoDataViewPrimary
+                    title="Post Detail"
+                    showIcon
+                    iconName="close-circle"
+                />
+            </MainWrapper>
+        )
     }
+
     return (
         <MainWrapper>
 
@@ -75,14 +86,14 @@ export default function PostDetail({ navigation, route }) {
                     //isLoading={isLoading}
                     //onEndReached={handleLoadMorePosts}
                     updateData={(updatedPosts) => {
-                        if(updatedPosts.length){
+                        if (updatedPosts.length) {
                             setPostDetail(updatedPosts[0])
-                            updateData && updateData({updatedPost:updatedPosts[0]})
-                        }else{
-                            updateData && updateData({deletePost:postDetail})
+                            updateData && updateData({ updatedPost: updatedPosts[0] })
+                        } else {
+                            updateData && updateData({ deletePost: postDetail })
                             goBack()
                         }
-                       
+
                     }}
                     enableComment
                     onPressPost={(item, index) => { }}

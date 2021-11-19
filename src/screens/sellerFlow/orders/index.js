@@ -4,7 +4,7 @@ import { FlatList } from 'react-native';
 import { View, Text } from 'react-native';
 import { height, width } from 'react-native-dimension';
 import { useSelector } from 'react-redux';
-import { ButtonColored, ButtonColoredSmall, ButtonGroupAnimated, MainWrapper, MediumText, NoDataViewPrimary, ProductCardSecondary, Purchases, RegularText, RowWrapper, RowWrapperBasic, SkeletonListVerticalPrimary, Spacer, TitleInfoPrimary, TitlePrimary, TitleValue, Toasts, Wrapper } from '../../../components';
+import { ButtonColored, ButtonColoredSmall, ButtonGroupAnimated, MainWrapper, MediumText, NoDataViewPrimary, ProductCardSecondary, RegularText, RowWrapper, RowWrapperBasic, SkeletonListVerticalPrimary, Spacer, TitleInfoPrimary, TitlePrimary, TitleValue, Toasts, Wrapper } from '../../../components';
 import { appStyles, Backend, colors, fulfillmentStatuses, fulfillmentTypes, orderStatuses, routes, sizes } from '../../../services';
 import dummyData from '../../../services/constants/dummyData';
 import { OrdersList } from './ordersList';

@@ -1,8 +1,9 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { height, width } from 'react-native-dimension';
+import { useSelector } from 'react-redux';
 import { ButtonGroupAnimated, Dealers, MainWrapper, Products, Spacer } from '../../../components';
-import { appStyles, colors, DummyData, routes, sizes } from '../../../services';
+import { appStyles, Backend, colors, DummyData, routes, sizes } from '../../../services';
 const tabs = [
     {
         title: 'Products',
@@ -15,11 +16,51 @@ const tabs = [
 function Favourites(props) {
     const { navigation, route } = props
     const { navigate } = navigation
+
+    //redux states
+    const user = useSelector(state => state.user)
+    const { userDetail } = user
+    //const {favorite_products,favorite_dealers}=user.userDetail
     //local states
     const [selectedTabIndex, setSelectedTabIndex] = useState(0)
+    const [favProducts, setFavProducts] = useState(null)
+    const [favDealers, setFavDealers] = useState(null)
 
-    const products = [...DummyData.products, ...DummyData.products]
-    const dealers = [...DummyData.users, ...DummyData.users]
+
+
+    useEffect(() => {
+        getSetData()
+    }, [])
+
+    // useEffect(() => {
+    //     handleGetFavProducts()
+    // }, [userDetail.favorite_products])
+
+    // useEffect(() => {
+    //     handleGetFavDealers()
+    // }, [userDetail.favorite_dealers])
+
+    const getSetData = async () => {
+        await handleGetFavProducts()
+        await handleGetFavDealers()
+    }
+
+    const handleGetFavProducts = async () => {
+        await Backend.getFavouriteProducts().
+            then(res => {
+                if (res) {
+                    setFavProducts(res.data)
+                }
+            })
+    }
+    const handleGetFavDealers = async () => {
+        await Backend.getFavouriteDealers().
+            then(res => {
+                if (res) {
+                    setFavDealers(res.data.favorite_dealers)
+                }
+            })
+    }
     return (
         <MainWrapper>
             <ButtonGroupAnimated
@@ -39,7 +80,7 @@ function Favourites(props) {
             {
                 selectedTabIndex === 0 ?
                     <Products
-                        data={products}
+                        data={favProducts}
                         onPressProduct={(item, index) => navigate(routes.productDetail, { product: item })}
                         viewType={'grid'}
                         ListHeaderComponent={() => {
@@ -48,10 +89,15 @@ function Favourites(props) {
                         ListFooterComponent={() => {
                             return <Spacer height={sizes.baseMargin} />
                         }}
+                        isLoading={!favProducts}
+                        onPressHeart={(item, index) => {
+                            const tempData = favProducts.filter(obj => obj.id != item.id)
+                            setFavProducts(tempData)
+                        }}
                     />
-                    :
+                    : 
                     <Dealers
-                        data={dealers}
+                        data={favDealers}
                         onPress={(item, index) => navigate(routes.userProfile, { item: item })}
                         viewType={'list'}
                         ListHeaderComponent={() => {
@@ -60,6 +106,12 @@ function Favourites(props) {
                         ListFooterComponent={() => {
                             return <Spacer height={sizes.baseMargin} />
                         }}
+                        isLoading={!favDealers}
+                        onPressHeart={(item, index) => {
+                            const tempData = favDealers.filter(obj => obj.id != item.id)
+                            setFavDealers(tempData)
+                        }}
+                        
                     />
             }
         </MainWrapper>

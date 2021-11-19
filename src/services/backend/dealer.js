@@ -117,23 +117,45 @@ export const handleAddRemoveFavouriteDealer = async (dealer_id) => {
     const state = store.getState()
     const { userDetail } = state.user
     if (HelpingMethods.checkIfDealerFavourite(dealer_id)) {
-        const newFavDealers=userDetail.favorite_dealers.filter(favDealerId=>favDealerId!=dealer_id)
-        dispatch(setUserDetail({...userDetail,favorite_dealers:newFavDealers}))
+        const newFavDealers = userDetail.favorite_dealers.filter(favDealerId => favDealerId != dealer_id)
+        dispatch(setUserDetail({ ...userDetail, favorite_dealers: newFavDealers }))
         await removeFavouriteDealer(dealer_id).
-        then(res=>res&&[response=res])
+            then(res => res && [response = res])
     } else {
-        const newFavDealers=[...userDetail.favorite_dealers,dealer_id]
-        dispatch(setUserDetail({...userDetail,favorite_dealers:newFavDealers}))
+        const newFavDealers = [...userDetail.favorite_dealers, dealer_id]
+        dispatch(setUserDetail({ ...userDetail, favorite_dealers: newFavDealers }))
         await addFavouriteDealer(dealer_id).
-        then(res=>res&&[response=res])
+            then(res => res && [response = res])
     }
     if (response) {
-        // const state = store.getState()
-        // const { userDetail } = state.user
-        // const { favorite_dealers } = response.data
-        // if (favorite_dealers) {
-        //     dispatch(setUserDetail({ ...userDetail, favorite_dealers }))
-        // }
+
     }
+    return response
+};
+
+export const getFavouriteDealers = async () => {
+    let response = null
+    const state = store.getState()
+    const { userDetail } = state.user
+    const user_id = userDetail.id
+    let params = {
+        user_id
+    }
+    console.log('getFavouriteDealers Params', params);
+    await axios
+        .post(`${baseURL + endPoints.dealer.show_favorite_dealers}`, params)
+        .then(async responseJson => {
+            const tempResponseData = responseJson.data
+            console.log('getFavouriteDealers response', tempResponseData);
+            if (tempResponseData.success) {
+                response = tempResponseData
+            } else {
+                Toasts.error(tempResponseData.message)
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
     return response
 };

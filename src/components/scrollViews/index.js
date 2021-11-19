@@ -6,9 +6,13 @@ import { colors } from '../../services';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 
-export const KeyboardAvoidingScrollView = ({children, style, animation }) => {
+export const KeyboardAvoidingScrollView = ({children, scrollEnabled }) => {
     return (
-        <KeyboardAwareScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always">
+        <KeyboardAwareScrollView 
+        showsVerticalScrollIndicator={false} 
+        keyboardShouldPersistTaps="always"
+        scrollEnabled={scrollEnabled}
+        >
             {children}
         </KeyboardAwareScrollView>
     );

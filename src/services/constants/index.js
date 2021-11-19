@@ -29,7 +29,7 @@ export const endPoints = {
         reject_identity: 'reject-identity',
         check_user: 'check-user',
         update_delivery_address: 'update-delivery-address',
-        show_user_profile:'show-user-profile',
+        show_user_profile: 'show-user-profile',
     },
     creditCard: {
         add_card: 'add-card',
@@ -170,13 +170,15 @@ export const endPoints = {
         get_invoice: 'get-invoice',
         get_earnings_reports: 'get-earnings',
         weekly_reports: 'weekly-reports',
-        advance_reports: 'advance-reports'
+        advance_reports: 'advance-reports',
+        user_orders:'user-orders'
     },
     dealer: {
         get_dealers: 'get-dealers',
         search_dealers: 'search-dealers',
         add_favorite_dealer: 'add-favorite-dealer',
-        remove_favorite_dealer: 'remove-favorite-dealer'
+        remove_favorite_dealer: 'remove-favorite-dealer',
+        show_favorite_dealers: 'show-favorite-dealers'
     },
     bank: {
         add_bank_account: 'add-bank-account',
@@ -186,6 +188,12 @@ export const endPoints = {
     feature: {
         add_feature: 'add-feature',
         show_features: 'show-features',
+    },
+    notificaitons: {
+        show_notifications: 'show-notifications',
+        read_all_notifications: 'read-all-notifications',
+        read_single_notification: 'read-single-notification',
+        get_new_notification_count: 'get-new-notification-count'
     },
     contact_us: 'contact-us',
     add_card: 'add-card',
@@ -254,8 +262,8 @@ export const routes = {
     createGroup: 'createGroup',
     groupPrivacySettings: 'privacySettings',
     groupMemberRequests: 'memberRequests',
-    postDetail:'postDetail',
-    reportContent:'reportContent',
+    postDetail: 'postDetail',
+    reportContent: 'reportContent',
     seller: {
         sellerDashboard: 'sellerDashboard',
         yourProducts: 'yourProducts',
@@ -275,7 +283,8 @@ export const routes = {
     dealer: {
         fulfillments: 'fulfillments',
         fulfillmentDetail: 'fulfillmentDetail'
-    }
+    },
+
 
 }
 export const asyncConts = {

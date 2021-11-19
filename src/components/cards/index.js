@@ -14,6 +14,7 @@ import { ImageSqareRound, ImageThumbnailGrid } from '../images';
 import { TitleValue } from '../common';
 import { BallIndicator, DotIndicator, MaterialIndicator } from 'react-native-indicators';
 
+
 export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, image, images, containerstyle, description, onPressHeart, discountedPrice, price, userName, userImage, viewType, rating, reviewCount, isSponsered }) => {
     const defaultViewType = viewType ? viewType : 'grid'
     const isGridView = defaultViewType === 'grid'

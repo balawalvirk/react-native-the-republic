@@ -8,7 +8,11 @@ import * as RootNavigation from '../../../services/navigation/rootNavigation'
 import { SkeletonPrimary, SkeletonProductsGrid, Spacer } from '../..';
 import { NoDataViewPrimary } from '..';
 
-export function Products({ data, viewType, ListHeaderComponent, ListFooterComponent, onPressProduct, isLoading, isLoadingMore, onEndReached }) {
+export function Products({
+     data, viewType, ListHeaderComponent, ListFooterComponent,
+      onPressProduct, isLoading, isLoadingMore, onEndReached,
+      onPressHeart
+    }) {
     const isGridView = viewType === 'grid'
     const isListView = viewType === 'list'
     const { navigate } = RootNavigation
@@ -66,7 +70,10 @@ export function Products({ data, viewType, ListHeaderComponent, ListFooterCompon
                                                 isListView ? [styles.productContainerList] : null
                                         }
                                         isFavourite={HelpingMethods.checkIsProductFavourite(item.id)}
-                                        onPressHeart={() => Backend.handleAddRemoveFavouriteProduct(item.id)}
+                                        onPressHeart={() => {
+                                            Backend.handleAddRemoveFavouriteProduct(item.id)
+                                            onPressHeart&&onPressHeart(item,index)
+                                        }}
                                         viewType={viewType}
                                         image={item.images ? JSON.parse(item.images)[0] : appImages.noImageAvailable}
                                         description={item.title}

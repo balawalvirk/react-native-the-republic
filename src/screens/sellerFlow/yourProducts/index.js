@@ -3,7 +3,7 @@ import React, { Component, useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 import { View, Text } from 'react-native';
 import { height, width } from 'react-native-dimension';
-import { ButtonColoredSmall, ButtonGroupAnimated, ComponentWrapper, MainWrapper, Purchases, PopupPrimary, ProductCardSecondary, RowWrapperBasic, SmallTitle, Spacer, Wrapper, SkeletonListVerticalPrimary, Toasts, AddDataViewPrimary } from '../../../components';
+import { ButtonColoredSmall, ButtonGroupAnimated, ComponentWrapper, MainWrapper, PopupPrimary, ProductCardSecondary, RowWrapperBasic, SmallTitle, Spacer, Wrapper, SkeletonListVerticalPrimary, Toasts, AddDataViewPrimary } from '../../../components';
 import { appStyles, Backend, colors, routes, sizes } from '../../../services';
 import dummyData from '../../../services/constants/dummyData';
 

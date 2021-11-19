@@ -78,7 +78,9 @@ export function OrdersList({ data, onPressOrder, onpressAccept, onpressCancel, L
                                 <ButtonColoredSmall
                                     disabled
                                     text={statusText}
-                                    buttonStyle={{ paddingHorizontal: sizes.marginHorizontalSmall / 2, borderRadius: 100, backgroundColor: isActive ? colors.appColor1 : isCompleted || isDelivered ? colors.success : isCancelled ? colors.error : colors.appColor1 }}
+                                    buttonStyle={{ paddingHorizontal: sizes.marginHorizontalSmall / 2, borderRadius: 100, 
+                                        backgroundColor: isActive ? colors.appColor1 : isCompleted || isDelivered ? colors.success : isCancelled ? colors.error : colors.appColor1 
+                                    }}
                                     textStyle={[appStyles.textRegular, appStyles.textWhite]}
                                 />
                                 :
