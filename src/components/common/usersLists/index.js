@@ -2,7 +2,7 @@ import React from 'react'
 import { FlatList } from 'react-native'
 import { height, totalSize } from 'react-native-dimension'
 import { NoDataViewPrimary } from '..'
-import { RowWrapperBasic, SkeletonListVerticalPrimary, SkeletonPrimary, Wrapper } from '../..'
+import { RowWrapperBasic, SkeletonListVerticalPrimary, SkeletonPrimary, UserSkeletons, Wrapper } from '../..'
 import { appImages, appStyles, Backend, colors, HelpingMethods, sizes } from '../../../services'
 import { ButtonColoredSmall } from '../../buttons'
 import { UserCardPrimary } from '../../cards'
@@ -18,14 +18,7 @@ export const Dealers = ({ data, onPress, onPressHeart, ListHeaderComponent, List
                 isLoading ?
                     <>
                         {ListHeaderComponent}
-                        {[1, 2, 3, 4].map((item, index) => {
-                            return (
-                                <SkeletonPrimary
-                                    itemStyle={{ height: height(8), marginBottom: sizes.marginVertical / 2 }}
-
-                                />
-                            )
-                        })}
+                        <UserSkeletons/>
                     </>
                     :
                     data.length ?

@@ -169,7 +169,7 @@ function UserProfile(props) {
                             <IconButtonPrimary
                                 iconName="message-circle"
                                 iconType="feather"
-                                onPress={() => { }}
+                                onPress={()=>navigate(routes.chatScreen,{userId:user_id})}
                             />
                             <Spacer width={sizes.smallMargin} />
                             <IconButtonPrimary

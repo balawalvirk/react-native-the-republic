@@ -1,12 +1,24 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useRef, useState } from 'react';
 import { FlatList } from 'react-native';
 import { Platform } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native';
 import { View, Text } from 'react-native';
 import { height, totalSize } from 'react-native-dimension';
-import { AbsoluteWrapper, ChatBubbule, ComponentWrapper, IconWithText, ImageRound, ImageSqareRound, KeyboardAvoidingScrollView, MainWrapper, MediumText, RowWrapper, RowWrapperBasic, Spacer, TextInputChat, TinyTitle, Wrapper } from '../../../components';
-import { appStyles, colors, sizes } from '../../../services';
-const myId = 1
+import { useSelector } from 'react-redux';
+import { AbsoluteWrapper, ChatBubbule, ComponentWrapper, IconWithText, ImagePickerPopup, ImageRound, ImageSqareRound, KeyboardAvoidingScrollView, LoaderPrimary, MainWrapper, MediumText, NoDataViewPrimary, RowWrapper, RowWrapperBasic, Spacer, TextInputChat, TinyTitle, Wrapper } from '../../../components';
+import { appImages, appStyles, Backend, colors, HelpingMethods, sizes } from '../../../services';
+import * as ImagePicker from 'react-native-image-picker';
+const options = {
+    title: 'Select Photo',
+    quality: 1,
+    maxWidth: 500,
+    maxHeight: 500,
+    // customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+    storageOptions: {
+        skipBackup: true,
+        path: 'images',
+    },
+};
 const chatMessages = [
     {
         id: 56,
@@ -54,7 +66,26 @@ function ChatScreen(props) {
 
     const { navigation, route } = props
     const { navigate } = navigation
-    const { user, enquire } = route.params
+    const { conversation, enquire, user, userId } = route.params
+    const receiver_id = userId ? userId : conversation ? conversation.id : user ? user.id : ''
+
+    //refs
+    const messagesList = useRef(null)
+
+    //redux States
+    const userData = useSelector(state => state.user)
+    const { userDetail } = userData
+    const myId = userDetail.id
+    //local states
+    const [messages, setMessages] = useState(null)
+    const [userDetails, setUserDetails] = useState(null)
+    const [messageText, setMessageText] = useState('')
+    const [messageImage, setMessageImage] = useState(null)
+    const [isImagePickerPopupVisible, setImagePickerPopupVisibility] = useState(false)
+    const [loadingSendMessage, setLoadingSendMessage] = useState(false)
+
+    const toggleImagePickerPopup = () => setImagePickerPopupVisibility(!isImagePickerPopupVisible)
+    //const sortedMessages = messages ? messages.slice().reverse() : []
 
     //configure Header
     React.useLayoutEffect(() => {
@@ -62,11 +93,11 @@ function ChatScreen(props) {
             headerTitle: () => (
                 <RowWrapperBasic>
                     <ImageRound
-                        source={{ uri: user.image }}
+                        source={{ uri: userDetails ? userDetails.profile_image ? userDetails.profile_image : appImages.noUser : appImages.noUser }}
                     />
                     <Spacer width={sizes.marginHorizontalSmall} />
                     <Wrapper>
-                        <TinyTitle>{user.name}</TinyTitle>
+                        <TinyTitle>{userDetails ? (userDetails.first_name + ' ' + userDetails.last_name) : ' '}</TinyTitle>
                         <Spacer height={sizes.TinyMargin} />
                         <IconWithText
                             iconName="circle"
@@ -79,7 +110,141 @@ function ChatScreen(props) {
                 </RowWrapperBasic>
             )
         });
-    }, [navigation]);
+    }, [navigation, userDetails]);
+
+    // useEffect(() => {
+    //     getSetInitialData()
+    // }, [])
+    useEffect(() => {
+        getSetInitialData()
+         const interval = setInterval(() => {
+             getChatMessages()
+         }, 10000);
+         return () => clearInterval(interval);
+    }, [])
+
+    const getSetInitialData = () => {
+        if (conversation) {
+            setMessages(conversation.messages.reverse())
+            setUserDetails(conversation)
+        }
+        if (user || userId) {
+            if (user) {
+                setUserDetails(user)
+            } else {
+                getUserProfile()
+            }
+            getChatMessages()
+        }
+    }
+    const getChatMessages = async () => {
+        await Backend.getChatMessages(receiver_id).
+            then(res => {
+                if (res) {
+                    let tempData = []
+                    if (tempData) {
+                        tempData = res.data
+                    }
+                    setMessages(tempData)
+                }
+            })
+    }
+    const getUserProfile = async () => {
+        await Backend.getUserProfileDetail(receiver_id).
+            then(res => {
+                if (res) {
+                    setUserDetails(res.data)
+                }
+            })
+    }
+
+    const sendChatMessage = async () => {
+        if (messageText || messageImage) {
+            setLoadingSendMessage(true)
+            let newMessageObj = {
+                sender_id: myId,
+                receiver_id,
+                message: messageText,
+                created_at: new Date()
+            }
+            messageImage && [newMessageObj['image'] = messageImage.uri]
+            const tempNewMessages = [...messages, newMessageObj]
+            setMessages(tempNewMessages)
+            const sendMessageObj = {
+                receiver_id,
+                message: messageText,
+                image: messageImage
+            }
+            setMessageText('')
+            setMessageImage(null)
+            await Backend.sendChatMessage(sendMessageObj).
+                then(res => {
+                    if (res) {
+                        let tempData = tempNewMessages
+                        tempData[(tempData.length-1)] = res.data
+                        setMessages(tempData)
+                        setLoadingSendMessage(false)
+                    }
+                })
+
+            // setTimeout(() => {
+            //     const data = {
+            //         sender_id: myId,
+            //         receiver_id,
+            //         message: messageText,
+            //         image: messageImage
+            //     }
+            //     let tempData = tempNewMessages
+            //     tempData[0] = data
+            //     setMessages(tempData)
+            //     setLoadingSendMessage(false)
+            // }, 2000);
+        }
+    }
+    const launchImagePicker = () => {
+        ImagePicker.launchImageLibrary(options, (response) => {
+            if (response.didCancel) {
+                //console.log('User cancelled image picker');
+            } else if (response.error) {
+                //console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+                //console.log('User tapped custom button: ', response.customButton);
+            } else {
+                if (!response.fileName) response.fileName = 'profile_image';
+                const tempFile = {
+                    uri: response.uri,
+                    name: response.fileName,
+                    type: response.type
+                }
+                setMessageImage(tempFile)
+            }
+        });
+    }
+    const launchCamera = () => {
+        ImagePicker.launchCamera(options, (response) => {
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            } else {
+                if (!response.fileName) response.fileName = 'profile_image';
+                const tempFile = {
+                    uri: response.uri,
+                    name: response.fileName,
+                    type: response.type
+                }
+                setMessageImage(tempFile)
+            }
+        });
+    }
+    if (!messages) {
+        return (
+            <LoaderPrimary
+            />
+        )
+    }
     return (
         <MainWrapper>
             {
@@ -100,68 +265,61 @@ function ChatScreen(props) {
                     :
                     null
             }
-             <KeyboardAvoidingView
+            <KeyboardAvoidingView
                 style={{ flex: 1 }}
                 behavior={Platform.OS == 'ios' ? 'padding' : 'padding'}
                 keyboardVerticalOffset={Platform.OS == 'ios' ? height(12) : 0}
                 enabled={Platform.OS === 'ios' ? true : false}>
                 <MainWrapper>
-                    <FlatList
-                    showsVerticalScrollIndicator={false}
-                          data={[...chatMessages,...chatMessages,...chatMessages]}
-                        ListHeaderComponent={() => <Spacer height={sizes.smallMargin} />}
-                        renderItem={({ item, index }) => {
-                            return (
-                                <ChatBubbule
-                                    message={item.message}
-                                    time={item.time}
-                                    myMessage={item.user.id === myId}
-                                />
-                            );
-                        }}
-                    />
+                    {
+                        messages.length ?
+                            <FlatList
+                                ref={messagesList}
+                                showsVerticalScrollIndicator={false}
+                                onContentSizeChange={() => messagesList.current.scrollToEnd({ animated: true })}
+                                data={messages}
+                                keyExtractor={(item, index) => index.toString()}
+                                ListHeaderComponent={() => <Spacer height={sizes.smallMargin} />}
+                                renderItem={({ item, index }) => {
+                                    return (
+                                        <ChatBubbule
+                                            key={(index + 1).toString()}
+                                            message={item.message}
+                                            time={HelpingMethods.formateDateFromNow(item.created_at)}
+                                            myMessage={item.sender_id == myId}
+                                            image={item.image}
+                                            loadingSendMessage={(index === (messages.length - 1)) && loadingSendMessage}
+                                        />
+                                    );
+                                }}
+                            />
+                            :
+                            <NoDataViewPrimary
+                                title="Chat"
+                            />
+
+                    }
+
                     <Wrapper>
                         <TextInputChat
-                            onChangeText={text => { }}
-                            onSend={() => { }}
-                            onAdd={() => { }}
+                            value={messageText}
+                            onChangeText={text => setMessageText(text)}
+                            onSend={sendChatMessage}
+                            onAdd={toggleImagePickerPopup}
+                            image={messageImage}
+
                         />
                         <Spacer height={sizes.smallMargin} />
                     </Wrapper>
                 </MainWrapper>
-            </KeyboardAvoidingView> 
-            {/* <MainWrapper>
-                <FlatList
-                    data={[...chatMessages,...chatMessages,...chatMessages]}
-                    ListHeaderComponent={() => <Spacer height={sizes.smallMargin} />}
-                    renderItem={({ item, index }) => {
-                        return (
-                            <ChatBubbule
-                                message={item.message}
-                                time={item.time}
-                                myMessage={item.user.id === myId}
-                            />
-                        );
-                    }}
-                    ListFooterComponent={() => <Spacer height={sizes.doubleBaseMargin*2} />}
+            </KeyboardAvoidingView>
 
-                />
-
-                <KeyboardAvoidingView
-                    style={{ position: 'absolute', left: 0, right: 0, bottom: 0 }}
-                    behavior="position"
-                    keyboardVerticalOffset={Platform.OS == 'ios' ? height(12) : 0}
-                >
-                    <Wrapper>
-                        <TextInputChat
-                            onChangeText={text => { }}
-                            onSend={() => { }}
-                            onAdd={() => { }}
-                        />
-                        <Spacer height={sizes.smallMargin} />
-                    </Wrapper>
-                </KeyboardAvoidingView>
-            </MainWrapper> */}
+            <ImagePickerPopup
+                visible={isImagePickerPopupVisible}
+                toggle={toggleImagePickerPopup}
+                onPressTakePhoto={launchCamera}
+                onPressSelectFromGalary={launchImagePicker}
+            />
         </MainWrapper>
     );
 }

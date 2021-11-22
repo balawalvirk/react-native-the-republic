@@ -58,9 +58,12 @@ export const Wrapper = ({ children, style, animation, flex, duration, iterationC
         </Animatable.View>
     );
 }
-export const ComponentWrapper = ({ children, style, animation, horizontal }) => {
+export const ComponentWrapper = ({ children, style, horizontal, ...props }) => {
     return (
-        <Animatable.View animation={animation} style={[appStyles.compContainer, styles.removerMarginVertical, { marginHorizontal: horizontal ? horizontal : sizes.marginHorizontal }, style]}>
+        <Animatable.View
+            style={[appStyles.compContainer, styles.removerMarginVertical, { marginHorizontal: horizontal ? horizontal : sizes.marginHorizontal }, style]}
+            {...props}
+        >
             {children}
         </Animatable.View>
     );

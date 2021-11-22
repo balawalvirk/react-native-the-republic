@@ -41,7 +41,7 @@ function MarketPlace(props) {
     const product = useSelector(state => state.product)
     const user = useSelector(state => state.user)
     const { categories } = product
-    const { currentLocation,userDetail } = user
+    const { currentLocation, userDetail } = user
     //local states
     const [featuredProducts, setFeaturedProducts] = useState([])
     const [popularProducts, setPopularProducts] = useState([])
@@ -84,16 +84,16 @@ function MarketPlace(props) {
                     setTopRatedProducts(res.data.data)
                 }
             })
-        
 
 
+        setLoading(false)
         await Backend.get_credit_cards()
         await Backend.get_product_items()
         await Backend.get_product_manufacturers()
         await Backend.get_product_calibers()
         await Backend.get_product_actions()
         await Backend.get_product_conditions()
-        setLoading(false)
+
     }
 
 

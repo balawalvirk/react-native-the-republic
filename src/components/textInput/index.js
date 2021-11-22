@@ -9,6 +9,7 @@ import { CustomIcon, IconButton, IconWithText } from '../icons';
 import { Spacer } from '../spacers';
 import { Platform } from 'react-native';
 import { Animated } from 'react-native';
+import { ImageRound } from '..';
 const TextInputColored = ({
     iconNameRight, inputRef, iconTypeRight, returnKeyLabel,
     returnKeyType, onSubmitEditing, onPress,
@@ -23,11 +24,11 @@ const TextInputColored = ({
     iconColorLeft, iconStyleLeft, onPressIconLeft
 }) => {
     return (
-        <TouchableOpacity 
-        activeOpacity={1}
-         onPress={onPress} 
-         disabled={!onPress}
-         style={[{ marginHorizontal: sizes.marginHorizontal }, containerStyle]}>
+        <TouchableOpacity
+            activeOpacity={1}
+            onPress={onPress}
+            disabled={!onPress}
+            style={[{ marginHorizontal: sizes.marginHorizontal }, containerStyle]}>
             {
                 title ?
                     <ComponentWrapper style={{ marginHorizontal: 0 }}>
@@ -61,7 +62,7 @@ const TextInputColored = ({
                 <View style={{ flex: 1 }}>
                     {
                         onPress ?
-                            <ComponentWrapper style={{height: height(7),justifyContent: 'center',}}>
+                            <ComponentWrapper style={{ height: height(7), justifyContent: 'center', }}>
                                 <RegularText style={value ? null : appStyles.textGray}>{value ? value : placeholder}</RegularText>
                             </ComponentWrapper>
                             :
@@ -246,7 +247,7 @@ const TextInputUnderlined = ({
                                     keyboardType={keyboardType}
                                     placeholder={placeholder}
                                     autoFocus={autoFocus}
-                                    autoCapitalize={autoCapitalize?autoCapitalize:'none'}
+                                    autoCapitalize={autoCapitalize ? autoCapitalize : 'none'}
                                     onFocus={() => {
                                         onFocusInput();
                                         onFocus ? onFocus() : null
@@ -313,28 +314,44 @@ export const SearchTextinput = ({ value, placeholder, inputContainerStyle, onCha
             iconTypeRight="ionicon"
             onPressIconRight={onPressCross}
             right={right}
+            inputStyle={{ height: height(6) }}
         />
     )
 }
 export const TextInputChat = props => {
-    const { onChangeText, onSend, value } = props;
+    const { onChangeText, onSend, value, onAdd, image } = props;
     return (
         <TextInputColored
             placeholder="Write a message"
             multiline
             left={
-                <IconButton
-                    iconName="add"
-                    iconType="ionicon"
-                    iconColor={colors.appTextColor4}
-                    buttonColor={colors.appBgColor3}
-                    buttonSize={totalSize(4)}
-                    iconSize={totalSize(3)}
-                />
+                <Wrapper style={{}}>
+                    {
+                        image ?
+                            <AbsoluteWrapper style={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+                                <ImageRound
+                                    source={{ uri: image.uri }}
+                                    size={totalSize(4)}
+                                />
+                            </AbsoluteWrapper>
+                            :
+                            null
+                    }
+                    <IconButton
+                        iconName="add"
+                        iconType="ionicon"
+                        iconColor={!image ? colors.appTextColor4 : colors.appBgColor1}
+                        buttonColor={!image ? colors.appBgColor3 : (colors.appBgColor6 + '40')}
+                        buttonSize={totalSize(4)}
+                        iconSize={totalSize(3)}
+                        onPress={onAdd}
+                    />
+
+                </Wrapper>
             }
             iconNameRight="send-sharp"
             iconTypeRight="ionicon"
-            iconColorRight={colors.appColor1}
+            iconColorRight={(value || image) ? colors.appColor1 : colors.appTextColor5}
             inputStyle={{
                 height: null,
                 backgroundColor: 'transparent',
@@ -347,7 +364,7 @@ export const TextInputChat = props => {
             containerStyle={{ borderTopWidth: 1, borderColor: colors.appBgColor3, backgroundColor: 'transparent', marginHorizontal: 0, backgroundColor: colors.appBgColor1 }}
             value={value}
             onChangeText={onChangeText}
-            onPressIcon={onSend}
+            onPressIconRight={onSend}
         />
     );
 };

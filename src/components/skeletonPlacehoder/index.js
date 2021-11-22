@@ -263,3 +263,27 @@ export const PostSkeletons = ({ NumOfItems, itemStyle }) => {
         </SkeletonPlaceholder >
     )
 }
+
+export const UserSkeletons = ({ NumOfItems, itemStyle }) => {
+    const defaultItems = NumOfItems ? NumOfItems : 3
+    const PlaceholderItems = Array.from(Array(defaultItems).keys())
+    return (
+        <SkeletonPlaceholder>
+            {
+                PlaceholderItems.map((item, index) => {
+                    return (
+                        <Wrapper style={[{ marginVertical: sizes.marginVertical / 2, marginHorizontal: sizes.marginHorizontal }]}>
+                            <Wrapper style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Wrapper style={{ height: totalSize(5), width: totalSize(5), borderRadius: 100 }} />
+                                <Wrapper style={{ marginHorizontal: sizes.smallMargin }}>
+                                    <Wrapper style={{ height: height(2), width: width(40), borderRadius: sizes.cardRadius, marginBottom: sizes.smallMargin }} />
+                                    <Wrapper style={{ height: height(0.5), width: width(15), borderRadius: sizes.cardRadius }} />
+                                </Wrapper>
+                            </Wrapper>
+                        </Wrapper>
+                    )
+                })
+            }
+        </SkeletonPlaceholder >
+    )
+}

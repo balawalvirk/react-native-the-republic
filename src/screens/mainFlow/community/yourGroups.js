@@ -13,30 +13,31 @@ import { setMyGroups } from '../../../services/store/actions';
 export default function YourGroups({ tab }) {
 
     //redux states
-    const dispatch=useDispatch()
+    const dispatch = useDispatch()
     const group = useSelector(state => state.group)
     const { myGroups } = group
 
     //local states
-    //const [groups, setGroups] = useState(null)
+    const [loading, setLoading] = useState(true)
 
 
     useFocusEffect(
         React.useCallback(() => {
             getSetGroups()
+
         }, [])
     )
 
     const getSetGroups = async () => {
-        Backend.getUserGroups().
+        await Backend.getUserGroups().
             then(res => {
                 if (res) {
-                    //setGroups(res.data)
                     dispatch(setMyGroups(res.data))
                 }
             })
+        loading && setLoading(false)
     }
-    if (!myGroups) {
+    if (loading) {
         return (
             <>
                 <Spacer height={sizes.baseMargin} />
