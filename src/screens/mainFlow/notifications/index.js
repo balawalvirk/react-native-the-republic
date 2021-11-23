@@ -2,7 +2,7 @@ import moment from 'moment';
 import React, { Component, useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { Rating } from 'react-native-elements';
-import { ComponentWrapper, MainWrapper, MediumText, NoDataViewPrimary, NotificationCardPrimary, RegularText, SkeletonPrimaryList, Wrapper } from '../../../components';
+import { ComponentWrapper, MainWrapper, MediumText, NoDataViewPrimary, NotificationCardPrimary, RegularText, SkeletonPrimaryList, UserSkeletons, Wrapper } from '../../../components';
 import { appStyles, Backend, colors, DummyData, HelpingMethods, routes } from '../../../services';
 import ApproveReviewPopup from './approveReviewPopup';
 import { Swipeable } from 'react-native-gesture-handler'
@@ -96,10 +96,9 @@ function Notifications(props) {
     }
     if (!notifications) {
         return (
-            <SkeletonPrimaryList
-                NumOfItems={10}
-                itemStyle={{ marginHorizontal: 0, borderRadius: 0, marginVertical: 0, marginBottom: 1 }}
-            />
+          <MainWrapper>
+                <UserSkeletons NumOfItems={10} />
+          </MainWrapper>
         )
     }
     else if (!notifications.length) {

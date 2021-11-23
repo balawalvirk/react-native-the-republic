@@ -768,6 +768,34 @@ export const getProductReviews = async (product_id) => {
     }
     return response
 };
+export const getProductReviewsByOrderId = async (order_id) => {
+    let response = null
+    // const state = store.getState()
+    // const { userDetail } = state.user
+    // const user_id = userDetail.id
+    const params = {
+        order_id,
+    }
+    const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    if (isInternetAvailable) {
+        await axios
+            .post(`${baseURL + endPoints.product.get_reviews_by_order}`, params)
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('getProductReviewsByOrderId Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
+    }
+    return response
+};
 
 export const handleAddRemoveFavouriteProduct = async (product_id) => {
     const state = store.getState()

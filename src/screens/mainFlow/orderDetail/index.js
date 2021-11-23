@@ -1,8 +1,9 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
 import StarRating from 'react-native-star-rating';
-import { ButtonColoredSmall, ButtonGradient, ComponentWrapper, IconWithText, LineHorizontal, MainWrapper, ProductCardSecondary, RowWrapperBasic, Spacer, TitleValue, Wrapper, OrderStatusWizard, Toasts, ButtonColored, PopupPrimary, TextInputUnderlined, ReviewCardPrimary, ButtonBordered } from '../../../components';
+import { useSelector } from 'react-redux';
+import { ButtonColoredSmall, ButtonGradient, ComponentWrapper, IconWithText, LineHorizontal, MainWrapper, ProductCardSecondary, RowWrapperBasic, Spacer, TitleValue, Wrapper, OrderStatusWizard, Toasts, ButtonColored, PopupPrimary, TextInputUnderlined, ReviewCardPrimary, ButtonBordered, SkeletonPrimary, Reviews } from '../../../components';
 import { appImages, appStyles, Backend, colors, orderStatuses, routes, sizes } from '../../../services';
 import PurchasesList from '../purchaseHistory/purchasesList';
 const steps = ['Order\nPlaced', 'Order\naccepted', 'Delivery\non the way', 'Delivered\nto you']
@@ -51,6 +52,7 @@ const testReview = {
 function OrderDetail(props) {
     const { navigation, route } = props
     const { navigate, goBack, setParams } = navigation
+
     //navigation params
     const { order } = route.params
     const { user } = order
@@ -63,6 +65,9 @@ function OrderDetail(props) {
     const isCancelled = order.status === orderStatuses.cancelled
     const orderStep = isNew ? 1 : isActive ? 2 : isShipping ? 3 : isDelivered ? 4 : 1
 
+    //redux states
+    const userData = useSelector(state => state.user)
+    const { userDetail } = userData
     //local states
     const [loadingCancel, setLoadingCancel] = useState(false)
     const [loadingComplete, setLoadingComplete] = useState(false)
@@ -71,7 +76,7 @@ function OrderDetail(props) {
     const [rating, setRating] = useState(5)
     const [isReviewPopupVisible, setReviewPopupVisibility] = useState(false)
     const [loadingReview, setLoadingReview] = useState(false)
-    const [review, setReview] = useState(null)
+    const [reviews, setReviews] = useState(null)
 
 
     const toggleOrderRecievedPopup = () => setOrderRecievedPopupVisibility(!isOrderRecievedPopupVisible)
@@ -95,6 +100,11 @@ function OrderDetail(props) {
             )
         });
     }, [navigation, order, loadingCancel]);
+
+
+    useEffect(() => {
+        handleGetMyOrderProductReview()
+    }, [])
 
     const handleCancelOrder = async () => {
         setLoadingCancel(true)
@@ -146,30 +156,43 @@ function OrderDetail(props) {
         //     }, 500);
         // }, 2000);
     }
+    const handleGetMyOrderProductReview = async () => {
+        Backend.getProductReviewsByOrderId(order.id).
+            then(res => {
+                if (res) {
+                    setReviews(res.data)
+                }
+            })
+            
+        // setTimeout(() => {
+        //     setReviews([])
+        // }, 2000);
+    }
     const handleSubmitReview = async () => {
         setLoadingReview(true)
-        // await Backend.addProductReview({
-        //     order_id: order.id,
-        //     product_id: order.product.id,
-        //     comment,
-        //     rating
-        // }).
-        //     then(async res => {
-        //         setLoadingReview(false)
-        //         if (res) {
-        //             setReview(res.data)
-        //             toggleReviewPopup()
-        //             Toasts.success('Review has been submitted')
-        //         }
-        //     })
+        await Backend.addProductReview({
+            order_id: order.id,
+            product_id: order.product.id,
+            comment,
+            rating
+        }).
+            then(async res => {
+                setLoadingReview(false)
+                if (res) {
+                    //setReviews([res.data])
+                    setReviews([{ ...res.data, user: userDetail }])
+                    toggleReviewPopup()
+                    Toasts.success('Review has been submitted')
+                }
+            })
 
         // testing
-        setTimeout(() => {
-            setReview(testReview)
-            setLoadingReview(false)
-            toggleReviewPopup()
-            Toasts.success('Review has been submitted')
-        }, 2000);
+        // setTimeout(() => {
+        //     setReviews([testReview])
+        //     setLoadingReview(false)
+        //     toggleReviewPopup()
+        //     Toasts.success('Review has been submitted')
+        // }, 2000);
 
     }
     return (
@@ -205,23 +228,33 @@ function OrderDetail(props) {
             </> */}
             {
                 isCompleted ?
-                    review ?
-                        <>
-                            <ReviewCardPrimary
-                                imageUrl={appImages.user2}
-                                title={review.user.first_name + ' ' + review.user.last_name}
-                                rating={review.rating}
-                                comment={review.comment}
-                            />
-                            <Spacer height={sizes.baseMargin} />
-                        </>
-                        :
-                        <ButtonBordered
-                            text="Write a Review"
-                            onPress={toggleReviewPopup}
-                            tintColor={colors.appTextColor5}
-                            buttonStyle={{ marginBottom: sizes.baseMargin }}
-                        />
+                    <Wrapper>
+                        {
+                            reviews ?
+                                reviews.length ?
+                                    <Wrapper>
+                                        {/* <ReviewCardPrimary
+                                        imageUrl={appImages.user2}
+                                        title={reviews.user.first_name + ' ' + reviews.user.last_name}
+                                        rating={reviews.rating}
+                                        comment={reviews.comment}
+                                    />
+                                    <Spacer height={sizes.baseMargin} /> */}
+                                        <Reviews
+                                            data={reviews}
+                                        />
+                                    </Wrapper>
+                                    :
+                                    <ButtonBordered
+                                        text="Write a Review"
+                                        onPress={toggleReviewPopup}
+                                        tintColor={colors.appTextColor5}
+                                    />
+                                :
+                                <SkeletonPrimary />
+                        }
+                        <Spacer height={sizes.smallMargin} />
+                    </Wrapper>
                     :
                     null
             }

@@ -214,7 +214,7 @@ function ProductDetail(props) {
                     <FooterButton
                         text="Enquire"
                         onPress={() => {
-                            navigate(routes.chatScreen, { enquire: productDetail, user })
+                            navigate(routes.chatScreen, { enquire: productDetail, userId:user.id })
                         }}
                     />
                     {/* <FooterButton

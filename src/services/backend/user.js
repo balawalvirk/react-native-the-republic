@@ -421,3 +421,32 @@ export const getUserProfileDetail = async (userId) => {
         });
     return response
 };
+
+export const changePassword = async ({old_password,password,password_confirmation}) => {
+    let response = null
+    const state = store.getState()
+    const user_id =state.user.userDetail.id
+    let params = {
+        user_id,
+        old_password,
+        password,
+        password_confirmation
+    }
+    console.log('changePassword Params', params);
+    await axios
+        .post(`${baseURL + endPoints.user.change_password}`, params)
+        .then(async responseJson => {
+            const tempResponseData = responseJson.data
+            console.log('changePassword Response', tempResponseData);
+            if (tempResponseData.success) {
+                response = tempResponseData
+            } else {
+                Toasts.error(tempResponseData.message)
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};

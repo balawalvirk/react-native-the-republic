@@ -65,7 +65,7 @@ const chatMessages = [
 function ChatScreen(props) {
 
     const { navigation, route } = props
-    const { navigate } = navigation
+    const { navigate, setParams } = navigation
     const { conversation, enquire, user, userId } = route.params
     const receiver_id = userId ? userId : conversation ? conversation.id : user ? user.id : ''
 
@@ -115,12 +115,13 @@ function ChatScreen(props) {
     // useEffect(() => {
     //     getSetInitialData()
     // }, [])
+
     useEffect(() => {
         getSetInitialData()
-         const interval = setInterval(() => {
-             getChatMessages()
-         }, 10000);
-         return () => clearInterval(interval);
+        const interval = setInterval(() => {
+            getChatMessages()
+        }, 10000);
+        return () => clearInterval(interval);
     }, [])
 
     const getSetInitialData = () => {
@@ -168,20 +169,30 @@ function ChatScreen(props) {
                 created_at: new Date()
             }
             messageImage && [newMessageObj['image'] = messageImage.uri]
+            enquire && [
+                newMessageObj['product_id'] = enquire.id,
+                newMessageObj['product'] = enquire
+            ]
             const tempNewMessages = [...messages, newMessageObj]
             setMessages(tempNewMessages)
+
+            //send message api call
             const sendMessageObj = {
                 receiver_id,
                 message: messageText,
-                image: messageImage
             }
+            messageImage && [sendMessageObj['image'] = messageImage]
+            enquire && [
+                sendMessageObj['product_id'] = enquire.id,
+                setParams({ enquire: null })
+            ]
             setMessageText('')
             setMessageImage(null)
             await Backend.sendChatMessage(sendMessageObj).
                 then(res => {
                     if (res) {
                         let tempData = tempNewMessages
-                        tempData[(tempData.length-1)] = res.data
+                        tempData[(tempData.length - 1)] = res.data
                         setMessages(tempData)
                         setLoadingSendMessage(false)
                     }
@@ -252,14 +263,14 @@ function ChatScreen(props) {
                     <Wrapper style={[{ backgroundColor: colors.error, flexDirection: 'row', alignItems: 'center', paddingVertical: sizes.marginVertical / 2, paddingHorizontal: sizes.marginHorizontalSmall }]}>
                         <Wrapper style={{ backgroundColor: colors.appBgColor1, borderRadius: sizes.smallRadius }}>
                             <ImageSqareRound
-                                source={{ uri: enquire.image }}
+                                source={{ uri: enquire.images ? JSON.parse(enquire.images)[0] : appImages.noImageAvailable }}
                                 style={{ borderRadius: sizes.smallRadius }}
                                 resizeMode="contain"
                             />
                         </Wrapper>
                         <Spacer width={sizes.smallMargin} />
                         <Wrapper flex={1}>
-                            <MediumText numberOfLines={2} style={[appStyles.textWhite]}>{enquire.description}</MediumText>
+                            <MediumText numberOfLines={2} style={[appStyles.textWhite]}>{enquire.title}</MediumText>
                         </Wrapper>
                     </Wrapper>
                     :
@@ -288,6 +299,7 @@ function ChatScreen(props) {
                                             time={HelpingMethods.formateDateFromNow(item.created_at)}
                                             myMessage={item.sender_id == myId}
                                             image={item.image}
+                                            product={item.product}
                                             loadingSendMessage={(index === (messages.length - 1)) && loadingSendMessage}
                                         />
                                     );

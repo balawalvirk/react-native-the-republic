@@ -35,7 +35,7 @@ export const getAllConversations = async () => {
     return response
 };
 
-export const sendChatMessage = async ({receiver_id, message, image}) => {
+export const sendChatMessage = async ({ receiver_id, message, image, product_id }) => {
     let response = null
     const state = store.getState()
     const user_id = state.user.userDetail.id
@@ -45,6 +45,7 @@ export const sendChatMessage = async ({receiver_id, message, image}) => {
     params.append('receiver_id', receiver_id)
     params.append('message', message)
     image && params.append('image', image)
+    product_id && params.append('product_id', product_id)
     console.log('sendMessage Params', params);
     await axios
         .post(`${baseURL + endPoints.chat.send_message}`, params)

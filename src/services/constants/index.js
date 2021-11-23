@@ -30,6 +30,7 @@ export const endPoints = {
         check_user: 'check-user',
         update_delivery_address: 'update-delivery-address',
         show_user_profile: 'show-user-profile',
+        change_password: 'change-password'
     },
     creditCard: {
         add_card: 'add-card',
@@ -92,6 +93,7 @@ export const endPoints = {
         show_reviews: 'show-reviews',
         edit_review: 'edit-review',
         delete_review: 'delete-review',
+        get_reviews_by_order: 'get-reviews-by-order',
         nearby_products: 'nearby-products',
         show_categories: 'show-categories',
         show_items: 'show-items',
@@ -171,7 +173,8 @@ export const endPoints = {
         get_earnings_reports: 'get-earnings',
         weekly_reports: 'weekly-reports',
         advance_reports: 'advance-reports',
-        user_orders:'user-orders'
+        user_orders: 'user-orders',
+
     },
     dealer: {
         get_dealers: 'get-dealers',

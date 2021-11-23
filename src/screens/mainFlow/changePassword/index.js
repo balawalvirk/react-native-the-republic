@@ -1,8 +1,9 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { Component, useState } from 'react';
 import { View, Text } from 'react-native';
 import { totalSize } from 'react-native-dimension';
 import { ButtonColored, ComponentWrapper, KeyboardAvoidingScrollView, MainWrapper, Spacer, TextInputUnderlined, Toasts, Wrapper } from '../../../components';
-import { Backend, colors, HelpingMethods, sizes } from '../../../services';
+import { asyncConts, Backend, colors, HelpingMethods, sizes } from '../../../services';
 
 function ChangePassword(props) {
     const { goBack } = props.navigation
@@ -21,25 +22,25 @@ function ChangePassword(props) {
 
     const handleOnChangeCurrentPasswordText = (text) => {
         HelpingMethods.handleAnimation()
-        !text ? setCurrentPasswordError('') : text.length < 8 ? setCurrentPasswordError('Atleast 8 characters') : setCurrentPasswordError('')
+        !text ? setCurrentPasswordError('') : text.length < 6 ? setCurrentPasswordError('Atleast 6 characters') : setCurrentPasswordError('')
         setCurrentPassword(text)
     }
     const handleOnChangeNewPasswordText = (text) => {
         HelpingMethods.handleAnimation()
-        !text ? setNewPasswordError('') : text.length < 8 ? setNewPasswordError('Atleast 8 characters') : setNewPasswordError('')
+        !text ? setNewPasswordError('') : text.length < 6 ? setNewPasswordError('Atleast 6 characters') : setNewPasswordError('')
         setNewPassword(text)
     }
     const handleOnChangeConfirmNewPasswordText = (text) => {
         HelpingMethods.handleAnimation()
-        !text ? setConfirmNewPasswordError('') : text.length < 8 ? setConfirmNewPasswordError('Atleast 8 characters') : text != NewPassowrd ? setConfirmNewPasswordError('Not matching with New Passowrd') : setConfirmNewPasswordError('')
+        !text ? setConfirmNewPasswordError('') : text.length < 6 ? setConfirmNewPasswordError('Atleast 6 characters') : text != NewPassowrd ? setConfirmNewPasswordError('Not matching with New Passowrd') : setConfirmNewPasswordError('')
         setConfirmNewPassword(text)
     }
     const validations = () => {
         HelpingMethods.handleAnimation()
-        !CurrentPassowrd ? setCurrentPasswordError('Enter your Current Passowrd') : CurrentPassowrd.length < 8 ? setCurrentPasswordError('Atleast 8 characters') : setCurrentPasswordError('')
-        !NewPassowrd ? setNewPasswordError('Enter your New Passowrd') : NewPassowrd.length < 8 ? setNewPasswordError('Atleast 8 characters') : setNewPasswordError('')
-        !ConfirmNewPassowrd ? setConfirmNewPasswordError('Confirm your New Password') : ConfirmNewPassowrd.length < 8 ? setConfirmNewPasswordError('Atleast 8 characters') : ConfirmNewPassowrd != NewPassowrd ? setConfirmNewPasswordError('Not matching with New Password') : setConfirmNewPasswordError('')
-        if (CurrentPassowrd.length >= 8 && NewPassowrd.length >= 8 && ConfirmNewPassowrd.length >= 8 && NewPassowrd === ConfirmNewPassowrd) {
+        !CurrentPassowrd ? setCurrentPasswordError('Enter your Current Passowrd') : CurrentPassowrd.length < 6 ? setCurrentPasswordError('Atleast 6 characters') : setCurrentPasswordError('')
+        !NewPassowrd ? setNewPasswordError('Enter your New Passowrd') : NewPassowrd.length < 6 ? setNewPasswordError('Atleast 6 characters') : setNewPasswordError('')
+        !ConfirmNewPassowrd ? setConfirmNewPasswordError('Confirm your New Password') : ConfirmNewPassowrd.length < 6 ? setConfirmNewPasswordError('Atleast 6 characters') : ConfirmNewPassowrd != NewPassowrd ? setConfirmNewPasswordError('Not matching with New Password') : setConfirmNewPasswordError('')
+        if (CurrentPassowrd.length >= 6 && NewPassowrd.length >= 6 && ConfirmNewPassowrd.length >= 6 && NewPassowrd === ConfirmNewPassowrd) {
             return true
         } else {
             return false
@@ -48,12 +49,31 @@ function ChangePassword(props) {
     const handleSaveChanges = async () => {
         if (validations()) {
             setLoading(true)
-
-            setTimeout(() => {
-                goBack()
-                Toasts.success('Password changed successfuly')
+            await Backend.changePassword({
+                old_password: CurrentPassowrd,
+                password: NewPassowrd,
+                password_confirmation: ConfirmNewPassowrd
+            }).then(async res => {
                 setLoading(false)
-            }, 1000);
+                if (res) {
+                    const userCredentials = await AsyncStorage.getItem(asyncConts.user_credentials)
+                    if (userCredentials) {
+                        const userCredentialsParsed = JSON.parse(userCredentials)
+                        const NewUserCredentials = {
+                            ...userCredentialsParsed,
+                            password: NewPassowrd
+                        }
+                        await AsyncStorage.setItem(asyncConts.user_credentials, JSON.stringify(NewUserCredentials))
+                        goBack()
+                        Toasts.success('Password changed successfuly')
+                    }
+                }
+            })
+            // setTimeout(() => {
+            //     goBack()
+            //     Toasts.success('Password changed successfuly')
+            //     setLoading(false)
+            // }, 1000);
         }
     }
     return (
