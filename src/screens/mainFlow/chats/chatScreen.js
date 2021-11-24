@@ -125,18 +125,20 @@ function ChatScreen(props) {
     }, [])
 
     const getSetInitialData = () => {
-        if (conversation) {
-            setMessages(conversation.messages.reverse())
-            setUserDetails(conversation)
-        }
-        if (user || userId) {
-            if (user) {
-                setUserDetails(user)
-            } else {
-                getUserProfile()
-            }
-            getChatMessages()
-        }
+        // if (conversation) {
+        //     setMessages(conversation.messages.reverse())
+        //     setUserDetails(conversation)
+        // }
+        // if (user || userId) {
+        //     if (user) {
+        //         setUserDetails(user)
+        //     } else {
+        //         getUserProfile()
+        //     }
+        //     getChatMessages()
+        // }
+        getUserProfile()
+        getChatMessages()
     }
     const getChatMessages = async () => {
         await Backend.getChatMessages(receiver_id).

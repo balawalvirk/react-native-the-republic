@@ -30,7 +30,8 @@ export const endPoints = {
         check_user: 'check-user',
         update_delivery_address: 'update-delivery-address',
         show_user_profile: 'show-user-profile',
-        change_password: 'change-password'
+        change_password: 'change-password',
+        send_fcm_token:'send-fcm-token'
     },
     creditCard: {
         add_card: 'add-card',
@@ -196,7 +197,12 @@ export const endPoints = {
         show_notifications: 'show-notifications',
         read_all_notifications: 'read-all-notifications',
         read_single_notification: 'read-single-notification',
-        get_new_notification_count: 'get-new-notification-count'
+        get_new_notification: 'get-new-notifications'
+    },
+    news: {
+        get_news: 'get-news',
+        clear_single_news: 'clear-single-news',
+        clear_all_news: 'clear-all-news',
     },
     contact_us: 'contact-us',
     add_card: 'add-card',
@@ -300,6 +306,7 @@ export const asyncConts = {
     product_calibers: 'PRODUCT_CALIBERS',
     product_actions: 'PRODUCT_ACTIONS',
     product_conditions: 'PRODUCT_CONDITIONS',
+    fcmToken:'FCM_TOKEN'
 }
 export const orderStatuses = {
     pending: 'pending',

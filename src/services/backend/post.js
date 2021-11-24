@@ -4,7 +4,7 @@ import { Toasts } from "../../components";
 import store from "../store";
 import * as Backend from './index'
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import HelpingMethods from "../helpingMethods";
+import * as HelpingMethods from "../helpingMethods";
 import { setCreditCards, setUserDetail } from "../store/actions";
 import { postTypes } from '..'
 const { dispatch } = store

@@ -4,7 +4,7 @@ import { Toasts } from "../../components";
 import store from "../store";
 import * as Backend from './index'
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import HelpingMethods from "../helpingMethods";
+import * as HelpingMethods from "../helpingMethods";
 import { setReports, setUserDetail } from "../store/actions";
 const { dispatch } = store
 
@@ -25,6 +25,7 @@ export const login = async (email, password) => {
                 response = tempResponseData
                 const userDetail = tempResponseData.data
                 dispatch(setUserDetail(userDetail))
+                HelpingMethods.handlePushNotificationPermission()
                 //Saving in local storage
                 AsyncStorage.setItem(asyncConts.user_credentials, JSON.stringify(params))
                 AsyncStorage.setItem(asyncConts.user_details, JSON.stringify(userDetail))
@@ -438,6 +439,33 @@ export const changePassword = async ({old_password,password,password_confirmatio
         .then(async responseJson => {
             const tempResponseData = responseJson.data
             console.log('changePassword Response', tempResponseData);
+            if (tempResponseData.success) {
+                response = tempResponseData
+            } else {
+                Toasts.error(tempResponseData.message)
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};
+
+export const sendFcmToken = async (token) => {
+    let response = null
+    const state = store.getState()
+    const user_id =state.user.userDetail.id
+    let params = {
+        user_id,
+        token
+    }
+    console.log('sendFcmToken Params', params);
+    await axios
+        .post(`${baseURL + endPoints.user.send_fcm_token}`, params)
+        .then(async responseJson => {
+            const tempResponseData = responseJson.data
+            console.log('sendFcmToken Response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
             } else {

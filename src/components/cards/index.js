@@ -405,7 +405,7 @@ export const CreditCardPrimary = ({ containerStyle, name, cardNumber, expiry, on
 
 export const NotificationCardPrimary = ({ onPress, text, image, type, time, containerStyle }) => {
     const isProduct = type === 'product' || type === 'order'
-    const isUser = type === 'review'
+    const isUser = type === 'postReaction' ||type === 'postComment'||type==='followRequestAccepted'||type==='newFollowRequest'||type==='followUser'
     const isApp = type === 'app'
     return (
         <TouchableOpacity onPress={onPress} activeOpacity={1} style={[{ paddingVertical: sizes.marginVertical / 2, borderBottomWidth: 1, borderBottomColor: colors.appBgColor3 }, containerStyle]}>

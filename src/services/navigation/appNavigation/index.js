@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
@@ -17,10 +17,11 @@ import { totalSize, width } from 'react-native-dimension';
 import { Badge, Icon } from 'react-native-elements';
 import { FlatList, TouchableOpacity } from 'react-native';
 import styles from './styles'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import CommunityCustomTopTab from './communityCustomTopTab';
-
+import messaging from '@react-native-firebase/messaging';
+import * as RootNavigation from '../rootNavigation'
 const AppStack = createStackNavigator();
 const MainBottomTab = createBottomTabNavigator();
 const MainBottomTabStack = createStackNavigator();
@@ -141,6 +142,9 @@ function BottomTabScreens() {
 }
 
 function BottomTabStackScreens() {
+    const user = useSelector(state => state.user)
+    const { userDetail } = user
+    const { newNotificationsCount, newMessagesCount } = userDetail
     return (
         <MainBottomTabStack.Navigator
             screenOptions={headers.screenOptionsSecondary}
@@ -159,9 +163,9 @@ function BottomTabStackScreens() {
                         <RowWrapper style={[{ marginRight: sizes.marginHorizontal }]}>
                             <CustomIcon icon={appIcons.search} size={sizes.icons.medium} color={colors.appTextColor1} onPress={() => navigation.navigate(routes.search)} />
                             <Spacer width={sizes.marginHorizontal} />
-                            <CustomIcon value='2' icon={appIcons.bell} size={sizes.icons.medium} color={colors.appTextColor1} onPress={() => navigation.navigate(routes.notifications)} />
+                            <CustomIcon value={newNotificationsCount ? newNotificationsCount : ''} icon={appIcons.bell} size={sizes.icons.medium} color={colors.appTextColor1} onPress={() => navigation.navigate(routes.notifications)} />
                             <Spacer width={sizes.marginHorizontal} />
-                            <CustomIcon value='5' icon={appIcons.chat} size={sizes.icons.medium} color={colors.appTextColor1} onPress={() => navigation.navigate(routes.chats)} />
+                            <CustomIcon value={newMessagesCount ? newMessagesCount : ''} icon={appIcons.chat} size={sizes.icons.medium} color={colors.appTextColor1} onPress={() => navigation.navigate(routes.chats)} />
                         </RowWrapper>,
                     headerLeft: () => <RowWrapper style={[{}]}>
                         <CustomIcon onPress={() => navigation.toggleDrawer()} icon={appIcons.menu} size={sizes.icons.medium} color={colors.appTextColor1} />
@@ -243,6 +247,78 @@ const MainSideDrawer = () => {
     );
 };
 const AppNavigation = () => {
+    const handleOnPressNotification = (data) => {
+        const { navigate } = RootNavigation
+        // navigate(routes.postDetail, { item: JSON.parse(content) })
+        const { type, content } = data
+        if (type === 'postReaction') {
+            navigate(routes.postDetail, { postId: content.id })
+        } else if (type === 'postComment') {
+            navigate(routes.postDetail, { postId: content.id })
+        } else if (type === 'followRequestAccepted') {
+            navigate(routes.userProfile, { userId: content.id })
+        } else if (type === 'newFollowRequest') {
+            navigate(routes.followRequests)
+        } else if (type === 'followUser') {
+            // navigate(routes.followRequests)
+            navigate(routes.userProfile, { userId: content.id })
+        } else if (type === 'productReview') {
+            toggleApproveReview()
+        }
+    }
+    const handleOnOpenNotification = () => {
+        const { navigate } = RootNavigation
+
+
+        const dispatch = useDispatch()
+        useEffect(() => {
+            handleOnOpenNotification();
+            handelNotificationListner();
+        }, []);
+
+
+        messaging().onNotificationOpenedApp(remoteMessage => {
+            if (remoteMessage) {
+                console.log(
+                    'Notification caused app to open from background state:',
+                    remoteMessage,
+                );
+                const { data } = remoteMessage
+                handleOnPressNotification(data)
+            }
+        });
+        // Check whether an initial notification is available
+        messaging()
+            .getInitialNotification()
+            .then(remoteMessage => {
+                if (remoteMessage) {
+                    console.log(
+                        'Notification caused app to open from quit state:',
+                        remoteMessage,
+                    );
+                    //  setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
+                    if (remoteMessage.data) {
+                        const { data } = remoteMessage
+                        handleOnPressNotification(data)
+                    }
+                }
+            });
+    }
+    const handelNotificationListner = () => {
+        messaging()
+            .onMessage(remoteMessage => {
+                if (remoteMessage) {
+                    console.log(
+                        'Notification Has been recieved:',
+                        remoteMessage,
+                    );
+                    //  setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
+                    if (remoteMessage.data) {
+
+                    }
+                }
+            })
+    }
     return (
         <AppStack.Navigator
             screenOptions={headers.screenOptionsSecondary}

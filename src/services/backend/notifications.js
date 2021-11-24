@@ -4,7 +4,7 @@ import { Toasts } from "../../components";
 import store from "../store";
 import * as Backend from './index'
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import HelpingMethods from "../helpingMethods";
+import * as HelpingMethods from "../helpingMethods";
 import { setCreditCards, setUserDetail } from "../store/actions";
 const { dispatch } = store
 
@@ -98,13 +98,13 @@ export const getNewNotificationsCount = async () => {
     }
     console.log('getNewNotificationsCount Params', params);
     await axios
-        .post(`${baseURL + endPoints.notificaitons.get_new_notification_count}`, params)
+        .post(`${baseURL + endPoints.notificaitons.get_new_notification}`, params)
         .then(async responseJson => {
             const tempResponseData = responseJson.data
             console.log('getNewNotificationsCount response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
-                dispatch(setUserDetail({...userDetail,newNotificationCount:tempResponseData.data}))
+                dispatch(setUserDetail({...userDetail,newNotificationsCount:tempResponseData.notifications.length}))
             } else {
                 Toasts.error(tempResponseData.message)
             }

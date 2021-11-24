@@ -96,9 +96,9 @@ function Notifications(props) {
     }
     if (!notifications) {
         return (
-          <MainWrapper>
+            <MainWrapper>
                 <UserSkeletons NumOfItems={10} />
-          </MainWrapper>
+            </MainWrapper>
         )
     }
     else if (!notifications.length) {
@@ -120,7 +120,8 @@ function Notifications(props) {
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item, index }) => {
                     const itemData = JSON.parse(item.data)
-                    index === 0 && console.log('itemData --> ', itemData)
+                    index === 0 && console.log('itemData --> ', itemData.profile_image)
+                    index === 0 && console.log('type --> ', itemData.type)
                     let refsArray = []
                     return (
                         <Swipeable
@@ -143,7 +144,7 @@ function Notifications(props) {
                                 containerStyle={{ backgroundColor: colors.appBgColor1 }}
                                 text={itemData.data}
                                 image={itemData.profile_image}
-                                type={item.type}
+                                type={itemData.type}
                                 time={moment(item.created_at).fromNow()}
                                 onPress={() => handlePressNotification(itemData, index)}
                             />

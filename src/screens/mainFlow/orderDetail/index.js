@@ -179,8 +179,8 @@ function OrderDetail(props) {
             then(async res => {
                 setLoadingReview(false)
                 if (res) {
-                    //setReviews([res.data])
-                    setReviews([{ ...res.data, user: userDetail }])
+                    setReviews([res.data])
+                    //setReviews([{ ...res.data, user: userDetail }])
                     toggleReviewPopup()
                     Toasts.success('Review has been submitted')
                 }

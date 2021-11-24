@@ -87,6 +87,7 @@ function MarketPlace(props) {
 
 
         setLoading(false)
+        await Backend.getNewNotificationsCount()
         await Backend.get_credit_cards()
         await Backend.get_product_items()
         await Backend.get_product_manufacturers()

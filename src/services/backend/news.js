@@ -9,21 +9,19 @@ import { setCreditCards, setUserDetail } from "../store/actions";
 const { dispatch } = store
 
 
-export const addBankAccount = async ({ bank_name, account_no }) => {
+export const getAllNews = async () => {
     let response = null
     const state = store.getState()
-    const userId = state.user.userDetail.id
+    const user_id = state.user.userDetail.id
     let params = {
-        user_id: userId,
-        bank_name,
-        account_no
+        user_id
     }
-    console.log('addBankAccount Params', params);
+    console.log('getAllNews Params', params);
     await axios
-        .post(`${baseURL + endPoints.bank.add_bank_account}`, params)
+        .post(`${baseURL + endPoints.news.get_news}`, params)
         .then(async responseJson => {
             const tempResponseData = responseJson.data
-            console.log('addBankAccount Response', tempResponseData);
+            console.log('getAllNews Response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
             } else {
@@ -37,19 +35,19 @@ export const addBankAccount = async ({ bank_name, account_no }) => {
     return response
 };
 
-export const getBankAccounts = async () => {
+export const clearAllNews = async () => {
     let response = null
     const state = store.getState()
-    const user_id =  state.user.userDetail.id
+    const user_id = state.user.userDetail.id
     let params = {
-        user_id
+        user_id,
     }
-    console.log('getBankAccounts Params', params);
+    console.log('clearAllNews Params', params);
     await axios
-        .post(`${baseURL + endPoints.bank.get_bank_accounts}`, params)
+        .post(`${baseURL + endPoints.news.clear_all_news}`, params)
         .then(async responseJson => {
             const tempResponseData = responseJson.data
-            console.log('getBankAccounts response', tempResponseData);
+            console.log('clearAllNews response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
             } else {
@@ -63,20 +61,20 @@ export const getBankAccounts = async () => {
     return response
 };
 
-
-export const getBanks = async () => {
+export const clearSingleNews = async (news_id) => {
     let response = null
     const state = store.getState()
-    const user_id =  state.user.userDetail.id
+    const user_id = state.user.userDetail.id
     let params = {
-        user_id
+        user_id,
+        news_id
     }
-    console.log('getBanks Params', params);
+    console.log('clearSingleNews Params', params);
     await axios
-        .get(`${baseURL + endPoints.bank.get_banks}`, params)
+        .post(`${baseURL + endPoints.news.clear_single_news}`, params)
         .then(async responseJson => {
             const tempResponseData = responseJson.data
-            console.log('getBanks response', tempResponseData);
+            console.log('clearSingleNews response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
             } else {

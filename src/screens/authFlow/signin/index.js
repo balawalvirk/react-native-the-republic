@@ -21,6 +21,7 @@ function Signin(props) {
   const [resetPasswordModalVisible, SetResetPasswordModalVisible] = useState(false)
 
   useEffect(() => {
+    // HelpingMethods.handlePushNotificationPermission()
     checkUser()
   }, [])
 
