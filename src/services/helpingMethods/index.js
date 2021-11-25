@@ -1,5 +1,5 @@
 import moment from "moment";
-import { UIManager, LayoutAnimation, Platform, Linking, PermissionsAndroid } from "react-native";
+import { UIManager, LayoutAnimation, Platform, Linking, PermissionsAndroid, Alert } from "react-native";
 import dummyData from "../constants/dummyData";
 import NetInfo from "@react-native-community/netinfo";
 import store from "../store";
@@ -49,12 +49,15 @@ export const compareDate = () => {
 export const checkIsProductFavourite = (productId) => {
     let isFavourite = false
     const state = store.getState()
-    const { favorite_products } = state.user.userDetail
-    if (favorite_products) {
-        if (favorite_products.length) {
-            const matchedId = favorite_products.find(id => id === productId)
-            if (matchedId) {
-                isFavourite = true
+    const { userDetail } = state.user
+    if (userDetail) {
+        const { favorite_products } = userDetail
+        if (favorite_products) {
+            if (favorite_products.length) {
+                const matchedId = favorite_products.find(id => id === productId)
+                if (matchedId) {
+                    isFavourite = true
+                }
             }
         }
     }
@@ -223,9 +226,29 @@ export const checkInternetConnectivity = async () => {
     return isConnected
 }
 export const logout = async () => {
-    dispatch(setUserDetail(null))
-    AsyncStorage.removeItem(asyncConts.user_credentials)
-    AsyncStorage.removeItem(asyncConts.user_details)
+    Alert.alert(
+        "Do you want to logout?",
+        "",
+        [
+            {
+                text: "Cancel",
+                //onPress: () => Alert.alert("Cancel Pressed"),
+                //style: "cancel",
+            },
+            {
+                text: "Logout",
+                onPress: () => [
+                    dispatch(setUserDetail(null)),
+                    AsyncStorage.removeItem(asyncConts.user_credentials),
+                    AsyncStorage.removeItem(asyncConts.user_details)
+                    //setDownloads(downloads.filter(ite => ite != item))
+                ],
+                style: "destructive",
+                //style: "cancel",
+            },
+        ],
+    )
+
 }
 export const getPickerData = (data) => {
     let tempData = []
@@ -382,7 +405,7 @@ export const getFcmToken = async () => {
         if (fcmToken) {
             console.log('after fcmToken: ', fcmToken);
             await AsyncStorage.setItem(asyncConts.fcm_token, fcmToken);
-            Backend.sendFcmToken(fcmToken)
+           // Backend.update_profile({ fcm_token: fcmToken })
         }
     } else {
         Backend.sendFcmToken(fcmToken)

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Platform, TouchableOpacity, ImageBackground, Keyboard } from 'react-native'
 import { height, totalSize, width } from 'react-native-dimension'
 import { ModalSwipeablePrimary, SkeletonPrimary } from '..'
@@ -36,7 +36,7 @@ export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconColor
     const [keyboardVisible, setKeyboardVisible] = useState(false)
     let keyboardDidShowListener
     let keyboardDidHideListener
-    
+
     useEffect(() => {
         keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => { HelpingMethods.handleAnimation(); setKeyboardVisible(true) });
         keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => { HelpingMethods.handleAnimation(); setKeyboardVisible(false) });
@@ -58,10 +58,10 @@ export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconColor
         >
             <Wrapper flex={1}>
                 <KeyboardAvoidingScrollView
-                   // keyboardShouldPersistTaps={keyboardShouldPersistTaps}
+                    // keyboardShouldPersistTaps={keyboardShouldPersistTaps}
                     //showsVerticalScrollIndicator={false}
                     scrollEnabled={scrollEnabled}
-                    >
+                >
                     <Spacer height={sizes.baseMargin * 1.5} />
                     {
                         iconName || customIcon ?
@@ -195,13 +195,18 @@ export const SwitchPrimary = ({ value, onPress }) => {
 export const LocationPickerButton = ({ text, onPress }) => {
     const user = useSelector(state => state.user)
     const { userDetail } = user
-    const userAddress = text ? text : userDetail.address ? userDetail.address : 'Current Location'
+    let address = ''
+    if (userDetail) {
+        address = userDetail.address
+    }
+    let userAddress = text ? text : address ? address : 'Current Location'
+    console.log('userAddress -->',userAddress)
     return (
         <TouchableOpacity disabled={!onPress} onPress={onPress} activeOpacity={1}>
             <RowWrapperBasic style={{ padding: sizes.smallMargin, backgroundColor: colors.appBgColor3, borderRadius: 100 }}>
                 <IconWithText
                     customIcon={appIcons.map_pin_outline}
-                    text={userAddress.slice(0, 12) + '..'}
+                    text={userAddress?userAddress.slice(0, 12) + '..':''}
                     tintColor={colors.appTextColor1}
                     iconSize={totalSize(2)}
                     textStyle={[appStyles.textRegular]}

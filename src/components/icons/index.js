@@ -4,7 +4,7 @@ import { Icon } from 'react-native-elements';
 import { height, totalSize, width } from 'react-native-dimension';
 import { colors, appStyles, sizes } from '../../services';
 import * as Animatable from 'react-native-animatable';
-import { SmallText } from '../text';
+import { SmallText,RegularText } from '../text';
 import { AbsoluteWrapper, Wrapper } from '../wrappers';
 import { Badge } from 'react-native-elements';
 export const BackIcon = ({ style, onPress, size }) => {
@@ -35,13 +35,13 @@ export const BackIconAbsolute = ({ onPress, containerStyle }) => {
         />
     )
 }
-export const IconButton = ({ buttonStyle, onPress, shadow, shadowColored, iconSize, iconColor, iconName, iconType, buttonColor, buttonSize, customIcon, iconStyle, disabled }) => {
+export const IconButton = ({ buttonStyle, onPress, shadow, text, textStyle, shadowColored, iconSize, iconColor, iconName, iconType, buttonColor, buttonSize, customIcon, iconStyle, disabled }) => {
     const defaultButtonsize = totalSize(5)
     return (
         <TouchableOpacity
             onPress={onPress}
             activeOpacity={1}
-            disabled={!onPress||disabled}
+            disabled={!onPress || disabled}
             style={
                 [styles.IconButtonContainer,
                 {
@@ -55,16 +55,22 @@ export const IconButton = ({ buttonStyle, onPress, shadow, shadowColored, iconSi
             }
         >
             {
-                customIcon ?
-                    <CustomIcon icon={customIcon} size={iconSize ? iconSize : totalSize(2)} color={iconColor} containerStyle={iconStyle} />
+                text ?
+                    <RegularText style={[{ color: colors.appColor1 }, textStyle]}>{text}</RegularText>
                     :
-                    <Icon
-                        name={iconName ? iconName : "heart"}
-                        type={iconType ? iconType : "material-community"}
-                        size={iconSize ? iconSize : sizes.icons.large}
-                        color={iconColor ? iconColor : colors.appColor1}
-                        iconStyl={iconStyle}
-                    />
+                    customIcon ?
+                        <CustomIcon icon={customIcon} size={iconSize ? iconSize : totalSize(2)} color={iconColor} containerStyle={iconStyle} />
+                        :
+                        iconName ?
+                            <Icon
+                                name={iconName ? iconName : "heart"}
+                                type={iconType ? iconType : "material-community"}
+                                size={iconSize ? iconSize : sizes.icons.large}
+                                color={iconColor ? iconColor : colors.appColor1}
+                                iconStyl={iconStyle}
+                            />
+                            :
+                            null
             }
         </TouchableOpacity>
     );
@@ -109,7 +115,7 @@ export const TouchableCustomIcon = ({ icon, size, animation, duration, color, on
     );
 }
 
-export const IconWithText = ({ text, disabled, containerStyle, title, customIcon, onPress, tintColor, iconName, iconType, iconSize, textStyle, titleStyle, direction, iconStyle, textContainerStyle,icon }) => {
+export const IconWithText = ({ text, disabled, containerStyle, title, customIcon, onPress, tintColor, iconName, iconType, iconSize, textStyle, titleStyle, direction, iconStyle, textContainerStyle, icon }) => {
     return (
         <TouchableOpacity disabled={disabled || !onPress} activeOpacity={1} onPress={onPress} style={[{ flexDirection: direction ? direction : 'row', alignItems: 'center', }, containerStyle]}>
             {

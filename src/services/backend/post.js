@@ -201,7 +201,7 @@ export const getSubscribedPosts = async (page) => {
             if (tempResponseData.success) {
                 response = tempResponseData
             } else {
-                Toasts.error(tempResponseData.message)
+                //Toasts.error(tempResponseData.message)
             }
         })
         .catch(error => {
@@ -226,7 +226,7 @@ export const getFollowingsPosts = async (page) => {
             if (tempResponseData.success) {
                 response = tempResponseData
             } else {
-                Toasts.error(tempResponseData.message)
+                //Toasts.error(tempResponseData.message)
             }
         })
         .catch(error => {
@@ -251,7 +251,7 @@ export const getJoinedGroupsPosts = async (page) => {
             if (tempResponseData.success) {
                 response = tempResponseData
             } else {
-                Toasts.error(tempResponseData.message)
+                //Toasts.error(tempResponseData.message)
             }
         })
         .catch(error => {
@@ -274,7 +274,7 @@ export const getGroupPosts = async ({ group_id, page }) => {
             if (tempResponseData.success) {
                 response = tempResponseData
             } else {
-                Toasts.error(tempResponseData.message)
+               // Toasts.error(tempResponseData.message)
             }
         })
         .catch(error => {

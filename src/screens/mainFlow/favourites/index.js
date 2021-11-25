@@ -1,4 +1,5 @@
-import React, { Component, useEffect, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/core';
+import React, { Component, useCallback, useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { height, width } from 'react-native-dimension';
 import { useSelector } from 'react-redux';
@@ -28,17 +29,15 @@ function Favourites(props) {
 
 
 
-    useEffect(() => {
-        getSetData()
-    }, [])
-
     // useEffect(() => {
-    //     handleGetFavProducts()
-    // }, [userDetail.favorite_products])
+    //     getSetData()
+    // }, [])
 
-    // useEffect(() => {
-    //     handleGetFavDealers()
-    // }, [userDetail.favorite_dealers])
+    useFocusEffect(
+        useCallback(() => {
+            getSetData()
+        }, [])
+    )
 
     const getSetData = async () => {
         await handleGetFavProducts()
@@ -95,10 +94,10 @@ function Favourites(props) {
                             setFavProducts(tempData)
                         }}
                     />
-                    : 
+                    :
                     <Dealers
                         data={favDealers}
-                        onPress={(item, index) => navigate(routes.userProfile, { item: item })}
+                        onPress={(item, index) => navigate(routes.userProfile, { user: item })}
                         viewType={'list'}
                         ListHeaderComponent={() => {
                             return <Spacer height={sizes.smallMargin} />
@@ -111,7 +110,7 @@ function Favourites(props) {
                             const tempData = favDealers.filter(obj => obj.id != item.id)
                             setFavDealers(tempData)
                         }}
-                        
+
                     />
             }
         </MainWrapper>

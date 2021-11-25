@@ -8,7 +8,7 @@ import {
 } from '../actionTypes'
 
 const INITIAL_STATE = {
-    categories: [],
+    categories: null,
     items: [],
     manufacturers: [],
     calibers: [],

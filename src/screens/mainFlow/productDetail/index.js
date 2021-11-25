@@ -174,23 +174,22 @@ function ProductDetail(props) {
                 <ComponentWrapper>
                     <RegularText>{productDetail.description}</RegularText>
                 </ComponentWrapper>
-                <Spacer height={sizes.baseMargin} />
-                <TitlePrimary
-                    title="Reviews"
-                    onPressRight={() => navigate(routes.reviews)}
-                    rightText={<RegularText style={[appStyles.fontBold, appStyles.textGray]}>Not Reviewed Yet</RegularText>}
-                />
-                <Spacer height={sizes.smallMargin} />
                 {
                     productReviews.length ?
-                        <Reviews
-                            data={productReviews}
-                        />
-
+                        <>
+                            <Spacer height={sizes.baseMargin} />
+                            <TitlePrimary
+                                title="Reviews"
+                                onPressRight={() => navigate(routes.reviews,{product_id})}
+                               // rightText={<RegularText style={[appStyles.fontBold, appStyles.textGray]}>Not Reviewed Yet</RegularText>}
+                            />
+                            <Spacer height={sizes.smallMargin} />
+                            <Reviews
+                                data={productReviews.length>3?productReviews.slice(0,3):productReviews}
+                            />
+                        </>
                         :
-                        <ComponentWrapper>
-                            <RegularText style={[appStyles.textGray, appStyles.textCenter]}>No Reviews Found</RegularText>
-                        </ComponentWrapper>
+                        null
                 }
                 <Spacer height={sizes.baseMargin} />
                 <TitlePrimary
@@ -214,7 +213,7 @@ function ProductDetail(props) {
                     <FooterButton
                         text="Enquire"
                         onPress={() => {
-                            navigate(routes.chatScreen, { enquire: productDetail, userId:user.id })
+                            navigate(routes.chatScreen, { enquire: productDetail, userId: user.id })
                         }}
                     />
                     {/* <FooterButton

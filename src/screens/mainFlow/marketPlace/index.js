@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from 'react';
-import { ScrollView } from 'react-native';
+import { Platform, ScrollView } from 'react-native';
 import { FlatList } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { View, Text } from 'react-native';
@@ -8,7 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IconWithText, ImageSqareRound, LoaderAbsolute, MainWrapper, ProductsHorizontalyPrimary, ProductsSecondary, RegularText, Spacer, TitlePrimary, Wrapper } from '../../../components';
 import { appStyles, Backend, colors, DummyData, HelpingMethods, routes, sizes } from '../../../services';
 import TopCategories from './topCategories';
-import Skeleton from './skeleton'
+//import Skeleton from './skeleton'
+import { CategoriesSkeleton, PostTypesSkeleton } from './skeleton'
 import { setMyGroups } from '../../../services/store/actions';
 function RenderProducts({ title, onPressViewAll, data, onPressProduct }) {
     return (
@@ -43,10 +44,10 @@ function MarketPlace(props) {
     const { categories } = product
     const { currentLocation, userDetail } = user
     //local states
-    const [featuredProducts, setFeaturedProducts] = useState([])
-    const [popularProducts, setPopularProducts] = useState([])
-    const [nearYouProducts, setNearYouProducts] = useState([])
-    const [topRatedProducts, setTopRatedProducts] = useState([])
+    const [featuredProducts, setFeaturedProducts] = useState(null)
+    const [popularProducts, setPopularProducts] = useState(null)
+    const [nearYouProducts, setNearYouProducts] = useState(null)
+    const [topRatedProducts, setTopRatedProducts] = useState(null)
     const [isLoading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -84,9 +85,7 @@ function MarketPlace(props) {
                     setTopRatedProducts(res.data.data)
                 }
             })
-
-
-        setLoading(false)
+        //setLoading(false)
         await Backend.getNewNotificationsCount()
         await Backend.get_credit_cards()
         await Backend.get_product_items()
@@ -116,33 +115,53 @@ function MarketPlace(props) {
             data: topRatedProducts
         }
     ]
-    if (isLoading) {
-        return (
-            <Skeleton />
-        )
-    }
+    // if (isLoading) {
+    //     return (
+    //         <Skeleton />
+    //     )
+    // }
     return (
         <MainWrapper>
             <ScrollView
                 showsVerticalScrollIndicator={false}
             >
                 <Spacer height={sizes.baseMargin} />
-                <TopCategories
-                    data={categories}
-                    onPressCategory={(item, index) => { navigate(routes.CategoryDetail, { category: item }) }}
-                    onPressViewAll={() => navigate(routes.categories)}
-                />
+                {
+                    categories ?
+                        <TopCategories
+                            data={categories}
+                            onPressCategory={(item, index) => { navigate(routes.CategoryDetail, { category: item }) }}
+                            onPressViewAll={() => navigate(routes.categories)}
+                        />
+                        :
+                        Platform.OS === 'ios' ?
+                            <CategoriesSkeleton />
+                            :
+                            null
+                }
                 {
                     mainOptions.map((item, index) => {
                         return (
                             <>
                                 <Spacer height={sizes.smallMargin * 1.5} />
-                                <RenderProducts
-                                    title={item.title}
-                                    data={item.data}
-                                    onPressProduct={(item, index) => navigate(routes.productDetail, { product: item })}
-                                    onPressViewAll={() => { navigate(routes.CategoryDetail, { type: item }) }}
-                                />
+                                {
+                                    item.data ?
+                                        <RenderProducts
+                                            title={item.title}
+                                            data={item.data}
+                                            onPressProduct={(item, index) => navigate(routes.productDetail, { product: item })}
+                                            onPressViewAll={() => { navigate(routes.CategoryDetail, { type: item }) }}
+                                        />
+                                        :
+                                        index === 0 || index === 1 ?
+                                            Platform.OS === 'ios' ?
+                                                <PostTypesSkeleton />
+                                                :
+                                                null
+                                            :
+                                            null
+                                }
+
                             </>
                         )
                     })

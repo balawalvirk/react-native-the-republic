@@ -144,7 +144,12 @@ function BottomTabScreens() {
 function BottomTabStackScreens() {
     const user = useSelector(state => state.user)
     const { userDetail } = user
-    const { newNotificationsCount, newMessagesCount } = userDetail
+    let newNotificationsCount = ''
+    let newMessagesCount = ''
+    if (userDetail) {
+        newNotificationsCount = userDetail.newNotificationsCount
+        newMessagesCount = userDetail.newMessagesCount
+    }
     return (
         <MainBottomTabStack.Navigator
             screenOptions={headers.screenOptionsSecondary}

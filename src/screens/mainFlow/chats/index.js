@@ -90,8 +90,10 @@ function Chats(props) {
                                     keyExtractor={(item, index) => index.toString()}
                                     renderItem={({ item, index }) => {
                                         const fullname = item.first_name + ' ' + item.last_name
-                                        const lastMessage = item.messages ? item.messages.length ? item.messages[0].message : '' : ''
-                                        const lastMessageTime = item.messages ? item.messages.length ? item.messages[0].created_at : '' : item.created_at
+                                        // const lastMessage = item.messages ? item.messages.length ? item.messages[0].message : '' : ''
+                                        // const lastMessageTime = item.messages ? item.messages.length ? item.messages[0].created_at : '' : item.created_at
+                                        const lastMessage = item.last_message ? item.last_message.message : '' 
+                                        const lastMessageTime = item.last_message ? item.last_message.created_at : ''
                                         return (
                                             <MessageCardPrimary
                                                 containerStyle={{}}
@@ -100,6 +102,7 @@ function Chats(props) {
                                                 message={lastMessage}
                                                 time={HelpingMethods.formateDateFromNow(lastMessageTime)}
                                                 onPress={() => navigate(routes.chatScreen, { conversation: item })}
+                                                newMessagesCount={item.new_messages_count}
                                             />
                                         )
                                     }}

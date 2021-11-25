@@ -15,39 +15,45 @@ function ShareOnPopup({ visible, toggle, onPressItem, selectedGroupId }) {
   const user = useSelector(state => state.user)
   const group = useSelector(state => state.group)
   const { userDetail } = user
-  const { myGroups, myJoinedGroups } = group
+  //const { myGroups, myJoinedGroups } = group
 
   //local states
   const [selectedIndex, selectIndex] = useState(0)
-  //const groups = [...DummyData.groups]
+  const [relatedGroups, setRelatedGroups] = useState(null)
   //const data = [DummyData.userData, ...DummyData.groups]
   let data = []
 
   useEffect(() => {
     getSetSelectedGroup()
-  }, [selectedGroupId,myGroups,myGroups])
+  }, [selectedGroupId, relatedGroups])
 
   useEffect(() => {
     getSetGroups()
   }, [])
 
   const getSetGroups = async () => {
+    let myGroups = []
+    let joinedGroups = []
     await Backend.getUserGroups().
       then(res => {
         if (res) {
-          dispatch(setMyGroups(res.data))
+          // dispatch(setMyGroups(res.data))
+          myGroups = res.data
         }
       })
-    Backend.getJoinedGroups().
+    await Backend.getJoinedGroups().
       then(res => {
         if (res) {
-          dispatch(setMyJoinedGroups(res.data.joined_groups))
+          // dispatch(setMyJoinedGroups(res.data.joined_groups))
+          console.log('getJoinedGroups --> ', res.data.joined_groups)
+          joinedGroups = res.data.joined_groups
         }
       })
+    setRelatedGroups([...myGroups, ...joinedGroups])
   }
 
   const getSetSelectedGroup = () => {
-    if (selectedGroupId) {
+    if (selectedGroupId && relatedGroups) {
       const tempData = getSetData()
       const tempObj = tempData.find(item => item.id === selectedGroupId)
       if (tempObj) {
@@ -58,7 +64,6 @@ function ShareOnPopup({ visible, toggle, onPressItem, selectedGroupId }) {
       }
     }
   }
-
   const getSetData = () => {
     let tempGroups = []
     const topItem = {
@@ -67,11 +72,12 @@ function ShareOnPopup({ visible, toggle, onPressItem, selectedGroupId }) {
       subTitle: 'Your followers will be able to see this post.',
       id: null
     }
-    for (const item of [...myGroups]) {
+    // for (const item of [...myGroups, ...myJoinedGroups]) {
+    for (const item of [...relatedGroups]) {
       const obj = {
         image: item.icon,
         title: item.name,
-        subTitle: item.users.length + ' members will be able to see this post.',
+        subTitle: (item.users ? item.users.length : 0) + ' members will be able to see this post.',
         id: item.id
       }
       tempGroups.push(obj)
@@ -80,7 +86,9 @@ function ShareOnPopup({ visible, toggle, onPressItem, selectedGroupId }) {
 
   }
 
-  data = getSetData()
+  if (relatedGroups) {
+    data = getSetData()
+  }
 
   return (
     <ModalSwipeablePrimary

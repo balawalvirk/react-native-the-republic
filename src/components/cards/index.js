@@ -110,14 +110,14 @@ export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, 
                                         </RowWrapperBasic>
                                         :
                                         //  <TinyText style={[appStyles.textGray]}>Not Rated</TinyText>
-                                         <IconWithText
-                                         iconName="star"
-                                         text="Not Rated"
-                                         iconSize={totalSize(1.5)}
-                                         tintColor={colors.appTextColor5}
-                                         textStyle={[appStyles.textTiny,appStyles.textLightGray]}
-                                         textContainerStyle={{marginHorizontal:sizes.marginHorizontalSmall/2}}
-                                         />
+                                        <IconWithText
+                                            iconName="star"
+                                            text="Not Rated"
+                                            iconSize={totalSize(1.5)}
+                                            tintColor={colors.appTextColor5}
+                                            textStyle={[appStyles.textTiny, appStyles.textLightGray]}
+                                            textContainerStyle={{ marginHorizontal: sizes.marginHorizontalSmall / 2 }}
+                                        />
                                 }
 
                             </Wrapper>
@@ -405,7 +405,7 @@ export const CreditCardPrimary = ({ containerStyle, name, cardNumber, expiry, on
 
 export const NotificationCardPrimary = ({ onPress, text, image, type, time, containerStyle }) => {
     const isProduct = type === 'product' || type === 'order'
-    const isUser = type === 'postReaction' ||type === 'postComment'||type==='followRequestAccepted'||type==='newFollowRequest'||type==='followUser'
+    const isUser = type === 'postReaction' || type === 'postComment' || type === 'followRequestAccepted' || type === 'newFollowRequest' || type === 'followUser'
     const isApp = type === 'app'
     return (
         <TouchableOpacity onPress={onPress} activeOpacity={1} style={[{ paddingVertical: sizes.marginVertical / 2, borderBottomWidth: 1, borderBottomColor: colors.appBgColor3 }, containerStyle]}>
@@ -451,7 +451,7 @@ export const NotificationCardPrimary = ({ onPress, text, image, type, time, cont
 
 }
 
-export const MessageCardPrimary = ({ onPress, name, message, image, isOnline, time, containerStyle }) => {
+export const MessageCardPrimary = ({ onPress, name, message, image, isOnline, time, containerStyle, newMessagesCount }) => {
 
     return (
         <TouchableOpacity activeOpacity={1} onPress={onPress} style={[{ paddingVertical: sizes.marginVertical / 2, borderBottomWidth: 1, borderBottomColor: colors.appBgColor3, }, containerStyle]}>
@@ -471,7 +471,24 @@ export const MessageCardPrimary = ({ onPress, name, message, image, isOnline, ti
                         <SmallText style={[appStyles.textLightGray]}>{time}</SmallText>
                     </RowWrapperBasic>
                     <Spacer height={sizes.smallMargin} />
-                    <SmallText numberOfLines={1} num style={[appStyles.textLightGray]}>{message}</SmallText>
+                    <RowWrapperBasic>
+                        <Wrapper flex={1}>
+                            <SmallText numberOfLines={1} num style={[appStyles.textLightGray]}>{message}</SmallText>
+
+                        </Wrapper>
+                        {
+                            newMessagesCount ?
+                                <IconButton
+                                    text={newMessagesCount}
+                                    buttonColor={colors.error}
+                                    textStyle={[appStyles.textSmall,appStyles.fontMedium,appStyles.textWhite]}
+                                    buttonSize={totalSize(2.5)}
+                                />
+                                :
+                                null
+                        }
+
+                    </RowWrapperBasic>
                 </Wrapper>
 
             </RowWrapper>

@@ -162,6 +162,9 @@ export const FollowRequestsList = ({ data, onPress, loading, ListHeaderComponent
                         :
                         <NoDataViewPrimary
                             title="Follow Request"
+                        showIcon
+                        iconName="deleteusergroup"
+                        iconType="antdesign"
                         />
             }
         </>

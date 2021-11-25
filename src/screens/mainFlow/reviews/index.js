@@ -1,12 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
-import { MainWrapper, Reviews as RenderReviews, Spacer } from '../../../components';
-import { sizes } from '../../../services';
+import { MainWrapper, Reviews as RenderReviews, SkeletonPrimaryList, Spacer } from '../../../components';
+import { Backend, sizes } from '../../../services';
 import dummyData from '../../../services/constants/dummyData';
 
-const Reviews = (props) => {
+const Reviews = ({ navigation, route }) => {
+    const { product_id } = route.params
 
-    const reviews = dummyData.reviews.slice().concat(dummyData.reviews)
+    const [reviews, setReviews] = useState(null)
+    useEffect(() => {
+        getSetReviews()
+    }, [])
+    const getSetReviews = async() => {
+        await Backend.getProductReviews(product_id).
+            then(res => {
+                if (res) {
+                    setReviews(res.data)
+                }
+            })
+    }
+
+    if(!reviews){
+        return(
+            <SkeletonPrimaryList itemStyle={{}}/>
+        )
+    }
     return (
         <MainWrapper>
             <RenderReviews

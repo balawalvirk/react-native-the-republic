@@ -130,10 +130,10 @@ export const getFollowings = async () => {
         user_id,
     }
     await axios
-        .post(`${baseURL + endPoints.follow.show_followers}`, params)
+        .post(`${baseURL + endPoints.follow.show_followings}`, params)
         .then(async responseJson => {
             const tempResponseData = responseJson.data
-            console.log('getFollowers Response', tempResponseData);
+            console.log('getFollowings Response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
             } else {

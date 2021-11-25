@@ -37,15 +37,11 @@ function MyLocation(props) {
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
+        //HelpingMethods.RequestLocationAccess()
         getSetData()
     }, [])
 
     const getSetData = () => {
-        // const { latitude, longitude, distance,address } = userDetail
-        // const { coords } = currentLocation
-        // console.log('currentLocation', currentLocation)
-        // latitude ? setLatitude(latitude) : setLatitude(coords.latitude)
-        // longitude ? setLongitude(longitude) : setLongitude(coords.longitude)
         const tempMyLocation = HelpingMethods.getMyLocation()
         console.log('tempMyLocation -->', tempMyLocation)
         if (tempMyLocation) {
