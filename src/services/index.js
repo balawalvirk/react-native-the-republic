@@ -1,7 +1,9 @@
 export * from './utilities'
 import Validations from './validations'
 import * as HelpingMethods from './helpingMethods'
-export { Validations,HelpingMethods }
+import MyToast from './helpingMethods/toast'
+import PushNotification from './helpingMethods/pushNotification'
+export { Validations,HelpingMethods ,MyToast,PushNotification}
 export * from './constants'
 import * as Backend from './backend/index'
 export {Backend}

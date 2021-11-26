@@ -1,34 +1,63 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 import { View, Text } from 'react-native';
-import { MainWrapper, Spacer, TraningCard } from '../../../components';
-import { DummyData, routes, sizes } from '../../../services';
+import { height } from 'react-native-dimension';
+import { MainWrapper, SkeletonListVerticalPrimary, Spacer, TraningCard } from '../../../components';
+import { appImages, Backend, DummyData, routes, sizes } from '../../../services';
 
 function Trainings(props) {
     const { navigate } = props.navigation
     const trainings = DummyData.trainings
+    const [allTrainings, setAllTrainings] = useState(null)
+
+
+    useEffect(() => {
+        getSetAllTrainings()
+    }, [])
+    const getSetAllTrainings = () => {
+        Backend.getAllTranings().
+            then(res => {
+                if (res) {
+                    setAllTrainings(res.data)
+                }
+            })
+    }
+    if (!allTrainings) {
+        return (
+            <SkeletonListVerticalPrimary
+                itemHeight={height(40)}
+
+            />
+        )
+    }
     return (
         <MainWrapper>
             <FlatList
-                data={trainings}
+                data={allTrainings}
                 key={'key'}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={(item, index) => index.toString()}
                 ListHeaderComponent={() => <Spacer height={sizes.baseMargin} />}
                 renderItem={({ item, index }) => {
+                    const { trainer } = item
+                    const { first_name, last_name, profile_image,avg_rating,reviews } = item.trainer
+                    const fullName = first_name + ' ' + last_name
+                    const image = profile_image ? profile_image : appImages.noUser
+                    const rating=avg_rating?avg_rating:0
+                    const reviewsCount=reviews?reviews:0
                     return (
                         <TraningCard
-                        containerStyle={{ marginBottom: sizes.marginVertical / 2 }}
-                            onPress={() => navigate(routes.selectDateTime, { training:item })}
+                            containerStyle={{ marginBottom: sizes.marginVertical / 2 }}
+                            onPress={() => navigate(routes.selectDateTime, { training: item })}
                             title={item.title}
                             description={item.description}
                             duration={item.duration}
-                            charges={item.charges}
+                            charges={'$ ' + item.charges}
                             location={item.location}
-                            userName={item.user.name}
-                            userImage={item.user.image}
-                            userRating={4.6}
-                            userReviewsCount={'234'}
+                            userName={fullName}
+                            userImage={image}
+                            userRating={rating}
+                            userReviewsCount={reviewsCount}
                         />
                     )
                 }}

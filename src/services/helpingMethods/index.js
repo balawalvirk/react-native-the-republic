@@ -405,10 +405,10 @@ export const getFcmToken = async () => {
         if (fcmToken) {
             console.log('after fcmToken: ', fcmToken);
             await AsyncStorage.setItem(asyncConts.fcm_token, fcmToken);
-           // Backend.update_profile({ fcm_token: fcmToken })
+            Backend.saveFcmToken(fcmToken)
         }
     } else {
-        Backend.sendFcmToken(fcmToken)
+        Backend.saveFcmToken(fcmToken)
         // await saveData('Users', userId, { Token: fcmToken });
     }
 }

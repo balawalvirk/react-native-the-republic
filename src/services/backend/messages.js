@@ -44,8 +44,9 @@ export const sendChatMessage = async ({ receiver_id, message, image, product_id 
     params.append('sender_id', user_id)
     params.append('receiver_id', receiver_id)
     params.append('message', message)
+    params.append('product_id', product_id?product_id:'')
     image && params.append('image', image)
-    product_id && params.append('product_id', product_id)
+    //product_id && params.append('product_id', product_id)
     console.log('sendMessage Params', params);
     await axios
         .post(`${baseURL + endPoints.chat.send_message}`, params)

@@ -1,6 +1,6 @@
 import React from 'react'
 import { height } from "react-native-dimension"
-import { MenuOption } from ".."
+import { MenuOption } from "../index"
 import { ModalSwipeablePrimary } from "../../modals"
 
 function MenuPopup({options, visible, toggle, onPressOption }) {

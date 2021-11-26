@@ -8,6 +8,7 @@ import { routes } from '../constants';
 import { Splash } from '../../screens/authFlow';
 import { navigationRef } from './rootNavigation';
 import { useSelector } from 'react-redux';
+ import { PushNotification, Toast } from '../../components';
 
 const MainStack = createStackNavigator();
 
@@ -16,6 +17,9 @@ export function Navigation() {
     const user = useSelector(state => state.user)
     const { userDetail } = user
     return (
+       <>
+        <Toast/> 
+        <PushNotification/> 
         <NavigationContainer ref={navigationRef}>
             <MainStack.Navigator
                 screenOptions={{ headerShown: false }}
@@ -35,6 +39,7 @@ export function Navigation() {
                 }
             </MainStack.Navigator>
         </NavigationContainer>
+       </>
     );
 }
 

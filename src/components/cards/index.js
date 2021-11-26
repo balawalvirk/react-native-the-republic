@@ -3,7 +3,12 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator } fr
 import { Icon } from 'react-native-elements';
 import { height, totalSize, width } from 'react-native-dimension';
 import { appIcons, appImages, appStyles, colors, fontFamily, HelpingMethods, sizes } from '../../services';
-import { Spacer, Wrapper, AbsoluteWrapper, LineHorizontal, LineVertical, ComponentWrapper, MediumText, RowWrapperBasic, RowWrapper, TinyText, RegularText, IconWithText, ImageRound } from '..';
+import { IconWithText, } from '../icons';
+import { ImageRound } from '../images';
+import { Wrapper, AbsoluteWrapper, RowWrapperBasic, RowWrapper, } from '../wrappers'
+import { MediumText, TinyText, RegularText, } from '../text'
+import { Spacer } from '../spacers';
+import { LineHorizontal, LineVertical } from '../lines';
 import styles from './styles'
 import { IconButton, IconHeart } from '../icons';
 import StarRating from 'react-native-star-rating';
@@ -403,12 +408,12 @@ export const CreditCardPrimary = ({ containerStyle, name, cardNumber, expiry, on
 }
 
 
-export const NotificationCardPrimary = ({ onPress, text, image, type, time, containerStyle }) => {
+export const NotificationCardPrimary = ({ onPress, disabled,text, image, type, time, containerStyle }) => {
     const isProduct = type === 'product' || type === 'order'
     const isUser = type === 'postReaction' || type === 'postComment' || type === 'followRequestAccepted' || type === 'newFollowRequest' || type === 'followUser'
     const isApp = type === 'app'
     return (
-        <TouchableOpacity onPress={onPress} activeOpacity={1} style={[{ paddingVertical: sizes.marginVertical / 2, borderBottomWidth: 1, borderBottomColor: colors.appBgColor3 }, containerStyle]}>
+        <TouchableOpacity disabled={disabled} onPress={onPress} activeOpacity={1} style={[{ paddingVertical: sizes.marginVertical / 2, borderBottomWidth: 1, borderBottomColor: colors.appBgColor3 }, containerStyle]}>
             <RowWrapperBasic style={{ alignItems: 'flex-start', marginHorizontal: sizes.marginHorizontalSmall }}>
                 <Wrapper>
                     {
@@ -481,7 +486,7 @@ export const MessageCardPrimary = ({ onPress, name, message, image, isOnline, ti
                                 <IconButton
                                     text={newMessagesCount}
                                     buttonColor={colors.error}
-                                    textStyle={[appStyles.textSmall,appStyles.fontMedium,appStyles.textWhite]}
+                                    textStyle={[appStyles.textSmall, appStyles.fontMedium, appStyles.textWhite]}
                                     buttonSize={totalSize(2.5)}
                                 />
                                 :

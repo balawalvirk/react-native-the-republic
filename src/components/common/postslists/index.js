@@ -14,7 +14,9 @@ import { ModalSwipeablePrimary } from '../../modals';
 import { height, totalSize, width } from 'react-native-dimension';
 import { Icon } from 'react-native-elements';
 import * as RootNavigation from '../../../services/navigation/rootNavigation'
-import { MenuOption, MenuPopup, NoDataViewPrimary, PopupPrimary, RenderComments } from '..';
+import { NoDataViewPrimary,RenderComments } from '../index'
+import { PopupPrimary } from '../..'
+import MenuPopup from '../menuPopup';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import { PostSkeletons, Toasts } from '../..';
 import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
@@ -211,21 +213,21 @@ export function Posts({
         //     updateData(tempPostsData)
         // }
 
-         setLoadingDeletePost(true)
-         await Backend.deletePost(selectedPostForMenu.id).
-             then(res => {
-                 setLoadingDeletePost(false)
-                 toggleDeletePostPopupMenu()
-                 if (res) {
-                     if (updateData) {
-                         let tempPostsData = data.slice()
-                         tempPostsData = tempPostsData.filter(item => item.id != selectedPostForMenu.id)
-                         console.log('Delete tempPostsData --> ', tempPostsData)
-                         updateData(tempPostsData)
-                     }
-                     Toasts.success('Post has been deleted')
-                 }
-             })
+        setLoadingDeletePost(true)
+        await Backend.deletePost(selectedPostForMenu.id).
+            then(res => {
+                setLoadingDeletePost(false)
+                toggleDeletePostPopupMenu()
+                if (res) {
+                    if (updateData) {
+                        let tempPostsData = data.slice()
+                        tempPostsData = tempPostsData.filter(item => item.id != selectedPostForMenu.id)
+                        console.log('Delete tempPostsData --> ', tempPostsData)
+                        updateData(tempPostsData)
+                    }
+                    Toasts.success('Post has been deleted')
+                }
+            })
     }
 
     return (

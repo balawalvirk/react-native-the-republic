@@ -8,12 +8,12 @@ import * as HelpingMethods from "../helpingMethods";
 import { setProductActions, setProductCalibers, setProductCategories, setProductConditions, setProductItems, setProductManufacturers, setUserDetail } from "../store/actions";
 const { dispatch } = store
 
-export const get_all_tranings = async () => {
+export const getAllTranings = async () => {
     let response = null
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios
-            .get(`${baseURL + endPoints.training.show_training}`)
+            .get(`${baseURL + endPoints.training.show_trainings}`)
             .then(async responseJson => {
                 const tempResponseData = responseJson.data
                 console.log('Response', tempResponseData);
@@ -31,7 +31,31 @@ export const get_all_tranings = async () => {
     }
     return response
 };
-
+export const getTrainingTimeSlots = async (training_id) => {
+    let response = null
+    const params = {
+        training_id
+    }
+    const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    if (isInternetAvailable) {
+        await axios
+            .post(`${baseURL + endPoints.training.show_timeslots}`, params)
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
+    }
+    return response
+};
 export const get_user_tranings = async () => {
     let response = null
     const state = store.getState()
@@ -61,7 +85,36 @@ export const get_user_tranings = async () => {
     }
     return response
 };
+export const sendTrainingRequest = async ({ training_id ,timeSlot_id}) => {
+    let response = null
+    const state = store.getState()
+    const user_id = state.user.userDetail.id
 
+    const params = {
+        user_id,
+        training_id,
+        timeSlot_id
+    }
+    const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    if (isInternetAvailable) {
+        await axios
+            .post(`${baseURL + endPoints.training.send_training_request}`, params)
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
+    }
+    return response
+};
 export const add_traning = async ({ title, description, location, duration, charges, spots, status, latitude, longitude }) => {
     let response = null
     const state = store.getState()
@@ -108,7 +161,7 @@ export const add_traning_timeSlots = async ({ training_id, date, start_time, end
     const state = store.getState()
     const { id } = state.user.userDetail
 
-    const uri=`${baseURL + endPoints.training.add_timeslot}`
+    const uri = `${baseURL + endPoints.training.add_timeslot}`
     const params = {
         training_id,
         date, //2021-09-16
@@ -138,7 +191,7 @@ export const add_traning_timeSlots = async ({ training_id, date, start_time, end
     return response
 };
 
-export const edit_traning = async ({training_id, title, description, location, duration, charges, spots, status, latitude, longitude }) => {
+export const edit_traning = async ({ training_id, title, description, location, duration, charges, spots, status, latitude, longitude }) => {
     let response = null
     const state = store.getState()
     const { id } = state.user.userDetail
@@ -180,15 +233,15 @@ export const edit_traning = async ({training_id, title, description, location, d
     return response
 };
 
-export const delete_tranings = async ({training_id}) => {
+export const delete_tranings = async ({ training_id }) => {
     let response = null
-    const params={
+    const params = {
         training_id
     }
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios
-            .post(`${baseURL + endPoints.training.delete_training}`,params)
+            .post(`${baseURL + endPoints.training.delete_training}`, params)
             .then(async responseJson => {
                 const tempResponseData = responseJson.data
                 console.log('Response', tempResponseData);
@@ -237,9 +290,9 @@ export const get_trainer_traning_requests = async () => {
     return response
 };
 
-export const accept_traning_request = async ({training_id,trainingRequest_id,user_id}) => {
+export const accept_traning_request = async ({ training_id, trainingRequest_id, user_id }) => {
     let response = null
-    const params={
+    const params = {
         training_id,
         user_id,
         trainingRequest_id
@@ -247,7 +300,7 @@ export const accept_traning_request = async ({training_id,trainingRequest_id,use
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios
-            .post(`${baseURL + endPoints.training.accept_training_request}`,params)
+            .post(`${baseURL + endPoints.training.accept_training_request}`, params)
             .then(async responseJson => {
                 const tempResponseData = responseJson.data
                 console.log('Response', tempResponseData);
@@ -266,16 +319,16 @@ export const accept_traning_request = async ({training_id,trainingRequest_id,use
     return response
 };
 
-export const reject_traning_request = async ({training_id,trainingRequest_id}) => {
+export const reject_traning_request = async ({ training_id, trainingRequest_id }) => {
     let response = null
-    const params={
+    const params = {
         training_id,
         trainingRequest_id
     }
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios
-            .post(`${baseURL + endPoints.training.reject_training_request}`,params)
+            .post(`${baseURL + endPoints.training.reject_training_request}`, params)
             .then(async responseJson => {
                 const tempResponseData = responseJson.data
                 console.log('Response', tempResponseData);

@@ -8,16 +8,16 @@ import * as HelpingMethods from "../helpingMethods";
 import { setProductActions, setProductCalibers, setProductCategories, setProductConditions, setProductItems, setProductManufacturers, setUserDetail } from "../store/actions";
 const { dispatch } = store
 
-export const get_user_coupons = async () => {
+export const getUserCoupons = async (userId) => {
     let response = null
     const state = store.getState()
-    const { id } = state.user.userDetail
+    const user_id =userId?userId: state.user.userDetail.id
 
     const uri = `${baseURL + endPoints.coupon.show_coupons}`
     const params = {
-        user_id: id,
+        user_id
     }
-    console.log('get_user_coupons \n uri: ', uri, '\n params: ', params)
+    console.log('getUserCoupons \n uri: ', uri, '\n params: ', params)
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios

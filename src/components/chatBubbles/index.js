@@ -7,7 +7,7 @@ import { ComponentWrapper, Wrapper } from '../wrappers';
 import { MediumText, RegularText, TinyText } from '../text';
 import { Spacer } from '../spacers';
 import { MaterialIndicator } from 'react-native-indicators';
-import { ProductCardPrimary } from '..';
+import { ProductCardPrimary } from '../cards'
 import { navigate } from '../../services/navigation/rootNavigation';
 
 export const ChatBubbule = ({ containerStyle, myMessage, message, time, image, loadingSendMessage, product }) => {

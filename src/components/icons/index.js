@@ -6,7 +6,7 @@ import { colors, appStyles, sizes } from '../../services';
 import * as Animatable from 'react-native-animatable';
 import { SmallText,RegularText } from '../text';
 import { AbsoluteWrapper, Wrapper } from '../wrappers';
-import { Badge } from 'react-native-elements';
+import { BadgePrimary } from '../badges';
 export const BackIcon = ({ style, onPress, size }) => {
     return (
         <Icon
@@ -85,17 +85,18 @@ export const CustomIcon = ({ icon, size, animation, duration, color, iterationCo
                     resizeMode="contain"
                     style={{ height: size ? size : defaulSize, width: size ? size : defaulSize, tintColor: color }}
                 />
-            </TouchableOpacity>
-            {
+                {
                 value ?
                     <AbsoluteWrapper style={{ right: -7.5, top: -7.5 }}>
-                        <Badge
+                        <BadgePrimary
                             value={value}
-                            status="error"
+                            //status="error"
                         />
                     </AbsoluteWrapper> : null
 
             }
+            </TouchableOpacity>
+            
 
         </Animatable.View>
     );

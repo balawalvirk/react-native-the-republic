@@ -4,7 +4,6 @@ import { height, totalSize, width } from 'react-native-dimension';
 import MapView, { PROVIDER_GOOGLE, Marker, Circle, Callout } from 'react-native-maps';
 import { AbsoluteWrapper, ButtonGradient, ComponentWrapper, CustomIcon, KeyboardAvoidingScrollView, MainWrapper, MediumText, RowWrapper, SearchTextinput, Spacer, TextInputUnderlined, TinyTitle, Toasts, Wrapper } from '../../../components';
 import { appIcons, appStyles, Backend, colors, HelpingMethods, mapStyles, sizes } from '../../../services';
-import styles from './styles';
 import Slider from '@react-native-community/slider';
 import { useSelector } from 'react-redux';
 

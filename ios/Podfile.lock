@@ -272,7 +272,7 @@ PODS:
     - React-cxxreact (= 0.63.4)
     - React-jsi (= 0.63.4)
   - React-jsinspector (0.63.4)
-  - react-native-geolocation-service (5.3.0-beta.3):
+  - react-native-geolocation-service (5.3.0-beta.1):
     - React
   - react-native-google-maps (0.28.0):
     - Google-Maps-iOS-Utils (= 2.1.0)
@@ -604,7 +604,7 @@ SPEC CHECKSUMS:
   React-jsi: a0418934cf48f25b485631deb27c64dc40fb4c31
   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
-  react-native-geolocation-service: 32e50a2e4e4518b51b829fdfe137562a672d95d2
+  react-native-geolocation-service: 4030de78cdeb93ebef1fdc1971668bea6c0bc59b
   react-native-google-maps: 46dea4aa4acb7300beff508f64d9f8c84e9fb106
   react-native-image-picker: 05eefd9232123c5ebde7979c3eefb890b57a87ff
   react-native-maps: 2d405b4e8cee0282e4c02bac434d81450dfea877

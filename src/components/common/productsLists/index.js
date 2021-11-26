@@ -5,8 +5,7 @@ import { ProductCardPrimary } from "../../cards";
 import { Wrapper } from '../../wrappers';
 import styles from './styles'
 import * as RootNavigation from '../../../services/navigation/rootNavigation'
-import { SkeletonPrimary, SkeletonProductsGrid, Spacer } from '../..';
-import { NoDataViewPrimary } from '..';
+import { SkeletonPrimary, SkeletonProductsGrid, Spacer,NoDataViewPrimary } from '../..';
 
 export function Products({
      data, viewType, ListHeaderComponent, ListFooterComponent,

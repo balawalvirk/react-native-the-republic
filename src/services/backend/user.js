@@ -452,28 +452,28 @@ export const changePassword = async ({old_password,password,password_confirmatio
     return response
 };
 
-export const sendFcmToken = async (token) => {
+export const saveFcmToken = async (fcm_token) => {
     let response = null
     const state = store.getState()
     const user_id =state.user.userDetail.id
     let params = {
         user_id,
-        token
+        fcm_token
     }
-    console.log('sendFcmToken Params', params);
+    console.log('saveFcmToken Params', params);
     await axios
-        .post(`${baseURL + endPoints.user.send_fcm_token}`, params)
+        .post(`${baseURL + endPoints.user.save_fcm_token}`, params)
         .then(async responseJson => {
             const tempResponseData = responseJson.data
-            console.log('sendFcmToken Response', tempResponseData);
+            console.log('saveFcmToken Response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
             } else {
-                Toasts.error(tempResponseData.message)
+                //Toasts.error(tempResponseData.message)
             }
         })
         .catch(error => {
-            Toasts.error(error.response.data.message)
+           // Toasts.error(error.response.data.message)
             console.error(error);
         });
     return response

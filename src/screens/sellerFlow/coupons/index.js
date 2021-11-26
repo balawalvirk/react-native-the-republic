@@ -40,7 +40,7 @@ function Coupons(props) {
     }, [])
   );
   const getCoupons = () => {
-    Backend.get_user_coupons().
+    Backend.getUserCoupons().
       then(res => {
         if (res) {
           setCoupons(res.data)

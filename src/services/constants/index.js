@@ -31,7 +31,7 @@ export const endPoints = {
         update_delivery_address: 'update-delivery-address',
         show_user_profile: 'show-user-profile',
         change_password: 'change-password',
-        send_fcm_token:'send-fcm-token'
+        save_fcm_token:'save-fcm-token'
     },
     creditCard: {
         add_card: 'add-card',
@@ -390,5 +390,6 @@ export const tabs = {
         //tabStyle:{borderRadius:20,marginHorizontal:7.5,marginVertical:2}
     }
 }
-
+export const SHOW_TOAST_MESSAGE = 'SHOW_TOAST_MESSAGE';
+export const SHOW_PUSH_NOTIFICATION = 'SHOW_PUSH_NOTIFICATION';
 export { DummyData }

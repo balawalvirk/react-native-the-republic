@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Platform, TouchableOpacity, ImageBackground, Keyboard } from 'react-native'
 import { height, totalSize, width } from 'react-native-dimension'
-import { ModalSwipeablePrimary, SkeletonPrimary } from '..'
+import {ModalSwipeablePrimary} from '../modals'
+import {SkeletonPrimary} from '../skeletonPlacehoder'
 import { appIcons, appImages, appStyles, colors, HelpingMethods, sizes } from '../../services'
 import { ButtonColored, ButtonColoredSmall, ButtonGradient } from '../buttons'
 import { CustomIcon, IconButton, IconWithText } from '../icons'
@@ -18,14 +19,13 @@ import RenderComments from './renderComments'
 import { Products, ProductsSecondary, ProductsHorizontalyPrimary } from './productsLists'
 import ArmerInfo from './armerInfo'
 import Reviews from './reviews'
-import { LineHorizontal } from '..'
 import { Dealers, Groups, FollowRequestsList } from './usersLists'
 import AddPaymentMethodModal from './addPaymentMethodModal'
 import { ImageProfile, ImageRound } from '../images'
 import { KeyboardAvoidingScrollView } from '../scrollViews'
 import { ScrollView } from 'react-native'
 import { StyleSheet } from 'react-native'
-import { LineVertical } from '../lines'
+import { LineVertical,LineHorizontal } from '../lines'
 import GoogleAutoComplete from './googleAutoComplete'
 import { useSelector } from 'react-redux'
 
@@ -206,7 +206,7 @@ export const LocationPickerButton = ({ text, onPress }) => {
             <RowWrapperBasic style={{ padding: sizes.smallMargin, backgroundColor: colors.appBgColor3, borderRadius: 100 }}>
                 <IconWithText
                     customIcon={appIcons.map_pin_outline}
-                    text={userAddress?userAddress.slice(0, 12) + '..':''}
+                    text={userAddress?userAddress.slice(0, 12) + '...':''}
                     tintColor={colors.appTextColor1}
                     iconSize={totalSize(2)}
                     textStyle={[appStyles.textRegular]}

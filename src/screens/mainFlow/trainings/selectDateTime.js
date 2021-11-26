@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import moment from 'moment';
+import React, { Component, useEffect, useState } from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { Icon } from 'react-native-elements';
-import { ComponentWrapper, MainWrapper, Spacer, TimeSlotCard, TinyTitle, TitleInfoPrimary, TitlePrimary, TitleValue, Wrapper } from '../../../components';
-import { appStyles, colors, fontFamily, fontSize, routes, sizes } from '../../../services';
+import { ComponentWrapper, MainWrapper, NoDataViewPrimary, SkeletonPrimaryList, Spacer, TimeSlotCard, TinyTitle, TitleInfoPrimary, TitlePrimary, TitleValue, Wrapper } from '../../../components';
+import { appStyles, Backend, colors, fontFamily, fontSize, routes, sizes } from '../../../services';
 
 const timeSlots = [
     {
@@ -23,8 +24,6 @@ const timeSlots = [
 function SelectDateTime(props) {
     const { navigate } = props.navigation
     const { training } = props.route.params
-
-
     const primaryTheme = {
         //Colors
         backgroundColor: "transparent",
@@ -55,6 +54,27 @@ function SelectDateTime(props) {
         textDayHeaderFontWeight: "bold",
     };
 
+    const [allTimeSlots, setAllTimeSlots] = useState(null)
+
+    useEffect(() => {
+        getTrainingTimeSlots()
+    }, [])
+    const getTrainingTimeSlots = () => {
+        Backend.getTrainingTimeSlots(training.id).
+            then(res => {
+                if (res) {
+                    setAllTimeSlots(res.data)
+                }
+            })
+    }
+    // if (!allTimeSlots) {
+    //     return (
+    //         <SkeletonListVerticalPrimary
+    //             itemHeight={height(40)}
+
+    //         />
+    //     )
+    // }
     return (
         <MainWrapper>
             <Spacer height={sizes.baseMargin} />
@@ -116,26 +136,44 @@ function SelectDateTime(props) {
                 />
             </Wrapper>
             <Spacer height={sizes.baseMargin} />
-            <ComponentWrapper>
-                <TinyTitle>Available Time Slots</TinyTitle>
-            </ComponentWrapper>
-            <Spacer height={sizes.smallMargin} />
-            <FlatList
-                data={timeSlots}
-                renderItem={({ item, index }) => {
-                    return (
-                        <TimeSlotCard
-                            containerStyle={{ marginBottom: sizes.marginVertical / 2 }}
-                            onPress={() => {
-                                navigate(routes.payment, { training, timeSlot: item })
-                            }}
-                            date={item.date}
-                            startTime={item.startTime}
-                            endTime={item.endTime}
-                        />
-                    )
-                }}
-            />
+            {
+                allTimeSlots ?
+                    <Wrapper flex={1}>
+                        <ComponentWrapper>
+                            <TinyTitle>Available Time Slots</TinyTitle>
+                        </ComponentWrapper>
+                        <Spacer height={sizes.smallMargin} />
+                        {
+                            allTimeSlots.length ?
+                                <FlatList
+                                    data={allTimeSlots}
+                                    renderItem={({ item, index }) => {
+                                        return (
+                                            <TimeSlotCard
+                                                containerStyle={{ marginBottom: sizes.marginVertical / 2 }}
+                                                onPress={() => {
+                                                    navigate(routes.payment, { training, timeSlot: item })
+                                                }}
+                                                date={moment(item.date).format('dddd, D MMMM, yyyy')}
+                                                startTime={item.start_time}
+                                                endTime={item.end_time}
+                                            />
+                                        )
+                                    }}
+                                />
+                                :
+                                <NoDataViewPrimary
+                                    title="Time Slots"
+                                    showIcon
+                                    iconName="clock"
+                                />
+                        }
+                    </Wrapper>
+                    :
+                    <SkeletonPrimaryList
+                    NumOfItems={3}
+                    />
+            }
         </MainWrapper>
     );
 }

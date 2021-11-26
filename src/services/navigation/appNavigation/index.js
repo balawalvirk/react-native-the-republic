@@ -22,6 +22,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import CommunityCustomTopTab from './communityCustomTopTab';
 import messaging from '@react-native-firebase/messaging';
 import * as RootNavigation from '../rootNavigation'
+import { MyToast, PushNotification } from '../..';
 const AppStack = createStackNavigator();
 const MainBottomTab = createBottomTabNavigator();
 const MainBottomTabStack = createStackNavigator();
@@ -147,9 +148,10 @@ function BottomTabStackScreens() {
     let newNotificationsCount = ''
     let newMessagesCount = ''
     if (userDetail) {
-        newNotificationsCount = userDetail.newNotificationsCount
-        newMessagesCount = userDetail.newMessagesCount
+        newNotificationsCount = userDetail.notification_count
+        newMessagesCount = userDetail.messages_count
     }
+    const notificationData = "{\"data\":\"User Twelve like  Your Post\",\"profile_image\":\"https:\\/\\/republic-bucket-2.s3.us-west-2.amazonaws.com\\/images\\/16347381212663E500-76FB-4648-8828-3AA42EAAC2D7.jpg\",\"user\":\"User Twelve\",\"content\":{\"id\":18,\"user_id\":10,\"group_id\":3,\"product_id\":null,\"post_type\":\"group\",\"images\":\"[\\\"https:\\\\\\/\\\\\\/republic-bucket-2.s3.us-west-2.amazonaws.com\\\\\\/images\\\\\\/1636730533A20EF343-774A-4B33-B5E9-DE6DDCC89A45.jpg\\\"]\",\"title\":null,\"tags\":null,\"views\":29,\"created_at\":\"2021-11-12T15:22:13.000000Z\",\"updated_at\":\"2021-11-25T13:04:56.000000Z\",\"video\":null,\"profile\":null,\"user\":{\"id\":10,\"first_name\":\"User\",\"last_name\":\"Seven\",\"email\":\"user7@test.com\",\"username\":\"user7\",\"gender\":\"male\",\"birthday\":\"1987-10-05T05:17:22.000Z\",\"phone\":\"3450144778\",\"email_verified_at\":null,\"profile_image\":\"https:\\/\\/republic-bucket-2.s3.us-west-2.amazonaws.com\\/images\\/1632112825473B82DC-C12F-41D4-BC6E-FFC425F6B67B.jpg\",\"country_code\":\"AF\",\"country_phone_code\":\"93\",\"created_at\":\"2021-09-16T14:06:00.000000Z\",\"updated_at\":\"2021-11-26T03:01:19.000000Z\",\"identity_approved\":false,\"fcm_token\":\"e7W7izBvRAq7lKyT6d6Hx3:APA91bFpXKumU4xSVol9S7VLyk66y01yxL4a9upbornOHSmqPNIHsGvOmllcP0O1A5X0N13L6kbNqRkoh3ofy07j7FUd6-iPGP4t1ufdDYhVIrHT0ZAi8rpnL8RRNInFAG9eVpQayNmL\",\"subscription_id\":\"sub_1JhSQBLAATci74dLqW1YU3lg\",\"customer_id\":\"cus_KMAVvMYbynMxtk\",\"payment_id\":\"pm_1JhSNLLAATci74dLsblfI7tv\",\"user_type\":\"dealer\\/pro\",\"latitude\":\"32.4944991\",\"longitude\":\"74.5228916\",\"distance\":\"10\",\"subscription_plan\":\"Dealer\\/Pro\",\"default_card_id\":\"3\",\"default_dealer_id\":18,\"address\":\"Sialkot, Pakistan\",\"get_notify\":null,\"get_chat\":null,\"profile_photo_url\":\"https:\\/\\/ui-avatars.com\\/api\\/?name=&color=7F9CF5&background=EBF4FF\"},\"reactions\":[{\"id\":46,\"user_id\":18,\"post_id\":18,\"comment_id\":null,\"reaction\":\"like\",\"created_at\":\"2021-11-26T03:15:58.000000Z\",\"updated_at\":\"2021-11-26T03:15:58.000000Z\"}],\"comments\":[]},\"type\":\"postReaction\"}"
     return (
         <MainBottomTabStack.Navigator
             screenOptions={headers.screenOptionsSecondary}
@@ -173,11 +175,17 @@ function BottomTabStackScreens() {
                             <CustomIcon value={newMessagesCount ? newMessagesCount : ''} icon={appIcons.chat} size={sizes.icons.medium} color={colors.appTextColor1} onPress={() => navigation.navigate(routes.chats)} />
                         </RowWrapper>,
                     headerLeft: () => <RowWrapper style={[{}]}>
-                        <CustomIcon onPress={() => navigation.toggleDrawer()} icon={appIcons.menu} size={sizes.icons.medium} color={colors.appTextColor1} />
-                        {/* <Spacer width={sizes.marginHorizontal} />
-                     <LocationPickerButton
-                            onPress={() => navigation.navigate(routes.myLocation)}
-                            text="Broklyn, NYC" /> */}
+                        <CustomIcon
+                            onPress={() => navigation.toggleDrawer()}
+                            //onPress={() => MyToast.success({ message: 'asdasd' })}
+                            //  onPress={() => {
+                            //      const data = JSON.parse(notificationData)
+                            //      PushNotification.show({ image: data.profile_image, message: data.data, data: data.content,notificationType:'postReaction' })
+                            //  }}
+                            icon={appIcons.menu}
+                            size={sizes.icons.medium}
+                            color={colors.appTextColor1} />
+
                     </RowWrapper>
                 })}
             />
@@ -251,11 +259,19 @@ const MainSideDrawer = () => {
         </MainDrawer.Navigator>
     );
 };
-const AppNavigation = () => {
+function AppNavigation() {
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        handleOnOpenNotification();
+        handelNotificationListner();
+    }, [])
     const handleOnPressNotification = (data) => {
         const { navigate } = RootNavigation
         // navigate(routes.postDetail, { item: JSON.parse(content) })
-        const { type, content } = data
+        const { type } = data
+        const content = JSON.parse(data.content)
         if (type === 'postReaction') {
             navigate(routes.postDetail, { postId: content.id })
         } else if (type === 'postComment') {
@@ -268,20 +284,11 @@ const AppNavigation = () => {
             // navigate(routes.followRequests)
             navigate(routes.userProfile, { userId: content.id })
         } else if (type === 'productReview') {
-            toggleApproveReview()
+            //toggleApproveReview()
         }
     }
     const handleOnOpenNotification = () => {
         const { navigate } = RootNavigation
-
-
-        const dispatch = useDispatch()
-        useEffect(() => {
-            handleOnOpenNotification();
-            handelNotificationListner();
-        }, []);
-
-
         messaging().onNotificationOpenedApp(remoteMessage => {
             if (remoteMessage) {
                 console.log(
@@ -319,7 +326,15 @@ const AppNavigation = () => {
                     );
                     //  setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
                     if (remoteMessage.data) {
-
+                        const {data}=remoteMessage
+                        const content = JSON.parse(data.content)
+                         PushNotification.show({
+                             image: data.profile_image,
+                             message: data.body,
+                             data: content,
+                             notificationType: data.type
+                         })
+                        //MyToast.success({message:data.body})
                     }
                 }
             })

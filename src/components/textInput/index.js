@@ -9,7 +9,7 @@ import { CustomIcon, IconButton, IconWithText } from '../icons';
 import { Spacer } from '../spacers';
 import { Platform } from 'react-native';
 import { Animated } from 'react-native';
-import { ImageRound } from '..';
+import { ImageRound } from '../images';
 const TextInputColored = ({
     iconNameRight, inputRef, iconTypeRight, returnKeyLabel,
     returnKeyType, onSubmitEditing, onPress,

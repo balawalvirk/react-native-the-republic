@@ -6,7 +6,7 @@ import * as Backend from './index'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as HelpingMethods from "../helpingMethods";
 import { setCreditCards, setUserDetail } from "../store/actions";
-import { postTypes } from '..'
+import { postTypes } from '../constants'
 const { dispatch } = store
 
 

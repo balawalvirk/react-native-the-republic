@@ -5,7 +5,6 @@ import { height, totalSize, width } from 'react-native-dimension';
 import { colors, sizes, appStyles } from '../../services';
 import PropTypes from 'prop-types'
 import { Wrapper, AbsoluteWrapper } from '../wrappers';
-import { color } from 'react-native-reanimated';
 import { LargeText } from '../text'
 //import LinearGradient from 'react-native-linear-gradient';
 

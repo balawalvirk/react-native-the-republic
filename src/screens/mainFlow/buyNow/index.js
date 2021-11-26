@@ -1,11 +1,12 @@
+import moment from 'moment';
 import React, { Component, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { View, Text } from 'react-native';
-import { totalSize } from 'react-native-dimension';
+import { totalSize, width } from 'react-native-dimension';
+import { MaterialIndicator } from 'react-native-indicators';
 import { useSelector } from 'react-redux';
-import { ButtonGradient, ComponentWrapper, IconButton, KeyboardAvoidingScrollView, LineHorizontal, MainWrapper, MediumText, PopupPrimary, ProductCardSecondary, RegularText, RowWrapper, RowWrapperBasic, SmallTitle, Spacer, SwitchPrimary, TextInputUnderlined, TinyTitle, TitleInfoPrimary, TitlePrimary, UserCardPrimary, Wrapper, TitleValue, Toasts } from '../../../components';
+import { ButtonGradient, ComponentWrapper, IconButton, KeyboardAvoidingScrollView, LineHorizontal, MainWrapper, MediumText, PopupPrimary, ProductCardSecondary, RegularText, RowWrapper, RowWrapperBasic, SmallTitle, Spacer, SwitchPrimary, TextInputUnderlined, TinyTitle, TitleInfoPrimary, TitlePrimary, UserCardPrimary, Wrapper, TitleValue, Toasts, SmallText } from '../../../components';
 import { appImages, appStyles, Backend, colors, fulfillmentStatuses, fulfillmentTypes, HelpingMethods, routes, sizes } from '../../../services';
-import styles from './styles'
 
 
 
@@ -26,7 +27,9 @@ function BuyNow(props) {
         deliveryAddress = house + ', ' + street + ', ' + city + ', ' + zip_code + ', ' + state
     }
     //local states
-    const [coupon, setCoupon] = useState('')
+    const [coupons, setCoupons] = useState(null)
+    const [coupon, setCoupon] = useState(null)
+    const [validCoupon, setValidCoupon] = useState(null)
     const [privateSale, setPrivateSale] = useState(false)
     const [defaultCreditCard, setDefaultCreditCard] = useState(null)
     const [loadingBuy, setLoadingBuy] = useState(false)
@@ -35,6 +38,7 @@ function BuyNow(props) {
     const toggleOrderPlacedPopup = () => setOrderPlacedPopupVisible(!isOrderPlacedPopupVisible)
 
     useEffect(() => {
+        getSetSellerCopuns()
         const default_card_id = userDetail.default_card_id
         console.log(default_card_id)
         console.log(creditCards.length)
@@ -46,14 +50,61 @@ function BuyNow(props) {
         }
     }, [userDetail])
 
-    const productImages = images ? JSON.parse(images) : null
-    const productImage = productImages ? productImages[0] : appImages.noImageAvailable
+    const getSetSellerCopuns = () => {
+        Backend.getUserCoupons(user.id).
+            then(res => {
+                if (res) {
+                    setCoupons(res.data)
+                }
+            })
+    }
 
+    const handleOnChangeCouponText = (text) => {
+        const couponQuery = text.toLowerCase()
+        if (coupons.length) {
+            const tempOBj = coupons.find(item => item.code.toLowerCase() === couponQuery)
+            if (tempOBj) {
+                HelpingMethods.handleAnimation()
+                setCoupon(tempOBj)
+            } else {
+                setCoupon(null)
+            }
+        }
+    }
+
+
+    const getDiscountAmount = () => {
+        let discount = 0
+        if (coupon) {
+            const { discount_type, discount_amount, code, minimum_order, expiry_date } = coupon
+            // console.log('today --> ', moment(new Date()).format('yyyy-mm-d'))
+            // console.log('is expired --> ', moment(new Date()).format('yyyy-mm-d') > expiry_date)
+            const isExpired = moment(new Date()).format('yyyy-mm-d') > expiry_date
+            if (!isExpired) {
+                const productPricee = Number(productPrice)
+                // console.log('productPricee --> ', productPricee)
+                if (productPricee >= minimum_order) {
+                    //let discount = 0
+                    if (discount_type === 'percentage') {
+                        discount = (productPricee / 100) * discount_amount
+                    } else {
+                        discount = discount_amount
+                    }
+                }
+            }
+        }
+        return HelpingMethods.getRoundedValue(discount)
+    }
+    //const discountAmount = getDiscountAmount()
+    //console.log('discountAmount --> ', discountAmount)
     const productPrice = discounted_price ? discounted_price : price ? price : 0
     const subTotal = Number(productPrice)
     const tax = HelpingMethods.getRoundedValue((Number(productPrice) / 100) * 10)
     const transectionCharges = 10
-    const total = subTotal + tax + transectionCharges
+    const total = (subTotal + tax + transectionCharges)
+
+    const productImages = images ? JSON.parse(images) : null
+    const productImage = productImages ? productImages[0] : appImages.noImageAvailable
 
 
     const validations = () => {
@@ -135,7 +186,7 @@ function BuyNow(props) {
                             iconName="trash-2"
                             iconType="feather"
                             iconColor={colors.error}
-                            iconSize={totalSize(2.5)}
+                            iconSize={totalSize(2)}
                             buttonSize={totalSize(4)}
                         />
                     }
@@ -147,6 +198,7 @@ function BuyNow(props) {
                 <Spacer height={sizes.baseMargin} />
                 <TitleValue
                     title={'Subtotal'}
+                    // value={'$ ' + subTotal + (coupon ? ('-' + getDiscountAmount()) : '')}
                     value={'$ ' + subTotal}
                 />
                 <Spacer height={sizes.baseMargin} />
@@ -159,15 +211,48 @@ function BuyNow(props) {
                     title={'Transaction Charges'}
                     value={'$ ' + transectionCharges}
                 />
+                {
+                    coupon ?
+                        <>
+                            <Spacer height={sizes.baseMargin} />
+                            <TitleValue
+                                title={'Discount'}
+                                value={'-' + (coupon.discount_type != 'percentage' ? '$ ' : '') + coupon.discount_amount + (coupon.discount_type === 'percentage' ? ' %' : '')}
+                            />
+                            {
+                                getDiscountAmount() === 0 ?
+                                    <ComponentWrapper style={{ marginRight: width(30) }}>
+                                        <Spacer height={sizes.TinyMargin} />
+                                        <SmallText style={[appStyles.textGray]}>Not Applicable on this order, minimum order should be
+                                            {' '}
+                                            <SmallText style={[appStyles.fontBold]}>${coupon.minimum_order}</SmallText>
+                                        </SmallText>
+                                    </ComponentWrapper>
+                                    : null
+                            }
+                        </>
+                        :
+                        null
+                }
                 <Spacer height={sizes.baseMargin} />
                 <TextInputUnderlined
                     title="Discount Coupon"
-                    value={coupon}
-                    onChangeText={(t) => setCoupon(t)}
+                    value={coupon && coupon.code}
+                    onChangeText={handleOnChangeCouponText}
                     containerStyle={{ marginHorizontal: sizes.marginHorizontal }}
                     iconNameRight={coupon ? "check-circle" : null}
                     iconTypeRight="feather"
                     iconColorRight={colors.success}
+                    right={!coupons ?
+                        <Wrapper>
+                            <MaterialIndicator
+                                size={totalSize(2.5)}
+                                color={colors.appTextColor4}
+                            />
+                        </Wrapper>
+                        :
+                        null
+                    }
                 />
                 <Spacer height={sizes.baseMargin} />
                 <Wrapper style={[appStyles.grayWrapper, { paddingVertical: sizes.baseMargin * 1.5 }]}>
@@ -175,32 +260,32 @@ function BuyNow(props) {
                         <Wrapper flex={1}>
                             <SmallTitle>Total</SmallTitle>
                         </Wrapper>
-                        <SmallTitle style={[appStyles.textPrimaryColor]}>$ {total}</SmallTitle>
+                        <SmallTitle style={[appStyles.textPrimaryColor]}>$ {total - (coupon ? getDiscountAmount() : 0)}</SmallTitle>
                     </RowWrapperBasic>
                 </Wrapper>
                 <Spacer height={sizes.baseMargin} />
-               
-                        <Wrapper style={[appStyles.grayWrapper, {}]}>
-                            <RowWrapperBasic>
-                                <Wrapper flex={1}>
-                                    <RegularText>Payment Method</RegularText>
-                                    {
-                                        defaultCreditCard ?
-                                            <>
-                                                <Spacer height={sizes.smallMargin} />
-                                                <MediumText>{HelpingMethods.getHiddenCardNumber(defaultCreditCard.card_number)}</MediumText>
-                                            </>
-                                            :
-                                            null
-                                    }
 
-                                </Wrapper>
-                                <TinyTitle
-                                    onPress={() => navigate(routes.paymentMethods)}
-                                    style={[appStyles.textPrimaryColor]}>{defaultCreditCard?'Change':'Add'}</TinyTitle>
-                            </RowWrapperBasic>
+                <Wrapper style={[appStyles.grayWrapper, {}]}>
+                    <RowWrapperBasic>
+                        <Wrapper flex={1}>
+                            <RegularText>Payment Method</RegularText>
+                            {
+                                defaultCreditCard ?
+                                    <>
+                                        <Spacer height={sizes.smallMargin} />
+                                        <MediumText>{HelpingMethods.getHiddenCardNumber(defaultCreditCard.card_number)}</MediumText>
+                                    </>
+                                    :
+                                    null
+                            }
+
                         </Wrapper>
-                       
+                        <TinyTitle
+                            onPress={() => navigate(routes.paymentMethods)}
+                            style={[appStyles.textPrimaryColor]}>{defaultCreditCard ? 'Change' : 'Add'}</TinyTitle>
+                    </RowWrapperBasic>
+                </Wrapper>
+
                 <Spacer height={sizes.baseMargin} />
                 <Wrapper style={[appStyles.grayWrapper, {}]}>
                     <RowWrapperBasic>

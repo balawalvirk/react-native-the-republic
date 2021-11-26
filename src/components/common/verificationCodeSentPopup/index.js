@@ -1,6 +1,6 @@
 import React  from 'react';
 import { height } from 'react-native-dimension';
-import { PopupPrimary } from '..';
+import { PopupPrimary } from '../index';
 import { appStyles, sizes } from '../../../services';
 import { Spacer } from '../../spacers';
 import { MediumText } from '../../text';
