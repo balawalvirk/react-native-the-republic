@@ -1,13 +1,14 @@
 import React, { Component, useEffect, useRef, useState } from 'react';
 import { View, Text } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
-import { MainWrapper, Products, RowWrapper, Wrapper, ButtonGroupAnimated, CustomIcon, AbsoluteWrapper, ButtonColoredSmall, Spacer, ProductCardPrimary, TitleInfoPrimary, ButtonGradient, ArmerInfo, Toasts, MediumText, FilterButton, SkeletonPrimary } from '../../../components';
+import { MainWrapper, Products, RowWrapper, Wrapper, ButtonGroupAnimated, CustomIcon, AbsoluteWrapper, ButtonColoredSmall, Spacer, ProductCardPrimary, TitleInfoPrimary, ButtonGradient, ArmerInfo, Toasts, MediumText, FilterButton, SkeletonPrimary, TinyTitle } from '../../../components';
 import { appIcons, appImages, appStyles, Backend, colors, DummyData, HelpingMethods, mapStyles, routes, sizes } from '../../../services';
-import MapView,{ Marker } from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 //import MapView from "react-native-map-clustering";
 import BottomSheet from 'reanimated-bottom-sheet';
 import styles from './styles'
 import { useSelector } from 'react-redux';
+import { Icon } from 'react-native-elements';
 const delta = 0.9
 const ASPECT_RATIO = width(100) / height(100)
 const defaultLocation = {
@@ -38,9 +39,9 @@ const topTabs = [
     },
 
 ]
-function Explore(props) {
-    const { navigate } = props.navigation
-
+function Explore({ navigation, route }) {
+    const { navigate, setParams } = navigation
+    const filterData = route.params ? route.params.filterData ? route.params.filterData : null : null
 
 
     //Refs
@@ -57,10 +58,14 @@ function Explore(props) {
     //local states
     const [myLocation, setMyLocation] = useState(null)
     const [allProducts, setAllProducts] = useState([])
+    const [filteredProducts, setFilteredProducts] = useState(null)
     const [currentPage, setCurrentPage] = useState(1)
+    const [filteredProductsCurrentPage, setFilteredProductsCurrentPage] = useState(1)
     const [loading, setLoading] = useState(true)
     const [loadingMore, setLoadingMore] = useState(false)
+    const [filteredProductsLoadingMore, setFilteredProductsLoadingMore] = useState(false)
     const [allItemsLoaded, setAllItemsLoaded] = useState(false)
+    const [allFilteredProductsLoaded, setAllFilteredProductsLoaded] = useState(false)
 
     const [mapProducts, setMapProducts] = useState(null)
     const [selectedViewIndex, setViewIndex] = useState(0)
@@ -92,8 +97,16 @@ function Explore(props) {
         if (!allItemsLoaded) {
             setLoadingMore(true)
             await getSetAllProducts()
-            setCurrentPage(currentPage + 1)
+            // setCurrentPage(currentPage + 1)
             setLoadingMore(false)
+        }
+    }
+    const handleLoadingMoreFilteredProducts = async () => {
+        if (!allFilteredProductsLoaded) {
+            setFilteredProductsLoadingMore(true)
+            await getSetFilteredProducts()
+            // setFilteredProductsCurrentPage(filteredProductsCurrentPage + 1)
+            setFilteredProductsLoadingMore(false)
         }
     }
     const getSetAllProducts = async () => {
@@ -101,7 +114,20 @@ function Explore(props) {
             then(res => {
                 if (res) {
                     setAllProducts([...allProducts, ...res.data.data])
-                    !res.data.next_page_url && setAllItemsLoaded(true)
+                    !res.data.next_page_url ?
+                        setAllItemsLoaded(true) :
+                        setCurrentPage(currentPage + 1)
+                }
+            })
+    }
+    const getSetFilteredProducts = async () => {
+        await Backend.filterProducts({ ...filterData, page: filteredProductsCurrentPage }).
+            then(res => {
+                if (res) {
+                    setFilteredProducts([...filteredProducts, ...res.data.data])
+                    !res.data.next_page_url ?
+                        setAllFilteredProductsLoaded(true) :
+                        setFilteredProductsCurrentPage(filteredProductsCurrentPage + 1)
                 }
             })
     }
@@ -119,9 +145,19 @@ function Explore(props) {
         tempMarkers = mapProducts.filter(item => item.latitude && item.longitude && item.user)
         return tempMarkers
     }
+
+    const handleClearFilter = () => {
+        setFilteredProducts(null)
+        setAllFilteredProductsLoaded(false)
+        setFilteredProductsCurrentPage(1)
+        setParams({ filterData: null })
+
+        // Toasts.success('Filter cleared')
+    }
+
     const renderContent = () => {
         let productInfo = {}
-        
+
         if (selectedProduct) {
             const { item, type, manufacturer, caliber, action, condition, images, reviews } = selectedProduct
             const tempProdInfo = {
@@ -168,9 +204,9 @@ function Explore(props) {
                                     }}
                                 />
                                 <Spacer height={sizes.baseMargin} />
-                              <ArmerInfo
+                                <ArmerInfo
                                     info={productInfo}
-                                /> 
+                                />
                             </>
                             :
                             null
@@ -189,22 +225,45 @@ function Explore(props) {
         );
     }
 
+    const showProducts = filteredProducts ? filteredProducts : allProducts
     return (
         <MainWrapper>
             {
                 selectedTabIndex === 0 ?
                     < Products
-                        data={allProducts}
+                        data={showProducts}
                         onPressProduct={(item, index) => navigate(routes.productDetail, { product: item })}
                         viewType={selectedViewIndex === 0 ? 'grid' : 'list'}
                         ListHeaderComponent={() => {
-                            return <Spacer height={sizes.baseMargin * 4} />
+                            return <>
+                                {
+                                    !filteredProducts ?
+                                        <Spacer height={sizes.baseMargin * 4} />
+                                        :
+                                        <>
+                                            <Spacer height={sizes.baseMargin * 3} />
+                                            <RowWrapper>
+                                                <TinyTitle>Filter Results</TinyTitle>
+                                                <Icon
+                                                    name="close"
+                                                    type="ionicon"
+                                                    size={totalSize(3)}
+                                                    onPress={handleClearFilter}
+                                                />
+                                            </RowWrapper>
+                                            <Spacer height={sizes.smallMargin} />
+                                        </>
+                                }
+                            </>
                         }}
                         isLoading={loading}
                         isLoadingMore={loadingMore}
                         onEndReached={(data) => {
                             console.log('onEndReached Data --->', data)
-                            handleLoadingMore()
+                            !filteredProducts ?
+                                handleLoadingMore()
+                                :
+                                handleLoadingMoreFilteredProducts()
                         }}
                     />
                     :
@@ -267,8 +326,12 @@ function Explore(props) {
                     </Wrapper>
                     <FilterButton
                         onPress={() => navigate(routes.sortFilter, {
-                            clearFilter: () => { Toasts.success('Filter cleared') },
-                            applyFilter: () => { Toasts.success('Filter applied') }
+                            clearFilter: handleClearFilter,
+                            applyFilter: (data, filterData) => {
+                                setFilteredProducts(data)
+                                setParams({ filterData })
+                            },
+                            filterData
                         })}
                         buttonStyle={{ marginHorizontal: 0 }}
                     />

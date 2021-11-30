@@ -802,20 +802,20 @@ export const handleAddRemoveFavouriteProduct = async (product_id) => {
     const { userDetail } = state.user
     let response = null
     //let new_favorite_products = []
-    console.log('old favorite_products ',[...userDetail.favorite_products])
+    console.log('old favorite_products ', [...userDetail.favorite_products])
 
     if (HelpingMethods.checkIsProductFavourite(product_id)) {
         //favorite_products = [...userDetail.favorite_products, product_id]
         const new_favorite_products = userDetail.favorite_products.filter(favProdId => favProdId != product_id)
-        console.log('new favorite_products ',new_favorite_products)
-        dispatch(setUserDetail({ ...userDetail, favorite_products:new_favorite_products }))
+        console.log('new favorite_products ', new_favorite_products)
+        dispatch(setUserDetail({ ...userDetail, favorite_products: new_favorite_products }))
         await removeFavouriteProduct(product_id).
             then(res => res && [response = res])
     } else {
-       // favorite_products = userDetail.favorite_products.filter(favProdId => favProdId != product_id)
-       const new_favorite_products=[...userDetail.favorite_products, product_id]
-        console.log('new favorite_products ',new_favorite_products)
-        dispatch(setUserDetail({ ...userDetail, favorite_products:new_favorite_products}))
+        // favorite_products = userDetail.favorite_products.filter(favProdId => favProdId != product_id)
+        const new_favorite_products = [...userDetail.favorite_products, product_id]
+        console.log('new favorite_products ', new_favorite_products)
+        dispatch(setUserDetail({ ...userDetail, favorite_products: new_favorite_products }))
         await addFavouriteProduct(product_id).
             then(res => res && [response = res])
     }
@@ -832,3 +832,49 @@ export const handleAddRemoveFavouriteProduct = async (product_id) => {
     return response
 };
 
+
+
+export const filterProducts = async ({ sortBy, make, action, caliber, minPrice, maxPrice, barel_length,page }) => {
+    let response = null
+    const defaultPage=page?page:1
+    // const state = store.getState()
+    // const { userDetail } = state.user
+    // const user_id = userDetail.id
+    let params = new FormData()
+    sortBy && params.append('sortBy', sortBy)
+    make && params.append('make[]', make)
+    action && params.append('action[]', action)
+    caliber && params.append('caliber[]', caliber)
+    minPrice && params.append('price[]', minPrice)
+    maxPrice && params.append('price[]', maxPrice)
+    barel_length && params.append('barel_length[]', barel_length)
+    // sortBy && [params['sortBy'] = sortBy]
+    // make && [params['make[]'] = make]
+    // action && [params['action[]'] = action]
+    // caliber && [params['caliber[]'] = caliber]
+    // for (const item of [minPrice, maxPrice]) {
+    //     params['price[]'] = item
+    // }
+    //barel_length && [params['barel_length[]'] = barel_length]
+
+    console.log('filterProducts params', params);
+    const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    if (isInternetAvailable) {
+        await axios
+            .post(`${baseURL + endPoints.product.filter_products}?page=${defaultPage}`, params)
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('filterProducts Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
+    }
+    return response
+};

@@ -5,13 +5,13 @@ import { ProductCardPrimary } from "../../cards";
 import { Wrapper } from '../../wrappers';
 import styles from './styles'
 import * as RootNavigation from '../../../services/navigation/rootNavigation'
-import { SkeletonPrimary, SkeletonProductsGrid, Spacer,NoDataViewPrimary } from '../..';
+import { SkeletonPrimary, SkeletonProductsGrid, Spacer, NoDataViewPrimary } from '../..';
 
 export function Products({
-     data, viewType, ListHeaderComponent, ListFooterComponent,
-      onPressProduct, isLoading, isLoadingMore, onEndReached,
-      onPressHeart
-    }) {
+    data, viewType, ListHeaderComponent, ListFooterComponent,
+    onPressProduct, isLoading, isLoadingMore, onEndReached,
+    onPressHeart
+}) {
     const isGridView = viewType === 'grid'
     const isListView = viewType === 'list'
     const { navigate } = RootNavigation
@@ -24,17 +24,27 @@ export function Products({
                 isLoading ?
                     <>
                         {
-                            isGridView ?
-                                <SkeletonProductsGrid />
+                            isGridView || isListView ?
+
+
+                                <>
+                                    {ListHeaderComponent()}
+                                    {
+                                        isGridView ?
+                                            <SkeletonProductsGrid />
+                                            :
+                                            isListView ?
+                                                [1, 2, 3, 4, 5, 6].map((item, index) => {
+                                                    return (
+                                                        <SkeletonPrimary itemStyle={{ marginTop: sizes.marginVertical }} />
+                                                    )
+                                                })
+                                                :
+                                                null
+                                    }
+                                </>
                                 :
-                                isListView ?
-                                    [1, 2, 3, 4, 5, 6].map((item, index) => {
-                                        return (
-                                            <SkeletonPrimary itemStyle={{ marginTop: sizes.marginVertical }} />
-                                        )
-                                    })
-                                    :
-                                    null
+                                null
                         }
                     </>
                     :
@@ -71,7 +81,7 @@ export function Products({
                                         isFavourite={HelpingMethods.checkIsProductFavourite(item.id)}
                                         onPressHeart={() => {
                                             Backend.handleAddRemoveFavouriteProduct(item.id)
-                                            onPressHeart&&onPressHeart(item,index)
+                                            onPressHeart && onPressHeart(item, index)
                                         }}
                                         viewType={viewType}
                                         image={item.images ? JSON.parse(item.images)[0] : appImages.noImageAvailable}

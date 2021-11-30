@@ -62,7 +62,7 @@ export default function AnimatedGroupButton({
     handleTabSlide(item.x, item.tabHeight, item.tabWidth)
   }
 
-  if (selectedTabIndex != initalIndex && data[initalIndex].x) {
+  if (selectedTabIndex != initalIndex && data[initalIndex].x>=0) {
     handleOnPress(data[initalIndex], initalIndex)
   }
 
@@ -81,14 +81,17 @@ export default function AnimatedGroupButton({
                 onLayout={event => {
                   (item.x = event.nativeEvent.layout.x),
                     (item.tabHeight = event.nativeEvent.layout.height),
-                    (item.tabWidth = event.nativeEvent.layout.width),
-                    key === 0
-                      ? handleTabSlide(
-                        item.x,
-                        item.tabHeight,
-                        item.tabWidth,
-                      )
-                      : null;
+                    (item.tabWidth = event.nativeEvent.layout.width)
+                    // key === 0
+                    //   ? handleTabSlide(
+                    //     item.x,
+                    //     item.tabHeight,
+                    //     item.tabWidth,
+                    //   )
+                    //   : null;
+                    key === selectedTabIndex
+                    ? handleOnPress(data[initalIndex], initalIndex)
+                    : null;
                 }}
                 style={[
                   {

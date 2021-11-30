@@ -31,7 +31,7 @@ export const endPoints = {
         update_delivery_address: 'update-delivery-address',
         show_user_profile: 'show-user-profile',
         change_password: 'change-password',
-        save_fcm_token:'save-fcm-token'
+        save_fcm_token: 'save-fcm-token'
     },
     creditCard: {
         add_card: 'add-card',
@@ -306,7 +306,7 @@ export const asyncConts = {
     product_calibers: 'PRODUCT_CALIBERS',
     product_actions: 'PRODUCT_ACTIONS',
     product_conditions: 'PRODUCT_CONDITIONS',
-    fcmToken:'FCM_TOKEN'
+    fcmToken: 'FCM_TOKEN'
 }
 export const orderStatuses = {
     pending: 'pending',
@@ -342,6 +342,13 @@ export const groupJoinPrivacies = {
 export const groupPostPrivacies = {
     everyone: 'everyone',
     onlyAdmin: 'onlyAdmin',
+}
+export const sortingOptions = {
+    topRated: 'topRated',
+    title_a_z: 'title-a-z',
+    title_z_a: 'title-z-a',
+    price_low_to_high: 'price-low-to-high',
+    price_high_to_low: 'price-high-to-low',
 }
 export const headers = {
     screenOptionsPrimary: {

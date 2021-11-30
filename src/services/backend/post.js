@@ -205,7 +205,7 @@ export const getSubscribedPosts = async (page) => {
             }
         })
         .catch(error => {
-            Toasts.error(error.response.data.message)
+           //Toasts.error(error.response.data.message)
             console.error(error);
         });
     return response
@@ -230,7 +230,7 @@ export const getFollowingsPosts = async (page) => {
             }
         })
         .catch(error => {
-            Toasts.error(error.response.data.message)
+           // Toasts.error(error.response.data.message)
             console.error(error);
         });
     return response
@@ -255,7 +255,7 @@ export const getJoinedGroupsPosts = async (page) => {
             }
         })
         .catch(error => {
-            Toasts.error(error.response.data.message)
+           // Toasts.error(error.response.data.message)
             console.error(error);
         });
     return response
@@ -278,7 +278,7 @@ export const getGroupPosts = async ({ group_id, page }) => {
             }
         })
         .catch(error => {
-            Toasts.error(error.response.data.message)
+           // Toasts.error(error.response.data.message)
             console.error(error);
         });
     return response

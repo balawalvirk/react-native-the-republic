@@ -28,6 +28,7 @@ import { StyleSheet } from 'react-native'
 import { LineVertical,LineHorizontal } from '../lines'
 import GoogleAutoComplete from './googleAutoComplete'
 import { useSelector } from 'react-redux'
+import MultiSlider from '@ptomasroos/react-native-multi-slider';
 
 export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconColor, iconContainerColor, iconContainerSize, iconSize, disableSwipe, disableBackDropPress, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, loadingButton1, loadinButton2, topMargin, children, scrollEnabled, button1Style, keyboardShouldPersistTaps }) => {
 
@@ -588,6 +589,27 @@ export const AddDataViewPrimary = ({ title, iconName, iconType, onPress }) => {
             </TouchableOpacity>
         </Wrapper>
     )
+}
+export const MultiSliderPrimary = ({ values, onValuesChange, valuePrimary, valueSecondary, minimumValue, maximumValue ,sliderLength}) => {
+    return (
+        <Wrapper>
+            <Wrapper style={[appStyles.center]}>
+                <MultiSlider
+                    trackStyle={{ backgroundColor: colors.appTextColor5 }}
+                    selectedStyle={{ backgroundColor: colors.appColor2 }}
+                    values={values}
+                    sliderLength={sliderLength?sliderLength:width(90)}
+                    onValuesChange={onValuesChange}
+                    min={minimumValue}
+                    max={maximumValue}
+                    markerStyle={{ backgroundColor: colors.appColor2, height: totalSize(2.5), width: totalSize(2.5) }}
+                    step={1}
+                    allowOverlap={false}
+                    snapped={true}
+                />
+            </Wrapper>
+        </Wrapper>
+    );
 }
 
 export {

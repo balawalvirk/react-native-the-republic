@@ -49,9 +49,9 @@ export default function CommunityCustomTopTab(props) {
     const activeIndex = index
     //console.log('Tab screen index --> ',activeIndex)
     if (activeIndex === 2) {
-        navigation.setOptions({ tabBarVisible: false })
+       // navigation.setOptions({ tabBarVisible: false })
     } else {
-        navigation.setOptions({ tabBarVisible: true })
+       // navigation.setOptions({ tabBarVisible: true })
     }
     return (
         <View style={{ backgroundColor: colors.appBgColor1 }}>

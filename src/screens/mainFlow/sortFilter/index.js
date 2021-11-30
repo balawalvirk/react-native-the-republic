@@ -1,22 +1,29 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
-import { ButtonColoredSmall, ButtonGradient, ButtonGroupAnimated, ComponentWrapper, MainWrapper, PickerPrimary, RegularText, Spacer } from '../../../components';
-import { appStyles, colors, sizes } from '../../../services';
-const sortingOptions = [
+import { width } from 'react-native-dimension';
+import { useSelector } from 'react-redux';
+import { ButtonColoredSmall, ButtonGradient, ButtonGroupAnimated, ComponentWrapper, InputTitle, MainWrapper, MultiSliderPrimary, PickerPrimary, RegularText, RowWrapper, RowWrapperBasic, Spacer, TextInputUnderlined, Wrapper } from '../../../components';
+import { appStyles, Backend, colors, orderStatuses, sizes, sortingOptions } from '../../../services';
+const defaultSortingOptions = [
     {
-        title: 'Top Rated'
+        title: 'Top Rated',
+        value: sortingOptions.topRated
     },
     {
-        title: 'Title (A-Z)'
+        title: 'Title (A-Z)',
+        value: sortingOptions.title_a_z
     },
     {
-        title: 'Title (Z-A)'
+        title: 'Title (Z-A)',
+        value: sortingOptions.title_z_a
     },
     {
-        title: 'Price (High-Low)'
+        title: 'Price (High-Low)',
+        value: sortingOptions.price_high_to_low
     },
     {
-        title: 'Price (Low-High)'
+        title: 'Price (Low-High)',
+        value: sortingOptions.price_low_to_high
     }
 ]
 const options = [
@@ -37,6 +44,11 @@ function SortFilter(props) {
     const { navigation, route } = props
     const { navigate, goBack } = navigation
     const { clearFilter, applyFilter } = route.params
+    const filterData = route.params ? route.params.filterData ? route.params.filterData : null : null
+    //redux states
+    const product = useSelector(state => state.product)
+    const { categories, items, actions, manufacturers, conditions, calibers } = product
+
     //configure Header
     React.useLayoutEffect(() => {
         navigation.setOptions({
@@ -55,12 +67,57 @@ function SortFilter(props) {
         });
     }, [navigation]);
 
-    const [selectedTabIndex, setSelectedTabIndex] = useState(0)
+    const [selectedSortTabIndex, setSelectedSortTabIndex] = useState(0)
     const [make, setMake] = useState('')
     const [actionType, setActionType] = useState('')
     const [barrelLength, setBarrelLength] = useState('')
     const [caliber, setCalibre] = useState('')
-    const [priceRange, setPriceRange] = useState('')
+    const [priceRange, setPriceRange] = useState([1, 1000000])
+    const [loading, setLoading] = useState(false)
+
+    const priceRangeValuesChange = values => setPriceRange(values)
+
+
+
+    useEffect(()=>{
+        getSetFilterData()
+    },[])
+
+    const getSetFilterData=()=>{
+        console.log('filterData  --> ',filterData)
+        if(filterData){
+            const {sortBy,make,action,caliber,minPrice,maxPrice,barel_length}=filterData
+            const tempSortByObj=defaultSortingOptions.find(item=>item.value===sortBy)
+            const tempSortByIndex=defaultSortingOptions.indexOf(tempSortByObj)
+            console.log('tempSortByIndex  --> ',tempSortByIndex)
+            setSelectedSortTabIndex(tempSortByIndex)
+            setActionType(action)
+            setMake(make)
+            setCalibre(caliber)
+            setPriceRange([minPrice,maxPrice])
+            setBarrelLength(barel_length)
+        }
+    }
+    const handleApplyFilter = async () => {
+        setLoading(true)
+        const filteredProductsData={
+            sortBy: defaultSortingOptions[selectedSortTabIndex].value,
+            make: make!='placeholder'?make:'',
+            action: actionType!='placeholder'?actionType:'',
+            caliber: caliber!='placeholder'?caliber:'',
+            minPrice: priceRange[0],
+            maxPrice: priceRange[1],
+            barel_length: barrelLength!='placeholder'?barrelLength:''
+        }
+        await Backend.filterProducts(filteredProductsData).
+        then(res => {
+            setLoading(false)
+            if (res) {
+                applyFilter(res.data.data,filteredProductsData);
+                goBack()
+            }
+        })
+    }
     return (
         <MainWrapper>
             <Spacer height={sizes.baseMargin} />
@@ -69,10 +126,10 @@ function SortFilter(props) {
             </ComponentWrapper>
             <Spacer height={sizes.smallMargin} />
             <ButtonGroupAnimated
-                data={sortingOptions}
-                initalIndex={selectedTabIndex}
+                data={defaultSortingOptions}
+                initalIndex={selectedSortTabIndex}
                 text='title'
-                onPressButton={(item, index) => setSelectedTabIndex(index)}
+                onPressButton={(item, index) => setSelectedSortTabIndex(index)}
                 inActiveButtonStyle={{ paddingVertical: sizes.marginVertical / 3, paddingHorizontal: sizes.marginHorizontalSmall, backgroundColor: 'transparent', borderWidth: 1.5, borderColor: colors.error }}
                 inActiveTextStyle={{ color: colors.error }}
                 activeButtonStyle={{ backgroundColor: colors.error }}
@@ -86,7 +143,7 @@ function SortFilter(props) {
             <PickerPrimary
                 title="Make"
                 // placeholder="No Selected"
-                data={options}
+                data={manufacturers}
                 value={make}
                 onChange={(value, index) => setMake(value)}
             />
@@ -94,42 +151,73 @@ function SortFilter(props) {
             <PickerPrimary
                 title="Action Type"
                 // placeholder="No Selected"
-                data={options}
+                data={actions}
                 value={actionType}
                 onChange={(value, index) => setActionType(value)}
             />
-            <Spacer height={sizes.baseMargin} />
+            {/* <Spacer height={sizes.baseMargin} />
             <PickerPrimary
                 title="Barrel Length"
                 // placeholder="No Selected"
                 data={options}
                 value={barrelLength}
                 onChange={(value, index) => setBarrelLength(value)}
-            />
+            /> */}
             <Spacer height={sizes.baseMargin} />
             <PickerPrimary
                 title="Caliber / Gauge"
                 // placeholder="No Selected"
-                data={options}
+                data={calibers}
                 value={caliber}
                 onChange={(value, index) => setCalibre(value)}
             />
-            <Spacer height={sizes.baseMargin} />
-            <PickerPrimary
+            <Spacer height={sizes.doubleBaseMargin} />
+            {/* <PickerPrimary
                 title="Price Range"
                 // placeholder="No Selected"
                 data={options}
                 value={priceRange}
                 onChange={(value, index) => setPriceRange(value)}
+            /> */}
+            <ComponentWrapper style={{ marginHorizontal: sizes.marginHorizontalLarge }}>
+                <InputTitle>Price</InputTitle>
+
+                <RowWrapperBasic>
+                    <Wrapper flex={1}>
+                        <TextInputUnderlined
+                            value={'$ ' + priceRange[0].toString()}
+                            editable={false}
+                            containerStyle={{ marginHorizontal: 0 }}
+                        />
+                    </Wrapper>
+                    <Spacer width={sizes.marginHorizontalXLarge} />
+                    <Wrapper flex={1}>
+                        <TextInputUnderlined
+                            value={'$' + priceRange[1].toString()}
+                            editable={false}
+                            containerStyle={{ marginHorizontal: 0 }}
+                        />
+                    </Wrapper>
+                </RowWrapperBasic>
+            </ComponentWrapper>
+            <ComponentWrapper>
+                <MultiSliderPrimary
+                    values={priceRange}
+                    onValuesChange={priceRangeValuesChange}
+                    minimumValue={1}
+                    maximumValue={100000}
+                    sliderLength={width(85)}
+                    valuePrimary={'$' + priceRange[0]}
+                    valueSecondary={'$' + priceRange[1]}
+                />
+            </ComponentWrapper>
+            <Spacer height={sizes.doubleBaseMargin} />
+            <ButtonGradient
+                text="Apply Filters"
+                onPress={handleApplyFilter}
+                loading={loading}
+
             />
-             <Spacer height={sizes.doubleBaseMargin} />
-             <ButtonGradient
-             text="Apply Filters"
-             onPress={()=>{
-                 applyFilter();
-                 goBack()
-             }}
-             />
         </MainWrapper>
     );
 }
