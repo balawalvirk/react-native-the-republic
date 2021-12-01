@@ -10,14 +10,14 @@ import { Spacer } from '../../spacers'
 import styles from './styles'
 
 
-export const Dealers = ({ data, onPress, onPressHeart, ListHeaderComponent, ListFooterComponent, isLoading }) => {
+export const Dealers = ({ data, onPress, onPressHeart, ListHeaderComponent, ListFooterComponent, isLoading,disableNoDataView }) => {
     return (
         <>
             {
                 isLoading ?
                     <>
-                        {ListHeaderComponent}
-                        <UserSkeletons/>
+                        {() => ListHeaderComponent}
+                        <UserSkeletons />
                     </>
                     :
                     data.length ?
@@ -41,7 +41,7 @@ export const Dealers = ({ data, onPress, onPressHeart, ListHeaderComponent, List
                                                 value={HelpingMethods.checkIfDealerFavourite(item.id)}
                                                 onPress={() => {
                                                     Backend.handleAddRemoveFavouriteDealer(item.id)
-                                                    onPressHeart&&onPressHeart(item,index)
+                                                    onPressHeart && onPressHeart(item, index)
                                                 }}
                                             />
                                         }
@@ -50,52 +50,68 @@ export const Dealers = ({ data, onPress, onPressHeart, ListHeaderComponent, List
                             }}
                         />
                         :
-                        <NoDataViewPrimary
-                            title="Dealers"
-                        />
+                        !disableNoDataView ?
+                            <NoDataViewPrimary
+                                title="Dealers"
+                            />
+                            :
+                            null
             }
         </>
 
     )
 }
-export const Groups = ({ data, onPress, handleJoin, ListHeaderComponent, ListFooterComponent, right }) => {
+export const Groups = ({ data, onPress, handleJoin, ListHeaderComponent, ListFooterComponent, right, isLoading,disableNoDataView }) => {
     return (
-        <FlatList
-            data={data}
-            key={'key'}
-            keyExtractor={(item, index) => index.toString()}
-            ListHeaderComponent={ListHeaderComponent}
-            ListFooterComponent={ListFooterComponent}
-            renderItem={({ item, index }) => {
-                const isJoined = index === 2 || index === 5
-                return (
-                    <UserCardPrimary
-                        containerStyle={{ backgroundColor: colors.appBgColor1, borderWidth: 1, borderColor: colors.appBgColor3, marginBottom: sizes.marginVertical / 2 }}
-                        onPress={() => onPress(item, index)}
-                        title={item.name}
-                        imageUri={item.icon}
-                        subTitle={item.users.length + ' ' + 'member' + (item.users.length <= 1 ? '' : 's')}
-                        right={
-                            right ? right(item, index) :
-                                isJoined ?
-                                    <ButtonColoredSmall
-                                        text="Joined"
-                                        onPress={() => handleJoin(item, index)}
-                                        buttonStyle={[styles.joinButton, { backgroundColor: colors.appColor1 + '40' }]}
-                                        textStyle={[appStyles.textRegular, appStyles.textPrimaryColor]}
+        <>
+            {
+                isLoading ?
+                    <>
+                        {() => ListHeaderComponent}
+                        <UserSkeletons />
+                    </>
+                    :
+                    data.length ?
+                        <FlatList
+                            data={data}
+                            key={'key'}
+                            keyExtractor={(item, index) => index.toString()}
+                            ListHeaderComponent={ListHeaderComponent}
+                            ListFooterComponent={ListFooterComponent}
+                            renderItem={({ item, index }) => {
+                                const isJoined = HelpingMethods.checkIfGroupJoined(item.id)
+                                const isJoinRequested = HelpingMethods.checkIfGroupJoinRequested(item.id)
+                                const joinBtnText = HelpingMethods.checkIfGroupJoinRequested(item.id)?'Join Request Sent':HelpingMethods.checkIfGroupJoined()?'Joined':'Join'
+                                return (
+                                    <UserCardPrimary
+                                        containerStyle={{ backgroundColor: colors.appBgColor1, borderWidth: 1, borderColor: colors.appBgColor3, marginBottom: sizes.marginVertical / 2 }}
+                                        onPress={() => onPress(item, index)}
+                                        title={item.name}
+                                        imageUri={item.icon}
+                                        subTitle={item.users ? item.users.length + ' ' + 'member' + (item.users.length <= 1 ? '' : 's') : ''}
+                                        right={
+                                            right ? right(item, index) :
+                                                    <ButtonColoredSmall
+                                                        text={joinBtnText}
+                                                        onPress={() => {}}
+                                                        buttonStyle={[styles.joinButton, { backgroundColor: isJoined?(colors.appColor1 + '40'):isJoinRequested?colors.appBgColor4:colors.appColor1 }]}
+                                                        textStyle={[appStyles.textRegular, isJoinRequested?appStyles.textGray:isJoined?appStyles.textPrimaryColor:{color:colors.appTextColor6}]}
+                                                    />
+                                                   
+                                        }
                                     />
-                                    :
-                                    <ButtonColoredSmall
-                                        text="Join"
-                                        onPress={() => handleJoin(item, index)}
-                                        buttonStyle={[styles.joinButton,]}
-                                        textStyle={[appStyles.textRegular, appStyles.textWhite]}
-                                    />
-                        }
-                    />
-                )
-            }}
-        />
+                                )
+                            }}
+                        />
+                        :
+                        !disableNoDataView ?
+                            <NoDataViewPrimary
+                                title="Groups"
+                            />
+                            :
+                            null
+            }
+        </>
     )
 }
 
@@ -161,9 +177,9 @@ export const FollowRequestsList = ({ data, onPress, loading, ListHeaderComponent
                         :
                         <NoDataViewPrimary
                             title="Follow Request"
-                        showIcon
-                        iconName="deleteusergroup"
-                        iconType="antdesign"
+                            showIcon
+                            iconName="deleteusergroup"
+                            iconType="antdesign"
                         />
             }
         </>

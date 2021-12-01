@@ -10,10 +10,15 @@ const { dispatch } = store
 
 export const getAllTranings = async () => {
     let response = null
+    const state = store.getState()
+    const user_id = state.user.userDetail.id
+    const params = {
+        user_id
+    } 
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios
-            .get(`${baseURL + endPoints.training.show_trainings}`)
+            .get(`${baseURL + endPoints.training.show_trainings}`,params)
             .then(async responseJson => {
                 const tempResponseData = responseJson.data
                 console.log('Response', tempResponseData);

@@ -10,6 +10,7 @@ import { Toasts } from "../../components";
 import Geolocation from 'react-native-geolocation-service';
 import Share from 'react-native-share';
 import messaging from '@react-native-firebase/messaging';
+import { height } from "react-native-dimension";
 const { dispatch } = store
 
 export const handleAnimation = () => {
@@ -455,4 +456,10 @@ export const checkPushNotificationPermission = async () => {
             }
         });
     return hasPermission
+}
+
+export const isEndReached = ({ layoutMeasurement, contentOffset, contentSize }) => {
+    const paddingToBottom = height(5);
+    return layoutMeasurement.height + contentOffset.y >=
+        contentSize.height - paddingToBottom;
 }

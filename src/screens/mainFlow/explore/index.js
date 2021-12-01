@@ -2,7 +2,7 @@ import React, { Component, useEffect, useRef, useState } from 'react';
 import { View, Text } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
 import { MainWrapper, Products, RowWrapper, Wrapper, ButtonGroupAnimated, CustomIcon, AbsoluteWrapper, ButtonColoredSmall, Spacer, ProductCardPrimary, TitleInfoPrimary, ButtonGradient, ArmerInfo, Toasts, MediumText, FilterButton, SkeletonPrimary, TinyTitle } from '../../../components';
-import { appIcons, appImages, appStyles, Backend, colors, DummyData, HelpingMethods, mapStyles, routes, sizes } from '../../../services';
+import { appIcons, appImages, appStyles, Backend, colors, DummyData, HelpingMethods, mapStyles, routes, sizes, sortingOptions } from '../../../services';
 import MapView, { Marker } from "react-native-maps";
 //import MapView from "react-native-map-clustering";
 import BottomSheet from 'reanimated-bottom-sheet';
@@ -58,6 +58,7 @@ function Explore({ navigation, route }) {
     //local states
     const [myLocation, setMyLocation] = useState(null)
     const [allProducts, setAllProducts] = useState([])
+    const [sortBy, setSortBy] = useState(sortingOptions.topRated)
     const [filteredProducts, setFilteredProducts] = useState(null)
     const [currentPage, setCurrentPage] = useState(1)
     const [filteredProductsCurrentPage, setFilteredProductsCurrentPage] = useState(1)
@@ -110,7 +111,7 @@ function Explore({ navigation, route }) {
         }
     }
     const getSetAllProducts = async () => {
-        await Backend.getAllProducts(currentPage).
+        await Backend.getAllProducts({sort_by:sortBy,page:currentPage}).
             then(res => {
                 if (res) {
                     setAllProducts([...allProducts, ...res.data.data])

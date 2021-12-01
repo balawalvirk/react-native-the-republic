@@ -180,12 +180,14 @@ export const getProductDetail = async (product_id) => {
     }
     return response
 };
-export const getAllProducts = async (page) => {
+export const getAllProducts = async ({ sort_by, page }) => {
     let response = null
     const defaultPage = page ? page : 1
-    // const state = store.getState()
-    // const { id } = state.user.userDetail
+    const state = store.getState()
+    const user_id= state.user.userDetail.id
     const params = {
+        user_id,
+        sort_by
     }
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
@@ -834,14 +836,14 @@ export const handleAddRemoveFavouriteProduct = async (product_id) => {
 
 
 
-export const filterProducts = async ({ sortBy, make, action, caliber, minPrice, maxPrice, barel_length,page }) => {
+export const filterProducts = async ({ sortBy, make, action, caliber, minPrice, maxPrice, barel_length, page }) => {
     let response = null
-    const defaultPage=page?page:1
+    const defaultPage = page ? page : 1
     // const state = store.getState()
     // const { userDetail } = state.user
     // const user_id = userDetail.id
     let params = new FormData()
-    sortBy && params.append('sortBy', sortBy)
+    sortBy && params.append('sort_by', sortBy)
     make && params.append('make[]', make)
     action && params.append('action[]', action)
     caliber && params.append('caliber[]', caliber)

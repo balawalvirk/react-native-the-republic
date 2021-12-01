@@ -30,7 +30,8 @@ export default function AnimatedGroupButton({
   iconSize,
   activeButtonContent,
   activeButtonForceStyle,
-  initalIndex
+  initalIndex,
+  disableAutoSwipe
 }) {
 
   const scrollViewRef = React.useRef();
@@ -62,7 +63,7 @@ export default function AnimatedGroupButton({
     handleTabSlide(item.x, item.tabHeight, item.tabWidth)
   }
 
-  if (selectedTabIndex != initalIndex && data[initalIndex].x>=0) {
+  if (!disableAutoSwipe&&selectedTabIndex != initalIndex && data[initalIndex].x>=0) {
     handleOnPress(data[initalIndex], initalIndex)
   }
 
@@ -104,8 +105,10 @@ export default function AnimatedGroupButton({
                   inActiveButtonStyle,
                 ]}
                 onPress={async () => {
-                  onPressButton && onPressButton(item, key,)
                   handleOnPress(item, key);
+                  onPressButton && setTimeout(() => {
+                    onPressButton(item, key,)
+                  }, disableAutoSwipe?250:0);
                 }
 
                 }>

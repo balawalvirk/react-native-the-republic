@@ -42,6 +42,7 @@ function MyLocation(props) {
     }, [])
 
     const getSetData = () => {
+        const {distance,address}=userDetail
         const tempMyLocation = HelpingMethods.getMyLocation()
         console.log('tempMyLocation -->', tempMyLocation)
         if (tempMyLocation) {

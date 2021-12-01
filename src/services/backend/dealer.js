@@ -11,8 +11,13 @@ const { dispatch } = store
 
 export const getDealers = async () => {
     let response = null
+    const state = store.getState()
+    const user_id = state.user.userDetail.id
+    const params = {
+        user_id
+    } 
     await axios
-        .get(`${baseURL + endPoints.dealer.get_dealers}`)
+        .get(`${baseURL + endPoints.dealer.get_dealers}`,params)
         .then(async responseJson => {
             const tempResponseData = responseJson.data
             console.log('getDealers Response', tempResponseData);

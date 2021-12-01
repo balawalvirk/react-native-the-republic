@@ -1,34 +1,55 @@
-import React, { Component, useRef, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { Component, useEffect, useRef, useState } from 'react';
 import { ScrollView, Animated } from 'react-native';
-import { height } from 'react-native-dimension';
-import { AbsoluteWrapper, ButtonColored, ButtonColoredSmall, ButtonGroupAnimated, ComponentWrapper, Dealers, Groups, MainWrapper, Products, SearchTextinput, Spacer, TitleInfoPrimary, ViewAllListButton, Wrapper } from '../../../components';
-import { appStyles, colors, DummyData, routes, sizes } from '../../../services';
+import { height, totalSize } from 'react-native-dimension';
+import { MaterialIndicator } from 'react-native-indicators';
+import { AbsoluteWrapper, ButtonColored, ButtonColoredSmall, ButtonGroupAnimated, ComponentWrapper, Dealers, Groups, MainWrapper, Products, SearchTextinput, Spacer, TitleInfoPrimary, UserSkeletons, ViewAllListButton, Wrapper } from '../../../components';
+import { appStyles, asyncConts, Backend, colors, DummyData, HelpingMethods, routes, searchTypes, sizes } from '../../../services';
 import RecentSearches from './recentSearches';
-const recentSearches = ['Mark Field', 'Mark Plus Vision', 'Taurus Raging Hunter 357', 'Jimmy Doe']
+const dummyRecentSearches = ['Mark Field', 'Mark Plus Vision', 'Taurus Raging Hunter 357', 'Jimmy Doe']
 const topTabs = [
     {
-        title: 'All'
+        title: 'All',
+        value: searchTypes.all
     },
     {
-        title: 'Dealers'
+        title: 'Dealers',
+        value: searchTypes.dealer
     },
     {
-        title: 'Groups'
+        title: 'Groups',
+        value: searchTypes.group
     },
     {
-        title: 'Products'
+        title: 'Products',
+        value: searchTypes.product
     }
 ]
-const productResults = [...DummyData.products, ...DummyData.products]
-const dealerResults = [...DummyData.users, ...DummyData.users]
-const groupResults = [...DummyData.groups, ...DummyData.groups]
+// const productResults = [...DummyData.products, ...DummyData.products]
+// const dealerResults = [...DummyData.users, ...DummyData.users]
+// const groupResults = [...DummyData.groups, ...DummyData.groups]
 
 function Search(props) {
     const { navigation } = props
     const { navigate } = navigation
-    const [searchQuery, setSearchQuery] = useState('')
-    const [selectedTabIndex, setSelectedTabIndex] = useState(0)
 
+    //local states
+    const [searchQuery, setSearchQuery] = useState('')
+    const [recentSearches, setrecentSearches] = useState([])
+    const [productResults, setproductResults] = useState(null)
+    const [dealerResults, setdealerResults] = useState(null)
+    const [groupResults, setgroupResults] = useState(null)
+    const [selectedTabIndex, setSelectedTabIndex] = useState(0)
+    const [loadingSearch, setLoadingSearch] = useState(false)
+    const [loadingmore, setLoadingMore] = useState(false)
+    const [currentPage, setCurrentPage] = useState(2)
+    const [allItemsLoaded, setAllItemLoaded] = useState(false)
+
+
+    const isSearchingAll = topTabs[selectedTabIndex].value === searchTypes.all
+    const isSearchingProducts = topTabs[selectedTabIndex].value === searchTypes.product
+    const isSearchingDealer = topTabs[selectedTabIndex].value === searchTypes.dealer
+    const isSearchingGroups = topTabs[selectedTabIndex].value === searchTypes.group
     //top tab buttons
     const mainScrollRef = useRef(null)
     let scroll_y = new Animated.Value(0)
@@ -48,6 +69,105 @@ function Search(props) {
         outputRange: [0, -50],
         extrapolate: 'clamp'
     })
+
+    useEffect(() => {
+        getSetRecentSearches()
+    }, [])
+
+    const getSetRecentSearches = async () => {
+        const tempRecentSearches = await AsyncStorage.getItem(asyncConts.recentSearches)
+        console.log('tempRecentSearches ==> ', tempRecentSearches)
+        if (tempRecentSearches) {
+            const tempRecentSearchesParsed = JSON.parse(tempRecentSearches)
+            setrecentSearches(tempRecentSearchesParsed)
+        }
+    }
+    const addNewRecentSearch = (newSearchQuery) => {
+        const isAlreadySearched = recentSearches.find(item => item.toLowerCase() === newSearchQuery.toLowerCase())
+        if (!isAlreadySearched) {
+            const tempNewRecentSearches = [...recentSearches, newSearchQuery]
+            setrecentSearches(tempNewRecentSearches)
+            AsyncStorage.setItem(asyncConts.recentSearches, JSON.stringify(tempNewRecentSearches))
+        }
+    }
+    const removeRecentSearch = (recentSearchQuery, index) => {
+        const tempNewRecentSearches = recentSearches.filter(item => item != recentSearchQuery)
+        setrecentSearches(tempNewRecentSearches)
+        AsyncStorage.setItem(asyncConts.recentSearches, JSON.stringify(tempNewRecentSearches))
+    }
+
+    const handleSearchContent = async (search_query, selected_type) => {
+        const query = search_query ? search_query : searchQuery
+        const searchingAll = selected_type ? selected_type === 'all' : isSearchingAll
+        const searchingDealers = selected_type ? selected_type === 'dealer' : isSearchingDealer
+        const searchingGroups = selected_type ? selected_type === 'group' : isSearchingGroups
+        const searchingProducts = selected_type ? selected_type === 'product' : isSearchingProducts
+        const selectedType = selected_type ? selected_type != 'all' ? selected_type : '' :
+            !searchingAll ? topTabs[selectedTabIndex].value : ''
+        console.log('searchingAll -->', searchingAll)
+        if (query) {
+            currentPage > 2 && setCurrentPage(2)
+            allItemsLoaded && setAllItemLoaded(false)
+            loadingmore && setLoadingMore(false)
+            addNewRecentSearch(query)
+            setLoadingSearch(true)
+            await Backend.searchAll({ query, type: selectedType }).
+                then(res => {
+                    if (res) {
+                        if (searchingAll) {
+                            const { dealers, groups, products } = res.data
+                            setdealerResults(dealers.data)
+                            setgroupResults(groups.data)
+                            setproductResults(products.data)
+                        } else {
+                            if (searchingDealers) {
+                                setdealerResults(res.data.data)
+                            } else if (searchingGroups) {
+                                setgroupResults(res.data.data)
+                            } else if (searchingProducts) {
+                                setproductResults(res.data.data)
+                            }
+                            !res.data.next_page_url && setAllItemLoaded(true)
+                            //setCurrentPage(currentPage+1)
+                        }
+                    }
+                })
+            setLoadingSearch(false)
+        }
+    }
+    const handleLoadingMore = async (nativeEvent) => {
+        //console.log('nativeEvent --> ', nativeEvent)
+        const query = searchQuery
+        if (query && !isSearchingAll && HelpingMethods.isEndReached(nativeEvent) && !allItemsLoaded && !loadingmore && !loadingSearch) {
+            setLoadingMore(true)
+            const selectedType = !isSearchingAll ? topTabs[selectedTabIndex].value : ''
+            await Backend.searchAll({ query, type: selectedType, page: currentPage }).
+                then(res => {
+                    if (res) {
+                        const oldDealerResults = dealerResults ? dealerResults : []
+                        const oldGroupResults = groupResults ? groupResults : []
+                        const oldProductResults = productResults ? productResults : []
+                        if (isSearchingAll) {
+                            const { dealers, groups, products } = res.data
+                            setdealerResults([...oldDealerResults, ...dealers.data])
+                            setgroupResults([...oldGroupResults, ...groups.data])
+                            setproductResults([...oldProductResults, ...products.data])
+                        } else {
+                            if (isSearchingDealer) {
+                                setdealerResults([...oldDealerResults, ...res.data.data])
+                            } else if (isSearchingGroups) {
+                                setgroupResults([...oldGroupResults, ...res.data.data])
+                            } else if (isSearchingProducts) {
+                                setproductResults([...oldProductResults, ...res.data.data])
+                            }
+                            !res.data.next_page_url && setAllItemLoaded(true)
+                            setCurrentPage(currentPage+1)
+                        }
+                    }
+                })
+            setLoadingMore(false)
+        }
+    }
     return (
         <MainWrapper>
             <Spacer height={sizes.smallMargin} />
@@ -55,26 +175,45 @@ function Search(props) {
                 value={searchQuery}
                 onChangeText={text => setSearchQuery(text)}
                 placeholder="Search by make, model, dealer"
+                onPressCross={() => {
+                    setSearchQuery('')
+                    setdealerResults(null)
+                    setgroupResults(null)
+                    setproductResults(null)
+                    currentPage > 1 && setCurrentPage(1)
+                    allItemsLoaded && setAllItemLoaded(false)
+                    loadingmore && setLoadingMore(false)
+                    selectedTabIndex > 0 && setSelectedTabIndex(0)
+                }}
+                returnKeyLabel="Search"
+                returnKeyType="google"
+                onSubmitEditing={() => handleSearchContent()}
+                autoFocus
+                right={
+                    loadingSearch ?
+                        <ComponentWrapper>
+                            <MaterialIndicator size={totalSize(2)} color={colors.appTextColor4} />
+                        </ComponentWrapper>
+                        :
+                        null
+                }
             />
             <Spacer height={sizes.smallMargin} />
             {
-                !searchQuery ?
-                    <RecentSearches
-                        data={recentSearches}
-                        onPressItem={(item, index) => { }}
-                        onPressCross={(item, index) => { }}
-                    />
+                !dealerResults && !groupResults && !productResults && !loadingSearch ?
+                    recentSearches ?
+                        <RecentSearches
+                            data={recentSearches}
+                            onPressItem={(item, index) => {
+                                setSearchQuery(item)
+                                handleSearchContent(item)
+                            }}
+                            onPressCross={removeRecentSearch}
+                        />
+                        :
+                        null
                     :
                     <Wrapper flex={1}>
-                        {/* {
-                            selectedTabIndex != 0 ? 
-                            <TitleInfoPrimary
-                                title={'72 results found'}
-                            />
-                                :
-                                null
-                        } */}
-
                         <Animated.ScrollView
                             ref={mainScrollRef}
                             onScroll={Animated.event([
@@ -83,6 +222,7 @@ function Search(props) {
                                 {
                                     listener: event => {
                                         //console.log('Scroll Event: ', event.nativeEvent)
+                                        handleLoadingMore(event.nativeEvent)
                                     },
                                 }
                             )}
@@ -91,12 +231,12 @@ function Search(props) {
                         >
                             <Spacer height={DATE_HEADER_MAX_HEIGHT} />
                             {
-                                selectedTabIndex === 0 ?
+                                isSearchingAll ?
                                     <Wrapper flex={1}>
                                         <Wrapper>
                                             <Dealers
-                                                data={dealerResults.slice(0, 3)}
-                                                onPress={(item, index) => navigate(routes.userProfile, { item: item })}
+                                                data={dealerResults ? dealerResults.length > 3 ? dealerResults.slice(0, 3) : dealerResults : []}
+                                                onPress={(item, index) => navigate(routes.userProfile, { user: item })}
                                                 onPressHeart={(item, index) => { }}
                                                 ListHeaderComponent={() => {
                                                     return <TitleInfoPrimary
@@ -104,13 +244,15 @@ function Search(props) {
                                                     />
                                                 }}
                                                 ListFooterComponent={() => {
-                                                    return <ViewAllListButton onPress={() => setSelectedTabIndex(1)} />
+                                                    return <ViewAllListButton onPress={() => { setSelectedTabIndex(1), handleSearchContent() }} />
                                                 }}
+                                                isLoading={loadingSearch}
+                                                disableNoDataView
                                             />
                                         </Wrapper>
                                         <Wrapper>
                                             <Groups
-                                                data={groupResults.slice(0, 3)}
+                                                data={groupResults ? groupResults.length > 3 ? groupResults.slice(0, 3) : groupResults : []}
                                                 onPress={(item, index) => navigate(routes.groupDetail, { item: item })}
                                                 handleJoin={(item, index) => { }}
                                                 ListHeaderComponent={() => {
@@ -119,13 +261,15 @@ function Search(props) {
                                                     />
                                                 }}
                                                 ListFooterComponent={() => {
-                                                    return <ViewAllListButton onPress={() => setSelectedTabIndex(2)} />
+                                                    return <ViewAllListButton onPress={() => { setSelectedTabIndex(2), handleSearchContent() }} />
                                                 }}
+                                                isLoading={loadingSearch}
+                                                disableNoDataView
                                             />
                                         </Wrapper>
                                         <Wrapper>
                                             <Products
-                                                data={productResults.slice(0, 3)}
+                                                data={productResults ? productResults.length > 3 ? productResults.slice(0, 3) : productResults : []}
                                                 onPressProduct={(item, index) => navigate(routes.productDetail, { product: item })}
                                                 viewType={'list'}
                                                 ListHeaderComponent={() => {
@@ -134,66 +278,111 @@ function Search(props) {
                                                     />
                                                 }}
                                                 ListFooterComponent={() => {
-                                                    return <ViewAllListButton onPress={() => setSelectedTabIndex(3)} />
+                                                    return <ViewAllListButton onPress={() => { setSelectedTabIndex(3), handleSearchContent() }} />
                                                 }}
+                                                isLoading={loadingSearch}
+                                                disableNoDataView
+                                                scrollEnabled={false}
                                             />
                                         </Wrapper>
                                         <Spacer height={sizes.doubleBaseMargin} />
 
                                     </Wrapper>
                                     :
-                                    selectedTabIndex === 1 ?
+                                    isSearchingDealer ?
                                         <Wrapper flex={1}>
-                                            <TitleInfoPrimary
-                                                title={dealerResults.length + ' results found'}
-                                            />
+                                            {
+                                                !loadingSearch ?
+                                                    <TitleInfoPrimary
+                                                        title={dealerResults.length + ' results found'}
+                                                    />
+                                                    :
+                                                    null
+                                            }
                                             <Dealers
                                                 data={dealerResults}
-                                                onPress={(item, index) => navigate(routes.userProfile, { item: item })}
+                                                onPress={(item, index) => navigate(routes.userProfile, { user: item })}
                                                 viewType={'list'}
                                                 ListHeaderComponent={() => {
                                                     return <Spacer height={sizes.smallMargin} />
                                                 }}
                                                 ListFooterComponent={() => {
-                                                    return <Spacer height={sizes.baseMargin} />
+                                                    return <>
+                                                        {
+                                                            loadingmore ?
+                                                              <>
+                                                                <UserSkeletons />
+                                                                <Spacer height={sizes.baseMargin} />
+                                                              </>
+                                                                :
+                                                                <Spacer height={sizes.baseMargin} />
+                                                        }
+                                                    </>
                                                 }}
+                                                isLoading={loadingSearch}
+                                               // isLoadingMore={loadingmore}
                                             />
                                         </Wrapper>
                                         :
-                                        selectedTabIndex === 2 ?
+                                        isSearchingGroups ?
                                             <Wrapper flex={1}>
-                                                <TitleInfoPrimary
-                                                    title={groupResults.length + ' results found'}
-                                                />
+                                                {
+                                                    !loadingSearch ?
+                                                        <TitleInfoPrimary
+                                                            title={groupResults.length + ' results found'}
+                                                        />
+                                                        :
+                                                        null
+                                                }
                                                 <Groups
                                                     data={groupResults}
-                                                    onPress={(item, index) => navigate(routes.groupDetail, { item: item })}
+                                                    onPress={(item, index) => navigate(routes.groupDetail, { group: item })}
                                                     handleJoin={(item, index) => { }}
                                                     ListHeaderComponent={() => {
                                                         return <Spacer height={sizes.smallMargin} />
                                                     }}
                                                     ListFooterComponent={() => {
-                                                        return <Spacer height={sizes.baseMargin} />
+                                                        return <>
+                                                            {
+                                                                loadingmore ?
+                                                                  <>
+                                                                    <UserSkeletons />
+                                                                    <Spacer height={sizes.baseMargin} />
+                                                                  </>
+                                                                    :
+                                                                    <Spacer height={sizes.baseMargin} />
+                                                            }
+                                                        </>
                                                     }}
+                                                    isLoading={loadingSearch}
                                                 />
                                             </Wrapper>
                                             :
-                                            selectedTabIndex === 3 ?
+                                            isSearchingProducts ?
                                                 <Wrapper flex={1}>
-                                                    <TitleInfoPrimary
-                                                        title={productResults.length + ' results found'}
-                                                    />
-                                                    <Products
-                                                        data={productResults}
-                                                        onPressProduct={(item, index) => navigate(routes.productDetail, { product: item })}
-                                                        viewType={'list'}
-                                                        ListHeaderComponent={() => {
-                                                            return <Spacer height={sizes.smallMargin} />
-                                                        }}
-                                                        ListFooterComponent={() => {
-                                                            return <Spacer height={sizes.baseMargin} />
-                                                        }}
-                                                    />
+                                                    {
+                                                        !loadingSearch ?
+                                                            <TitleInfoPrimary
+                                                                title={productResults.length + ' results found'}
+                                                            />
+                                                            :
+                                                            null
+                                                    }
+                                                    <Wrapper flex={1}>
+                                                        <Products
+                                                            data={productResults}
+                                                            onPressProduct={(item, index) => navigate(routes.productDetail, { product: item })}
+                                                            viewType={'list'}
+                                                            ListHeaderComponent={() => {
+                                                                return <Spacer height={sizes.smallMargin} />
+                                                            }}
+                                                            // ListFooterComponent={() => {
+                                                            //     return <Spacer height={sizes.baseMargin} />
+                                                            // }}
+                                                            isLoading={loadingSearch}
+                                                            isLoadingMore={loadingmore}
+                                                        />
+                                                    </Wrapper>
                                                 </Wrapper>
                                                 :
                                                 null
@@ -213,7 +402,14 @@ function Search(props) {
                                     data={topTabs}
                                     initalIndex={selectedTabIndex}
                                     text='title'
-                                    onPressButton={(item, index) => setSelectedTabIndex(index)}
+                                    onPressButton={(item, index) => {
+                                        setSelectedTabIndex(index)
+                                        // currentPage > 1 && setCurrentPage(1)
+                                        // allItemsLoaded && setAllItemLoaded(false)
+                                        // loadingmore && setLoadingMore(false)
+                                        handleSearchContent('', item.value)
+                                    }}
+                                // disableAutoSwipe
                                 />
                                 <Spacer height={sizes.smallMargin} />
                             </Animated.View>

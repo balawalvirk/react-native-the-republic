@@ -10,7 +10,7 @@ import { SkeletonPrimary, SkeletonProductsGrid, Spacer, NoDataViewPrimary } from
 export function Products({
     data, viewType, ListHeaderComponent, ListFooterComponent,
     onPressProduct, isLoading, isLoadingMore, onEndReached,
-    onPressHeart
+    onPressHeart,disableNoDataView,scrollEnabled
 }) {
     const isGridView = viewType === 'grid'
     const isListView = viewType === 'list'
@@ -28,7 +28,7 @@ export function Products({
 
 
                                 <>
-                                    {ListHeaderComponent()}
+                                    {()=>ListHeaderComponent}
                                     {
                                         isGridView ?
                                             <SkeletonProductsGrid />
@@ -51,6 +51,7 @@ export function Products({
                     data.length ?
                         <FlatList
                             data={data}
+                            scrollEnabled={scrollEnabled}
                             showsVerticalScrollIndicator={false}
                             key={viewType}
                             numColumns={isGridView && 2}
@@ -122,9 +123,12 @@ export function Products({
 
                         />
                         :
+                        !disableNoDataView?
                         <NoDataViewPrimary
                             title="Products"
                         />
+                        :
+                        null
             }
         </>
     )

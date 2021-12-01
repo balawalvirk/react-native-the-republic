@@ -204,6 +204,10 @@ export const endPoints = {
         clear_single_news: 'clear-single-news',
         clear_all_news: 'clear-all-news',
     },
+    search: {
+        recent_searches: 'recent-searches',
+        search_all: 'search',
+    },
     contact_us: 'contact-us',
     add_card: 'add-card',
     submit_app_feedback: 'submit-app-feedback'
@@ -306,7 +310,8 @@ export const asyncConts = {
     product_calibers: 'PRODUCT_CALIBERS',
     product_actions: 'PRODUCT_ACTIONS',
     product_conditions: 'PRODUCT_CONDITIONS',
-    fcmToken: 'FCM_TOKEN'
+    fcmToken: 'FCM_TOKEN',
+    recentSearches:'RECENT_SEARCHES'
 }
 export const orderStatuses = {
     pending: 'pending',
@@ -344,11 +349,17 @@ export const groupPostPrivacies = {
     onlyAdmin: 'onlyAdmin',
 }
 export const sortingOptions = {
-    topRated: 'topRated',
-    title_a_z: 'title-a-z',
-    title_z_a: 'title-z-a',
-    price_low_to_high: 'price-low-to-high',
-    price_high_to_low: 'price-high-to-low',
+    topRated: 'top_rated',
+    title_a_z: 'a_to_z',
+    title_z_a: 'z_to_a',
+    price_low_to_high: 'lo_to_hi',
+    price_high_to_low: 'hi_to_lo',
+}
+export const searchTypes = {
+    all: 'all',
+    dealer: 'dealer',
+    product: 'product',
+    group: 'group',
 }
 export const headers = {
     screenOptionsPrimary: {
