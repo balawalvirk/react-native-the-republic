@@ -33,6 +33,14 @@ export const endPoints = {
         change_password: 'change-password',
         save_fcm_token: 'save-fcm-token'
     },
+    sociaAuth: {
+        register_google: 'register-google',
+        login_google: 'login-google',
+        register_instagram: 'register-instagram',
+        login_instagram: 'login-instagram',
+        register_apple: 'register-apple',
+        login_apple: 'login-apple',
+    },
     creditCard: {
         add_card: 'add-card',
         show_cards: 'show-cards'
@@ -300,8 +308,11 @@ export const routes = {
 
 
 }
-export const asyncConts = {
+export const asyncConsts = {
     user_credentials: 'USER_CREDENTIALS',
+    google_token: 'GOOGLE_TOKEN',
+    instagram_token: 'INSTAGRAM_TOKEN',
+    apple_token: 'APPLE_TOKEN',
     user_details: 'USER_DETAILS',
     fcm_token: "FCM_TOKEN",
     product_categories: 'PRODUCT_CATEGORIES',
@@ -311,7 +322,7 @@ export const asyncConts = {
     product_actions: 'PRODUCT_ACTIONS',
     product_conditions: 'PRODUCT_CONDITIONS',
     fcmToken: 'FCM_TOKEN',
-    recentSearches:'RECENT_SEARCHES'
+    recentSearches: 'RECENT_SEARCHES'
 }
 export const orderStatuses = {
     pending: 'pending',

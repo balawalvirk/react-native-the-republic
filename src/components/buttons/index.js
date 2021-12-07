@@ -6,7 +6,7 @@ import { colors, appStyles, fontSize, sizes } from '../../services';
 import { ButtonTextRegular, ButtonTextMedium } from '../text';
 import { color } from 'react-native-reanimated';
 import { CustomIcon } from '../icons';
-import { Wrapper, RowWrapperBasic, RowWrapper, ComponentWrapper ,AbsoluteWrapper} from '../wrappers';
+import { Wrapper, RowWrapperBasic, RowWrapper, ComponentWrapper, AbsoluteWrapper } from '../wrappers';
 import LinearGradient from 'react-native-linear-gradient';
 import { MaterialIndicator } from 'react-native-indicators';
 import ButtonGroupAnimated from './animatedButtonGroup'
@@ -14,35 +14,36 @@ import ButtonGroupAnimated from './animatedButtonGroup'
 export const ButtonColored = ({
     text, isLoading, activityColor, animation, onPress, disabled, buttonStyle,
     customIcon, textStyle, iconName, iconType, iconSize, buttonColor, iconStyle,
-    tintColor, direction
+    tintColor, direction, left
 }) => {
     return (
         <TouchableOpacity onPress={onPress} disabled={isLoading ? true : disabled}>
             <Wrapper animation={animation} style={[appStyles.buttonColord, { borderRadius: sizes.buttonRadius, height: height(6), backgroundColor: disabled ? colors.appColor1 + '80' : buttonColor ? buttonColor : colors.appColor1, marginHorizontal: sizes.marginHorizontalXLarge }, buttonStyle]}>
                 <View style={{ flexDirection: direction ? direction : 'row', alignItems: 'center' }}>
                     {
-                        customIcon ?
-                            <CustomIcon
-                                icon={customIcon}
-                                size={iconSize ? iconSize : totalSize(3)}
-                                color={tintColor && tintColor}
-                                containerStyle={iconStyle}
-                            />
-                            :
-                            iconName ?
-                                <Icon
-                                    name={iconName ? iconName : "email-outline"}
-                                    type={iconType ? iconType : "material-community"}
+                        left ? left :
+                            customIcon ?
+                                <CustomIcon
+                                    icon={customIcon}
                                     size={iconSize ? iconSize : totalSize(3)}
-                                    color={tintColor ? tintColor : colors.appTextColor6}
-                                //iconStyle={[{ marginRight: width(2.5) }, iconStyle]}
+                                    color={tintColor && tintColor}
+                                    containerStyle={iconStyle}
                                 />
                                 :
-                                null
+                                iconName ?
+                                    <Icon
+                                        name={iconName ? iconName : "email-outline"}
+                                        type={iconType ? iconType : "material-community"}
+                                        size={iconSize ? iconSize : totalSize(3)}
+                                        color={tintColor ? tintColor : colors.appTextColor6}
+                                        iconStyle={[iconStyle]}
+                                    />
+                                    :
+                                    null
                     }
                     {
                         isLoading ?
-                            <MaterialIndicator size={totalSize(2.5)} color={tintColor?tintColor:'#FFFFFF'} />
+                            <MaterialIndicator size={totalSize(2.5)} color={tintColor ? tintColor : '#FFFFFF'} />
                             :
                             <ButtonTextMedium style={[{ color: tintColor ? tintColor : colors.appTextColor6, }, textStyle]}>{text}</ButtonTextMedium>
                     }
@@ -52,7 +53,7 @@ export const ButtonColored = ({
     );
 }
 
-export const ButtonColoredSmall = ({ text, onPress, disabled, buttonStyle, customIcon, direction, textStyle, iconName, iconType, iconSize, iconColor, iconStyle,isLoading,tintColor }) => {
+export const ButtonColoredSmall = ({ text, onPress, disabled, buttonStyle, customIcon, direction, textStyle, iconName, iconType, iconSize, iconColor, iconStyle, isLoading, tintColor }) => {
     return (
         <TouchableOpacity disabled={disabled} onPress={onPress} style={[{ borderRadius: 15, paddingHorizontal: width(5), paddingVertical: height(1), backgroundColor: colors.appColor1 }, buttonStyle]}>
             <View style={{ flexDirection: direction ? direction : 'row', alignItems: 'center' }}>
@@ -75,11 +76,11 @@ export const ButtonColoredSmall = ({ text, onPress, disabled, buttonStyle, custo
                             :
                             null
                 }
-                 <Wrapper>
-                    <ButtonTextRegular style={[{ color: tintColor ? tintColor : colors.appTextColor6,opacity:isLoading?0:1 }, textStyle]}>  {text}  </ButtonTextRegular>
+                <Wrapper>
+                    <ButtonTextRegular style={[{ color: tintColor ? tintColor : colors.appTextColor6, opacity: isLoading ? 0 : 1 }, textStyle]}>  {text}  </ButtonTextRegular>
                     {
                         isLoading ?
-                            <AbsoluteWrapper style={{ right:0,bottom:0,left:0,top:0,...appStyles.center }}>
+                            <AbsoluteWrapper style={{ right: 0, bottom: 0, left: 0, top: 0, ...appStyles.center }}>
                                 <MaterialIndicator
                                     color={tintColor ? tintColor : colors.appTextColor6}
                                     size={totalSize(1.5)}
@@ -197,16 +198,27 @@ export function ButtonGradient({ text, animation, onPress, buttonStyle, textStyl
     );
 }
 
-export const ButtonSocial = ({ text, onPress, logo }) => {
+export const ButtonSocial = ({ text, onPress, logo, iconName, iconType, iconColor, isLoading }) => {
     return (
         <ButtonColored
             text={text ? text : 'Social Button'}
             buttonColor={colors.appBgColor3}
+            iconName={iconName}
+            iconType={iconType}
+            tintColor={iconColor}
             customIcon={logo}
             onPress={() => { }}
             textStyle={[appStyles.ButtonTextMedium]}
             iconStyle={{ marginRight: sizes.marginHorizontalSmall }}
             onPress={onPress}
+            left={
+                isLoading ?
+                   <Wrapper style={{ marginRight: sizes.marginHorizontalSmall }}>
+                        <MaterialIndicator size={totalSize(2.5)} color={iconColor ? iconColor : colors.appTextColor1} />
+                   </Wrapper>
+                    :
+                    null
+            }
         />
     )
 }

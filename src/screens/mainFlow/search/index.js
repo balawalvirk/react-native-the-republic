@@ -4,7 +4,7 @@ import { ScrollView, Animated } from 'react-native';
 import { height, totalSize } from 'react-native-dimension';
 import { MaterialIndicator } from 'react-native-indicators';
 import { AbsoluteWrapper, ButtonColored, ButtonColoredSmall, ButtonGroupAnimated, ComponentWrapper, Dealers, Groups, MainWrapper, Products, SearchTextinput, Spacer, TitleInfoPrimary, UserSkeletons, ViewAllListButton, Wrapper } from '../../../components';
-import { appStyles, asyncConts, Backend, colors, DummyData, HelpingMethods, routes, searchTypes, sizes } from '../../../services';
+import { appStyles, asyncConsts, Backend, colors, DummyData, HelpingMethods, routes, searchTypes, sizes } from '../../../services';
 import RecentSearches from './recentSearches';
 const dummyRecentSearches = ['Mark Field', 'Mark Plus Vision', 'Taurus Raging Hunter 357', 'Jimmy Doe']
 const topTabs = [
@@ -75,7 +75,7 @@ function Search(props) {
     }, [])
 
     const getSetRecentSearches = async () => {
-        const tempRecentSearches = await AsyncStorage.getItem(asyncConts.recentSearches)
+        const tempRecentSearches = await AsyncStorage.getItem(asyncConsts.recentSearches)
         console.log('tempRecentSearches ==> ', tempRecentSearches)
         if (tempRecentSearches) {
             const tempRecentSearchesParsed = JSON.parse(tempRecentSearches)
@@ -87,13 +87,13 @@ function Search(props) {
         if (!isAlreadySearched) {
             const tempNewRecentSearches = [...recentSearches, newSearchQuery]
             setrecentSearches(tempNewRecentSearches)
-            AsyncStorage.setItem(asyncConts.recentSearches, JSON.stringify(tempNewRecentSearches))
+            AsyncStorage.setItem(asyncConsts.recentSearches, JSON.stringify(tempNewRecentSearches))
         }
     }
     const removeRecentSearch = (recentSearchQuery, index) => {
         const tempNewRecentSearches = recentSearches.filter(item => item != recentSearchQuery)
         setrecentSearches(tempNewRecentSearches)
-        AsyncStorage.setItem(asyncConts.recentSearches, JSON.stringify(tempNewRecentSearches))
+        AsyncStorage.setItem(asyncConsts.recentSearches, JSON.stringify(tempNewRecentSearches))
     }
 
     const handleSearchContent = async (search_query, selected_type) => {

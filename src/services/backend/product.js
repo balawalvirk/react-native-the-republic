@@ -1,5 +1,5 @@
 import axios from "axios"
-import { endPoints, routes, baseURL, asyncConts } from "../constants"
+import { endPoints, routes, baseURL, asyncConsts } from "../constants"
 import { Toasts } from "../../components";
 import store from "../store";
 import * as Backend from './index'
@@ -401,7 +401,7 @@ export const get_product_items = async () => {
                     let tempData = HelpingMethods.getPickerData(tempResponseData.data)
                     dispatch(setProductItems(tempData))
                     //Saving in local storage
-                    AsyncStorage.setItem(asyncConts.product_items, JSON.stringify(tempData))
+                    AsyncStorage.setItem(asyncConsts.product_items, JSON.stringify(tempData))
                 } else {
                     Toasts.error(tempResponseData.message)
                 }
@@ -412,7 +412,7 @@ export const get_product_items = async () => {
                 console.error(error);
             });
     } else {
-        const data = AsyncStorage.getItem(asyncConts.product_items)
+        const data = AsyncStorage.getItem(asyncConsts.product_items)
         if (data) {
             const dataParsed = JSON.parse(data)
             dispatch(setProductItems(dataParsed))
@@ -435,7 +435,7 @@ export const get_product_categories = async () => {
                     const tempData = HelpingMethods.getPickerData(tempResponseData.data)
                     dispatch(setProductCategories(tempData))
                     //Saving in local storage
-                    AsyncStorage.setItem(asyncConts.product_categories, JSON.stringify(tempData))
+                    AsyncStorage.setItem(asyncConsts.product_categories, JSON.stringify(tempData))
                 } else {
                     Toasts.error(tempResponseData.message)
                 }
@@ -446,7 +446,7 @@ export const get_product_categories = async () => {
                 console.error(error);
             });
     } else {
-        const data = AsyncStorage.getItem(asyncConts.product_categories)
+        const data = AsyncStorage.getItem(asyncConsts.product_categories)
         if (data) {
             const dataParsed = JSON.parse(data)
             dispatch(setProductCategories(dataParsed))
@@ -469,7 +469,7 @@ export const get_product_manufacturers = async () => {
                     const tempData = HelpingMethods.getPickerData(tempResponseData.data)
                     dispatch(setProductManufacturers(tempData))
                     //Saving in local storage
-                    AsyncStorage.setItem(asyncConts.product_manufacturers, JSON.stringify(tempData))
+                    AsyncStorage.setItem(asyncConsts.product_manufacturers, JSON.stringify(tempData))
                 } else {
                     Toasts.error(tempResponseData.message)
                 }
@@ -480,7 +480,7 @@ export const get_product_manufacturers = async () => {
                 console.error(error);
             });
     } else {
-        const data = AsyncStorage.getItem(asyncConts.product_manufacturers)
+        const data = AsyncStorage.getItem(asyncConsts.product_manufacturers)
         if (data) {
             const dataParsed = JSON.parse(data)
             dispatch(setProductManufacturers(dataParsed))
@@ -503,7 +503,7 @@ export const get_product_calibers = async () => {
                     const tempData = HelpingMethods.getPickerData(tempResponseData.data)
                     dispatch(setProductCalibers(tempData))
                     //Saving in local storage
-                    AsyncStorage.setItem(asyncConts.product_calibers, JSON.stringify(tempData))
+                    AsyncStorage.setItem(asyncConsts.product_calibers, JSON.stringify(tempData))
                 } else {
                     Toasts.error(tempResponseData.message)
                 }
@@ -514,7 +514,7 @@ export const get_product_calibers = async () => {
                 console.error(error);
             });
     } else {
-        const data = AsyncStorage.getItem(asyncConts.product_calibers)
+        const data = AsyncStorage.getItem(asyncConsts.product_calibers)
         if (data) {
             const dataParsed = JSON.parse(data)
             dispatch(setProductCalibers(dataParsed))
@@ -537,7 +537,7 @@ export const get_product_actions = async () => {
                     const tempData = HelpingMethods.getPickerData(tempResponseData.data)
                     dispatch(setProductActions(tempData))
                     //Saving in local storage
-                    AsyncStorage.setItem(asyncConts.product_actions, JSON.stringify(tempData))
+                    AsyncStorage.setItem(asyncConsts.product_actions, JSON.stringify(tempData))
                 } else {
                     Toasts.error(tempResponseData.message)
                 }
@@ -548,7 +548,7 @@ export const get_product_actions = async () => {
                 console.error(error);
             });
     } else {
-        const data = AsyncStorage.getItem(asyncConts.product_actions)
+        const data = AsyncStorage.getItem(asyncConsts.product_actions)
         if (data) {
             const dataParsed = JSON.parse(data)
             dispatch(setProductActions(dataParsed))
@@ -571,7 +571,7 @@ export const get_product_conditions = async () => {
                     const tempData = HelpingMethods.getPickerData(tempResponseData.data)
                     dispatch(setProductConditions(tempData))
                     //Saving in local storage
-                    AsyncStorage.setItem(asyncConts.product_conditions, JSON.stringify(tempData))
+                    AsyncStorage.setItem(asyncConsts.product_conditions, JSON.stringify(tempData))
                 } else {
                     Toasts.error(tempResponseData.message)
                 }
@@ -582,7 +582,7 @@ export const get_product_conditions = async () => {
                 console.error(error);
             });
     } else {
-        const data = AsyncStorage.getItem(asyncConts.product_conditions)
+        const data = AsyncStorage.getItem(asyncConsts.product_conditions)
         if (data) {
             const dataParsed = JSON.parse(data)
             dispatch(setProductConditions(dataParsed))

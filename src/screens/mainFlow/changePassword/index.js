@@ -3,7 +3,7 @@ import React, { Component, useState } from 'react';
 import { View, Text } from 'react-native';
 import { totalSize } from 'react-native-dimension';
 import { ButtonColored, ComponentWrapper, KeyboardAvoidingScrollView, MainWrapper, Spacer, TextInputUnderlined, Toasts, Wrapper } from '../../../components';
-import { asyncConts, Backend, colors, HelpingMethods, sizes } from '../../../services';
+import { asyncConsts, Backend, colors, HelpingMethods, sizes } from '../../../services';
 
 function ChangePassword(props) {
     const { goBack } = props.navigation
@@ -56,14 +56,14 @@ function ChangePassword(props) {
             }).then(async res => {
                 setLoading(false)
                 if (res) {
-                    const userCredentials = await AsyncStorage.getItem(asyncConts.user_credentials)
+                    const userCredentials = await AsyncStorage.getItem(asyncConsts.user_credentials)
                     if (userCredentials) {
                         const userCredentialsParsed = JSON.parse(userCredentials)
                         const NewUserCredentials = {
                             ...userCredentialsParsed,
                             password: NewPassowrd
                         }
-                        await AsyncStorage.setItem(asyncConts.user_credentials, JSON.stringify(NewUserCredentials))
+                        await AsyncStorage.setItem(asyncConsts.user_credentials, JSON.stringify(NewUserCredentials))
                         goBack()
                         Toasts.success('Password changed successfuly')
                     }

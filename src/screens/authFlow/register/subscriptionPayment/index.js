@@ -3,7 +3,7 @@ import React, { Component, useState } from 'react';
 import { View, Text } from 'react-native';
 import { height } from 'react-native-dimension';
 import { ButtonGradient, CheckIconPrimary, CloseIconPrimary, ComponentWrapper, KeyboardAvoidingScrollView, LineHorizontal, MainWrapper, PopupPrimary, RowWrapper, RowWrapperBasic, SmallTitle, Spacer, TextInputUnderlined, TinyTitle, TitleValue, Toasts, Wrapper } from '../../../../components';
-import { appStyles, asyncConts, Backend, colors, HelpingMethods, routes, sizes, stripeKeys } from '../../../../services';
+import { appStyles, asyncConsts, Backend, colors, HelpingMethods, routes, sizes, stripeKeys } from '../../../../services';
 
 function SubscriptionPayment(props) {
 
@@ -83,7 +83,7 @@ function SubscriptionPayment(props) {
         let paymentObject
         let customerObject
         setLoading(true)
-        const data = await AsyncStorage.getItem(asyncConts.user_details)
+        const data = await AsyncStorage.getItem(asyncConsts.user_details)
         const userData = JSON.parse(data)
         const paymentDetails = {
             card_number: cardNumber,
@@ -122,7 +122,7 @@ function SubscriptionPayment(props) {
     }
 
     const handleSubscribe = async (stripeCustomerObjectID, stripePaymentObjectID) => {
-        const data = await AsyncStorage.getItem(asyncConts.user_details)
+        const data = await AsyncStorage.getItem(asyncConsts.user_details)
         const userData = JSON.parse(data)
         console.log('stripe Data', stripeCustomerObjectID, stripePaymentObjectID)
         await Backend.createStripeSubscription(
@@ -300,7 +300,7 @@ function SubscriptionPayment(props) {
                 buttonText1="Continue"
                 onPressButton1={async () => {
                     setLoading(true)
-                    const data = await AsyncStorage.getItem(asyncConts.user_credentials)
+                    const data = await AsyncStorage.getItem(asyncConsts.user_credentials)
                     if (data) {
                         const dataParsed = JSON.parse(data)
                         await Backend.auto_login(dataParsed.email, dataParsed.password)

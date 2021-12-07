@@ -1,5 +1,5 @@
 import axios from "axios"
-import { endPoints, routes, baseURL, asyncConts, stripeKeys } from "../constants"
+import { endPoints, routes, baseURL, asyncConsts, stripeKeys } from "../constants"
 import { Toasts } from "../../components";
 import store from "../store";
 import * as Backend from './index'

@@ -5,7 +5,7 @@ import NetInfo from "@react-native-community/netinfo";
 import store from "../store";
 import { setCurrentLocation, setUserDetail } from "../store/actions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { asyncConts, Backend } from "..";
+import { asyncConsts, Backend } from "..";
 import { Toasts } from "../../components";
 import Geolocation from 'react-native-geolocation-service';
 import Share from 'react-native-share';
@@ -240,8 +240,8 @@ export const logout = async () => {
                 text: "Logout",
                 onPress: () => [
                     dispatch(setUserDetail(null)),
-                    AsyncStorage.removeItem(asyncConts.user_credentials),
-                    AsyncStorage.removeItem(asyncConts.user_details)
+                    AsyncStorage.removeItem(asyncConsts.user_credentials),
+                    AsyncStorage.removeItem(asyncConsts.user_details)
                     //setDownloads(downloads.filter(ite => ite != item))
                 ],
                 style: "destructive",
@@ -398,14 +398,14 @@ export const getUserLocation = async () => {
 }
 //////Cloud messaging Tokens
 export const getFcmToken = async () => {
-    let fcmToken = await AsyncStorage.getItem(asyncConts.fcm_token);
+    let fcmToken = await AsyncStorage.getItem(asyncConsts.fcm_token);
     console.log('before fcmToken: ', fcmToken);
     // alert(fcmToken);
     if (!fcmToken) {
         fcmToken = await messaging().getToken();
         if (fcmToken) {
             console.log('after fcmToken: ', fcmToken);
-            await AsyncStorage.setItem(asyncConts.fcm_token, fcmToken);
+            await AsyncStorage.setItem(asyncConsts.fcm_token, fcmToken);
             Backend.saveFcmToken(fcmToken)
         }
     } else {

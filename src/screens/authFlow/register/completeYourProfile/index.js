@@ -7,8 +7,9 @@ import auth from '@react-native-firebase/auth';
 function CompleteYourProfile(props) {
     const { navigate } = props.navigation
     const { params } = props.route
-    const { credentials } = params
+    const { credentials, userSocialData } = params
     console.log('credentials', credentials)
+    console.log('userSocialData', userSocialData)
 
     const EditProfileRef = useRef(null)
 
@@ -19,6 +20,17 @@ function CompleteYourProfile(props) {
     const [isVerificationCodeSendModalVisible, setVerificationCodeSendModalVisibility] = useState(false)
     const [confirmPhoneNumber, setConfirmPhoneNumber] = useState(null)
 
+    let socicalCredentials = {}
+    if (userSocialData) {
+        const { email, firstName, lastName, googleToken, appleToken, instagramToken } = userSocialData
+        tempSocialCredentials = {
+            email,
+            googleToken,
+            appleToken,
+            instagramToken
+        }
+        socicalCredentials = tempSocialCredentials
+    }
 
 
     const toggleVerificationCodeSendModal = () => setVerificationCodeSendModalVisibility(!isVerificationCodeSendModalVisible)
@@ -46,20 +58,21 @@ function CompleteYourProfile(props) {
             validateProfileData
         ) {
             // setProfileData(profileDetails)
-             setLoading(true)
-             const { phoneNumber, countryPhoneCode } = profileDetails
-             const mobileNumber = '+' + countryPhoneCode + phoneNumber
-             setPhoneNumberWithCode(mobileNumber)
-             await sendCodeToPhoneNumber(mobileNumber)
-             setLoading(false)
+            setLoading(true)
+            const { phoneNumber, countryPhoneCode } = profileDetails
+            const mobileNumber = '+' + countryPhoneCode + phoneNumber
+            setPhoneNumberWithCode(mobileNumber)
+            await sendCodeToPhoneNumber(mobileNumber)
+            setLoading(false)
         }
     }
 
     return (
-        <MainWrapper> 
+        <MainWrapper>
             <KeyboardAvoidingScrollView>
                 <EditProfileComp
                     ref={EditProfileRef}
+                    data={userSocialData}
                 />
                 <Spacer height={sizes.baseMargin * 2} />
                 <ButtonGradient
@@ -75,7 +88,12 @@ function CompleteYourProfile(props) {
                 toggle={toggleVerificationCodeSendModal}
                 onPressContinue={() => {
                     toggleVerificationCodeSendModal();
-                    navigate(routes.verifyPhone, { credentials, profileDetails: EditProfileRef.current.getAllData(),confirmPhoneNumber })
+                    navigate(routes.verifyPhone, {
+                        credentials: userSocialData ? socicalCredentials : credentials,
+                        profileDetails: EditProfileRef.current.getAllData(),
+                        confirmPhoneNumber,
+                        userSocialData
+                    })
                 }}
                 phoneNumber={phoneNumberWithCode}
             />

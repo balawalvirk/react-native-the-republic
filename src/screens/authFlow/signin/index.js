@@ -1,16 +1,27 @@
-import React, { Component, useEffect, useState } from 'react';
-import { View, Text, Animated, Image } from 'react-native';
+import React, { Component, useEffect, useRef, useState } from 'react';
+import { View, Text, Animated, Image, Platform } from 'react-native';
 import { MainWrapper, XXLTitle, AbsoluteWrapper, Wrapper, Spacer, LogoMain, CustomIcon, ComponentWrapper, MediumText, ButtonColored, TextInputUnderlined, CheckBoxPrimary, RegularText, RowWrapper, ButtonGradient, ButtonSocial, KeyboardAvoidingScrollView } from '../../../components';
-import { appStyles, colors, sizes, appImages, routes, HelpingMethods, Validations, asyncConts, Backend } from '../../../services';
+import { appStyles, colors, sizes, appImages, routes, HelpingMethods, Validations, asyncConsts, Backend } from '../../../services';
 import { totalSize, width, height } from 'react-native-dimension';
 import { MaterialIndicator } from 'react-native-indicators';
 import { ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// import Instagram from './instagram';
+import InstagramLogin from 'react-native-instagram-login';
+import CookieManager from '@react-native-community/cookies';
 
 function Signin(props) {
   const { navigate, goBack } = props.navigation
+
+  //refs
+  const instagramLogin = useRef(null)
+
+  //local states
   const [logoTopMargin] = useState(new Animated.Value(height(40)))
   const [loading, setLoading] = useState(true)
+  const [loadingGoogle, setLoadingGoogle] = useState(false)
+  const [loadingApple, setLoadingApple] = useState(false)
+  const [loadingInstagram, setLoadinginstagram] = useState(false)
   const [email, setEmail] = useState('')
   const [emailError, setEmailError] = useState('')
   const [password, setPassword] = useState('')
@@ -27,7 +38,7 @@ function Signin(props) {
 
 
   const checkUser = async () => {
-    const userCredentials = await AsyncStorage.getItem(asyncConts.user_credentials)
+    const userCredentials = await AsyncStorage.getItem(asyncConsts.user_credentials)
     if (userCredentials) {
       const params = JSON.parse(userCredentials)
       await Backend.auto_login(params.email, params.password)
@@ -77,6 +88,14 @@ function Signin(props) {
       })
       setLoginLoading(false)
     }
+  }
+
+  const onInstagramLoginSuccess = async (data) => {
+    console.log('data', data)
+    setLoadinginstagram(true)
+    //await Backend.continueWithInstagram(data)
+    await Backend.handleContinueWithInstagram(data)
+    setLoadinginstagram(false)
   }
 
   return (
@@ -159,23 +178,45 @@ function Signin(props) {
                   loading={loginLoading}
                 />
                 <Spacer height={sizes.baseMargin} />
-                <ButtonSocial
-                  text="Continue with Parlor"
-                  logo={appImages.parlor_logo}
-                  onPress={() => { }}
-                />
-                <Spacer height={sizes.smallMargin} />
+
                 <ButtonSocial
                   text="Continue with Google"
                   logo={appImages.google_logo}
-                  onPress={() => { }}
+                  onPress={async () => {
+                    setLoadingGoogle(true)
+                    await Backend.handleContinueWithGoogle()
+                    setLoadingGoogle(false)
+                  }}
+                  isLoading={loadingGoogle}
+
                 />
                 <Spacer height={sizes.smallMargin} />
                 <ButtonSocial
                   text="Continue with Instagram"
                   logo={appImages.instagram_logo}
-                  onPress={() => { }}
+                  onPress={()=>instagramLogin.current.show()}
+                  isLoading={loadingInstagram}
                 />
+
+                <Spacer height={sizes.smallMargin} />
+                {
+                  Platform.OS === 'ios' ?
+                    <>
+                      <ButtonSocial
+                        text="Continue with Apple"
+                        iconName="apple"
+                        iconColor={colors.appTextColor1}
+                        onPress={async () => {
+                          setLoadingApple(true)
+                          await Backend.handleContinueWithApple()
+                          setLoadingApple(false)
+                        }}
+                      />
+                      <Spacer height={sizes.smallMargin} />
+                    </>
+                    :
+                    null
+                }
                 <Spacer height={sizes.baseMargin} />
                 <ComponentWrapper>
                   <RegularText style={[appStyles.textCenter]}>
@@ -192,6 +233,19 @@ function Signin(props) {
           }
         </Wrapper>
       </KeyboardAvoidingScrollView>
+      {/* <Instagram
+        onLoginSuccess={(data) => { console.log('onLoginSuccess data --> ', onLoginSuccess) }}
+      /> */}
+       <InstagramLogin
+          ref={instagramLogin}
+          appId='1619324318420647'
+          appSecret='1a649971c966fdf8369e4d41db8fa7dd'
+          redirectUrl='https://republic.co/'
+          scopes={['user_profile', 'user_media']}
+          onLoginSuccess={onInstagramLoginSuccess}
+          onLoginFailure={(data) => console.log(data)}
+          language='en' //default is 'en' for english
+        />
     </MainWrapper>
   );
 }

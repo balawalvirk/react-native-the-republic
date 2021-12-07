@@ -4,7 +4,7 @@ import { FlatList } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { View, Text } from 'react-native';
 import { BackIcon, ButtonGradient, ComponentWrapper, LargeText, LineHorizontal, LoaderAbsolute, MainWrapper, PlanCard, RegularText, RowWrapperBasic, SmallTitle, Spacer, TinyTitle, TitleValue, Wrapper } from '../../../../components';
-import { appStyles, asyncConts, Backend, colors, DummyData, fontFamily, HelpingMethods, routes, sizes } from '../../../../services';
+import { appStyles, asyncConsts, Backend, colors, DummyData, fontFamily, HelpingMethods, routes, sizes } from '../../../../services';
 
 
 function SelectSubscriptionPlan(props) {
@@ -65,7 +65,7 @@ function SelectSubscriptionPlan(props) {
 
                       if (index === 0) {
                         setloading(true)
-                        const data = await AsyncStorage.getItem(asyncConts.user_credentials)
+                        const data = await AsyncStorage.getItem(asyncConsts.user_credentials)
                         if (data) {
                           const dataParsed = JSON.parse(data)
                           Backend.auto_login(dataParsed.email, dataParsed.password)

@@ -2,7 +2,7 @@ import React, { Component, useState } from 'react';
 import { View, Text } from 'react-native';
 import { ButtonColored, ButtonGradient, ComponentWrapper, IconButton, ImagePickerPopup, ImageProfile, LoaderAbsolute, MainWrapper, PopupPrimary, Spacer, TinyTitle, Toasts, Wrapper } from '../../../../components';
 import * as ImagePicker from 'react-native-image-picker';
-import { appStyles, asyncConts, Backend, colors, routes, sizes } from '../../../../services';
+import { appStyles, asyncConsts, Backend, colors, routes, sizes } from '../../../../services';
 import { height, totalSize } from 'react-native-dimension';
 import { Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native';
@@ -77,7 +77,7 @@ function VerifyIdentity(props) {
             }
         });
     }
-    
+
     const registerNewAccount = async () => {
         const { email, password } = credentials
         const {
@@ -91,11 +91,11 @@ function VerifyIdentity(props) {
             // countryPhoneCode,
             // countryCode
         } = profileDetails
-        console.log('profileDetails-->', profileDetails) 
-        let fcmToken = await AsyncStorage.getItem(asyncConts.fcm_token);
+        console.log('profileDetails-->', profileDetails)
+        let fcmToken = await AsyncStorage.getItem(asyncConsts.fcm_token);
         console.log('fcmToken-->', fcmToken)
         setLoadingCreateAccount(true)
-        await Backend.user_register({ email, password, password_confirmation: password })
+        await handleCreateAccount()
             .then(async res => {
                 if (res) {
                     const tempUserId = res.data.id
@@ -120,7 +120,7 @@ function VerifyIdentity(props) {
                                     then(res => {
                                         if (res) {
                                             toggleIdentityVerifiedPopup()
-                                            // AsyncStorage.setItem(asyncConts.user_credentials, JSON.stringify(credentials))
+                                            // AsyncStorage.setItem(asyncConsts.user_credentials, JSON.stringify(credentials))
                                             // Toasts.success('Account Created Successfully')
                                         }
                                     })
@@ -129,6 +129,48 @@ function VerifyIdentity(props) {
                 }
             })
         setLoadingCreateAccount(false)
+    }
+
+    const handleCreateAccount = async () => {
+        const { email,
+            password,
+            googleToken,
+            appleToken,
+            instagramToken } = credentials
+        let response = null
+        if (googleToken) {
+            await Backend.userRegisterGoogle({ email, google_token: googleToken }).
+                then(res => {
+                    if (res) {
+                        response = res
+                    }
+                })
+        } else if (instagramToken) {
+            await Backend.userRegisterInstagram({ email, instagram_token: instagramToken }).
+                then(res => {
+                    if (res) {
+                        response = res
+                    }
+                })
+        } else if (appleToken) {
+            await Backend.userRegisterApple({ email, apple_token: appleToken }).
+                then(res => {
+                    if (res) {
+                        response = res
+                    }
+                })
+        } else if (password) {
+            {
+                await Backend.user_register({ email, password, password_confirmation: password }).
+                    then(res => {
+                        if (res) {
+                            response = res
+                        }
+                    })
+            }
+        }
+        return response
+
     }
     return (
         <MainWrapper>

@@ -2,7 +2,7 @@ import React, { Component, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { height, totalSize } from 'react-native-dimension';
 import { ButtonColored, ButtonGradient, ComponentWrapper, CustomIcon, KeyboardAvoidingScrollView, MainWrapper, PopupPrimary, RegularText, Spacer, TextInputUnderlined, TinyTitle, Wrapper, VerificationCodeSentPopup, Toasts, LoaderAbsolute } from '../../../../components';
-import { appImages, appStyles, asyncConts, Backend, routes, sizes } from '../../../../services';
+import { appImages, appStyles, asyncConsts, Backend, routes, sizes } from '../../../../services';
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 import styles from './styles';
 import CountryPicker from 'react-native-country-picker-modal'
@@ -11,8 +11,9 @@ import auth from '@react-native-firebase/auth';
 function VerifyPhone(props) { 
     const { navigate } = props.navigation
     const { params } = props.route
-    const { credentials, profileDetails, confirmPhoneNumber } = params
-    console.log('credentials', credentials, 'Profile Details', profileDetails)
+    const { credentials, profileDetails, confirmPhoneNumber,userSocialData } = params
+    console.log('credentials', credentials, '\nProfile Details', profileDetails)
+    console.log('\nuserSocialData', userSocialData,)
 
     //local states
     const [confirmation, setConfirmation] = useState(null)

@@ -1,5 +1,5 @@
 import axios from "axios"
-import { endPoints, routes, baseURL, asyncConts } from "../constants"
+import { endPoints, routes, baseURL, asyncConsts } from "../constants"
 import { Toasts } from "../../components";
 import store from "../store";
 import * as Backend from './index'
@@ -17,7 +17,7 @@ export const getDealers = async () => {
         user_id
     } 
     await axios
-        .get(`${baseURL + endPoints.dealer.get_dealers}`,params)
+        .post(`${baseURL + endPoints.dealer.get_dealers}`,params)
         .then(async responseJson => {
             const tempResponseData = responseJson.data
             console.log('getDealers Response', tempResponseData);

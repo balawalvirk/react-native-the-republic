@@ -1,5 +1,5 @@
 import axios from "axios"
-import { endPoints, routes, baseURL, asyncConts } from "../constants"
+import { endPoints, routes, baseURL, asyncConsts } from "../constants"
 import { Toasts } from "../../components";
 import store from "../store";
 import * as Backend from './index'
@@ -18,7 +18,7 @@ export const getAllTranings = async () => {
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios
-            .get(`${baseURL + endPoints.training.show_trainings}`,params)
+            .post(`${baseURL + endPoints.training.show_trainings}`,params)
             .then(async responseJson => {
                 const tempResponseData = responseJson.data
                 console.log('Response', tempResponseData);

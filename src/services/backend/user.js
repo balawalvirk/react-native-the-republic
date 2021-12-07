@@ -1,5 +1,5 @@
 import axios from "axios"
-import { endPoints, routes, baseURL, asyncConts } from "../constants"
+import { endPoints, routes, baseURL, asyncConsts } from "../constants"
 import { Toasts } from "../../components";
 import store from "../store";
 import * as Backend from './index'
@@ -27,9 +27,9 @@ export const login = async (email, password) => {
                 dispatch(setUserDetail(userDetail))
                 HelpingMethods.handlePushNotificationPermission()
                 //Saving in local storage
-                AsyncStorage.setItem(asyncConts.user_credentials, JSON.stringify(params))
-                AsyncStorage.setItem(asyncConts.user_details, JSON.stringify(userDetail))
-                // let fcmToken = await AsyncStorage.getItem(asyncConts.fcm_token);
+                AsyncStorage.setItem(asyncConsts.user_credentials, JSON.stringify(params))
+                AsyncStorage.setItem(asyncConsts.user_details, JSON.stringify(userDetail))
+                // let fcmToken = await AsyncStorage.getItem(asyncConsts.fcm_token);
                 // if (fcmToken) {
                 //     Backend.update_profile({ fcmToken })
                 // }
@@ -45,27 +45,29 @@ export const login = async (email, password) => {
     return response
 };
 
-export const checkUser = async ({ email }) => {
+export const checkUser = async ({ email, username }) => {
     let response = null
-    let params = {
-        email: email.toLowerCase(),
+    if (email) {
+        let params = {
+            email: email.toLowerCase(),
+        }
+        console.log('Params', params);
+        await axios
+            .post(`${baseURL + endPoints.user.check_user}`, params)
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
     }
-    console.log('Params', params);
-    await axios
-        .post(`${baseURL + endPoints.user.check_user}`, params)
-        .then(async responseJson => {
-            const tempResponseData = responseJson.data
-            console.log('Response', tempResponseData);
-            if (tempResponseData.success) {
-                response = tempResponseData
-            } else {
-                Toasts.error(tempResponseData.message)
-            }
-        })
-        .catch(error => {
-            Toasts.error(error.response.data.message)
-            console.error(error);
-        });
     return response
 };
 
@@ -88,8 +90,8 @@ export const auto_login = async (email, password) => {
                     const userDetail = tempResponseData.data
                     dispatch(setUserDetail(userDetail))
                     //Saving in local storage
-                    AsyncStorage.setItem(asyncConts.user_details, JSON.stringify(userDetail))
-                    // let fcmToken = await AsyncStorage.getItem(asyncConts.fcm_token);
+                    AsyncStorage.setItem(asyncConsts.user_details, JSON.stringify(userDetail))
+                    // let fcmToken = await AsyncStorage.getItem(asyncConsts.fcm_token);
                     // if (fcmToken) {
                     //     Backend.update_profile({ fcmToken })
                     // }
@@ -103,7 +105,7 @@ export const auto_login = async (email, password) => {
                 console.error(error);
             });
     } else {
-        const data = AsyncStorage.getItem(asyncConts.user_details)
+        const data = AsyncStorage.getItem(asyncConsts.user_details)
         if (data) {
             const dataParsed = JSON.parse(data)
             dispatch(setUserDetail(dataParsed))
@@ -132,7 +134,7 @@ export const user_register = async ({ email, password, password_confirmation }) 
                     email: params.email,
                     password: params.password,
                 }
-                AsyncStorage.setItem(asyncConts.user_credentials, JSON.stringify(userCredentials))
+                AsyncStorage.setItem(asyncConsts.user_credentials, JSON.stringify(userCredentials))
             } else {
                 Toasts.error(tempResponseData.message)
             }
@@ -170,7 +172,7 @@ export const complete_profile = async ({ user_id, first_name, last_name, usernam
             console.log('complete_profile Response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
-                AsyncStorage.setItem(asyncConts.user_details, JSON.stringify(tempResponseData.data))
+                AsyncStorage.setItem(asyncConsts.user_details, JSON.stringify(tempResponseData.data))
             } else {
                 Toasts.error(tempResponseData.message)
             }
@@ -256,7 +258,7 @@ export const update_profile = async ({
             if (tempResponseData.success) {
                 response = tempResponseData
                 dispatch(setUserDetail(tempResponseData.data))
-                AsyncStorage.setItem(asyncConts.user_details, JSON.stringify(tempResponseData.data))
+                AsyncStorage.setItem(asyncConsts.user_details, JSON.stringify(tempResponseData.data))
             } else {
                 Toasts.error(tempResponseData.message)
             }
@@ -423,10 +425,10 @@ export const getUserProfileDetail = async (userId) => {
     return response
 };
 
-export const changePassword = async ({old_password,password,password_confirmation}) => {
+export const changePassword = async ({ old_password, password, password_confirmation }) => {
     let response = null
     const state = store.getState()
-    const user_id =state.user.userDetail.id
+    const user_id = state.user.userDetail.id
     let params = {
         user_id,
         old_password,
@@ -455,7 +457,7 @@ export const changePassword = async ({old_password,password,password_confirmatio
 export const saveFcmToken = async (fcm_token) => {
     let response = null
     const state = store.getState()
-    const user_id =state.user.userDetail.id
+    const user_id = state.user.userDetail.id
     let params = {
         user_id,
         fcm_token
@@ -473,7 +475,7 @@ export const saveFcmToken = async (fcm_token) => {
             }
         })
         .catch(error => {
-           // Toasts.error(error.response.data.message)
+            // Toasts.error(error.response.data.message)
             console.error(error);
         });
     return response

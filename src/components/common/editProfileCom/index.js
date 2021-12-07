@@ -80,16 +80,21 @@ const EditProfile = React.forwardRef((props, ref) => {
     const setAllData = () => {
         const { data } = props
         if (data) {
-            setImageUri(data.profileImage)
-            setFirstName(data.firstName);
-            setLastName(data.lastName)
-            setCountryCode(data.countryCode)
-            setCountryPhoneCode(data.countryPhoneCode)
-            setPhoneNumber(data.phoneNumber.toString())
-            setUsername(data.userName)
-             setBirthday(data.birthday)
+            const {
+                profileImage, firstName, lastName, countryCode,
+                countryPhoneCode, phoneNumber, userName, birthday,
+                gender
+            } = data
+            profileImage && setImageUri(data.profileImage)
+            firstName && setFirstName(data.firstName);
+            lastName && setLastName(data.lastName)
+            countryCode && setCountryCode(data.countryCode)
+            countryPhoneCode && setCountryPhoneCode(data.countryPhoneCode)
+            phoneNumber && setPhoneNumber(data.phoneNumber.toString())
+            userName && setUsername(data.userName)
+            birthday && setBirthday(data.birthday)
             //setBirthday(data.birthday, moment(data.birthday, 'YYYY-MM-DD').toDate())
-            setGender(data.gender)
+            gender && setGender(data.gender)
         }
     }
     const launchImagePicker = () => {

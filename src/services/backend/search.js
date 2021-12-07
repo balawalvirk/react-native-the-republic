@@ -1,5 +1,5 @@
 import axios from "axios"
-import { endPoints, routes, baseURL, asyncConts } from "../constants"
+import { endPoints, routes, baseURL, asyncConsts } from "../constants"
 import { Toasts } from "../../components";
 import store from "../store";
 import * as Backend from './index'
@@ -11,12 +11,13 @@ const { dispatch } = store
 
 export const searchAll = async ({ query, page,type, }) => {
     let response = null
-    // const state = store.getState()
-    // const userId = user_id ? user_id : state.user.userDetail.id
+     const state = store.getState()
+     const user_id =  state.user.userDetail.id
     const defaultPage=page?page:1
     let params = {
         query,
-        type:type?type:''
+        type:type?type:'',
+        user_id
     }
     const uri=`${baseURL + endPoints.search.search_all}?page=${defaultPage}`
     await axios
