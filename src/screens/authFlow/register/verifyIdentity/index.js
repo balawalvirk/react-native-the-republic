@@ -79,7 +79,6 @@ function VerifyIdentity(props) {
     }
 
     const registerNewAccount = async () => {
-        const { email, password } = credentials
         const {
             imageFile,
             firstName,
@@ -98,7 +97,7 @@ function VerifyIdentity(props) {
         await handleCreateAccount()
             .then(async res => {
                 if (res) {
-                    const tempUserId = res.data.id
+                    const tempUserId = res.user.id
                     const completeProfileParams = {
                         user_id: tempUserId,
                         first_name: firstName,
@@ -135,31 +134,32 @@ function VerifyIdentity(props) {
         const { email,
             password,
             googleToken,
+            userName,
             appleToken,
             instagramToken } = credentials
         let response = null
-        if (googleToken) {
+        if (googleToken && email) {
             await Backend.userRegisterGoogle({ email, google_token: googleToken }).
                 then(res => {
                     if (res) {
                         response = res
                     }
                 })
-        } else if (instagramToken) {
-            await Backend.userRegisterInstagram({ email, instagram_token: instagramToken }).
+        } else if (instagramToken && userName) {
+            await Backend.userRegisterInstagram({ user_name: userName, instagram_token: instagramToken }).
                 then(res => {
                     if (res) {
                         response = res
                     }
                 })
-        } else if (appleToken) {
+        } else if (appleToken && email) {
             await Backend.userRegisterApple({ email, apple_token: appleToken }).
                 then(res => {
                     if (res) {
                         response = res
                     }
                 })
-        } else if (password) {
+        } else if (email && password) {
             {
                 await Backend.user_register({ email, password, password_confirmation: password }).
                     then(res => {

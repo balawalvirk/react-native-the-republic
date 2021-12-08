@@ -215,7 +215,7 @@ export const update_profile = async ({
     user_id, first_name, last_name, username, gender, birthday, phone, image,
     country_code, country_phone_code, fcm_token, subscription_id, cancel_subscription,
     customer_id, payment_id, user_type, subscription_plan, latitude,
-    longitude, distance, default_card_id, default_dealer_id, address }) => {
+    longitude, distance, default_card_id, default_dealer_id, address,disableUpdateProfile }) => {
     let response = null
     const state = store.getState()
     const userId = user_id ? user_id : state.user.userDetail.id
@@ -257,7 +257,7 @@ export const update_profile = async ({
             console.log('response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
-                dispatch(setUserDetail(tempResponseData.data))
+                !disableUpdateProfile&& dispatch(setUserDetail(tempResponseData.data))
                 AsyncStorage.setItem(asyncConsts.user_details, JSON.stringify(tempResponseData.data))
             } else {
                 Toasts.error(tempResponseData.message)

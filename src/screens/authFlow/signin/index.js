@@ -38,16 +38,24 @@ function Signin(props) {
 
 
   const checkUser = async () => {
-    const userCredentials = await AsyncStorage.getItem(asyncConsts.user_credentials)
-    if (userCredentials) {
-      const params = JSON.parse(userCredentials)
-      await Backend.auto_login(params.email, params.password)
-    } else {
+    // const userCredentials = await AsyncStorage.getItem(asyncConsts.user_credentials)
+    // if (userCredentials) {
+    //   const params = JSON.parse(userCredentials)
+    //   await Backend.auto_login(params.email, params.password)
+    // } else {
+    //   setTimeout(() => {
+    //     handleLoading(sizes.statusBarHeight)
+    //     setLoading(false)
+    //   }, 1000);
+    // }
+    const isAutoLoggedIn = await Backend.handleAutoLogin()
+    if (!isAutoLoggedIn) {
       setTimeout(() => {
         handleLoading(sizes.statusBarHeight)
         setLoading(false)
       }, 1000);
     }
+
 
   }
 
@@ -194,7 +202,7 @@ function Signin(props) {
                 <ButtonSocial
                   text="Continue with Instagram"
                   logo={appImages.instagram_logo}
-                  onPress={()=>instagramLogin.current.show()}
+                  onPress={() => instagramLogin.current.show()}
                   isLoading={loadingInstagram}
                 />
 
@@ -236,16 +244,16 @@ function Signin(props) {
       {/* <Instagram
         onLoginSuccess={(data) => { console.log('onLoginSuccess data --> ', onLoginSuccess) }}
       /> */}
-       <InstagramLogin
-          ref={instagramLogin}
-          appId='1619324318420647'
-          appSecret='1a649971c966fdf8369e4d41db8fa7dd'
-          redirectUrl='https://republic.co/'
-          scopes={['user_profile', 'user_media']}
-          onLoginSuccess={onInstagramLoginSuccess}
-          onLoginFailure={(data) => console.log(data)}
-          language='en' //default is 'en' for english
-        />
+      <InstagramLogin
+        ref={instagramLogin}
+        appId='1619324318420647'
+        appSecret='1a649971c966fdf8369e4d41db8fa7dd'
+        redirectUrl='https://republic.co/'
+        scopes={['user_profile', 'user_media']}
+        onLoginSuccess={onInstagramLoginSuccess}
+        onLoginFailure={(data) => console.log(data)}
+        language='en' //default is 'en' for english
+      />
     </MainWrapper>
   );
 }

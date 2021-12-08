@@ -10,6 +10,44 @@ import { navigate } from "../navigation/rootNavigation";
 const { dispatch } = store
 
 
+export const handleAutoLogin = async () => {
+    let response = null
+    const userCredentials = await AsyncStorage.getItem(asyncConsts.user_credentials)
+    const googleToken = await AsyncStorage.getItem(asyncConsts.google_token)
+    const instagramToken = await AsyncStorage.getItem(asyncConsts.instagram_token)
+    const appleToken = await AsyncStorage.getItem(asyncConsts.apple_token)
+    if (userCredentials) {
+        const dataUserCredentials = JSON.parse(userCredentials)
+        await Backend.auto_login(dataUserCredentials.email, dataUserCredentials.password).
+            then(res => {
+                if (res) {
+                    response = res
+                }
+            })
+    } else if (googleToken) {
+        await autoLoginWithGoogle(googleToken).
+            then(res => {
+                if (res) {
+                    response = res
+                }
+            })
+    } else if (instagramToken) {
+        await autoLoginWithInstagram(instagramToken).
+            then(res => {
+                if (res) {
+                    response = res
+                }
+            })
+    } else if (appleToken) {
+        await autoLoginWithApple(appleToken).
+            then(res => {
+                if (res) {
+                    response = res
+                }
+            })
+    }
+    return response
+}
 //manage google authentications
 export const handleContinueWithGoogle = async () => {
     let response = null
@@ -44,7 +82,7 @@ export const userRegisterGoogle = async ({ email, google_token }) => {
     const uri = `${baseURL + endPoints.sociaAuth.register_google}`
     let params = {
         email: email.toLowerCase(),
-        google_token
+        access_token: google_token
     }
     console.log('userRegisterGoogle \nuri', uri, '\nParams', params);
     await axios
@@ -153,7 +191,7 @@ export const userRegisterApple = async ({ email, apple_token }) => {
     const uri = `${baseURL + endPoints.sociaAuth.register_google}`
     let params = {
         email: email.toLowerCase(),
-        apple_token
+        access_token: apple_token
     }
     console.log('userRegisterApple \nuri', uri, '\nParams', params);
     await axios
@@ -225,6 +263,38 @@ export const autoLoginWithApple = async (apple_token) => {
     return response
 };
 
+
+
+
+
+
+export const userRegisterInstagram = async ({ email, instagram_token }) => {
+    let response = null
+    const uri = `${baseURL + endPoints.sociaAuth.register_instagram}`
+    let params = {
+        email: email.toLowerCase(),
+        access_token: instagram_token
+    }
+    console.log('userRegisterInstagram \nuri', uri, '\nParams', params);
+    await axios
+        .post(uri, params)
+        .then(async responseJson => {
+            const tempResponseData = responseJson.data
+            console.log('userRegisterInstagram Response', tempResponseData);
+            if (tempResponseData.success) {
+                response = tempResponseData
+                AsyncStorage.setItem(asyncConsts.instagram_token, instagram_token)
+            } else {
+                Toasts.error(tempResponseData.message)
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};
+
 export const handleContinueWithInstagram = async (data) => {
     let response = null
     await Backend.continueWithInstagram(data).then(async instagramData => {
@@ -232,22 +302,22 @@ export const handleContinueWithInstagram = async (data) => {
             await Backend.checkUser({ username: instagramData.username })
                 .then(res => {
                     if (res) {
-                            if (res.success === false) {
-                                //User already registered
-                                autoLoginWithGoogle(instagramData.access_token)
-                            } else {
-                                let params = {
-                                    instagramToken: instagramData.access_token,
-                                    username: instagramData.username,
-                                    //email: instagramData.user.email,
-                                    //firstName: instagramData.user.givenName,
-                                    //lastName: instagramData.user.familyName,
-                                    //profileImage:googleData.user.photo
-                                }
-                                console.log('Params', params);
-                                navigate(routes.completeYourProfil, { userSocialData: params })
+                        if (res.success === false) {
+                            //User already registered
+                            autoLoginWithGoogle(instagramData.access_token)
+                        } else {
+                            let params = {
+                                instagramToken: instagramData.access_token,
+                                username: instagramData.username,
+                                //email: instagramData.user.email,
+                                //firstName: instagramData.user.givenName,
+                                //lastName: instagramData.user.familyName,
+                                //profileImage:googleData.user.photo
                             }
-                    }else {
+                            console.log('Params', params);
+                            navigate(routes.completeYourProfil, { userSocialData: params })
+                        }
+                    } else {
                         let params = {
                             instagramToken: instagramData.access_token,
                             userName: instagramData.username,

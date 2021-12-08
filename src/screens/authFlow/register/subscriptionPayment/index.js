@@ -139,7 +139,8 @@ function SubscriptionPayment(props) {
                         payment_id: stripePaymentObjectID,
                         subscription_id: response.id,
                         user_type: plan.title.toLowerCase(),
-                        subscription_plan: plan.title
+                        subscription_plan: plan.title,
+                        disableUpdateProfile
                     }).
                         then(async (response) => {
                             if (response) {

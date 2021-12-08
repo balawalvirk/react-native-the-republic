@@ -34,12 +34,12 @@ export const endPoints = {
         save_fcm_token: 'save-fcm-token'
     },
     sociaAuth: {
-        register_google: 'register-google',
-        login_google: 'login-google',
-        register_instagram: 'register-instagram',
-        login_instagram: 'login-instagram',
-        register_apple: 'register-apple',
-        login_apple: 'login-apple',
+        register_google: 'google-register',
+        login_google: 'google-login',
+        register_instagram: 'instagram-register',
+        login_instagram: 'instagram-login',
+        register_apple: 'apple-register',
+        login_apple: 'apple-login',
     },
     creditCard: {
         add_card: 'add-card',
