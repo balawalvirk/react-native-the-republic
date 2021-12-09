@@ -42,7 +42,7 @@ function PurchaseHistory(props) {
       )
  
     const getSetOrders = async () => {
-        await Backend.getUserOrders(15).
+        await Backend.getUserOrders().
             then(res => {
                 if (res) {
                     setOrders(res.data)

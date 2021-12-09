@@ -241,7 +241,7 @@ export const routes = {
     communityDealers: 'communityDealers',
     communityGroups: 'communityGroups',
     communityYourGroups: 'communityYourGroups',
-    explore: 'explore',
+    find: 'find',
     marketPlace: 'marketPlace',
     profile: 'profile',
     followRequests: 'followRequests',

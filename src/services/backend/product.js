@@ -299,9 +299,11 @@ export const getNearByProducts = async (page) => {
     const defaultPage = page ? page : 1
     const state = store.getState()
     const { userDetail, currentLocation } = state.user
-    const { coords } = currentLocation
-    const latitude = userDetail.latitude ? userDetail.latitude : coords ? coords.latitude : ''
-    const longitude = userDetail.longitude ? userDetail.longitude : coords ? coords.longitude : ''
+    //const { coords } = currentLocation
+    // const latitude = userDetail.latitude ? userDetail.latitude : coords ? coords.latitude : ''
+    // const longitude = userDetail.longitude ? userDetail.longitude : coords ? coords.longitude : ''
+    const userLocation=HelpingMethods.getMyLocation()
+    const {latitude,longitude}=userLocation
     const { id } = userDetail
     const params = {
         user_id: id,

@@ -301,11 +301,12 @@ function SubscriptionPayment(props) {
                 buttonText1="Continue"
                 onPressButton1={async () => {
                     setLoading(true)
-                    const data = await AsyncStorage.getItem(asyncConsts.user_credentials)
-                    if (data) {
-                        const dataParsed = JSON.parse(data)
-                        await Backend.auto_login(dataParsed.email, dataParsed.password)
-                    }
+                    // const data = await AsyncStorage.getItem(asyncConsts.user_credentials)
+                    // if (data) {
+                    //     const dataParsed = JSON.parse(data)
+                    //     await Backend.auto_login(dataParsed.email, dataParsed.password)
+                    // }
+                    await Backend.handleAutoLogin()
                     toggleOrderPlacedPopup()
                     setLoading(false)
                 }}

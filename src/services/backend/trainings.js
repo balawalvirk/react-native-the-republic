@@ -14,11 +14,11 @@ export const getAllTranings = async () => {
     const user_id = state.user.userDetail.id
     const params = {
         user_id
-    } 
+    }
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios
-            .post(`${baseURL + endPoints.training.show_trainings}`,params)
+            .post(`${baseURL + endPoints.training.show_trainings}`, params)
             .then(async responseJson => {
                 const tempResponseData = responseJson.data
                 console.log('Response', tempResponseData);
@@ -90,16 +90,23 @@ export const get_user_tranings = async () => {
     }
     return response
 };
-export const sendTrainingRequest = async ({ training_id ,timeSlot_id}) => {
+export const sendTrainingRequest = async ({ training_id, timeSlot_id, sub_total,
+    tax, transaction_charges, total, stripe_charge_id,coupon_id
+}) => {
     let response = null
     const state = store.getState()
     const user_id = state.user.userDetail.id
-
     const params = {
         user_id,
         training_id,
-        timeSlot_id
+        timeSlot_id,
+        sub_total,
+        tax,
+        transaction_charges,
+        total,
+        stripe_charge_id
     }
+    coupon_id && [params['coupon_id'] = coupon_id]
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios

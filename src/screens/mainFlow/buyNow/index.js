@@ -6,8 +6,8 @@ import { totalSize, width } from 'react-native-dimension';
 import { MaterialIndicator } from 'react-native-indicators';
 import { useSelector } from 'react-redux';
 import { ButtonGradient, ComponentWrapper, IconButton, KeyboardAvoidingScrollView, LineHorizontal, MainWrapper, MediumText, PopupPrimary, ProductCardSecondary, RegularText, RowWrapper, RowWrapperBasic, SmallTitle, Spacer, SwitchPrimary, TextInputUnderlined, TinyTitle, TitleInfoPrimary, TitlePrimary, UserCardPrimary, Wrapper, TitleValue, Toasts, SmallText } from '../../../components';
-import { appImages, appStyles, Backend, colors, fulfillmentStatuses, fulfillmentTypes, HelpingMethods, routes, sizes } from '../../../services';
-
+import { appImages, appStyles, Backend, colors, fulfillmentStatuses, fulfillmentTypes, HelpingMethods, routes, sizes, stripeKeys } from '../../../services';
+import Stripe from 'tipsi-stripe';
 
 
 
@@ -38,6 +38,7 @@ function BuyNow(props) {
     const toggleOrderPlacedPopup = () => setOrderPlacedPopupVisible(!isOrderPlacedPopupVisible)
 
     useEffect(() => {
+        initializStripeOptions()
         getSetSellerCopuns()
         const default_card_id = userDetail.default_card_id
         console.log(default_card_id)
@@ -49,6 +50,14 @@ function BuyNow(props) {
             tempCreditCard && setDefaultCreditCard(tempCreditCard)
         }
     }, [userDetail])
+
+    const initializStripeOptions = async () => {
+        await Stripe.setOptions({
+            publishableKey: stripeKeys.publishable_key,
+            //  merchantId: 'MERCHANT_ID', // Optional
+            androidPayMode: 'test', // Android only
+        })
+    }
 
     const getSetSellerCopuns = () => {
         Backend.getUserCoupons(user.id).
@@ -81,6 +90,7 @@ function BuyNow(props) {
             // console.log('is expired --> ', moment(new Date()).format('yyyy-mm-d') > expiry_date)
             const isExpired = moment(new Date()).format('yyyy-mm-d') > expiry_date
             if (!isExpired) {
+                //const productPricee = Number(total)
                 const productPricee = Number(productPrice)
                 // console.log('productPricee --> ', productPricee)
                 if (productPricee >= minimum_order) {
@@ -98,10 +108,12 @@ function BuyNow(props) {
     //const discountAmount = getDiscountAmount()
     //console.log('discountAmount --> ', discountAmount)
     const productPrice = discounted_price ? discounted_price : price ? price : 0
-    const subTotal = Number(productPrice)
-    const tax = HelpingMethods.getRoundedValue((Number(productPrice) / 100) * 10)
-    const transectionCharges = 10
-    const total = (subTotal + tax + transectionCharges)
+    const subTotal = Number(productPrice) - (coupon ? getDiscountAmount() : 0)
+    const tax = HelpingMethods.getRoundedValue((subTotal / 100) * 10)
+    //const transectionCharges = 10
+    const transectionCharges = HelpingMethods.getRoundedValue((subTotal / 100) * 2)
+    const total = HelpingMethods.getRoundedValue(subTotal + tax + transectionCharges)
+    // const grandTotal = total - (coupon ? getDiscountAmount() : 0)
 
     const productImages = images ? JSON.parse(images) : null
     const productImage = productImages ? productImages[0] : appImages.noImageAvailable
@@ -129,40 +141,48 @@ function BuyNow(props) {
     const handleBuyNow = async () => {
         if (validations()) {
             setLoadingBuy(true)
-            await Backend.createOrder({
-                product_id: product.id,
-                sub_total: subTotal.toString(),
-                tax: tax.toString(),
-                transaction_charges: transectionCharges.toString(),
-                total: total.toString(),
-                private_sale: privateSale,
-                house: delivery_address ? delivery_address.house : 'h#1',
-                street: delivery_address ? delivery_address.street : 's#1',
-                city: delivery_address ? delivery_address.city : 'Daska',
-                state: delivery_address ? delivery_address.state : 'Punjab',
-                zip_code: delivery_address ? delivery_address.zip_code : '51010',
-                seller_id: user.id,
-                buyer_dealer_id: !privateSale ? default_dealer_id ? default_dealer_id : '' : '',
-                address: delivery_address ? (delivery_address.house + ', ' + delivery_address.street + ', ' + delivery_address.city + ', ' + delivery_address.zip_code + ', ' + delivery_address.state) : ''
-            }).then(async res => {
-                if (res) {
-                    if (!privateSale && default_dealer_id) {
-                        const fulfillmentData = {
-                            dealer_id: default_dealer_id,
-                            seller_id: user.id,
-                            buyer_id: userDetail.id,
-                            // buyer_dealer_id: item.buyer_dealer_id,
-                            // seller_dealer_id: '18',
+            await Backend.payWithStripe(defaultCreditCard, total).
+                then(async res => {
+                    if (res) {
+                        const stripeCargeId = res.id
+                        await Backend.createOrder({
                             product_id: product.id,
-                            order_id: res.data.id,
-                            status: fulfillmentStatuses.inProgess,
-                            type: fulfillmentTypes.buyerDealer
-                        }
-                        await Backend.addFulfillment(fulfillmentData)
+                            sub_total: subTotal.toString(),
+                            tax: tax.toString(),
+                            transaction_charges: transectionCharges.toString(),
+                            total: total.toString(),
+                            private_sale: privateSale,
+                            house: delivery_address ? delivery_address.house : 'h#1',
+                            street: delivery_address ? delivery_address.street : 's#1',
+                            city: delivery_address ? delivery_address.city : 'Daska',
+                            state: delivery_address ? delivery_address.state : 'Punjab',
+                            zip_code: delivery_address ? delivery_address.zip_code : '51010',
+                            seller_id: user.id,
+                            buyer_dealer_id: !privateSale ? default_dealer_id ? default_dealer_id : '' : '',
+                            address: delivery_address ? (delivery_address.house + ', ' + delivery_address.street + ', ' + delivery_address.city + ', ' + delivery_address.zip_code + ', ' + delivery_address.state) : '',
+                            coupon_id: coupon ? coupon.id : '',
+                            stripe_charge_id: stripeCargeId
+                        }).then(async res => {
+                            if (res) {
+                                if (!privateSale && default_dealer_id) {
+                                    const fulfillmentData = {
+                                        dealer_id: default_dealer_id,
+                                        seller_id: user.id,
+                                        buyer_id: userDetail.id,
+                                        // buyer_dealer_id: item.buyer_dealer_id,
+                                        // seller_dealer_id: '18',
+                                        product_id: product.id,
+                                        order_id: res.data.id,
+                                        status: fulfillmentStatuses.inProgess,
+                                        type: fulfillmentTypes.buyerDealer
+                                    }
+                                    await Backend.addFulfillment(fulfillmentData)
+                                }
+                                toggleOrderPlacedPopup()
+                            }
+                        })
                     }
-                    toggleOrderPlacedPopup()
-                }
-            })
+                })
             setLoadingBuy(false)
         }
     }
@@ -260,7 +280,7 @@ function BuyNow(props) {
                         <Wrapper flex={1}>
                             <SmallTitle>Total</SmallTitle>
                         </Wrapper>
-                        <SmallTitle style={[appStyles.textPrimaryColor]}>$ {total - (coupon ? getDiscountAmount() : 0)}</SmallTitle>
+                        <SmallTitle style={[appStyles.textPrimaryColor]}>$ {total}</SmallTitle>
                     </RowWrapperBasic>
                 </Wrapper>
                 <Spacer height={sizes.baseMargin} />

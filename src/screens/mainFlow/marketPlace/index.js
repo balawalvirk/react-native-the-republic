@@ -11,28 +11,7 @@ import TopCategories from './topCategories';
 //import Skeleton from './skeleton'
 import { CategoriesSkeleton, PostTypesSkeleton } from './skeleton'
 import { setMyGroups } from '../../../services/store/actions';
-function RenderProducts({ title, onPressViewAll, data, onPressProduct }) {
-    return (
-        <>
-            {
-                data.length ?
-                    <Wrapper>
-                        <TitlePrimary
-                            title={title}
-                            onPressRight={onPressViewAll}
-                        />
-                        <Spacer height={sizes.smallMargin} />
-                        <ProductsHorizontalyPrimary
-                            data={data}
-                            onPressProduct={onPressProduct}
-                        />
-                    </Wrapper>
-                    :
-                    null
-            }
-        </>
-    )
-}
+
 function MarketPlace(props) {
     const { navigate } = props.navigation
 
@@ -78,7 +57,6 @@ function MarketPlace(props) {
                     setPopularProducts(res.data.data)
                 }
             })
-
         await Backend.getTopRatedProducts().
             then(res => {
                 if (res) {
@@ -86,7 +64,7 @@ function MarketPlace(props) {
                 }
             })
         //setLoading(false)
-       // await Backend.getNewNotificationsCount()
+        // await Backend.getNewNotificationsCount()
         await Backend.get_credit_cards()
         await Backend.get_product_items()
         await Backend.get_product_manufacturers()
@@ -172,3 +150,26 @@ function MarketPlace(props) {
 }
 
 export default MarketPlace;
+
+function RenderProducts({ title, onPressViewAll, data, onPressProduct }) {
+    return (
+        <>
+            {
+                data.length ?
+                    <Wrapper>
+                        <TitlePrimary
+                            title={title}
+                            onPressRight={onPressViewAll}
+                        />
+                        <Spacer height={sizes.smallMargin} />
+                        <ProductsHorizontalyPrimary
+                            data={data}
+                            onPressProduct={onPressProduct}
+                        />
+                    </Wrapper>
+                    :
+                    null
+            }
+        </>
+    )
+}

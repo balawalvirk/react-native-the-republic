@@ -39,7 +39,8 @@ const topTabs = [
     },
 
 ]
-function Explore({ navigation, route }) {
+
+function Find({ navigation, route }) {
     const { navigate, setParams } = navigation
     const filterData = route.params ? route.params.filterData ? route.params.filterData : null : null
 
@@ -363,4 +364,4 @@ function Explore({ navigation, route }) {
     );
 }
 
-export default Explore;
+export default Find;

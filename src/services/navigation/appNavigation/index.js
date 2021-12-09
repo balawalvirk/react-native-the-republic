@@ -80,8 +80,8 @@ function BottomTabScreens() {
                 })}
             />
             <MainBottomTab.Screen
-                name={routes.explore}
-                component={MainApp.Explore}
+                name={routes.find}
+                component={MainApp.Find}
                 options={() => ({
                     tabBarLabel: "Find",
                     tabBarIcon: ({ color, size, focused }) => {

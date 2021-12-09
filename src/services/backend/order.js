@@ -11,7 +11,7 @@ const { dispatch } = store
 export const createOrder = async ({
     product_id, sub_total, private_sale, house, street, city, state, zip_code,
     seller_id, tax, transaction_charges, total, seller_dealer_id, buyer_dealer_id,
-    seller_fullfillment_id, buyer_fullfillment_id, address }) => {
+    seller_fullfillment_id, buyer_fullfillment_id, address ,coupon_id,stripe_charge_id}) => {
     let response = null
     const reduxState = store.getState()
     const userId = reduxState.user.userDetail.id
@@ -30,11 +30,13 @@ export const createOrder = async ({
         state,
         zip_code,
         seller_id,
+        stripe_charge_id
         //seller_dealer_id
         //buyer_dealer_id
         //seller_fullfillment_id,
         //buyer_fullfillment_id,
     }
+    coupon_id && [params['coupon_id'] = coupon_id]
     seller_dealer_id && [params['seller_dealer_id'] = seller_dealer_id]
     buyer_dealer_id && [params['buyer_dealer_id'] = buyer_dealer_id]
     seller_fullfillment_id && [params['seller_fullfillment_id'] = seller_fullfillment_id]

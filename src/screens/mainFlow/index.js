@@ -1,5 +1,5 @@
 import Community from './community'
-import Explore from './explore'
+import Find from './find'
 import MarketPlace from './marketPlace'
 import Profile from './profile'
 import FollowRequests from './followRequests'
@@ -44,7 +44,7 @@ import PostDetail from './postDetail'
 import ReportContent from './reportContent'
 
 export {
-    Community, Explore, MarketPlace, Profile,
+    Community, Find, MarketPlace, Profile,
     FollowRequests, Dealers, Trainings, Comments,
     TheRepublicNews, ContactUs, SubscriptionPlan,
     Chats, Notifications, ShareAPost, MyLocation, Search,
