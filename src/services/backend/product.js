@@ -211,9 +211,10 @@ export const getAllProducts = async ({ sort_by, page }) => {
 };
 export const getMapProducts = async () => {
     let response = null
-    // const state = store.getState()
-    // const { id } = state.user.userDetail
+     const state = store.getState()
+    const user_id = state.user.userDetail.id
     const params = {
+        user_id
     }
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
