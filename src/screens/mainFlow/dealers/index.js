@@ -157,7 +157,7 @@ function Dealer(props) {
 
                     </Wrapper>
                     <FilterButton
-                        onPress={() => navigate(routes.sortFilter, {
+                        onPress={() => navigate(routes.sortFilterDealers, {
                             clearFilter: () => { Toasts.success('Filter cleared') },
                             applyFilter: () => { Toasts.success('Filter applied') }
                         })}

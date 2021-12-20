@@ -14,16 +14,17 @@ import CreateCoupon from './coupons/createCoupon'
 import Invoices from './invoices'
 import Reports from './reports'
 import WithdrawEarnings from './earnings/withdrawEarnings'
+import Services from './services'
 
 export {
   SellerDashboard, YourProducts,
   Reports, Requests, Orders,
-  Fulfillments,FulfillmentDetail,
-   Earnings,
+  Fulfillments, FulfillmentDetail,
+  Earnings,
   Trainings,
   Coupons, CreateCoupon,
   Invoices,
   OrderDetails, WithdrawEarnings,
   CreateTraining, SelectDateTime,
-
+  Services
 }

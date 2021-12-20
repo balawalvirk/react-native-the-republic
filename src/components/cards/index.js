@@ -18,6 +18,7 @@ import { ButtonColoredSmall } from '../buttons';
 import { ImageSqareRound, ImageThumbnailGrid } from '../images';
 import { TitleValue } from '../common';
 import { BallIndicator, DotIndicator, MaterialIndicator } from 'react-native-indicators';
+import { CustomIcon } from '../icons'
 
 
 export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, image, images, containerstyle, description, onPressHeart, discountedPrice, price, userName, userImage, viewType, rating, reviewCount, isSponsered }) => {
@@ -408,7 +409,7 @@ export const CreditCardPrimary = ({ containerStyle, name, cardNumber, expiry, on
 }
 
 
-export const NotificationCardPrimary = ({ onPress, disabled,text, image, type, time, containerStyle }) => {
+export const NotificationCardPrimary = ({ onPress, disabled, text, image, type, time, containerStyle }) => {
     const isProduct = type === 'product' || type === 'order'
     const isUser = type === 'postReaction' || type === 'postComment' || type === 'followRequestAccepted' || type === 'newFollowRequest' || type === 'followUser'
     const isApp = type === 'app'
@@ -931,4 +932,64 @@ export const IconTitleCrossCard = ({ style, onPress, hideLine, iconSize, title, 
             </Wrapper>
         </TouchableOpacity>
     );
+}
+
+export const UnderlinedWithArrowCard = ({
+    onPress, containerStyle, title, titleStyle, subContainerStyle, preRight,
+    animation, duration,
+    //right params
+    right, iconNameRight, iconTypeRight, iconSizeRight, iconColorRight, iconStyleRight, onPressIconRight,
+    //left params
+    left, customIconLeft, iconNameLeft, iconTypeLeft, iconColorLeft, iconSizeLeft, iconStyleLeft, onPressIconLeft,
+}) => {
+    return (
+        <TouchableOpacity
+            onPress={onPress}
+            activeOpacity={1}
+        >
+            <Wrapper animation={animation} duration={duration} style={[{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: sizes.marginHorizontal, paddingVertical: sizes.baseMargin, borderBottomWidth: 1, borderBottomColor: colors.appBgColor2 }, containerStyle]}>
+                {
+                    left ?
+                        left
+                        :
+                        customIconLeft ?
+                            <View style={{ alignItems: 'center', marginLeft: sizes.marginHorizontal }}>
+                                <CustomIcon icon={customIconLeft} size={iconSizeLeft ? iconSizeLeft : sizes.icons.medium} color={iconColorLeft ? iconColorLeft : colors.appTextColor1} containerStyle={iconStyleLeft} />
+                            </View>
+                            :
+                            iconNameLeft ?
+                                <View style={{ alignItems: 'center', marginLeft: sizes.marginHorizontal }}>
+                                    <Icon name={iconNameLeft} type={iconTypeLeft} size={iconSizeLeft ? iconSizeLeft : sizes.icons.medium} color={iconColorLeft ? iconColorLeft : colors.appTextColor4} iconStyle={iconStyleLeft} onPress={onPressIconLeft} />
+                                </View>
+                                :
+                                null
+                }
+                <Wrapper style={[{ flex: 1 }, subContainerStyle]}>
+                    <MediumText style={titleStyle}>{title}</MediumText>
+                </Wrapper>
+
+                <RowWrapperBasic>
+                    {
+                        preRight && preRight
+                    }
+                    {
+                        right ?
+                            right
+                            :
+                            iconNameRight ?
+                                <View style={{ alignItems: 'center', marginRight: sizes.marginHorizontal }}>
+                                    <Icon name={iconNameRight} type={iconTypeRight} size={iconSizeRight ? iconSizeRight : sizes.icons.medium} color={iconColorRight ? iconColorRight : colors.appTextColor5} iconStyle={iconStyleRight} onPress={onPressIconRight} />
+                                </View>
+                                :
+                                <Icon
+                                    name={'chevron-forward'}
+                                    type={'ionicon'}
+                                    size={totalSize(2)}
+                                    color={colors.appBgColor3}
+                                />
+                    }
+                </RowWrapperBasic>
+            </Wrapper>
+        </TouchableOpacity>
+    )
 }

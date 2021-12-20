@@ -630,6 +630,13 @@ function AppNavigation() {
                     headerTitleAlign: 'center'
                 }}
             />
+             <AppStack.Screen name={routes.sortFilterDealers} component={MainApp.SortFilterDealers}
+                options={{
+                    // headerShown: false,
+                    title: 'Sort & Filters',
+                    //headerTitleAlign: 'center'
+                }}
+            />
             <AppStack.Screen name={routes.reportContent} component={MainApp.ReportContent}
                 // options={{
                 //     // headerShown: false,
@@ -748,6 +755,13 @@ function AppNavigation() {
                 options={{
                     // headerShown: false,
                     title: 'Reports',
+                    headerTitleAlign: 'center'
+                }}
+            />
+             <AppStack.Screen name={routes.seller.services} component={Seller.Services}
+                options={{
+                    // headerShown: false,
+                    title: 'Services',
                     headerTitleAlign: 'center'
                 }}
             />

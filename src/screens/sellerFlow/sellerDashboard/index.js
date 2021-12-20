@@ -10,7 +10,7 @@ import { appStyles, Backend, colors, DummyData, routes, sizes } from '../../../s
 const options = [
   'Products Inventory',
   'Requests', 'Orders',
-  'Fulfillments', 'Earnings',
+  'Fulfillments', 'Earnings', 'Services',
   'Trainings', 'Coupons', 'Invoices', 'Reports',
 ]
 
@@ -39,6 +39,7 @@ function SellerDashboard(props) {
     else if (item === 'Reports') navigate(routes.seller.reports)
     else if (item === 'Orders') navigate(routes.seller.orders)
     else if (item === 'Fulfillments') navigate(routes.dealer.fulfillments)
+    else if (item === 'Services') navigate(routes.seller.services)
     else if (item === 'Earnings') navigate(routes.seller.earnings)
     else if (item === 'Trainings') navigate(routes.seller.trainings)
     else if (item === 'Coupons') navigate(routes.seller.coupons)

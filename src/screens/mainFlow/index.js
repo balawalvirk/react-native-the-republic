@@ -42,6 +42,7 @@ import PrivacySettings from './createGroup/privacySettings'
 import MemberRequests from './groupDetail/memberRequests'
 import PostDetail from './postDetail'
 import ReportContent from './reportContent'
+import SortFilterDealers from './sortFilterDealers'
 
 export {
     Community, Find, MarketPlace, Profile,
@@ -54,6 +55,7 @@ export {
     ChatScreen, TagFriends, BuyNow, DeliveryAddress, FflDealers,
     OrderDetail, OrderInvoice, UpgradeSubscriptionPlan,
     SelectDateTime, Payment,
-    CreateGroup, PrivacySettings, MemberRequests, PostDetail, ReportContent
+    CreateGroup, PrivacySettings, MemberRequests, PostDetail, ReportContent,
+    SortFilterDealers
 
 }

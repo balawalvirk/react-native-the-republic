@@ -20,8 +20,9 @@ const defaultMarker = {
         longitude: 0.1236
     }
 }
-function MyLocation(props) {
-    const { goBack } = props.navigation
+function MyLocation({ navigation, route }) {
+    const { goBack } = navigation
+    const getLocation = route.params ? route.params.getLocation ? route.params.getLocation : null : null
 
     //refs
     const mapRef = useRef(null)
@@ -42,7 +43,7 @@ function MyLocation(props) {
     }, [])
 
     const getSetData = () => {
-        const {distance,address}=userDetail
+        const { distance, address } = userDetail
         const tempMyLocation = HelpingMethods.getMyLocation()
         console.log('tempMyLocation -->', tempMyLocation)
         if (tempMyLocation) {
@@ -184,9 +185,14 @@ function MyLocation(props) {
                 </Wrapper>
                 <Spacer height={sizes.marginVertical} />
                 <ButtonGradient
-                    text="Update Location"
+                    text={!getLocation ? "Update Location" : "Done"}
                     loading={loading}
-                    onPress={handleUpdateLocation}
+                    onPress={() => {
+                        !getLocation ? handleUpdateLocation() : [
+                            getLocation({ address, latitude, longitude, distance }),
+                            goBack()
+                        ]
+                    }}
                 />
                 <Spacer height={sizes.marginVertical} />
             </AbsoluteWrapper>

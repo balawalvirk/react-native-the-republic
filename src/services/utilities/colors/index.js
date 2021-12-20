@@ -28,7 +28,8 @@ export const colors = {
 
   rating: '#FFC400',
   success: '#00C100',
-  error: '#FF0000',
+  //error: '#FF0000',
+  error: '#BF0B30',
 
   appGradiantColors: ['#0E4095', '#002768'],
 

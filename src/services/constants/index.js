@@ -285,6 +285,7 @@ export const routes = {
     groupMemberRequests: 'memberRequests',
     postDetail: 'postDetail',
     reportContent: 'reportContent',
+    sortFilterDealers:'sortFilterDealers',
     seller: {
         sellerDashboard: 'sellerDashboard',
         yourProducts: 'yourProducts',
@@ -299,7 +300,8 @@ export const routes = {
         invoices: 'invoices',
         withdrawEarnings: 'withdrawEarnings',
         createTrainin: 'createTrainin',
-        selectDateTime: 'sellcerSelectDateTime'
+        selectDateTime: 'sellcerSelectDateTime',
+        services:'services'
     },
     dealer: {
         fulfillments: 'fulfillments',
@@ -365,6 +367,7 @@ export const sortingOptions = {
     title_z_a: 'z_to_a',
     price_low_to_high: 'lo_to_hi',
     price_high_to_low: 'hi_to_lo',
+    distance:'distance'
 }
 export const searchTypes = {
     all: 'all',

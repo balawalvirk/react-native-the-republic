@@ -28,6 +28,7 @@ import { StyleSheet } from 'react-native'
 import { LineVertical,LineHorizontal } from '../lines'
 import GoogleAutoComplete from './googleAutoComplete'
 import { useSelector } from 'react-redux'
+import PickerPopup  from './pickerPopup'
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 
 export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconColor, iconContainerColor, iconContainerSize, iconSize, disableSwipe, disableBackDropPress, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, loadingButton1, loadinButton2, topMargin, children, scrollEnabled, button1Style, keyboardShouldPersistTaps }) => {
@@ -617,7 +618,7 @@ export {
     Posts, PostCard, MenuPopup, RenderComments, Products, ArmerInfo,
     Reviews, ProductsSecondary, ProductsHorizontalyPrimary, Dealers, Groups,
     AddPaymentMethodModal, FollowRequestsList, GoogleAutoComplete,
-
+    PickerPopup
 }
 
 export * from './imagesList'
