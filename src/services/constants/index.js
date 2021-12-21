@@ -216,6 +216,12 @@ export const endPoints = {
         recent_searches: 'recent-searches',
         search_all: 'search',
     },
+    services: {
+        create_service: 'create-service',
+        add_service: 'add-service',
+        remove_service:'remove-service',
+        get_services:'get-services'
+    },
     contact_us: 'contact-us',
     add_card: 'add-card',
     submit_app_feedback: 'submit-app-feedback'

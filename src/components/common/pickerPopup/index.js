@@ -1,22 +1,37 @@
 import React, { useState } from "react"
 import { height, totalSize } from "react-native-dimension"
 import { Icon } from "react-native-elements"
-import { Cards, Modals, PickerPrimary, SearchTextinput, Spacer, Spacers, TextInputs, UnderlinedWithArrowCard, Wrapper, Wrappers } from "../.."
+import { Cards, Modals, PickerPrimary, PopupPrimary, SearchTextinput, Spacer, Spacers, TextInputs, UnderlinedWithArrowCard, Wrapper, Wrappers } from "../.."
 import { colors, sizes } from "../../../services"
 
 export default function PickerPopup({
     visible, toggle, data, onPressItem,
     isSelected, enableSearch, textKey, topMargin,
-    selectionIndicator, headerTitle, onPressDone
+    selectionIndicator, headerTitle, onPressDone, showHeader
 }) {
     const isCheck = selectionIndicator === 'check' || !selectionIndicator
     const isRadio = selectionIndicator === 'radio'
     const [searchQuery, setSearchQuery] = useState('')
 
+    const getSearchedData = () => {
+        let tempData=[]
+        if(data){
+            if(searchQuery&&data.length){
+                const query=searchQuery.toLowerCase()
+                tempData=data.filter(item=>{
+                    const title=textKey ? item[textKey] : item
+                    return title.toLowerCase().includes(query)
+                })
+            }
+        }
+        return tempData
+    }
+    const filteredData = !searchQuery ? data : getSearchedData()
     return (
-        <PickerPrimary
+        <PopupPrimary
             visible={visible}
             toggle={toggle}
+            showHeader
             //onPressClose={toggle}
             headerTitle={headerTitle ? headerTitle : 'Select'}
             onPressButton1={() => {
@@ -48,7 +63,7 @@ export default function PickerPopup({
             <Wrapper>
 
                 {data ? data.length ?
-                    data.map((item, index) => {
+                    filteredData.map((item, index) => {
                         const is_selected = isSelected(item, index)
                         return (
                             <UnderlinedWithArrowCard
@@ -85,6 +100,6 @@ export default function PickerPopup({
                     null : null
                 }
             </Wrapper>
-        </PickerPrimary>
+        </PopupPrimary>
     )
 }

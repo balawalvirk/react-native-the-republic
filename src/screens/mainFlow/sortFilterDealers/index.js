@@ -2,8 +2,8 @@ import React, { Component, useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { totalSize } from 'react-native-dimension';
 import { MaterialIndicator } from 'react-native-indicators';
-import { ButtonColoredSmall, ButtonGradient, ButtonGroupAnimated, CheckBoxPrimary, ComponentWrapper, MainWrapper, RegularText, Spacer, TextInputUnderlined, Wrapper, PickerPopup } from '../../../components';
-import { appStyles, colors, HelpingMethods, routes, sizes, sortingOptions } from '../../../services';
+import { ButtonColoredSmall, ButtonGradient, ButtonGroupAnimated, CheckBoxPrimary, ComponentWrapper, MainWrapper, RegularText, Spacer, TextInputUnderlined, Wrapper, PickerPopup, RenderTags } from '../../../components';
+import { appStyles, Backend, colors, HelpingMethods, routes, sizes, sortingOptions } from '../../../services';
 const defaultSortingOptions = [
     {
         title: 'Top Rated',
@@ -47,32 +47,51 @@ export default function SortFilterDealers({ navigation, route }) {
     }, [navigation]);
 
     useEffect(() => {
-        setTimeout(() => {
-            getSetServices()
-        }, 2000);
+        getSetServices()
     }, [])
 
     const getSetServices = () => {
-        let tempData = []
-        for (let i = 0; i < 20; i++) {
-            const tempObj = {
-                name: 'Service Number ' + i,
-                is_selected: i === 2 || i === 3 ? true : false
-            }
-            tempData.push(tempObj)
-        }
-        setServices(tempData)
+        // let tempData = []
+        // for (let i = 0; i < 20; i++) {
+        //     const tempObj = {
+        //         name: 'Service Number ' + i,
+        //         isSelected: i === 2 || i === 3 ? true : false
+        //     }
+        //     tempData.push(tempObj)
+        // }
+        // setServices(tempData)
+        Backend.getAllServices().
+            then(res => {
+                if (res) setServices(res.data)
+            })
     }
     const handlePressServices = (item, index) => {
         let tempData = services.slice()
-        let tempIndex = services.indexOf(item)
-        tempData[tempIndex].is_selected = !tempData[tempIndex].is_selected
-        HelpingMethods.handleAnimation()
-        setServices(tempData)
+        const tempIndex = services.indexOf(item)
+        if (tempIndex >= 0) {
+            tempData[tempIndex].isSelected = !tempData[tempIndex].isSelected
+            setServices(tempData)
+        }
+
+    }
+    const getSelectedServices = () => {
+        let tempData = []
+        if (services) {
+            tempData = services.filter(item => item.isSelected)
+        }
+        return tempData
     }
     const handleGetSetLocation = (data) => {
         console.log('location data ---> ', data)
+        if (data) {
+            const { address, distance, latitude, longitude } = data
+            setAddress(address)
+            setDistance(distance)
+            setLatitude(latitude)
+            setLongitude(longitude)
+        }
     }
+    const searchArea = address && distance ? `${address.length>15?(address.slice(0,15)+'...'):address} ~ within ${distance} miles` : ''
     return (
         <MainWrapper>
             <Wrapper flex={1}>
@@ -106,7 +125,8 @@ export default function SortFilterDealers({ navigation, route }) {
                 </ComponentWrapper>
                 <Spacer height={sizes.baseMargin} />
                 <TextInputUnderlined
-                    title={'Services Offered'}
+                    titleStatic={getSelectedServices().length ? 'Services Offered' : null}
+                    title={!getSelectedServices().length ? 'Services Offered' : ''}
                     iconNameRight={'caret-down'}
                     iconTypeRight={'ionicon'}
                     iconColorRight={colors.appColor1}
@@ -123,11 +143,27 @@ export default function SortFilterDealers({ navigation, route }) {
                             :
                             null
                     }
-                />
+                >
+                    {
+                        getSelectedServices().length ?
+                            <Wrapper style={{ paddingVertical: sizes.smallMargin }}>
+                                <RenderTags
+                                    tags={getSelectedServices()}
+                                    value={'name'}
+                                    onPressCross={handlePressServices}
+                                    ContainerStyle={{ flexWrap: 'wrap', }}
+                                    tagStyle={{ marginBottom: sizes.TinyMargin }}
+                                />
+                            </Wrapper>
+                            :
+                            null
+                    }
+                </TextInputUnderlined>
                 <Spacer height={sizes.baseMargin} />
 
                 <TextInputUnderlined
                     title={'Search Area'}
+                    value={searchArea}
                     iconNameRight={'map-pin'}
                     iconTypeRight={'feather'}
                     iconColorRight={colors.appColor1}
@@ -148,16 +184,13 @@ export default function SortFilterDealers({ navigation, route }) {
                 toggle={toggleServicePopup}
                 textKey={'name'}
                 data={services ? services : []}
-                onPressItem={(item, index) => {
-                    let tempData = services.slice()
-                    tempData[index].is_selected = !tempData[index].is_selected
-                    setServices(tempData)
-                }}
+                onPressItem={handlePressServices}
                 isSelected={(item, index) => {
-                    return item.is_selected
+                    return item.isSelected
                 }}
-                selectionIndicator={'radio'}
+                selectionIndicator={'check'}
                 headerTitle={'Services'}
+                enableSearch
             />
         </MainWrapper>
     );

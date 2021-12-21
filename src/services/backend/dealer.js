@@ -9,15 +9,18 @@ import { setCreditCards, setUserDetail } from "../store/actions";
 const { dispatch } = store
 
 
-export const getDealers = async () => {
+export const getDealers = async ({ sort_by }) => {
     let response = null
     const state = store.getState()
     const user_id = state.user.userDetail.id
     const params = {
-        user_id
-    } 
+        user_id,
+        sort_by
+    }
+    const uri = `${baseURL + endPoints.dealer.get_dealers}`
+    console.log('getDealers uri: ', uri, '\n params: ', params);
     await axios
-        .post(`${baseURL + endPoints.dealer.get_dealers}`,params)
+        .post(uri, params)
         .then(async responseJson => {
             const tempResponseData = responseJson.data
             console.log('getDealers Response', tempResponseData);

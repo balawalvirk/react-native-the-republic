@@ -2,7 +2,7 @@ import React, { Component, useEffect, useRef, useState } from 'react';
 import { View, Text } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
 import { MainWrapper, Products, RowWrapper, Wrapper, ButtonGroupAnimated, CustomIcon, AbsoluteWrapper, ButtonColoredSmall, Spacer, ProductCardPrimary, TitleInfoPrimary, ButtonGradient, ArmerInfo, Toasts, MediumText, Dealers, FilterButton } from '../../../components';
-import { appIcons, appStyles, Backend, colors, DummyData, HelpingMethods, mapStyles, routes, sizes } from '../../../services';
+import { appIcons, appStyles, Backend, colors, DummyData, HelpingMethods, mapStyles, routes, sizes, sortingOptions } from '../../../services';
 import MapView, { Marker } from "react-native-maps";
 //import MapView from "react-native-map-clustering";
 import BottomSheet from 'reanimated-bottom-sheet';
@@ -42,6 +42,7 @@ function Dealer(props) {
 
     const [myLocation, setMyLocation] = useState(null)
     const [dealers, setDealers] = useState([])
+    const [sortBy, setSortBy] = useState(sortingOptions.topRated)
     const [selectedTabIndex, setSelectedTabIndex] = useState(0)
     const [loading, setLoading] = useState(true)
 
@@ -66,8 +67,9 @@ function Dealer(props) {
             setMyLocation({ ...tempMyLocation, ...locationDelta })
         }
     }
+    
     const getSetFflDealers = async () => {
-        await Backend.getDealers().
+        await Backend.getDealers({sort_by:sortBy}).
             then(res => {
                 if (res) {
                     setDealers(res.data)

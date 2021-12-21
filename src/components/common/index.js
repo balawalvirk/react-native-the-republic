@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Platform, TouchableOpacity, ImageBackground, Keyboard } from 'react-native'
 import { height, totalSize, width } from 'react-native-dimension'
-import {ModalSwipeablePrimary} from '../modals'
-import {SkeletonPrimary} from '../skeletonPlacehoder'
+import { ModalSwipeablePrimary } from '../modals'
+import { SkeletonPrimary } from '../skeletonPlacehoder'
 import { appIcons, appImages, appStyles, colors, HelpingMethods, sizes } from '../../services'
 import { ButtonColored, ButtonColoredSmall, ButtonGradient } from '../buttons'
 import { CustomIcon, IconButton, IconWithText } from '../icons'
@@ -25,13 +25,22 @@ import { ImageProfile, ImageRound } from '../images'
 import { KeyboardAvoidingScrollView } from '../scrollViews'
 import { ScrollView } from 'react-native'
 import { StyleSheet } from 'react-native'
-import { LineVertical,LineHorizontal } from '../lines'
+import { LineVertical, LineHorizontal } from '../lines'
 import GoogleAutoComplete from './googleAutoComplete'
 import { useSelector } from 'react-redux'
-import PickerPopup  from './pickerPopup'
+import PickerPopup from './pickerPopup'
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 
-export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconColor, iconContainerColor, iconContainerSize, iconSize, disableSwipe, disableBackDropPress, iconType, customIcon, buttonText1, buttonText2, onPressButton1, onPressButton2, loadingButton1, loadinButton2, topMargin, children, scrollEnabled, button1Style, keyboardShouldPersistTaps }) => {
+export const PopupPrimary = ({
+    visible, toggle, title, info, iconName, iconColor,
+    iconContainerColor, iconContainerSize, iconSize,
+    disableSwipe, disableBackDropPress, iconType,
+    customIcon, buttonText1, buttonText2,
+    onPressButton1, onPressButton2, loadingButton1,
+    loadinButton2, topMargin, children, scrollEnabled,
+    button1Style,
+    headerTitle, showHeader, headerBottom
+}) => {
 
 
     // manage keyboard
@@ -52,13 +61,16 @@ export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconColor
         <ModalSwipeablePrimary
             visible={visible}
             toggle={toggle}
-            hideHeader
+            hideHeader={!showHeader}
             topMargin={customTopMargin}
             disableSwipe={disableSwipe}
             disableBackDropPress={disableBackDropPress}
+            headerTitle={headerTitle}
+
 
         >
             <Wrapper flex={1}>
+                {headerBottom ? headerBottom : null}
                 <KeyboardAvoidingScrollView
                     // keyboardShouldPersistTaps={keyboardShouldPersistTaps}
                     //showsVerticalScrollIndicator={false}
@@ -106,56 +118,64 @@ export const PopupPrimary = ({ visible, toggle, title, info, iconName, iconColor
                             null
                     }
                     {children}
-                    <Spacer height={sizes.baseMargin} />
-                    <RowWrapper>
-                        {
-                            onPressButton2 ?
-                                <Wrapper flex={1}>
-                                    <ButtonColored
-                                        text={buttonText2}
-                                        onPress={onPressButton2}
-                                        buttonColor={colors.appBgColor3}
-                                        tintColor={colors.appTextColor1}
-                                        buttonStyle={{ marginHorizontal: 0 }}
-                                        isLoading={loadinButton2}
-                                    />
-                                </Wrapper>
-                                :
-                                null
-                        }
-                        {
-                            onPressButton2 && onPressButton1 ?
-                                <Spacer width={sizes.marginHorizontal} />
-                                : null
-                        }
-                        {
-                            onPressButton1 ?
-                                button1Style ?
-                                    <Wrapper flex={1}>
-                                        <ButtonColored
-                                            text={buttonText1}
-                                            onPress={onPressButton1}
-                                            shadow
-                                            buttonStyle={[{ marginHorizontal: 0 }, button1Style]}
-                                            isLoading={loadingButton1}
-                                        />
-                                    </Wrapper>
-                                    :
-                                    <Wrapper flex={1}>
-                                        <ButtonGradient
-                                            text={buttonText1}
-                                            onPress={onPressButton1}
-                                            shadow
-                                            buttonStyle={[{ marginHorizontal: 0 }]}
-                                            loading={loadingButton1}
-                                        />
-                                    </Wrapper>
-                                :
-                                null
-                        }
-                    </RowWrapper>
-                    <Spacer height={sizes.doubleBaseMargin} />
+
                 </KeyboardAvoidingScrollView>
+                {
+                    onPressButton1 || onPressButton2 ?
+                        <>
+                            <Spacer height={sizes.baseMargin} />
+                            <RowWrapper>
+                                {
+                                    onPressButton2 ?
+                                        <Wrapper flex={1}>
+                                            <ButtonColored
+                                                text={buttonText2}
+                                                onPress={onPressButton2}
+                                                buttonColor={colors.appBgColor3}
+                                                tintColor={colors.appTextColor1}
+                                                buttonStyle={{ marginHorizontal: 0 }}
+                                                isLoading={loadinButton2}
+                                            />
+                                        </Wrapper>
+                                        :
+                                        null
+                                }
+                                {
+                                    onPressButton2 && onPressButton1 ?
+                                        <Spacer width={sizes.marginHorizontal} />
+                                        : null
+                                }
+                                {
+                                    onPressButton1 ?
+                                        button1Style ?
+                                            <Wrapper flex={1}>
+                                                <ButtonColored
+                                                    text={buttonText1}
+                                                    onPress={onPressButton1}
+                                                    shadow
+                                                    buttonStyle={[{ marginHorizontal: 0 }, button1Style]}
+                                                    isLoading={loadingButton1}
+                                                />
+                                            </Wrapper>
+                                            :
+                                            <Wrapper flex={1}>
+                                                <ButtonGradient
+                                                    text={buttonText1}
+                                                    onPress={onPressButton1}
+                                                    shadow
+                                                    buttonStyle={[{ marginHorizontal: 0 }]}
+                                                    loading={loadingButton1}
+                                                />
+                                            </Wrapper>
+                                        :
+                                        null
+                                }
+                            </RowWrapper>
+                            <Spacer height={sizes.doubleBaseMargin} />
+                        </>
+                        :
+                        null
+                }
             </Wrapper>
         </ModalSwipeablePrimary>
     )
@@ -202,13 +222,13 @@ export const LocationPickerButton = ({ text, onPress }) => {
         address = userDetail.address
     }
     let userAddress = text ? text : address ? address : 'Current Location'
-    console.log('userAddress -->',userAddress)
+    console.log('userAddress -->', userAddress)
     return (
         <TouchableOpacity disabled={!onPress} onPress={onPress} activeOpacity={1}>
             <RowWrapperBasic style={{ padding: sizes.smallMargin, backgroundColor: colors.appBgColor3, borderRadius: 100 }}>
                 <IconWithText
                     customIcon={appIcons.map_pin_outline}
-                    text={userAddress?userAddress.slice(0, 12) + '...':''}
+                    text={userAddress ? userAddress.slice(0, 12) + '...' : ''}
                     tintColor={colors.appTextColor1}
                     iconSize={totalSize(2)}
                     textStyle={[appStyles.textRegular]}
@@ -591,7 +611,7 @@ export const AddDataViewPrimary = ({ title, iconName, iconType, onPress }) => {
         </Wrapper>
     )
 }
-export const MultiSliderPrimary = ({ values, onValuesChange, valuePrimary, valueSecondary, minimumValue, maximumValue ,sliderLength}) => {
+export const MultiSliderPrimary = ({ values, onValuesChange, valuePrimary, valueSecondary, minimumValue, maximumValue, sliderLength }) => {
     return (
         <Wrapper>
             <Wrapper style={[appStyles.center]}>
@@ -599,7 +619,7 @@ export const MultiSliderPrimary = ({ values, onValuesChange, valuePrimary, value
                     trackStyle={{ backgroundColor: colors.appTextColor5 }}
                     selectedStyle={{ backgroundColor: colors.appColor2 }}
                     values={values}
-                    sliderLength={sliderLength?sliderLength:width(90)}
+                    sliderLength={sliderLength ? sliderLength : width(90)}
                     onValuesChange={onValuesChange}
                     min={minimumValue}
                     max={maximumValue}

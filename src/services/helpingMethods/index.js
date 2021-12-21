@@ -64,6 +64,26 @@ export const checkIsProductFavourite = (productId) => {
     }
     return isFavourite
 }
+export const checkIfServiceAdded = (serviceId) => {
+    console.log('serviceId -->',serviceId)
+    let isAdded = false
+    const state = store.getState()
+    const { userDetail } = state.user
+    if (userDetail) {
+        const { services } = userDetail
+        console.log('services --> ',services)
+        if (services) {
+            if (services.length) {
+                const matchedId = services.find(item => item.id === serviceId)
+                console.log('matchedId --> ',matchedId)
+                if (matchedId) {
+                    isAdded = true
+                }
+            }
+        }
+    }
+    return isAdded
+}
 export const checkIfDealerFavourite = (dealerId) => {
     let isFavourite = false
     const state = store.getState()

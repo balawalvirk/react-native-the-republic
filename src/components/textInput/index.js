@@ -145,7 +145,7 @@ const TextInputUnderlined = ({
     iconColorLeft, iconColorRight, iconStyleLeft, iconStyleRight,
     onPressIconLeft, onPressIconRight, placeholder, onFocus, onBlur,
     onChangeText, secureTextEntry, value, containerStyle, inputContainerStyle,
-    inputStyle, titleStatic, autoCapitalize }) => {
+    inputStyle, titleStatic, autoCapitalize,children }) => {
     const [titleMarginBottom] = useState(new Animated.Value(0))
     //const [titleSize] = useState(new Animated.Value(fontSize.regular))
     const FocusedTitleMarginBottom = Platform.OS === 'ios' ? height(5) : height(5)
@@ -227,6 +227,7 @@ const TextInputUnderlined = ({
                             </Wrapper>
                         </AbsoluteWrapper>
                         {
+                            children?children:
                             onPress ?
                                 <Wrapper style={{ height: height(8), justifyContent: 'center' }}>
                                     {
