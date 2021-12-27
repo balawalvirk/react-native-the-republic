@@ -273,7 +273,7 @@ const TextInputUnderlined = ({
                             right
                             :
                             iconNameRight ?
-                                <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                                <View style={{   }}>
                                     <Icon name={iconNameRight} type={iconTypeRight} size={iconSizeRight ? iconSizeRight : sizes.icons.medium} color={iconColorRight ? iconColorRight : colors.appBgColor3} iconStyle={iconStyleRight} onPress={onPressIconRight} />
                                 </View>
                                 :

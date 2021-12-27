@@ -4,7 +4,7 @@ import { View, Text, FlatList } from 'react-native';
 import { height } from 'react-native-dimension';
 import { ComponentWrapper, MainWrapper, TraningSellerCard, PopupPrimary, SmallTitle, Spacer, TraningRequestCard, Wrapper, ButtonColoredSmall, MediumText, LoaderPrimary, SkeletonListVerticalPrimary, AddDataViewPrimary } from '../../../components';
 import { appStyles, Backend, colors, DummyData, routes, sizes } from '../../../services';
-
+ 
 function Trainings(props) {
   const { navigation } = props
   const { navigate } = navigation
@@ -81,6 +81,8 @@ function Trainings(props) {
                 title={item.title}
                 duration={item.duration}
                 charges={item.charges}
+                startDate={item.start_date}
+                endDate={item.end_date}
                 onPressEdit={() => { navigate(routes.seller.createTrainin, { training: item }) }}
                 onPressDelete={() => {
                   setSelectedTraining(item)

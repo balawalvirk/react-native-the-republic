@@ -19,6 +19,7 @@ import { ImageSqareRound, ImageThumbnailGrid } from '../images';
 import { TitleValue } from '../common';
 import { BallIndicator, DotIndicator, MaterialIndicator } from 'react-native-indicators';
 import { CustomIcon } from '../icons'
+import moment from 'moment';
 
 
 export const ProductCardPrimary = ({ onPress, animation, duration, isFavourite, image, images, containerstyle, description, onPressHeart, discountedPrice, price, userName, userImage, viewType, rating, reviewCount, isSponsered }) => {
@@ -521,7 +522,7 @@ export const PlanCard = ({ onPress, title, price, keyPoints, isSelected }) => {
     )
 }
 
-export const TraningCard = ({ onPress, title, duration, charges, location, userName, userImage, userRating, userReviewsCount, description, containerStyle }) => {
+export const TraningCard = ({ onPress, title, duration, charges, location, userName, userImage, userRating, userReviewsCount, description, containerStyle,startDate,endDate }) => {
     const TitleValueSecondary = ({ title, value }) => {
         return (
             <TitleValue
@@ -547,11 +548,15 @@ export const TraningCard = ({ onPress, title, duration, charges, location, userN
                 />
                 <Spacer height={sizes.baseRadius} />
                 <RowWrapperBasic>
-                    <Wrapper flex={1}>
-                        <TitleValueSecondary
+                    <Wrapper flex={2}>
+                        {/* <TitleValueSecondary
                             title="Duration"
                             value={duration}
-                        />
+                        /> */}
+                        <TitleValueSecondary
+                        title="Start - End Date"
+                        value={HelpingMethods.formateDate1(moment(startDate).add(1,'day'))+' - '+HelpingMethods.formateDate1(endDate)}
+                    />
                     </Wrapper>
                     <Wrapper flex={1}>
                         <TitleValueSecondary
@@ -659,15 +664,15 @@ export const TraningRequestCard = ({ onPress, title, userName, userImage, startD
         </TouchableOpacity>
     )
 }
-export const TraningSellerCard = ({ onPress, title, duration, charges, containerStyle, onPressDelete, onPressEdit }) => {
+export const TraningSellerCard = ({ onPress, title, duration, charges, containerStyle, onPressDelete, onPressEdit,startDate,endDate }) => {
     const TitleValuePrimary = ({ title, value }) => {
         return (
             <TitleValue
                 title={title}
                 value={value}
                 containerStyle={{ flexDirection: 'column', marginHorizontal: 0, alignItems: 'flex-start', }}
-                titleStyle={[appStyles.textRegular, appStyles.textDarkGray]}
-                valueStyle={[appStyles.textMedium, appStyles.fontBold, { marginTop: sizes.smallMargin }]}
+                titleStyle={[appStyles.textRegular,appStyles.fontBold, appStyles.textDarkGray]}
+                valueStyle={[appStyles.textMedium,  { marginTop: sizes.smallMargin }]}
             />
         )
     }
@@ -682,16 +687,20 @@ export const TraningSellerCard = ({ onPress, title, duration, charges, container
             </Wrapper>
             <Spacer height={sizes.baseRadius} />
             <RowWrapperBasic>
-                <Wrapper flex={1}>
-                    <TitleValuePrimary
+                <Wrapper flex={2}>
+                    {/* <TitleValuePrimary
                         title="Duration"
-                        value={duration}
+                        value={duration+' days'}
+                    /> */}
+                    <TitleValuePrimary
+                        title="Start - End Date"
+                        value={HelpingMethods.formateDate1(moment(startDate).add(1,'day'))+' - '+HelpingMethods.formateDate1(endDate)}
                     />
                 </Wrapper>
                 <Wrapper flex={1}>
                     <TitleValuePrimary
                         title="Charges"
-                        value={charges}
+                        value={'$'+charges}
                     />
                 </Wrapper>
             </RowWrapperBasic>

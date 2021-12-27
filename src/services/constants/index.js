@@ -292,6 +292,7 @@ export const routes = {
     postDetail: 'postDetail',
     reportContent: 'reportContent',
     sortFilterDealers:'sortFilterDealers',
+    trainingInfo:'trainingInfo',
     seller: {
         sellerDashboard: 'sellerDashboard',
         yourProducts: 'yourProducts',

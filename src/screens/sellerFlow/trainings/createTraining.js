@@ -1,8 +1,8 @@
 import React, { Component, useEffect, useLayoutEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { height } from 'react-native-dimension';
-import { ButtonColored, IconButton, KeyboardAvoidingScrollView, MainWrapper, PopupPrimary, RowWrapperBasic, Spacer, TextInputUnderlined, GoogleAutoComplete, ComponentWrapper, ErrorText, InputTitle } from '../../../components';
-import { Backend, colors, HelpingMethods, routes, sizes } from '../../../services';
+import { ButtonColored, IconButton, KeyboardAvoidingScrollView, MainWrapper, PopupPrimary, RowWrapperBasic, Spacer, TextInputUnderlined, GoogleAutoComplete, ComponentWrapper, ErrorText, InputTitle, MediumText } from '../../../components';
+import { appStyles, Backend, colors, HelpingMethods, routes, sizes } from '../../../services';
 
 function CreateTraining(props) {
     const { navigation, route } = props
@@ -46,13 +46,14 @@ function CreateTraining(props) {
 
     const getSetTrainingData = () => {
         if (trainingData) {
-            const { title, description, duration, location, latitude, longitude, charges, spots } = trainingData
+            console.log('trainingData --> ',trainingData)
+            const { title, description, duration, location, lat, long, charges, spots } = trainingData
             setTitle(title)
             setDescription(description)
             setDuration(duration)
             setLocation(location)
-            setLatitude(latitude)
-            setLongitude(longitude)
+            setLatitude(lat)
+            setLongitude(long)
             setCharges(charges)
             setSpots(spots)
         }
@@ -71,19 +72,55 @@ function CreateTraining(props) {
             return false
         }
     }
-    const handleEditTraining = async () => {
-        setLoading(true)
-        await Backend.edit_traning({ training_id:trainingData.id, title, description, duration, location, latitude, longitude, charges, spots,status:'active' }).
-            then(res => {
-                if (res) {
-                    toggleTrainingCreatedPopup()
-                }
-            })
-        setLoading(true)
+    const handleContinueEditTraining = async () => {
+        // setLoading(true)
+        // await Backend.edit_traning({
+        //     training_id: trainingData.id,
+        //     title,
+        //     description,
+        //     duration,
+        //     location,
+        //     latitude,
+        //     longitude,
+        //     charges,
+        //     spots,
+        //     status: 'active'
+        // }).
+        //     then(res => {
+        //         if (res) {
+        //             toggleTrainingCreatedPopup()
+        //         }
+        //     })
+        // setLoading(true)
+        navigate(routes.seller.selectDateTime, {
+            edit: true,
+            trainingData: {
+                ...trainingData,
+                title,
+                description,
+                duration,
+                location,
+                latitude,
+                longitude,
+                charges,
+                spots,
+            }
+        })
     }
     const handleContinue = () => {
         if (isDetailsValid()) {
-            navigate(routes.seller.selectDateTime, { trainingData: { title, description, duration, location, latitude, longitude, charges, spots, } })
+            navigate(routes.seller.selectDateTime, {
+                trainingData: {
+                    title,
+                    description,
+                    duration,
+                    location,
+                    latitude,
+                    longitude,
+                    charges,
+                    spots,
+                }
+            })
         } else {
 
         }
@@ -114,9 +151,15 @@ function CreateTraining(props) {
                 <Spacer height={sizes.baseMargin} />
                 <TextInputUnderlined
                     title="Training Duration"
+                    //value={duration ? (duration + ' days') : ''}
                     value={duration}
-                    onChangeText={t => setDuration(t)}
+                    onChangeText={t => {
+                        //const days = t.replace(' days', '')
+                        setDuration(t)
+                    }}
+                    keyboardType={'number-pad'}
                     error={durationError}
+                    right={duration ? <MediumText style={[appStyles.fontBold]}>days</MediumText> : null}
                 />
                 <Spacer height={sizes.baseMargin} />
                 {/* <TextInputUnderlined
@@ -186,10 +229,11 @@ function CreateTraining(props) {
                 />
                 <Spacer height={sizes.doubleBaseMargin} />
                 <ButtonColored
-                    text={trainingData ? "Update Training" : "Continue"}
+                    // text={trainingData ? "Update Training" : "Continue"}
+                    text={"Continue"}
                     onPress={() => {
                         trainingData ? [
-                            handleEditTraining()
+                            handleContinueEditTraining()
                         ] :
                             handleContinue()
                     }}
@@ -197,7 +241,7 @@ function CreateTraining(props) {
                 />
                 <Spacer height={sizes.doubleBaseMargin} />
             </KeyboardAvoidingScrollView>
-            <PopupPrimary
+            {/* <PopupPrimary
                 visible={isTrainingCreatedPopupVisible}
                 toggle={toggleTrainingCreatedPopup}
                 iconName="check"
@@ -209,7 +253,7 @@ function CreateTraining(props) {
                 topMargin={height(60)}
                 disableBackDropPress
                 disableSwipe
-            />
+            /> */}
         </MainWrapper>
     );
 }

@@ -43,6 +43,7 @@ import MemberRequests from './groupDetail/memberRequests'
 import PostDetail from './postDetail'
 import ReportContent from './reportContent'
 import SortFilterDealers from './sortFilterDealers'
+import TrainingInfo from './trainings/trainingInfo'
 
 export {
     Community, Find, MarketPlace, Profile,
@@ -56,6 +57,6 @@ export {
     OrderDetail, OrderInvoice, UpgradeSubscriptionPlan,
     SelectDateTime, Payment,
     CreateGroup, PrivacySettings, MemberRequests, PostDetail, ReportContent,
-    SortFilterDealers
+    SortFilterDealers,TrainingInfo
 
 }

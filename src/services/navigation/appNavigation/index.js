@@ -405,6 +405,12 @@ function AppNavigation() {
 
                 })}
             />
+             <AppStack.Screen name={routes.trainingInfo} component={MainApp.TrainingInfo}
+                options={({ navigation, route }) => ({
+                    title: 'Training Info',
+                    headerTitleAlign:'center'
+                })}
+            />
             <AppStack.Screen name={routes.comments} component={MainApp.Comments}
                 options={{
                     // headerShown: false,

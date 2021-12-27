@@ -127,7 +127,14 @@ export const sendTrainingRequest = async ({ training_id, timeSlot_id, sub_total,
     }
     return response
 };
-export const add_traning = async ({ title, description, location, duration, charges, spots, status, latitude, longitude }) => {
+export const add_traning = async ({ 
+    title, description, location,
+     duration, charges, spots, status, 
+     latitude, longitude,
+     start_date,
+     end_date,
+     start_time,
+     end_time, }) => {
     let response = null
     const state = store.getState()
     const { id } = state.user.userDetail
@@ -141,9 +148,13 @@ export const add_traning = async ({ title, description, location, duration, char
         duration,
         charges,
         spots,
-        status,
         latitude,
-        longitude
+        longitude,
+        start_date,
+        end_date,
+        start_time,
+        end_time,
+        status,
     }
     console.log('add_traning \n uri: ', uri, '\n params: ', params)
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
@@ -158,7 +169,6 @@ export const add_traning = async ({ title, description, location, duration, char
                 } else {
                     Toasts.error(tempResponseData.message)
                 }
-
             })
             .catch(error => {
                 Toasts.error(error.response.data.message)
@@ -203,7 +213,15 @@ export const add_traning_timeSlots = async ({ training_id, date, start_time, end
     return response
 };
 
-export const edit_traning = async ({ training_id, title, description, location, duration, charges, spots, status, latitude, longitude }) => {
+export const edit_traning = async ({
+     training_id, title, description, 
+     location, duration,
+      charges, spots, 
+      status, latitude, longitude,
+    start_date,
+        end_date,
+        start_time,
+        end_time, }) => {
     let response = null
     const state = store.getState()
     const { id } = state.user.userDetail
@@ -220,7 +238,11 @@ export const edit_traning = async ({ training_id, title, description, location, 
         spots,
         status,
         latitude,
-        longitude
+        longitude,
+        start_date,
+        end_date,
+        start_time,
+        end_time,
     }
     console.log('edit_traning \n uri: ', uri, '\n params: ', params)
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()

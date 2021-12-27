@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { ButtonGradient, ComponentWrapper, LineHorizontal, MainWrapper, MediumText, PopupPrimary, RegularText, RowWrapperBasic, SmallTitle, Spacer, TextInputUnderlined, TimeSlotCard, TitleValue, TraningCard, Wrapper, TinyTitle, KeyboardAvoidingScrollView, SmallText, Toasts } from '../../../components';
 import { appStyles, Backend, colors, HelpingMethods, routes, sizes, stripeKeys } from '../../../services';
 import Stripe from 'tipsi-stripe';
-
+import TrainingDetailTiming from './trainingDetailTiming'
 function Payment(props) {
     const { navigate, goBack } = props.navigation
     const { training, timeSlot } = props.route.params
@@ -102,7 +102,7 @@ function Payment(props) {
     const productPrice = training.charges
     const subTotal = Number(productPrice) - (coupon ? getDiscountAmount() : 0)
     const tax = HelpingMethods.getRoundedValue((Number(subTotal) / 100) * 10)
-    const transectionCharges = HelpingMethods.getRoundedValue((Number(subTotal) / 100) * 2)
+    const transectionCharges = HelpingMethods.getTransectionCharges(subTotal)
     const total = (subTotal + tax + transectionCharges)
 
 
@@ -114,7 +114,8 @@ function Payment(props) {
                     const stripeCargeId = res.id
                     await Backend.sendTrainingRequest({
                         training_id: training.id,
-                        timeSlot_id: timeSlot.id,
+                       // timeSlot_id: timeSlot.id,
+                        timeSlot_id: '',
                         sub_total: subTotal.toString(),
                         tax: tax.toString(),
                         transaction_charges: transectionCharges.toString(),
@@ -124,8 +125,8 @@ function Payment(props) {
                     }).
                         then(res => {
                             //setLoadingSendTrainingRequest(false)
-                            toggleOrderPlacedPopup()
                             if (res) {
+                                toggleOrderPlacedPopup()
                                 //navigate(routes.mainBottomTab)
                                 //Toasts.success('Training Request has been sumitted')
                             }
@@ -142,7 +143,7 @@ function Payment(props) {
         <MainWrapper>
             <KeyboardAvoidingScrollView>
                 <Spacer height={sizes.baseMargin} />
-                <TraningCard
+                {/* <TraningCard
                     // onPress={() => navigate(routes.selectDateTime, { training: training })}
                     title={training.title}
                     description={training.description}
@@ -159,6 +160,9 @@ function Payment(props) {
                     date={moment(timeSlot.date).format('dddd, D MMMM, yyyy')}
                     startTime={timeSlot.start_time}
                     endTime={timeSlot.end_time}
+                /> */}
+                  <TrainingDetailTiming
+                    data={training}
                 />
                 <Spacer height={sizes.baseMargin} />
                 <ComponentWrapper>
@@ -287,7 +291,7 @@ function Payment(props) {
                 disableSwipe
             >
                 <Spacer height={sizes.baseMargin} />
-                <TraningCard
+                {/* <TraningCard
                     // onPress={() => navigate(routes.selectDateTime, { training: training })}
                     title={training.title}
                     description={training.description}
@@ -304,6 +308,9 @@ function Payment(props) {
                     date={moment(timeSlot.date).format('dddd, D MMMM, yyyy')}
                     startTime={timeSlot.start_time}
                     endTime={timeSlot.end_time}
+                /> */}
+                 <TrainingDetailTiming
+                    data={training}
                 />
                 <Spacer height={sizes.baseMargin} />
             </PopupPrimary>

@@ -215,7 +215,7 @@ export const formateTime1 = (date) => {
     return moment(date).format('hh:mm A')
 }
 export const formateDate1 = (date) => {
-    return moment(date).format('DD / MM / YYYY')
+    return moment(date).format('DD/MM/YYYY')
 }
 export const formateDateFromNow = (date) => {
     return moment(date).fromNow()
@@ -366,6 +366,9 @@ export const RequestLocationAccess = async () => {
 }
 export const getRoundedValue = (value) => {
     return Math.round(value * 10) / 10
+}
+export const getTransectionCharges=(amount)=>{
+    return  getRoundedValue((Number(amount) / 100) * 1.5)
 }
 export const handleShare = (url) => {
     console.log('url --> ', url)
