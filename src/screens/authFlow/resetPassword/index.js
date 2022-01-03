@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
 import { View, Text } from 'react-native';
-import { height, totalSize } from 'react-native-dimension';
+import { height, totalSize, width } from 'react-native-dimension';
 import { ButtonGradient, ComponentWrapper, CustomIcon, KeyboardAvoidingScrollView, LargeTitle, MainWrapper, PopupPrimary, Spacer, TextInputUnderlined, Wrapper } from '../../../components';
 import { appImages, appStyles, HelpingMethods, routes, sizes, Validations } from '../../../services';
 
@@ -39,11 +39,11 @@ function ResetPassword(props) {
     return (
         <MainWrapper>
             <KeyboardAvoidingScrollView>
-                <Wrapper style={[appStyles.center]}>
+                <Wrapper animation={'fadeInDown'} style={[appStyles.center]}>
                     <Spacer height={sizes.baseMargin} />
                     <CustomIcon
                         icon={appImages.resetpassword_icon}
-                        size={totalSize(25)}
+                        size={width(80)}
                     />
                 </Wrapper>
                 <TextInputUnderlined

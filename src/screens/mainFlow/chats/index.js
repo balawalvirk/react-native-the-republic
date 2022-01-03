@@ -77,6 +77,7 @@ function Chats(props) {
                                 placeholder="Search messages"
                                 value={searchQuery}
                                 onChangeText={t => setSearchQuery(t)}
+                                onPressCross={()=>setSearchQuery('')}
                             />
                             <Spacer height={sizes.baseMargin} />
                             <LineHorizontal />

@@ -54,11 +54,11 @@ export const handleContinueWithGoogle = async () => {
     await Backend.CountinueWithGoogle().then(async googleData => {
         if (googleData) {
             await Backend.checkUser({ email: googleData.user.email })
-                .then(res => {
+                .then(async res => {
                     if (res) {
                         if (res.success === false) {
                             //User already registered
-                            autoLoginWithGoogle(googleData.idToken)
+                            await autoLoginWithGoogle(googleData.idToken)
                         } else {
                             let params = {
                                 googleToken: googleData.idToken,
@@ -268,11 +268,12 @@ export const autoLoginWithApple = async (apple_token) => {
 
 
 
-export const userRegisterInstagram = async ({ email, instagram_token }) => {
+export const userRegisterInstagram = async ({ user_name, instagram_token }) => {
     let response = null
     const uri = `${baseURL + endPoints.sociaAuth.register_instagram}`
     let params = {
-        email: email.toLowerCase(),
+        user_name,
+        //username:user_name,
         access_token: instagram_token
     }
     console.log('userRegisterInstagram \nuri', uri, '\nParams', params);

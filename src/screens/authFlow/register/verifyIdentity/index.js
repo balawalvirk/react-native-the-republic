@@ -79,6 +79,7 @@ function VerifyIdentity(props) {
     }
 
     const registerNewAccount = async () => {
+        setLoadingCreateAccount(true)
         const {
             imageFile,
             firstName,
@@ -91,8 +92,8 @@ function VerifyIdentity(props) {
             // countryCode
         } = profileDetails
         console.log('profileDetails-->', profileDetails)
-        let fcmToken = await AsyncStorage.getItem(asyncConsts.fcm_token);
-        console.log('fcmToken-->', fcmToken)
+        // let fcmToken = await AsyncStorage.getItem(asyncConsts.fcm_token);
+        // console.log('fcmToken-->', fcmToken)
         setLoadingCreateAccount(true)
         await handleCreateAccount()
             .then(async res => {
@@ -119,7 +120,7 @@ function VerifyIdentity(props) {
                                     then(res => {
                                         if (res) {
                                             toggleIdentityVerifiedPopup()
-                                            // AsyncStorage.setItem(asyncConsts.user_credentials, JSON.stringify(credentials))
+                                            AsyncStorage.setItem(asyncConsts.user_credentials, JSON.stringify(credentials))
                                             // Toasts.success('Account Created Successfully')
                                         }
                                     })
