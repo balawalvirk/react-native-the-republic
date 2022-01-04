@@ -14,9 +14,11 @@ export const handleAutoLogin = async () => {
     let response = null
     const userCredentials = await AsyncStorage.getItem(asyncConsts.user_credentials)
     const googleToken = await AsyncStorage.getItem(asyncConsts.google_token)
-    const instagramToken = await AsyncStorage.getItem(asyncConsts.instagram_token)
+    // const instagramToken = await AsyncStorage.getItem(asyncConsts.instagram_token)
+    const instagramCredentials = await AsyncStorage.getItem(asyncConsts.instagram_credentials)
     const appleToken = await AsyncStorage.getItem(asyncConsts.apple_token)
     if (userCredentials) {
+        console.log('userCredentials --> ', userCredentials)
         const dataUserCredentials = JSON.parse(userCredentials)
         await Backend.auto_login(dataUserCredentials.email, dataUserCredentials.password).
             then(res => {
@@ -25,20 +27,24 @@ export const handleAutoLogin = async () => {
                 }
             })
     } else if (googleToken) {
+        console.log('googleToken --> ', googleToken)
         await autoLoginWithGoogle(googleToken).
             then(res => {
                 if (res) {
                     response = res
                 }
             })
-    } else if (instagramToken) {
-        await autoLoginWithInstagram(instagramToken).
+    } else if (instagramCredentials) {
+        console.log('instagramCredentials --> ', instagramCredentials)
+        const tempInstagramCredentials = JSON.parse(instagramCredentials)
+        await autoLoginWithInstagram(tempInstagramCredentials).
             then(res => {
                 if (res) {
                     response = res
                 }
             })
     } else if (appleToken) {
+        console.log('appleToken --> ', appleToken)
         await autoLoginWithApple(appleToken).
             then(res => {
                 if (res) {
@@ -268,13 +274,13 @@ export const autoLoginWithApple = async (apple_token) => {
 
 
 
-export const userRegisterInstagram = async ({ user_name, instagram_token }) => {
+export const userRegisterInstagram = async ({ access_token, user_id }) => {
     let response = null
-    const uri = `${baseURL + endPoints.sociaAuth.register_instagram}`
+    //const uri = `${baseURL + endPoints.sociaAuth.register_instagram}`
+    const uri = `${baseURL + endPoints.sociaAuth.login_instagram}`
     let params = {
-        user_name,
-        //username:user_name,
-        access_token: instagram_token
+        user_id,
+        access_token
     }
     console.log('userRegisterInstagram \nuri', uri, '\nParams', params);
     await axios
@@ -284,7 +290,8 @@ export const userRegisterInstagram = async ({ user_name, instagram_token }) => {
             console.log('userRegisterInstagram Response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
-                AsyncStorage.setItem(asyncConsts.instagram_token, instagram_token)
+                const tempInstaCredentials = JSON.stringify(params)
+                AsyncStorage.setItem(asyncConsts.instagram_credentials, tempInstaCredentials)
             } else {
                 Toasts.error(tempResponseData.message)
             }
@@ -300,20 +307,24 @@ export const handleContinueWithInstagram = async (data) => {
     let response = null
     await Backend.continueWithInstagram(data).then(async instagramData => {
         if (instagramData) {
-            await Backend.checkUser({ username: instagramData.username })
-                .then(res => {
+            await Backend.checkUser({ user_name: instagramData.username })
+                .then(async res => {
                     if (res) {
                         if (res.success === false) {
                             //User already registered
-                            autoLoginWithGoogle(instagramData.access_token)
+                            await autoLoginWithInstagram(data).
+                            then(res=>{
+                                if(res){
+                                    const tempInstaCredentials = JSON.stringify(data)
+                                    AsyncStorage.setItem(asyncConsts.instagram_credentials, tempInstaCredentials)
+                                }
+                            })
+                          
                         } else {
                             let params = {
                                 instagramToken: instagramData.access_token,
-                                username: instagramData.username,
-                                //email: instagramData.user.email,
-                                //firstName: instagramData.user.givenName,
-                                //lastName: instagramData.user.familyName,
-                                //profileImage:googleData.user.photo
+                                userName: instagramData.username,
+                                instagramUserId: data.user_id
                             }
                             console.log('Params', params);
                             navigate(routes.completeYourProfil, { userSocialData: params })
@@ -322,10 +333,7 @@ export const handleContinueWithInstagram = async (data) => {
                         let params = {
                             instagramToken: instagramData.access_token,
                             userName: instagramData.username,
-                            //email: instagramData.user.email,
-                            //firstName: instagramData.user.givenName,
-                            //lastName: instagramData.user.familyName,
-                            //profileImage:googleData.user.photo
+                            instagramUserId: data.user_id
                         }
                         console.log('Params', params);
                         navigate(routes.completeYourProfil, { userSocialData: params })
@@ -336,22 +344,27 @@ export const handleContinueWithInstagram = async (data) => {
     return response
 };
 
-export const autoLoginWithInstagram = async (instagram_token) => {
-
+export const autoLoginWithInstagram = async ({ access_token, user_id }) => {
     let response = null
     let params = {
-        instagram_token
+        access_token,
+        user_id
     }
-    console.log('Params', params);
+    console.log('autoLoginWithInstagram Params', params);
     await axios
         .post(`${baseURL + endPoints.sociaAuth.login_instagram}`, params)
         //.then(response => response.json())
         .then(async responseJson => {
-            console.log('Response', responseJson.data);
+            console.log('autoLoginWithInstagram Response', responseJson.data);
             // return responseJson;
-            response = responseJson.data
-            dispatch(setUserDetail(responseJson.data.user))
-            // await AsyncStorage.setItem(asyncConsts.user_details, JSON.stringify(responseJson.data.user))
+            if (responseJson.data) {
+                if (responseJson.data.success) {
+                    response = responseJson.data
+                    dispatch(setUserDetail(responseJson.data.data))
+                }else{
+                   Toasts.error(responseJson.data.message) 
+                }
+            }
         })
         .catch(error => {
             Toasts.error(error.response.data.message)
@@ -359,3 +372,4 @@ export const autoLoginWithInstagram = async (instagram_token) => {
         });
     return response
 };
+

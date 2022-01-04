@@ -98,7 +98,7 @@ function VerifyIdentity(props) {
         await handleCreateAccount()
             .then(async res => {
                 if (res) {
-                    const tempUserId = res.user.id
+                    const tempUserId = res.user_id
                     const completeProfileParams = {
                         user_id: tempUserId,
                         first_name: firstName,
@@ -120,7 +120,7 @@ function VerifyIdentity(props) {
                                     then(res => {
                                         if (res) {
                                             toggleIdentityVerifiedPopup()
-                                            AsyncStorage.setItem(asyncConsts.user_credentials, JSON.stringify(credentials))
+                                            //AsyncStorage.setItem(asyncConsts.user_credentials, JSON.stringify(credentials))
                                             // Toasts.success('Account Created Successfully')
                                         }
                                     })
@@ -132,12 +132,14 @@ function VerifyIdentity(props) {
     }
 
     const handleCreateAccount = async () => {
-        const { email,
+        const {
+            email,
             password,
             googleToken,
-            userName,
             appleToken,
-            instagramToken } = credentials
+            instagramUserId,
+            instagramToken
+        } = credentials
         let response = null
         if (googleToken && email) {
             await Backend.userRegisterGoogle({ email, google_token: googleToken }).
@@ -146,11 +148,15 @@ function VerifyIdentity(props) {
                         response = res
                     }
                 })
-        } else if (instagramToken && userName) {
-            await Backend.userRegisterInstagram({ user_name: userName, instagram_token: instagramToken }).
+        } else if (instagramToken && instagramUserId) {
+            await Backend.userRegisterInstagram({ access_token: instagramToken, user_id: instagramUserId }).
                 then(res => {
                     if (res) {
-                        response = res
+                        const tempRes = {
+                            ...res,
+                            user_id: res.data.id
+                        }
+                        response = tempRes
                     }
                 })
         } else if (appleToken && email) {
@@ -165,7 +171,11 @@ function VerifyIdentity(props) {
                 await Backend.user_register({ email, password, password_confirmation: password }).
                     then(res => {
                         if (res) {
-                            response = res
+                            const tempRes = {
+                                ...res,
+                                user_id: res.user.id
+                            }
+                            response = tempRes
                         }
                     })
             }

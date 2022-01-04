@@ -261,6 +261,7 @@ export const logout = async () => {
                 onPress: () => [
                     dispatch(setUserDetail(null)),
                     AsyncStorage.removeItem(asyncConsts.user_credentials),
+                    AsyncStorage.removeItem(asyncConsts.instagram_credentials),
                     AsyncStorage.removeItem(asyncConsts.user_details)
                     //setDownloads(downloads.filter(ite => ite != item))
                 ],

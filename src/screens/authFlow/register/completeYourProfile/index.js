@@ -22,13 +22,13 @@ function CompleteYourProfile(props) {
 
     let socicalCredentials = {}
     if (userSocialData) {
-        const { email, firstName, lastName,userName, googleToken, appleToken, instagramToken } = userSocialData
+        const { email, firstName, lastName,userName, googleToken, appleToken, instagramToken,instagramUserId } = userSocialData
         tempSocialCredentials = {
             email,
             googleToken, 
             appleToken,
             instagramToken,
-            userName
+            instagramUserId
         }
         socicalCredentials = tempSocialCredentials
     }

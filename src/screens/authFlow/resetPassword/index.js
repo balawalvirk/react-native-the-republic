@@ -1,15 +1,20 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
 import { ButtonGradient, ComponentWrapper, CustomIcon, KeyboardAvoidingScrollView, LargeTitle, MainWrapper, PopupPrimary, Spacer, TextInputUnderlined, Wrapper } from '../../../components';
-import { appImages, appStyles, HelpingMethods, routes, sizes, Validations } from '../../../services';
+import { appImages, appStyles, Backend, HelpingMethods, routes, sizes, Validations } from '../../../services';
 
 function ResetPassword(props) {
-    const {navigate}=props.navigation
+    const { navigate } = props.navigation
+    const user_email = props.route.params.email
     const [email, setEmail] = useState('')
     const [emailError, setEmailError] = useState('')
     const [loading, setLoading] = useState(false)
     const [isLinkSentPopupVisible, setLinkSentPopupVisibility] = useState(false)
+
+    useEffect(() => {
+        user_email && setEmail(user_email)
+    }, [])
 
     const toggleLinkSentPopup = () => setLinkSentPopupVisibility(!isLinkSentPopupVisible)
     const handleOnChangeEmailText = (email) => {
@@ -19,7 +24,6 @@ function ResetPassword(props) {
     }
     const validations = () => {
         HelpingMethods.handleAnimation()
-
         !email ? setEmailError('Enter your email') : !Validations.validateEmail(email) ? setEmailError('Email format is invalid') : setEmailError('')
         if (Validations.validateEmail(email)) {
             return true
@@ -30,16 +34,29 @@ function ResetPassword(props) {
     const onSendLink = async () => {
         if (validations()) {
             setLoading(true)
-            setTimeout(() => {
-                toggleLinkSentPopup()
-                setLoading(false)
-            }, 2000);
+            await Backend.getCsrfToken().
+                then(async res => {
+                    if (res) {
+                        const _token = res
+                        await Backend.resetPassword({email:email.toLowerCase(),_token}).
+                        then(res=>{
+                            if(res){
+                                toggleLinkSentPopup()
+                            }
+                        })
+                    }
+                })
+            setLoading(false)
+            // setTimeout(() => {
+            //     toggleLinkSentPopup()
+            //     setLoading(false)
+            // }, 2000);
         }
     }
     return (
         <MainWrapper>
             <KeyboardAvoidingScrollView>
-                <Wrapper animation={'fadeInDown'} style={[appStyles.center]}>
+                <Wrapper animation={'fadeInDown'} duration={500} style={[appStyles.center]}>
                     <Spacer height={sizes.baseMargin} />
                     <CustomIcon
                         icon={appImages.resetpassword_icon}
@@ -76,11 +93,11 @@ function ResetPassword(props) {
                 // buttonText2="Cancel"
                 onPressButton1={() => {
                     toggleLinkSentPopup();
-                      navigate(routes.signin, {})
+                    navigate(routes.signin, {})
                 }}
             // onPressButton2={toggleLinkSentPopup}
             >
-                <Spacer height={sizes.baseMargin}/>
+                <Spacer height={sizes.baseMargin} />
             </PopupPrimary>
         </MainWrapper>
     );

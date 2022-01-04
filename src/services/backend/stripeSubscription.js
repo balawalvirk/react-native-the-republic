@@ -11,14 +11,16 @@ const { dispatch } = store
 export const createStripeCustomer = async (userData) => {
     const state = store.getState()
     const userDetail = userData ? userData : state.user.userDetail
+    const { first_name, last_name, email } = userDetail
 
-    const userFullName = userDetail.first_name + ' ' + userDetail.last_name
-    const userEmail = userDetail.email || (userDetail.first_name + ' ' + userDetail.last_name)
-    const userDescription = userDetail.first_name + ' ' + userDetail.last_name + '( ' + userDetail.email + ' )'
+    const userFullName = first_name + ' ' + last_name
+    // const userEmail = userDetail.email || (userDetail.first_name + ' ' + userDetail.last_name)
+    const userEmail = email
+    const userDescription = first_name + ' ' + last_name + (email ? '( ' + email + ' )' : '')
     const body = {};
     body['description'] = userDescription
     body['name'] = userFullName
-    body['email'] = userEmail
+    email && [body['email'] = userEmail]
     var requestOptions = {
         method: 'POST',
         headers: {

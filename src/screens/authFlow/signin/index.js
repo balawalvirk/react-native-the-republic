@@ -34,6 +34,7 @@ function Signin(props) {
   useEffect(() => {
     // HelpingMethods.handlePushNotificationPermission()
     checkUser()
+   //AsyncStorage.removeItem(asyncConsts.user_credentials)
   }, [])
 
 
@@ -175,7 +176,7 @@ function Signin(props) {
                     onPress={() => setRememberMe(!rememberMe)}
                   />
                   <RegularText
-                    onPress={() => navigate(routes.resetPassword)}
+                    onPress={() => navigate(routes.resetPassword,{email})}
                     style={[]}>Forgot Password</RegularText>
                 </RowWrapper>
                 <Spacer height={sizes.baseMargin} />

@@ -219,8 +219,12 @@ export const endPoints = {
     services: {
         create_service: 'create-service',
         add_service: 'add-service',
-        remove_service:'remove-service',
-        get_services:'get-services'
+        remove_service: 'remove-service',
+        get_services: 'get-services'
+    },
+    forgotPassword: {
+        resetPassword: 'https://republic-backend.herokuapp.com/password/email',
+        sendCsrfToken: 'https://republic-backend.herokuapp.com/get-csrf',
     },
     contact_us: 'contact-us',
     add_card: 'add-card',
@@ -291,8 +295,8 @@ export const routes = {
     groupMemberRequests: 'memberRequests',
     postDetail: 'postDetail',
     reportContent: 'reportContent',
-    sortFilterDealers:'sortFilterDealers',
-    trainingInfo:'trainingInfo',
+    sortFilterDealers: 'sortFilterDealers',
+    trainingInfo: 'trainingInfo',
     seller: {
         sellerDashboard: 'sellerDashboard',
         yourProducts: 'yourProducts',
@@ -308,19 +312,21 @@ export const routes = {
         withdrawEarnings: 'withdrawEarnings',
         createTrainin: 'createTrainin',
         selectDateTime: 'sellcerSelectDateTime',
-        services:'services'
+        services: 'services'
     },
     dealer: {
         fulfillments: 'fulfillments',
         fulfillmentDetail: 'fulfillmentDetail'
     },
-
+    
 
 }
 export const asyncConsts = {
     user_credentials: 'USER_CREDENTIALS',
     google_token: 'GOOGLE_TOKEN',
     instagram_token: 'INSTAGRAM_TOKEN',
+    instagram_credentials: 'INSTAGRAM_CREDENTIALS',
+    google_credentials: 'GOOGLE_CREDENTIALS',
     apple_token: 'APPLE_TOKEN',
     user_details: 'USER_DETAILS',
     fcm_token: "FCM_TOKEN",
@@ -374,7 +380,7 @@ export const sortingOptions = {
     title_z_a: 'z_to_a',
     price_low_to_high: 'lo_to_hi',
     price_high_to_low: 'hi_to_lo',
-    distance:'distance'
+    distance: 'distance'
 }
 export const searchTypes = {
     all: 'all',
