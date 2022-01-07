@@ -13,7 +13,8 @@ const { dispatch } = store
 export const handleAutoLogin = async () => {
     let response = null
     const userCredentials = await AsyncStorage.getItem(asyncConsts.user_credentials)
-    const googleToken = await AsyncStorage.getItem(asyncConsts.google_token)
+    //const googleToken = await AsyncStorage.getItem(asyncConsts.google_token)
+    const googleCredentials = await AsyncStorage.getItem(asyncConsts.google_credentials)
     // const instagramToken = await AsyncStorage.getItem(asyncConsts.instagram_token)
     const instagramCredentials = await AsyncStorage.getItem(asyncConsts.instagram_credentials)
     const appleToken = await AsyncStorage.getItem(asyncConsts.apple_token)
@@ -26,9 +27,10 @@ export const handleAutoLogin = async () => {
                     response = res
                 }
             })
-    } else if (googleToken) {
-        console.log('googleToken --> ', googleToken)
-        await autoLoginWithGoogle(googleToken).
+    } else if (googleCredentials) {
+        console.log('googleCredentials --> ', googleCredentials)
+        const parsedGoogleCredentials = JSON.parse(googleCredentials)
+        await autoLoginWithGoogle(parsedGoogleCredentials).
             then(res => {
                 if (res) {
                     response = res
@@ -64,16 +66,24 @@ export const handleContinueWithGoogle = async () => {
                     if (res) {
                         if (res.success === false) {
                             //User already registered
-                            await autoLoginWithGoogle(googleData.idToken)
+                            //await autoLoginWithGoogle({ google_token: googleData.idToken, email: googleData.user.email })
+                            const googleLoginParams = { google_token: googleData.idToken, email: googleData.user.email }
+                            await autoLoginWithGoogle(loginParams).
+                                then(res => {
+                                    if (res) {
+                                        const tempGoogleCredentials = JSON.stringify(googleLoginParams)
+                                        AsyncStorage.setItem(asyncConsts.google_credentials, tempGoogleCredentials)
+                                    }
+                                })
                         } else {
-                            let params = {
-                                googleToken: googleData.idToken,
-                                email: googleData.user.email,
-                                firstName: googleData.user.givenName,
-                                lastName: googleData.user.familyName,
-                                //profileImage:googleData.user.photo
-                            }
-                            console.log('Params', params);
+                             let params = {
+                                 googleToken: googleData.idToken,
+                                 email: googleData.user.email,
+                                 firstName: googleData.user.givenName,
+                                 lastName: googleData.user.familyName,
+                                 //profileImage:googleData.user.photo
+                             }
+                             console.log('Params', params);
                             navigate(routes.completeYourProfil, { userSocialData: params })
                         }
                     }
@@ -98,7 +108,9 @@ export const userRegisterGoogle = async ({ email, google_token }) => {
             console.log('userRegisterGoogle Response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
-                AsyncStorage.setItem(asyncConsts.google_token, google_token)
+                // AsyncStorage.setItem(asyncConsts.google_token, google_token)
+                const googleCredentials = JSON.parse(params)
+                AsyncStorage.setItem(asyncConsts.google_credentials, googleCredentials)
             } else {
                 Toasts.error(tempResponseData.message)
             }
@@ -140,15 +152,16 @@ export const userRegisterGoogle = async ({ email, google_token }) => {
 //     return response
 // };
 
-export const autoLoginWithGoogle = async (google_token) => {
+export const autoLoginWithGoogle = async ({ google_token, email }) => {
 
     let response = null
     let params = {
-        google_token
+        email: email.toLowerCase(),
+        access_token: apple_token
     }
     console.log('autoLoginWithGoogle Params', params);
     await axios
-        .post(`${baseURL + endPoints.sociaAuth.login_google}`, params)
+        .post(`${baseURL + endPoints.sociaAuth.register_google}`, params)
         //.then(response => response.json())
         .then(async responseJson => {
             console.log('autoLoginWithGoogle Response', responseJson.data);
@@ -313,13 +326,12 @@ export const handleContinueWithInstagram = async (data) => {
                         if (res.success === false) {
                             //User already registered
                             await autoLoginWithInstagram(data).
-                            then(res=>{
-                                if(res){
-                                    const tempInstaCredentials = JSON.stringify(data)
-                                    AsyncStorage.setItem(asyncConsts.instagram_credentials, tempInstaCredentials)
-                                }
-                            })
-                          
+                                then(res => {
+                                    if (res) {
+                                        const tempInstaCredentials = JSON.stringify(data)
+                                        AsyncStorage.setItem(asyncConsts.instagram_credentials, tempInstaCredentials)
+                                    }
+                                })
                         } else {
                             let params = {
                                 instagramToken: instagramData.access_token,
@@ -361,8 +373,8 @@ export const autoLoginWithInstagram = async ({ access_token, user_id }) => {
                 if (responseJson.data.success) {
                     response = responseJson.data
                     dispatch(setUserDetail(responseJson.data.data))
-                }else{
-                   Toasts.error(responseJson.data.message) 
+                } else {
+                    Toasts.error(responseJson.data.message)
                 }
             }
         })

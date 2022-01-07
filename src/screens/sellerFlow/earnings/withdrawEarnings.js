@@ -21,24 +21,43 @@ import { appStyles, Backend, colors, HelpingMethods, sizes } from '../../../serv
 //     }
 // ]
 
-
+const tempBanks = [
+    {
+        label: 'ABC bank',
+        value: 'abc'
+    },
+    {
+        label: 'DEF bank',
+        value: 'def'
+    },
+    {
+        label: 'GHI bank',
+        value: 'ghi'
+    }
+]
 function WithdrawEarnings(props) {
 
     //local states
     const [bankAccounts, setBackAccounts] = useState(null)
+    const [banks, setBanks] = useState(null)
     const [loadingAddBankAccount, setLoadingAddBankAccount] = useState(false)
     const [isAddBankAccountPopupVisible, setAddBankAccountPopupVisibility] = useState(false)
 
-     //redux states
-  const user = useSelector(state => state.user)
-  const { reports } = user
+    //redux states
+    const user = useSelector(state => state.user)
+    const { reports,userDetail } = user
+    console.log('userDetail-->',userDetail)
 
     const toggleAddBankAccountPopup = () => setAddBankAccountPopupVisibility(!isAddBankAccountPopupVisible)
 
     useEffect(() => {
-        getSetBankAccounts()
+        getAllData()
     }, [])
 
+    const getAllData = async () => {
+        await getSetAllBanks()
+        await getSetBankAccounts()
+    }
     const getSetBankAccounts = async () => {
         await Backend.getBankAccounts().
             then(res => {
@@ -47,24 +66,47 @@ function WithdrawEarnings(props) {
                 }
             })
     }
+    const getSetAllBanks = async () => {
+        await Backend.getBanks().
+            then(res => {
+                if (res?.success) {
+                    if (res?.data?.length) {
+                        let tempData=[]
+                        for (const item of res.data) {
+                            const tempObj = {
+                                ...item,
+                                label: item.name,
+                                value: item.name,
+
+                            }
+                            tempData.push(tempObj)
+                        }
+                        setBanks(tempData)
+                    } else {
+                        setBanks(res.data)
+                    }
+                }
+            })
+    }
 
     const addBankAccount = async (data) => {
         console.log('data-->', data)
-        const { bank, accountNo } = data
-        setLoadingAddBankAccount(true)
-        await Backend.addBankAccount({ bank_name: bank.label, account_no: accountNo }).
-            then(async res => {
-                if (res) {
-                    await getSetBankAccounts()
-                    toggleAddBankAccountPopup()
-                    setLoadingAddBankAccount(false)
-                    Toasts.success('Bank account added')
-                } else {
-                    toggleAddBankAccountPopup()
-                    setLoadingAddBankAccount(false)
-                }
-            })
-
+        if (data) {
+            const { bank, accountNo } = data
+            setLoadingAddBankAccount(true)
+            await Backend.addBankAccount({ bank_name: bank.label, account_no: accountNo }).
+                then(async res => {
+                    if (res) {
+                        await getSetBankAccounts()
+                        toggleAddBankAccountPopup()
+                        setLoadingAddBankAccount(false)
+                        Toasts.success('Bank account added')
+                    } else {
+                        toggleAddBankAccountPopup()
+                        setLoadingAddBankAccount(false)
+                    }
+                })
+        }
     }
 
     return (
@@ -87,6 +129,7 @@ function WithdrawEarnings(props) {
                 toggle={toggleAddBankAccountPopup}
                 onPressDone={addBankAccount}
                 isLoading={loadingAddBankAccount}
+                banks={banks}
             />
         </MainWrapper>
     );
@@ -99,12 +142,12 @@ function BankAccounts({ data, onPressItem, onPressAdd }) {
     if (!data) {
         return (
             <>
-            {[1, 2, 3, 4, 5].map((item, index) => {
-              return (
-                <SkeletonPrimary itemStyle={{  marginBottom: sizes.smallMargin }} />
-              )
-            })}
-          </>
+                {[1, 2, 3, 4, 5].map((item, index) => {
+                    return (
+                        <SkeletonPrimary itemStyle={{ marginBottom: sizes.smallMargin }} />
+                    )
+                })}
+            </>
         )
     }
     return (
@@ -161,21 +204,8 @@ function BankAccounts({ data, onPressItem, onPressAdd }) {
     )
 }
 
-function AddBankAccountPopup({ visible, toggle, onPressDone, isLoading }) {
-    const banks = [
-        {
-            label: 'ABC bank',
-            value: 'abc'
-        },
-        {
-            label: 'DEF bank',
-            value: 'def'
-        },
-        {
-            label: 'GHI bank',
-            value: 'ghi'
-        }
-    ]
+function AddBankAccountPopup({ visible, toggle, onPressDone, isLoading, banks }) {
+
     const [bank, setBank] = useState('')
     const [accountNo, setAccountNo] = useState('')
     const [bankError, setBankError] = useState('')

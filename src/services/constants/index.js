@@ -230,6 +230,11 @@ export const endPoints = {
     add_card: 'add-card',
     submit_app_feedback: 'submit-app-feedback'
 }
+export const stripe_base_url = 'https://api.stripe.com/v1/'
+export const stripe_endpoints = {
+    accounts: 'accounts',
+    external_accounts:'external_accounts'
+}
 export const routes = {
     auth: 'auth',
     app: 'app',
@@ -318,7 +323,7 @@ export const routes = {
         fulfillments: 'fulfillments',
         fulfillmentDetail: 'fulfillmentDetail'
     },
-    
+
 
 }
 export const asyncConsts = {

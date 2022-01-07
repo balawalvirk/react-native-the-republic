@@ -50,7 +50,7 @@ export const checkUser = async ({ email, user_name }) => {
     if (email || user_name) {
         let params = {}
         email && [params['email'] = email.toLowerCase()]
-        user_name[params['user_name'] = user_name]
+        user_name&&[params['user_name'] = user_name]
         console.log('checkUser Params', params);
         await axios
             .post(`${baseURL + endPoints.user.check_user}`, params)

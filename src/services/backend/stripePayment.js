@@ -7,7 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as HelpingMethods from "../helpingMethods";
 import { setCreditCards, setUserDetail } from "../store/actions";
 import stripe from 'tipsi-stripe'
-import { stripeKeys } from '../constants'
+import { stripeKeys, stripe_endpoints, stripe_base_url } from '../constants'
 const { dispatch } = store
 
 
@@ -123,3 +123,5 @@ export async function transfer(seller_stripe_account_id, amount) {
         });
     return response
 }
+
+
