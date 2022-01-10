@@ -50,7 +50,7 @@ export const checkUser = async ({ email, user_name }) => {
     if (email || user_name) {
         let params = {}
         email && [params['email'] = email.toLowerCase()]
-        user_name&&[params['user_name'] = user_name]
+        user_name && [params['user_name'] = user_name]
         console.log('checkUser Params', params);
         await axios
             .post(`${baseURL + endPoints.user.check_user}`, params)
@@ -249,7 +249,7 @@ export const update_profile = async ({
     distance && formDataObject.append("distance", distance)
     default_card_id && formDataObject.append("default_card_id", default_card_id)
     default_dealer_id && formDataObject.append("default_dealer_id", default_dealer_id)
-    seller_stripe_account_id  && formDataObject.append("seller_stripe_account_id", seller_stripe_account_id)
+    seller_stripe_account_id && formDataObject.append("seller_stripe_account_id", seller_stripe_account_id)
 
     console.log('update_profile\nuri: ', uri, '\nParams: ', formDataObject);
     await axios

@@ -63,6 +63,7 @@ export const createStripeAccount = async ({
 }
 
 export const createStripeAccountFetch = async () => {
+    let response = null
     var myHeaders = new Headers();
     myHeaders.append("Authorization", stripeKeys.authorization_key);
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
@@ -78,7 +79,7 @@ export const createStripeAccountFetch = async () => {
     urlencoded.append("external_account[account_holder_name]", "User Seven");
     urlencoded.append("external_account[routing_number]", "110000000");
     urlencoded.append("type", "express");
-    
+
     const uri = "https://api.stripe.com/v1/accounts"
 
     console.log('\ncreateStripeAccountFetch==>\nuri: ', uri, '\nurlencoded: ', urlencoded, '\nmyHeaders: ', myHeaders)
@@ -89,12 +90,68 @@ export const createStripeAccountFetch = async () => {
         redirect: 'follow'
     };
 
-   await fetch(uri, requestOptions)
+    await fetch(uri, requestOptions)
         .then(response => response.text())
-        .then(result => console.log('createStripeAccountFetch response', result))
+        .then(result => {
+            response = result
+            console.log('createStripeAccountFetch response', result)
+            if (result.error) {
+                console.log('createStripeAccountFetch error', result.error)
+
+            }
+        })
         .catch(error => console.log('createStripeAccountFetch error', error));
+    return response
 }
 
+export const createStripeAccountAxios = async ({
+    email,
+    country,
+    default_currency,
+    type,
+    business_type,
+    account_number,
+    currency,
+    account_holder_name,
+    routing_number
+}) => {
+    let main_response = null
+    var axios = require('axios');
+    var qs = require('qs');
+    var data = qs.stringify({
+        'type': 'express',
+        'country': 'US',
+        'email': email,
+        'capabilities[transfers][requested]': 'true',
+        'external_account[object]': 'bank_account',
+        'external_account[account_number]': account_number,
+        'external_account[country]': 'US',
+        'external_account[currency]': 'usd',
+        'external_account[account_holder_name]': account_holder_name,
+        'external_account[routing_number]': routing_number
+    });
+    var config = {
+        method: 'post',
+        url: 'https://api.stripe.com/v1/accounts',
+        headers: {
+            'Authorization': 'Basic c2tfdGVzdF80ZUMzOUhxTHlqV0Rhcmp0VDF6ZHA3ZGM6',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data: data
+    };
+
+    await axios(config)
+        .then(function (jsonResponse) {
+            const tempResponse = jsonResponse.data
+            console.log('createStripeAccountAxios response: ', tempResponse);
+            main_response = tempResponse
+
+        })
+        .catch(function (error) {
+            console.log('createStripeAccountAxios error: ', error);
+        });
+    return main_response
+}
 export const updateStripeAccount = ({ email, country, type, business_type, stripe_account_id, default_currency }) => {
     let response = null
     let body = {}
@@ -206,4 +263,28 @@ export const getBankAccountsOfStripeAccount = ({ stripe_account_id, }) => {
             console.log(error);
         });
     return response
+}
+
+export const getStripeAccountDetail = async ({ stripe_account_id }) => {
+    let response = null
+    var axios = require('axios');
+
+    var config = {
+        method: 'get',
+        url: 'https://api.stripe.com/v1/accounts/' + stripe_account_id,
+        headers: {
+            'Authorization': 'Basic c2tfdGVzdF80ZUMzOUhxTHlqV0Rhcmp0VDF6ZHA3ZGM6'
+        }
+    };
+
+    await axios(config)
+        .then(function (jsonResponse) {
+            console.log(jsonResponse.data);
+            response = jsonResponse.data
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    return response
+
 }

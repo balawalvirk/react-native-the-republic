@@ -57,17 +57,27 @@ export default function WithdrawEarnings(props) {
 
     useEffect(() => {
         getAllData()
-    }, [])
+    }, [seller_stripe_account_id])
 
     const getAllData = async () => {
-        await getSetAllBanks()
+        // await getSetAllBanks()
         await getSetBankAccounts()
     }
     const getSetBankAccounts = async () => {
-        await Backend.getBankAccounts().
+        // await Backend.getBankAccounts().
+        //     then(res => {
+        //         if (res) {
+        //             setBackAccounts(res.data)
+        //         }
+        //     })
+        await Backend.getStripeAccountDetail({ stripe_account_id: seller_stripe_account_id }).
             then(res => {
                 if (res) {
-                    setBackAccounts(res.data)
+                    if (res.external_accounts?.data) {
+                        setBackAccounts(res.external_accounts.data)
+                    }else{
+                        setBackAccounts([])
+                    }
                 }
             })
     }
@@ -125,9 +135,23 @@ export default function WithdrawEarnings(props) {
             //         }
             //     })
 
-            await Backend.createStripeAccountFetch().
-                then(res => {
+            // await Backend.createStripeAccountFetch().
+            //     then(res => {
 
+            //     })
+
+            await Backend.createStripeAccountAxios({
+                email,
+                account_holder_name: accountHolderName,
+                account_number: accountNumber,
+                routing_number: routingNumber
+            }).
+                then(async res => {
+                    if (res) {
+                        toggleAddBankAccountPopup()
+                        console.log("stripe account id: ", res.id)
+                        await Backend.update_profile({ seller_stripe_account_id: res.id })
+                    }
                 })
             setLoadingAddBankAccount(false)
         }
@@ -165,6 +189,8 @@ export default function WithdrawEarnings(props) {
                         buttonStyle={[{ height: height(10), borderStyle: 'dashed', marginVertical: sizes.marginVertical / 2 }]}
                         textStyle={[appStyles.h6, appStyles.fontBold]}
                         onPress={toggleAddBankAccountPopup}
+                    //onPress={() => Toasts.error('asad')}
+
                     />
                     :
                     <BankAccounts
@@ -177,6 +203,7 @@ export default function WithdrawEarnings(props) {
                 visible={isAddBankAccountPopupVisible}
                 toggle={toggleAddBankAccountPopup}
                 onPressDone={addBankAccount}
+                //onPressDone={()=>Toasts.error('asad')}
                 isLoading={loadingAddBankAccount}
                 banks={banks}
             />
@@ -225,8 +252,9 @@ function BankAccounts({ data, onPressItem, onPressAdd }) {
                         <RowWrapperBasic>
                             <Wrapper flex={1}>
                                 <LargeText style={[appStyles.fontBold]}>{item.bank_name}</LargeText>
-                                <Spacer height={sizes.baseMargin} />
-                                <RegularText>***************{item.account_no.slice(10)}</RegularText>
+                                <Spacer height={sizes.baseMargin} /> 
+                                {/* <RegularText>***************{item.account_no.slice(10)}</RegularText> */}
+                                <RegularText>***************{item.last4}</RegularText>
                             </Wrapper>
                             <Icon
                                 label="arrow-right"
@@ -277,9 +305,9 @@ function AddBankAccountPopup({ visible, toggle, onPressDone, isLoading, banks })
         HelpingMethods.handleAnimation()
         //!bank ? setBankError('Please select bank') : setBankError('')
         !accountHolderName ? setAccountHolderNameError('Please enter account holder name') : setAccountHolderNameError('')
-        !accountNumber ? setAcNumberError('Please enter account number') : setAcNumberError('')
+        !accountNumber ? setAcNumberError('Please enter account number') : accountNumber.length != 12 ? setAcNumberError('It must be 12 digits') : setAcNumberError('')
         !routingNumber ? setRoutingNumberError('Please enter routing number') : routingNumber.length != 9 ? setRoutingNumberError('It must be 9 digits') : setRoutingNumberError('')
-        if (accountNumber && accountHolderName && routingNumber.length === 9) { return true } else { return false }
+        if (accountHolderName && accountNumber.length === 12 && routingNumber.length === 9) { return true } else { return false }
     }
     const handleAdd = () => {
         if (validate()) {

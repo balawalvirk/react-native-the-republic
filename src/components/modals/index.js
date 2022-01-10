@@ -14,10 +14,11 @@ import { SearchIcon, CloseIcon, BackIcon } from '../icons';
 import { styles } from './styles';
 import { LineHorizontal } from '../lines';
 import { Platform } from 'react-native';
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 
 
-export const ModalSwipeablePrimary = ({ visible, toggle, disableSwipe, topMargin, headerTitle, headerRight, headerLeft, hideHeader, children,disableBackDropPress }) => {
+export const ModalSwipeablePrimary = ({ visible, toggle, disableSwipe, topMargin, headerTitle, headerRight, headerLeft, hideHeader, children, disableBackDropPress }) => {
     const defaultTopMargin = topMargin ? (Platform.OS === 'ios' ? topMargin : topMargin + height(5)) : height(12)
     return (
         <Modal
@@ -26,51 +27,54 @@ export const ModalSwipeablePrimary = ({ visible, toggle, disableSwipe, topMargin
             onSwipeComplete={toggle}
             swipeDirection={disableSwipe ? null : "down"}
             propagateSwipe
-            onBackdropPress={disableBackDropPress?null:toggle}
+            onBackdropPress={disableBackDropPress ? null : toggle}
             backdropOpacity={0}
-        >
-            <View
-                style={{
-                    flex: 1,
-                    marginTop: defaultTopMargin,
-                    backgroundColor: colors.appBgColor1,
-                    borderTopRightRadius: 25,
-                    borderTopLeftRadius: 25,
-                    ...appStyles.shadowExtraDark
-                }}>
-                {
-                    hideHeader ? null :
-                        <View style={appStyles.rowCompContainer}>
-                            <AbsoluteWrapper style={{ alignItems: 'center', right: 0, left: 0 }}>
-                                <TinyTitle style={[appStyles.headerTitleStyle]}>
-                                    {/* {data ? data.length + ' People' : 0 + ' People'} */}
-                                    {headerTitle ? headerTitle : 'Title'}
-                                </TinyTitle>
-                            </AbsoluteWrapper>
-                            <View>
-                                {
-                                    headerLeft ? headerLeft :
-                                        // <BackIcon
-                                        //     onPress={toggle}
-                                        //     color={colors.appTextColor6}
-                                        // />
-                                        <Icon
-                                        name="x"
-                                        type="feather"
-                                        size={totalSize(2.5)}
-                                        color={colors.appTextColor1}
-                                        onPress={toggle}
-                                        />
-                                }
-                            </View>
 
-                            <View style={{}}>
-                                {headerRight}
+        >
+            <RootSiblingParent >
+                <View
+                    style={{
+                        flex: 1,
+                        marginTop: defaultTopMargin,
+                        backgroundColor: colors.appBgColor1,
+                        borderTopRightRadius: 25,
+                        borderTopLeftRadius: 25,
+                        ...appStyles.shadowExtraDark
+                    }}>
+                    {
+                        hideHeader ? null :
+                            <View style={appStyles.rowCompContainer}>
+                                <AbsoluteWrapper style={{ alignItems: 'center', right: 0, left: 0 }}>
+                                    <TinyTitle style={[appStyles.headerTitleStyle]}>
+                                        {/* {data ? data.length + ' People' : 0 + ' People'} */}
+                                        {headerTitle ? headerTitle : 'Title'}
+                                    </TinyTitle>
+                                </AbsoluteWrapper>
+                                <View>
+                                    {
+                                        headerLeft ? headerLeft :
+                                            // <BackIcon
+                                            //     onPress={toggle}
+                                            //     color={colors.appTextColor6}
+                                            // />
+                                            <Icon
+                                                name="x"
+                                                type="feather"
+                                                size={totalSize(2.5)}
+                                                color={colors.appTextColor1}
+                                                onPress={toggle}
+                                            />
+                                    }
+                                </View>
+
+                                <View style={{}}>
+                                    {headerRight}
+                                </View>
                             </View>
-                        </View>
-                }
-                {children}
-            </View>
+                    }
+                    {children}
+                </View>
+            </RootSiblingParent>
         </Modal >
     )
 }
