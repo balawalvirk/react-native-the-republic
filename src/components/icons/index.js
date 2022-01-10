@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { Icon } from 'react-native-elements';
 import { height, totalSize, width } from 'react-native-dimension';
-import { colors, appStyles, sizes } from '../../services';
+import { colors, appStyles, sizes, fontFamily } from '../../services';
 import * as Animatable from 'react-native-animatable';
 import { SmallText,RegularText } from '../text';
 import { AbsoluteWrapper, Wrapper } from '../wrappers';
@@ -129,7 +129,7 @@ export const IconWithText = ({ text, disabled, containerStyle, title, customIcon
             <View style={[direction === 'column' ? { marginVertical: height(1.5) } : { marginHorizontal: width(2) }, textContainerStyle]}>
                 {
                     title ?
-                        <Text style={[appStyles.textRegular, { color: tintColor ? tintColor : colors.appTextColor1, fontFamily: FontFamily.appTextBold, marginBottom: 5 }, titleStyle]}>{title}</Text>
+                        <Text style={[appStyles.textRegular, { color: tintColor ? tintColor : colors.appTextColor1, fontFamily: fontFamily.appTextBold, marginBottom: 5 }, titleStyle]}>{title}</Text>
                         :
                         null
                 }

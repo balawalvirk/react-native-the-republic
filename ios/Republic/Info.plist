@@ -30,9 +30,23 @@
 				<string>com.googleusercontent.apps.1013721507878-dhhjb5t1p2lsji217jaslbordlnsr2qk</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>republicapp</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>whatsapp</string>
+		<string>facebook</string>
+		<string>instagram</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -102,11 +116,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>LSApplicationQueriesSchemes</key>
-<array>
-    <string>whatsapp</string>
-	<string>facebook</string>
-	<string>instagram</string>
-</array>
 </dict>
 </plist>

@@ -215,7 +215,9 @@ export const update_profile = async ({
     user_id, first_name, last_name, username, gender, birthday, phone, image,
     country_code, country_phone_code, fcm_token, subscription_id, cancel_subscription,
     customer_id, payment_id, user_type, subscription_plan, latitude,
-    longitude, distance, default_card_id, default_dealer_id, address, disableUpdateProfile }) => {
+    longitude, distance, default_card_id, default_dealer_id, address, disableUpdateProfile,
+    seller_stripe_account_id
+}) => {
     let response = null
     const state = store.getState()
     const userId = user_id ? user_id : state.user.userDetail.id
@@ -247,7 +249,7 @@ export const update_profile = async ({
     distance && formDataObject.append("distance", distance)
     default_card_id && formDataObject.append("default_card_id", default_card_id)
     default_dealer_id && formDataObject.append("default_dealer_id", default_dealer_id)
-
+    seller_stripe_account_id  && formDataObject.append("seller_stripe_account_id", seller_stripe_account_id)
 
     console.log('update_profile\nuri: ', uri, '\nParams: ', formDataObject);
     await axios

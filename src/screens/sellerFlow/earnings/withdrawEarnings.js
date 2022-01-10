@@ -7,7 +7,7 @@ import { View, Text, FlatList } from 'react-native';
 import { height, totalSize } from 'react-native-dimension';
 import { Icon } from 'react-native-elements';
 import { useSelector } from 'react-redux';
-import { ButtonBordered, ButtonGradient, CardWrapper, ColoredWrapper, ComponentWrapper, LargeText, LargeTitle, MainWrapper, MediumText, MediumTitle, PickerPrimary, PickerSearchable, PopupPrimary, RegularText, RowWrapper, RowWrapperBasic, SkeletonListVerticalSecondary, SkeletonPrimary, SmallTitle, Spacer, TextInputUnderlined, TinyTitle, Toasts, Wrapper, XLTitle, XXLTitle } from '../../../components';
+import { BorderedWrapper, ButtonBordered, ButtonGradient, CardWrapper, ColoredWrapper, ComponentWrapper, IconWithText, LargeText, LargeTitle, MainWrapper, MediumText, MediumTitle, PickerPrimary, PickerSearchable, PopupPrimary, RegularText, RowWrapper, RowWrapperBasic, SkeletonListVerticalSecondary, SkeletonPrimary, SmallTitle, Spacer, TextInputUnderlined, TinyTitle, Toasts, Wrapper, XLTitle, XXLTitle } from '../../../components';
 import { appStyles, Backend, colors, HelpingMethods, sizes } from '../../../services';
 
 // const bankAccounts = [
@@ -21,32 +21,37 @@ import { appStyles, Backend, colors, HelpingMethods, sizes } from '../../../serv
 //     }
 // ]
 
-const tempBanks = [
-    {
-        label: 'ABC bank',
-        value: 'abc'
-    },
-    {
-        label: 'DEF bank',
-        value: 'def'
-    },
-    {
-        label: 'GHI bank',
-        value: 'ghi'
-    }
-]
-function WithdrawEarnings(props) {
+// const tempBanks = [
+//     {
+//         label: 'ABC bank',
+//         value: 'abc'
+//     },
+//     {
+//         label: 'DEF bank',
+//         value: 'def'
+//     },
+//     {
+//         label: 'GHI bank',
+//         value: 'ghi'
+//     }
+// ]
+export default function WithdrawEarnings(props) {
 
     //local states
     const [bankAccounts, setBackAccounts] = useState(null)
     const [banks, setBanks] = useState(null)
     const [loadingAddBankAccount, setLoadingAddBankAccount] = useState(false)
     const [isAddBankAccountPopupVisible, setAddBankAccountPopupVisibility] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     //redux states
     const user = useSelector(state => state.user)
-    const { reports,userDetail } = user
-    console.log('userDetail-->',userDetail)
+    const { reports, userDetail } = user
+    //console.log('userDetail-->', userDetail)
+    const { seller_stripe_account_id, email, first_name, last_name } = userDetail
+    //console.log('seller_stripe_account_id-->', seller_stripe_account_id)
+
+
 
     const toggleAddBankAccountPopup = () => setAddBankAccountPopupVisibility(!isAddBankAccountPopupVisible)
 
@@ -71,7 +76,7 @@ function WithdrawEarnings(props) {
             then(res => {
                 if (res?.success) {
                     if (res?.data?.length) {
-                        let tempData=[]
+                        let tempData = []
                         for (const item of res.data) {
                             const tempObj = {
                                 ...item,
@@ -89,24 +94,44 @@ function WithdrawEarnings(props) {
             })
     }
 
-    const addBankAccount = async (data) => {
-        console.log('data-->', data)
-        if (data) {
-            const { bank, accountNo } = data
+    const addBankAccount = async (bankData) => {
+        console.log('bank_data-->', bankData)
+        if (bankData) {
+            const { accountHolderName, accountNumber, routingNumber } = bankData
             setLoadingAddBankAccount(true)
-            await Backend.addBankAccount({ bank_name: bank.label, account_no: accountNo }).
-                then(async res => {
-                    if (res) {
-                        await getSetBankAccounts()
-                        toggleAddBankAccountPopup()
-                        setLoadingAddBankAccount(false)
-                        Toasts.success('Bank account added')
-                    } else {
-                        toggleAddBankAccountPopup()
-                        setLoadingAddBankAccount(false)
-                    }
+
+            // await Backend.addBankAccount({ bank_name: bank.label, account_no: accountNumber }).
+            //     then(async res => {
+            //         if (res) {
+            //             await getSetBankAccounts()
+            //             toggleAddBankAccountPopup()
+            //             setLoadingAddBankAccount(false)
+            //             Toasts.success('Bank account added')
+            //         } else {
+            //             toggleAddBankAccountPopup()
+            //             setLoadingAddBankAccount(false)
+            //         }
+            //     })
+
+            // await Backend.createStripeAccount({
+            //     email,
+            //     account_holder_name: accountHolderName,
+            //     account_number: accountNumber,
+            //     routing_number: routingNumber
+            // }).
+            //     then(async res => {
+            //         if (res) {
+            //             await Backend.update_profile({ seller_stripe_account_id: res.id })
+            //         }
+            //     })
+
+            await Backend.createStripeAccountFetch().
+                then(res => {
+
                 })
+            setLoadingAddBankAccount(false)
         }
+
     }
 
     return (
@@ -118,12 +143,36 @@ function WithdrawEarnings(props) {
                 <XXLTitle style={appStyles.textPrimaryColor}>${reports.available_withdraw}</XXLTitle>
             </ComponentWrapper>
             <Spacer height={sizes.doubleBaseMargin} />
-
-            <BankAccounts
-                data={bankAccounts}
-                onPressItem={(item, index) => { }}
-                onPressAdd={toggleAddBankAccountPopup}
-            />
+            {
+                !seller_stripe_account_id ?
+                    // <ColoredWrapper
+                    //     onPress={handleCreateStripeExpressAccount}
+                    //     style={{ paddingVertical: sizes.marginVertical }}>
+                    //     <IconWithText
+                    //         iconName={'cc-stripe'}
+                    //         iconSize={totalSize(5)}
+                    //         tintColor={colors.appColor1}
+                    //         iconType={'font-awesome-5'}
+                    //         title={'Tap to create stripe express account'}
+                    //         text={'You have to create stripe express account in order to transfer your earnings to your bank account.'}
+                    //         direction={'column'}
+                    //         textStyle={[appStyles.textSmall, appStyles.textGray, appStyles.textCenter]}
+                    //         titleStyle={[appStyles.textCenter]}
+                    //     />
+                    // </ColoredWrapper>
+                    <ButtonBordered
+                        text="Add bank account"
+                        buttonStyle={[{ height: height(10), borderStyle: 'dashed', marginVertical: sizes.marginVertical / 2 }]}
+                        textStyle={[appStyles.h6, appStyles.fontBold]}
+                        onPress={toggleAddBankAccountPopup}
+                    />
+                    :
+                    <BankAccounts
+                        data={bankAccounts}
+                        onPressItem={(item, index) => { }}
+                    //onPressAdd={toggleAddBankAccountPopup}
+                    />
+            }
             <AddBankAccountPopup
                 visible={isAddBankAccountPopupVisible}
                 toggle={toggleAddBankAccountPopup}
@@ -135,7 +184,7 @@ function WithdrawEarnings(props) {
     );
 }
 
-export default WithdrawEarnings;
+
 
 
 function BankAccounts({ data, onPressItem, onPressAdd }) {
@@ -189,17 +238,17 @@ function BankAccounts({ data, onPressItem, onPressAdd }) {
                     </ColoredWrapper>
                 )
             }}
-            ListFooterComponent={() => {
-                return (
-                    <ButtonBordered
-                        text="Add bank account"
-                        buttonStyle={[{ height: height(10), borderStyle: 'dashed', marginVertical: sizes.marginVertical / 2 }]}
-                        textStyle={[appStyles.h6, appStyles.fontBold]}
-                        onPress={onPressAdd}
+        // ListFooterComponent={() => {
+        //     return (
+        //         <ButtonBordered
+        //             text="Add bank account"
+        //             buttonStyle={[{ height: height(10), borderStyle: 'dashed', marginVertical: sizes.marginVertical / 2 }]}
+        //             textStyle={[appStyles.h6, appStyles.fontBold]}
+        //             onPress={onPressAdd}
 
-                    />
-                )
-            }}
+        //         />
+        //     )
+        // }}
         />
     )
 }
@@ -207,9 +256,13 @@ function BankAccounts({ data, onPressItem, onPressAdd }) {
 function AddBankAccountPopup({ visible, toggle, onPressDone, isLoading, banks }) {
 
     const [bank, setBank] = useState('')
-    const [accountNo, setAccountNo] = useState('')
+    const [accountNumber, setAccountNumber] = useState('')
+    const [accountHolderName, setAccountHolderName] = useState('')
+    const [routingNumber, setRoutingNumber] = useState('')
     const [bankError, setBankError] = useState('')
+    const [accountHolderNameError, setAccountHolderNameError] = useState('')
     const [acNumberError, setAcNumberError] = useState('')
+    const [routingNumberError, setRoutingNumberError] = useState('')
 
     // manage keyboard
     const [keyboardVisible, setKeyboardVisible] = useState(false)
@@ -222,15 +275,19 @@ function AddBankAccountPopup({ visible, toggle, onPressDone, isLoading, banks })
 
     const validate = () => {
         HelpingMethods.handleAnimation()
-        !bank ? setBankError('Please select bank') : setBankError('')
-        !accountNo ? setAcNumberError('Please enter account number') : setAcNumberError('')
-        if (bank && accountNo) { return true } else { return false }
+        //!bank ? setBankError('Please select bank') : setBankError('')
+        !accountHolderName ? setAccountHolderNameError('Please enter account holder name') : setAccountHolderNameError('')
+        !accountNumber ? setAcNumberError('Please enter account number') : setAcNumberError('')
+        !routingNumber ? setRoutingNumberError('Please enter routing number') : routingNumber.length != 9 ? setRoutingNumberError('It must be 9 digits') : setRoutingNumberError('')
+        if (accountNumber && accountHolderName && routingNumber.length === 9) { return true } else { return false }
     }
     const handleAdd = () => {
         if (validate()) {
             const obj = {
-                bank,
-                accountNo
+                //bank,
+                accountNumber,
+                accountHolderName,
+                routingNumber
             }
             return obj
         } else {
@@ -244,12 +301,12 @@ function AddBankAccountPopup({ visible, toggle, onPressDone, isLoading, banks })
             title="Add bank account"
             buttonText1="Done"
             onPressButton1={() => onPressDone(handleAdd())}
-            topMargin={keyboardVisible ? height(20) : height(50)}
+            topMargin={keyboardVisible ? height(20) : height(40)}
             keyboardShouldPersistTaps
             loadingButton1={isLoading}
         >
 
-            <PickerSearchable
+            {/* <PickerSearchable
                 data={banks}
                 title="Select Bank"
                 value={bank.label}
@@ -263,13 +320,26 @@ function AddBankAccountPopup({ visible, toggle, onPressDone, isLoading, banks })
                     console.log('item', item)
                 }}
                 error={bankError}
+            /> */}
+            <TextInputUnderlined
+                title="Account Holder Name"
+                value={accountHolderName}
+                onChangeText={t => setAccountHolderName(t)}
+                error={accountHolderNameError}
             />
             <Spacer height={sizes.baseMargin} />
             <TextInputUnderlined
                 title="Account Number"
-                value={accountNo}
-                onChangeText={t => setAccountNo(t)}
+                value={accountNumber}
+                onChangeText={t => setAccountNumber(t)}
                 error={acNumberError}
+            />
+            <Spacer height={sizes.baseMargin} />
+            <TextInputUnderlined
+                title="Routing Number"
+                value={routingNumber}
+                onChangeText={t => setRoutingNumber(t)}
+                error={routingNumberError}
             />
             <Spacer height={sizes.baseMargin} />
         </PopupPrimary>

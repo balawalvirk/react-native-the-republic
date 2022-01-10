@@ -65,17 +65,17 @@ export const checkIsProductFavourite = (productId) => {
     return isFavourite
 }
 export const checkIfServiceAdded = (serviceId) => {
-    console.log('serviceId -->',serviceId)
+    console.log('serviceId -->', serviceId)
     let isAdded = false
     const state = store.getState()
     const { userDetail } = state.user
     if (userDetail) {
         const { services } = userDetail
-        console.log('services --> ',services)
+        console.log('services --> ', services)
         if (services) {
             if (services.length) {
                 const matchedId = services.find(item => item.id === serviceId)
-                console.log('matchedId --> ',matchedId)
+                console.log('matchedId --> ', matchedId)
                 if (matchedId) {
                     isAdded = true
                 }
@@ -339,7 +339,7 @@ export const getMyLocation = () => {
         return null
     }
 }
-export const RequestLocationAccess = async () => {
+export const requestLocationAccess = async () => {
     if (Platform.OS === 'ios') {
         getUserLocation();
     } else {
@@ -368,8 +368,8 @@ export const RequestLocationAccess = async () => {
 export const getRoundedValue = (value) => {
     return Math.round(value * 10) / 10
 }
-export const getTransectionCharges=(amount)=>{
-    return  getRoundedValue((Number(amount) / 100) * 1.5)
+export const getTransectionCharges = (amount) => {
+    return getRoundedValue((Number(amount) / 100) * 1.5)
 }
 export const handleShare = (url) => {
     console.log('url --> ', url)
@@ -404,7 +404,7 @@ export const handleRemovePost = (allPosts, post) => {
 
 
 export const getUserLocation = async () => {
-    Platform.OS === 'ios' && await Geolocation.requestAuthorization('always')
+    await Geolocation.requestAuthorization('always')
     Geolocation.getCurrentPosition(
         (position) => {
             // setTimeout(() => {
@@ -419,6 +419,23 @@ export const getUserLocation = async () => {
         },
         { enableHighAccuracy: false, timeout: 15000, maximumAge: 10000 }
     );
+}
+export const requestLocationPermissions = async () => {
+    if (Platform.OS === 'ios') {
+        await Geolocation.requestAuthorization('always');
+        Geolocation.setRNConfiguration({
+            skipPermissionRequests: false,
+            authorizationLevel: 'whenInUse',
+        });
+        getUserLocation()
+    }
+
+    if (Platform.OS === 'android') {
+        await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        );
+        getUserLocation()
+    }
 }
 //////Cloud messaging Tokens
 export const getFcmToken = async () => {

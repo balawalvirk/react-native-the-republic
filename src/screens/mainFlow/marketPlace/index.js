@@ -43,7 +43,8 @@ function MarketPlace(props) {
     }, [currentLocation])
 
     const getSetData = async () => {
-        await HelpingMethods.RequestLocationAccess()
+        await HelpingMethods.requestLocationPermissions()
+        //await HelpingMethods.requestLocationAccess()
         await Backend.get_product_categories()
         await Backend.getFeaturedProducts().
             then(res => {
