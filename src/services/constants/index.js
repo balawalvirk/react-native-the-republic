@@ -226,6 +226,10 @@ export const endPoints = {
         resetPassword: 'https://republic-backend.herokuapp.com/password/email',
         sendCsrfToken: 'https://republic-backend.herokuapp.com/get-csrf',
     },
+    withdraw: {
+        withdraw_amount: '/withdraw-amount',
+        withdraw_history: '/withdraw-history'
+    },
     contact_us: 'contact-us',
     add_card: 'add-card',
     submit_app_feedback: 'submit-app-feedback'
@@ -233,7 +237,7 @@ export const endPoints = {
 export const stripe_base_url = 'https://api.stripe.com/v1/'
 export const stripe_endpoints = {
     accounts: 'accounts',
-    external_accounts:'external_accounts'
+    external_accounts: 'external_accounts'
 }
 export const routes = {
     auth: 'auth',
@@ -439,6 +443,10 @@ export const tabs = {
         // activeBackgroundColor:'#FFFFFF40',
         //tabStyle:{borderRadius:20,marginHorizontal:7.5,marginVertical:2}
     }
+}
+export const appDeeplinks = {
+    app: 'https://republic://app',
+    auth: 'https://republic://auth'
 }
 export const SHOW_TOAST_MESSAGE = 'SHOW_TOAST_MESSAGE';
 export const SHOW_PUSH_NOTIFICATION = 'SHOW_PUSH_NOTIFICATION';

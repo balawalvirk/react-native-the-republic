@@ -2,8 +2,8 @@ import React, { Component, useEffect, useState } from 'react';
 import { View, Text, Platform, TouchableOpacity, Image, Animated } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
 import { Icon } from 'react-native-elements';
-import { AbsoluteWrapper, ArmerInfo, BackIcon, ButtonGradient, ComponentWrapper, ErrorText, GoogleAutoComplete, IconWithText, ImagePickerPopup, InputTitle, KeyboardAvoidingScrollView, LoaderAbsolute, MainWrapper, MediumText, PickerPrimary, PickerSearchable, ProductCardPrimary, RegularText, RenderTags, RowWrapper, Spacer, SwitchPrimary, TextInputUnderlined, Toasts, Wrapper } from '../../../components';
-import { appStyles, Backend, colors, DummyData, HelpingMethods, sizes } from '../../../services';
+import { AbsoluteWrapper, ArmerInfo, BackIcon, ButtonGradient, ComponentWrapper, ErrorText, GoogleAutoComplete, IconButton, IconWithText, ImagePickerPopup, InputTitle, KeyboardAvoidingScrollView, LargeText, LoaderAbsolute, MainWrapper, MediumText, MediumTitle, PickerPrimary, PickerSearchable, PopupPrimary, ProductCardPrimary, RegularText, RenderTags, RowWrapper, Spacer, SwitchPrimary, TextInputUnderlined, Toasts, Wrapper } from '../../../components';
+import { appStyles, Backend, colors, DummyData, HelpingMethods, routes, sizes } from '../../../services';
 import styles from './styles'
 import * as ImagePicker from 'react-native-image-picker';
 import { check, PERMISSIONS, RESULTS, request } from 'react-native-permissions';
@@ -42,8 +42,12 @@ function Sell(props) {
     const user = useSelector(state => state.user)
     const { categories, items, actions, manufacturers, conditions, calibers } = product
     const { userDetail } = user
+    const { seller_stripe_account_id } = userDetail
     //local states
     const [step, setStep] = useState(1)
+    const [isCreateStripeAccountPopupVisible, setCreateStripeAccountPopupVisibility] = useState(false)
+    const toggleCreateStripeAccountPopup = () => setCreateStripeAccountPopupVisibility(!isCreateStripeAccountPopupVisible)
+
     const headerTitle = step === 1 ? productDetail ? "Update Item" : "Post an Item" : step === 2 ? "Add Product Details" : step === 3 ? "Add Location Details" : step === 4 ? "Price" : step === 5 ? "Finish" : ""
     const handleBackPress = () => {
         step === 1 ?
@@ -99,7 +103,11 @@ function Sell(props) {
                 }
             }
         } else {
-            productDetail ? handleEditProduct() : handleAddNewProduct()
+            !seller_stripe_account_id ?
+                toggleCreateStripeAccountPopup() :
+                productDetail ?
+                    handleEditProduct() :
+                    handleAddNewProduct()
         }
 
     }
@@ -628,7 +636,7 @@ function Sell(props) {
                                                 viewType={'list'}
                                                 image={imageFile ? imageFile.uri : imageUri}
                                                 description={description}
-                                                discountedPrice={isDiscountedPriceVisible&&discountedPrice?discountedPrice:''}
+                                                discountedPrice={isDiscountedPriceVisible && discountedPrice ? discountedPrice : ''}
                                                 price={price}
                                                 location={city}
                                                 rating={selectedProduct.rating}
@@ -670,6 +678,29 @@ function Sell(props) {
                 toggle={toggleImagePickerPopup}
                 onPressTakePhoto={launchCamera}
                 onPressSelectFromGalary={launchImagePicker}
+            />
+            <PopupPrimary
+                visible={!isCreateStripeAccountPopupVisible}
+                toggle={toggleCreateStripeAccountPopup}
+                title={'Create Stripe Account'}
+                info={'To get the payment of your products and withdraw to your bank account, you have to create stripe express account'}
+                onPressButton1={() => {
+                    toggleCreateStripeAccountPopup()
+                    navigate(routes.seller.withdrawEarnings)
+                }}
+                buttonText1={'Continue'}
+                icon={
+                    <Wrapper
+                        style={{ marginBottom: sizes.baseMargin }}
+                    >
+                        <Icon
+                            name={'cc-stripe'}
+                            type={'font-awesome'}
+                            color={colors.appColor1}
+                            size={totalSize(7.5)}
+                        />
+                    </Wrapper>
+                }
             />
             <LoaderAbsolute
                 isVisible={isLoading}

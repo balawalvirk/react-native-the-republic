@@ -39,7 +39,8 @@ export const PopupPrimary = ({
     onPressButton1, onPressButton2, loadingButton1,
     loadinButton2, topMargin, children, scrollEnabled,
     button1Style,
-    headerTitle, showHeader, headerBottom
+    headerTitle, showHeader, headerBottom,
+    icon
 }) => {
 
 
@@ -66,8 +67,6 @@ export const PopupPrimary = ({
             disableSwipe={disableSwipe}
             disableBackDropPress={disableBackDropPress}
             headerTitle={headerTitle}
-
-
         >
             <Wrapper flex={1}>
                 {headerBottom ? headerBottom : null}
@@ -78,22 +77,23 @@ export const PopupPrimary = ({
                 >
                     <Spacer height={sizes.baseMargin * 1.5} />
                     {
-                        iconName || customIcon ?
-                            <>
-                                <IconButton
-                                    iconName={iconName}
-                                    iconType={iconType}
-                                    customIcon={customIcon}
-                                    iconColor={iconColor ? iconColor : colors.appTextColor6}
-                                    buttonColor={iconContainerColor ? iconContainerColor : colors.success}
-                                    buttonSize={iconContainerSize ? iconContainerSize : totalSize(6)}
-                                    iconSize={iconSize ? iconSize : totalSize(4)}
-                                    buttonStyle={{ borderRadius: 100, alignSelf: 'center', }}
-                                />
-                                <Spacer height={sizes.baseMargin * 1.5} />
-                            </>
-                            :
-                            null
+                        icon ? icon :
+                            iconName || customIcon ?
+                                <>
+                                    <IconButton
+                                        iconName={iconName}
+                                        iconType={iconType}
+                                        customIcon={customIcon}
+                                        iconColor={iconColor ? iconColor : colors.appTextColor6}
+                                        buttonColor={iconContainerColor ? iconContainerColor : colors.success}
+                                        buttonSize={iconContainerSize ? iconContainerSize : totalSize(6)}
+                                        iconSize={iconSize ? iconSize : totalSize(4)}
+                                        buttonStyle={{ borderRadius: 100, alignSelf: 'center', }}
+                                    />
+                                    <Spacer height={sizes.baseMargin * 1.5} />
+                                </>
+                                :
+                                null
                     }
                     {
                         title ?

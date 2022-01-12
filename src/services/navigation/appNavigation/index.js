@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
@@ -11,7 +11,7 @@ import { header, routes, headers, tabs } from '../../constants';
 import * as MainApp from '../../../screens/mainFlow';
 import * as CommunityScreens from '../../../screens/mainFlow/community';
 import * as Seller from '../../../screens/sellerFlow';
-import { CustomIcon, ImageRound, ComponentWrapper, MediumText, Spacer, Wrapper, RowWrapper, AbsoluteWrapper, ImageProfile, SmallTitle, LogoMain, LocationPickerButton } from '../../../components';
+import { CustomIcon, ImageRound, ComponentWrapper, MediumText, Spacer, Wrapper, RowWrapper, AbsoluteWrapper, ImageProfile, SmallTitle, LogoMain, LocationPickerButton, PopupPrimary } from '../../../components';
 import { appIcons, appImages, appStyles, colors, fontFamily, fontSize, sizes } from '../../utilities';
 import { totalSize, width } from 'react-native-dimension';
 import { Badge, Icon } from 'react-native-elements';
@@ -59,86 +59,81 @@ const CommunityTopTabScreens = ({ navigation }) => {
 function BottomTabScreens() {
     const tabIconSize = totalSize(3)
     //const colors = useSelector(state => state.theme.appTheme)
+
+    //redux state
     const user = useSelector(state => state.user)
     const { userDetail } = user
+
+    
     return (
-        <MainBottomTab.Navigator
-            tabBarOptions={{
-                ...tabs.tabBarOptions,
+        <>
+            <MainBottomTab.Navigator
+                tabBarOptions={{
+                    ...tabs.tabBarOptions,
 
-            }}
-        //initialRouteName={routes.welcome}
-        >
-            <MainBottomTab.Screen
-                name={routes.marketPlace}
-                component={MainApp.MarketPlace}
-                options={() => ({
-                    tabBarLabel: "Marketplace",
-                    tabBarIcon: ({ color, size, focused }) => {
-                        return <CustomIcon icon={appIcons.marketplace} size={tabIconSize} color={color} focused={focused} />
-                    },
-                })}
-            />
-            <MainBottomTab.Screen
-                name={routes.find}
-                component={MainApp.Find}
-                options={() => ({
-                    tabBarLabel: "Find",
-                    tabBarIcon: ({ color, size, focused }) => {
-                        return <CustomIcon icon={appIcons.globe} size={tabIconSize} color={color} focused={focused} />
-                    },
-                })}
-            />
-            <MainBottomTab.Screen
-                name={'null'}
-                component={() => null}
-                options={() => ({
-                    tabBarLabel: "Sell",
-                    tabBarIcon: ({ color, size, focused }) => {
-                        // return <CustomIcon icon={appIcons.add_circle} size={tabIconSize} color={color} focused={focused} />
-                        return <Icon name="camera" type="feather" size={tabIconSize} color={color} focused={focused} />
-                    },
-                })}
-                listeners={({ navigation }) => ({
-                    tabPress: event => {
-                        event.preventDefault();
-                        navigation.navigate(routes.sell)
-                    }
-                })}
-            />
-            {/* <MainBottomTab.Screen
-                name={routes.community}
-                component={MainApp.Community}
-                options={() => ({
-                    tabBarLabel: "Community",
-                    tabBarIcon: ({ color, size, focused }) => {
-                        return <CustomIcon icon={appIcons.users} size={tabIconSize} color={color} focused={focused} />
-                    },
-                })}
-            /> */}
-            <MainBottomTab.Screen
-                name={routes.community}
-                component={CommunityTopTabScreens}
-                options={() => ({
-                    tabBarLabel: "Community",
-                    tabBarIcon: ({ color, size, focused }) => {
-                        return <CustomIcon icon={appIcons.users} size={tabIconSize} color={color} focused={focused} />
-                    },
-                })}
-            />
+                }}
+            >
+                <MainBottomTab.Screen
+                    name={routes.marketPlace}
+                    component={MainApp.MarketPlace}
+                    options={() => ({
+                        tabBarLabel: "Marketplace",
+                        tabBarIcon: ({ color, size, focused }) => {
+                            return <CustomIcon icon={appIcons.marketplace} size={tabIconSize} color={color} focused={focused} />
+                        },
+                    })}
+                />
+                <MainBottomTab.Screen
+                    name={routes.find}
+                    component={MainApp.Find}
+                    options={() => ({
+                        tabBarLabel: "Find",
+                        tabBarIcon: ({ color, size, focused }) => {
+                            return <CustomIcon icon={appIcons.globe} size={tabIconSize} color={color} focused={focused} />
+                        },
+                    })}
+                />
+                <MainBottomTab.Screen
+                    name={'null'}
+                    component={() => null}
+                    options={() => ({
+                        tabBarLabel: "Sell",
+                        tabBarIcon: ({ color, size, focused }) => {
+                            // return <CustomIcon icon={appIcons.add_circle} size={tabIconSize} color={color} focused={focused} />
+                            return <Icon name="camera" type="feather" size={tabIconSize} color={color} focused={focused} />
+                        },
+                    })}
+                    listeners={({ navigation }) => ({
+                        tabPress: event => {
+                            event.preventDefault();
+                            navigation.navigate(routes.sell)
+                        }
+                    })}
+                />
+                <MainBottomTab.Screen
+                    name={routes.community}
+                    component={CommunityTopTabScreens}
+                    options={() => ({
+                        tabBarLabel: "Community",
+                        tabBarIcon: ({ color, size, focused }) => {
+                            return <CustomIcon icon={appIcons.users} size={tabIconSize} color={color} focused={focused} />
+                        },
+                    })}
+                />
 
-            <MainBottomTab.Screen
-                name={routes.profile}
-                component={MainApp.Profile}
-                options={() => ({
-                    tabBarLabel: "Profile",
-                    tabBarIcon: ({ color, size, focused }) => {
-                        //return <CustomIcon icon={appIcons.marketplace} size={tabIconSize} color={color} focused={focused} />
-                        return <ImageRound source={{ uri: userDetail ? userDetail.profile_image ? userDetail.profile_image : appImages.noUser : appImages.noUser }} size={tabIconSize} style={{ opacity: focused ? 1 : 0.5, borderColor: colors.appColor1 }} />
-                    },
-                })}
-            />
-        </MainBottomTab.Navigator>
+                <MainBottomTab.Screen
+                    name={routes.profile}
+                    component={MainApp.Profile}
+                    options={() => ({
+                        tabBarLabel: "Profile",
+                        tabBarIcon: ({ color, size, focused }) => {
+                            //return <CustomIcon icon={appIcons.marketplace} size={tabIconSize} color={color} focused={focused} />
+                            return <ImageRound source={{ uri: userDetail ? userDetail.profile_image ? userDetail.profile_image : appImages.noUser : appImages.noUser }} size={tabIconSize} style={{ opacity: focused ? 1 : 0.5, borderColor: colors.appColor1 }} />
+                        },
+                    })}
+                />
+            </MainBottomTab.Navigator>
+        </>
     )
 }
 
@@ -326,14 +321,14 @@ function AppNavigation() {
                     );
                     //  setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
                     if (remoteMessage.data) {
-                        const {data}=remoteMessage
+                        const { data } = remoteMessage
                         const content = JSON.parse(data.content)
-                         PushNotification.show({
-                             image: data.profile_image,
-                             message: data.body,
-                             data: content,
-                             notificationType: data.type
-                         })
+                        PushNotification.show({
+                            image: data.profile_image,
+                            message: data.body,
+                            data: content,
+                            notificationType: data.type
+                        })
                         //MyToast.success({message:data.body})
                     }
                 }
@@ -405,10 +400,10 @@ function AppNavigation() {
 
                 })}
             />
-             <AppStack.Screen name={routes.trainingInfo} component={MainApp.TrainingInfo}
+            <AppStack.Screen name={routes.trainingInfo} component={MainApp.TrainingInfo}
                 options={({ navigation, route }) => ({
                     title: 'Training Info',
-                    headerTitleAlign:'center'
+                    headerTitleAlign: 'center'
                 })}
             />
             <AppStack.Screen name={routes.comments} component={MainApp.Comments}
@@ -636,7 +631,7 @@ function AppNavigation() {
                     headerTitleAlign: 'center'
                 }}
             />
-             <AppStack.Screen name={routes.sortFilterDealers} component={MainApp.SortFilterDealers}
+            <AppStack.Screen name={routes.sortFilterDealers} component={MainApp.SortFilterDealers}
                 options={{
                     // headerShown: false,
                     title: 'Sort & Filters',
@@ -764,7 +759,7 @@ function AppNavigation() {
                     headerTitleAlign: 'center'
                 }}
             />
-             <AppStack.Screen name={routes.seller.services} component={Seller.Services}
+            <AppStack.Screen name={routes.seller.services} component={Seller.Services}
                 options={{
                     // headerShown: false,
                     title: 'Services',
