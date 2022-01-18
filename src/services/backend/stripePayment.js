@@ -95,7 +95,7 @@ export const charge = async (id, amount) => {
 
 //TRANSFER MONEY AFTER CHARGE
 
-export async function transfer(seller_stripe_account_id, amount) {
+export async function transferToStripeAccount(seller_stripe_account_id, amount) {
     // let source_transaction = id
     // let remaining = 100;
     // let loop = 0;
@@ -104,7 +104,8 @@ export async function transfer(seller_stripe_account_id, amount) {
     let response = null
 
     var myHeaders = new Headers();
-    myHeaders.append("Authorization", stripeKeys.authorization_key);
+    //myHeaders.append("Authorization", stripeKeys.authorization_key);
+    myHeaders.append("Authorization", 'Basic c2tfdGVzdF80ZUMzOUhxTHlqV0Rhcmp0VDF6ZHA3ZGM6');
     var requestOptions = {
         method: 'POST',
         headers: myHeaders,
@@ -114,12 +115,12 @@ export async function transfer(seller_stripe_account_id, amount) {
     await fetch("https://api.stripe.com/v1/transfers?amount=" + parseInt(amount) + "&currency=usd&destination=" + seller_stripe_account_id, requestOptions)
         .then(response => response.json())
         .then(result => {
-            console.log(result)
+            console.log('transferToStripeAccount response: ',result)
             response = result
         })
         .catch(error => {
-            console.log('error', error)
-            return false
+            console.log('transferToStripeAccount error', error)
+            //return false
         });
     return response
 }

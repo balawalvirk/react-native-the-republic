@@ -14,7 +14,7 @@ export function RenderBankAccounts({ data, onPressItem, onPressAdd }) {
     if (!data) {
         return (
             <>
-                {[1, 2, 3, 4, 5].map((item, index) => {
+                {[1].map((item, index) => {
                     return (
                         <SkeletonPrimary itemStyle={{ marginBottom: sizes.smallMargin }} />
                     )
@@ -74,7 +74,7 @@ export function RenderBankAccounts({ data, onPressItem, onPressAdd }) {
 }
 
 
-export const BankAccountCard = ({ bankAccountLastDigits, bankName, onPress }) => {
+export const BankAccountCard = ({ bankAccountLastDigits, bankName, onPress,right }) => {
     return (
         <ColoredWrapper activeOpacity={1} onPress={onPress} style={[{ backgroundColor: colors.appBgColor1, marginVertical: sizes.marginVertical / 2 }, appStyles.shadow]}>
             <RowWrapperBasic>
@@ -84,12 +84,15 @@ export const BankAccountCard = ({ bankAccountLastDigits, bankName, onPress }) =>
                     {/* <RegularText>***************{item.account_no.slice(10)}</RegularText> */}
                     <RegularText>***************{bankAccountLastDigits}</RegularText>
                 </Wrapper>
-                <Icon
+                {
+                    right?right:
+                    <Icon
                     name="arrow-right"
                     type="feather"
                     color={colors.appColor1}
                     size={totalSize(3)}
                 />
+                }
             </RowWrapperBasic>
         </ColoredWrapper>
     )

@@ -30,6 +30,8 @@ import GoogleAutoComplete from './googleAutoComplete'
 import { useSelector } from 'react-redux'
 import PickerPopup from './pickerPopup'
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import CreateStripeAccountPopup from './createStripeAccountPopup';
+import VerifyStripeAccountPopup from './verifyStripeAccountPopup';
 
 export const PopupPrimary = ({
     visible, toggle, title, info, iconName, iconColor,
@@ -638,7 +640,7 @@ export {
     Posts, PostCard, MenuPopup, RenderComments, Products, ArmerInfo,
     Reviews, ProductsSecondary, ProductsHorizontalyPrimary, Dealers, Groups,
     AddPaymentMethodModal, FollowRequestsList, GoogleAutoComplete,
-    PickerPopup
+    PickerPopup,CreateStripeAccountPopup,VerifyStripeAccountPopup
 }
 
 export * from './imagesList'

@@ -14,6 +14,7 @@ import CreateCoupon from './coupons/createCoupon'
 import Invoices from './invoices'
 import Reports from './reports'
 import WithdrawEarnings from './earnings/withdrawEarnings'
+import Withdraw from './earnings/withdraw'
 import Services from './services'
 
 export {
@@ -26,5 +27,5 @@ export {
   Invoices,
   OrderDetails, WithdrawEarnings,
   CreateTraining, SelectDateTime,
-  Services
+  Services,Withdraw
 }

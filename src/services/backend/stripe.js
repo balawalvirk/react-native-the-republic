@@ -5,7 +5,7 @@ import store from "../store";
 import * as Backend from './index'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as HelpingMethods from "../helpingMethods";
-import { setCreditCards, setUserDetail } from "../store/actions";
+import { setCreditCards, setStripeAccountDetail, setUserDetail } from "../store/actions";
 import stripe from 'tipsi-stripe'
 import { stripeKeys, stripe_endpoints, stripe_base_url } from '../constants'
 const { dispatch } = store
@@ -32,6 +32,7 @@ export const createStripeAccount = async ({
         'type': 'express',
         'country': 'US',
         'email': email,
+        'business_type': 'individual',
         'capabilities[transfers][requested]': 'true',
         'external_account[object]': 'bank_account',
         'external_account[account_number]': account_number,
@@ -45,7 +46,7 @@ export const createStripeAccount = async ({
         method: 'post',
         url: 'https://api.stripe.com/v1/accounts',
         headers: {
-            'Authorization': 'Basic c2tfdGVzdF80ZUMzOUhxTHlqV0Rhcmp0VDF6ZHA3ZGM6',
+            'Authorization': stripeKeys.authorization_key_basic,
             //'Authorization': stripeKeys.authorization_key,
             'Content-Type': 'application/x-www-form-urlencoded'
         },
@@ -186,7 +187,7 @@ export const getStripeAccountDetail = async ({ stripe_account_id }) => {
         method: 'get',
         url: 'https://api.stripe.com/v1/accounts/' + stripe_account_id,
         headers: {
-            'Authorization': 'Basic c2tfdGVzdF80ZUMzOUhxTHlqV0Rhcmp0VDF6ZHA3ZGM6',
+            'Authorization': stripeKeys.authorization_key_basic,
             //'Authorization': stripeKeys.authorization_key
         }
     };
@@ -195,6 +196,7 @@ export const getStripeAccountDetail = async ({ stripe_account_id }) => {
         .then(function (jsonResponse) {
             console.log(jsonResponse.data);
             response = jsonResponse.data
+            dispatch(setStripeAccountDetail(jsonResponse.data))
         })
         .catch(function (error) {
             console.log(error);
@@ -217,7 +219,7 @@ export const getStripeAccountLink = async ({ stripe_account_id, refresh_url, ret
         method: 'post',
         url: 'https://api.stripe.com/v1/account_links',
         headers: {
-            'Authorization': 'Basic c2tfdGVzdF80ZUMzOUhxTHlqV0Rhcmp0VDF6ZHA3ZGM6',
+            'Authorization': stripeKeys.authorization_key_basic,
             //'Authorization': 'Bearer sk_test_4eC39HqLyjWDarjtT1zdp7dc',
             //'Authorization': stripeKeys.authorization_key,
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -227,11 +229,64 @@ export const getStripeAccountLink = async ({ stripe_account_id, refresh_url, ret
 
     await axios(config)
         .then(function (jsonResponse) {
-            console.log('getStripeAccountLink response: ',jsonResponse.data);
+            console.log('getStripeAccountLink response: ', jsonResponse.data);
             response = jsonResponse.data
         })
         .catch(function (error) {
-            console.log('getStripeAccountLink error: ',error);
+            console.log('getStripeAccountLink error: ', error.message);
+        });
+    return response
+}
+
+export const getStripeAccontBalance = async ({ stripe_account_id, }) => {
+    let response = null
+    var config = {
+        method: 'get',
+        url: 'https://api.stripe.com/v1/balance',
+        headers: {
+            'Stripe-Account': stripe_account_id,
+            'Authorization': stripeKeys.authorization_key_basic
+        }
+    };
+
+    await axios(config)
+        .then(function (jsonResponse) {
+            console.log('getStripeAccontBalance response: ', jsonResponse.data);
+            response = jsonResponse.data
+        })
+        .catch(function (error) {
+            console.log('getStripeAccontBalance error: ', error);
+        });
+    return response
+}
+
+export const stripePayout = async ({ stripe_account_id, amount, currency, method }) => {
+    let response = null
+    var qs = require('qs');
+    var data = qs.stringify({
+        'amount': amount,
+        'currency': currency ? currency : 'usd',
+        'method': method ? method : 'standard'
+    });
+    var config = {
+        method: 'post',
+        url: 'https://api.stripe.com/v1/payouts',
+        headers: {
+            'Stripe-Account': stripe_account_id,
+            'Authorization': stripeKeys.authorization_key_basic,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data: data
+    };
+
+    await axios(config)
+        .then(function (jsonResponse) {
+            console.log('stripePayout response: ', jsonResponse.data);
+            response = jsonResponse.data
+        })
+        .catch(function (error) {
+            console.log(error);
+            console.log('stripePayout error: ', error);
         });
     return response
 }

@@ -710,6 +710,13 @@ function AppNavigation() {
                     headerTitleAlign: 'center'
                 }}
             />
+             <AppStack.Screen name={routes.seller.withdraw} component={Seller.Withdraw}
+                options={{
+                    // headerShown: false,
+                    title: 'Withdraw',
+                    headerTitleAlign: 'center'
+                }}
+            />
             <AppStack.Screen name={routes.seller.trainings} component={Seller.Trainings}
                 options={{
                     // headerShown: false,

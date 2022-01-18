@@ -1,7 +1,8 @@
 import React, { Component, useEffect, useLayoutEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { height } from 'react-native-dimension';
-import { ButtonColored, IconButton, KeyboardAvoidingScrollView, MainWrapper, PopupPrimary, RowWrapperBasic, Spacer, TextInputUnderlined, GoogleAutoComplete, ComponentWrapper, ErrorText, InputTitle, MediumText } from '../../../components';
+import { useSelector } from 'react-redux';
+import { ButtonColored, IconButton, KeyboardAvoidingScrollView, MainWrapper, PopupPrimary, RowWrapperBasic, Spacer, TextInputUnderlined, GoogleAutoComplete, ComponentWrapper, ErrorText, InputTitle, MediumText, CreateStripeAccountPopup, VerifyStripeAccountPopup } from '../../../components';
 import { appStyles, Backend, colors, HelpingMethods, routes, sizes } from '../../../services';
 
 function CreateTraining(props) {
@@ -10,6 +11,12 @@ function CreateTraining(props) {
     const { params } = route
     const trainingData = params ? params.training ? params.training : null : null
 
+    //redux states
+    const user = useSelector(state => state.user)
+    const { userDetail, stripeAccountDetail } = user
+    const { seller_stripe_account_id } = userDetail
+
+    //local states
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
@@ -40,13 +47,19 @@ function CreateTraining(props) {
     const [chargesError, setChargesError] = useState('')
     const [spotsError, setSpotsError] = useState('')
 
+    const [isCreateStripeAccountPopupVisible, setCreateStripeAccountPopupVisibility] = useState(false)
+    const toggleCreateStripeAccountPopup = () => setCreateStripeAccountPopupVisibility(!isCreateStripeAccountPopupVisible)
+
+    const [isVerifyStripeAccountPopupVisible, setVerifyStripeAccountPopupVisibility] = useState(false)
+    const toggleVerifyStripeAccountPopup = () => setVerifyStripeAccountPopupVisibility(!isVerifyStripeAccountPopupVisible)
+
     const [isTrainingCreatedPopupVisible, setTrainingCreatedPopupVisible] = useState(false)
 
     const toggleTrainingCreatedPopup = () => setTrainingCreatedPopupVisible(!isTrainingCreatedPopupVisible)
 
     const getSetTrainingData = () => {
         if (trainingData) {
-            console.log('trainingData --> ',trainingData)
+            console.log('trainingData --> ', trainingData)
             const { title, description, duration, location, lat, long, charges, spots } = trainingData
             setTitle(title)
             setDescription(description)
@@ -109,18 +122,24 @@ function CreateTraining(props) {
     }
     const handleContinue = () => {
         if (isDetailsValid()) {
-            navigate(routes.seller.selectDateTime, {
-                trainingData: {
-                    title,
-                    description,
-                    duration,
-                    location,
-                    latitude,
-                    longitude,
-                    charges,
-                    spots,
-                }
-            })
+            seller_stripe_account_id ?
+                stripeAccountDetail?.payouts_enabled ?
+                    navigate(routes.seller.selectDateTime, {
+                        trainingData: {
+                            title,
+                            description,
+                            duration,
+                            location,
+                            latitude,
+                            longitude,
+                            charges,
+                            spots,
+                        }
+                    })
+                    :
+                    toggleVerifyStripeAccountPopup()
+                :
+                toggleCreateStripeAccountPopup()
         } else {
 
         }
@@ -254,6 +273,14 @@ function CreateTraining(props) {
                 disableBackDropPress
                 disableSwipe
             /> */}
+            <CreateStripeAccountPopup
+                visible={isCreateStripeAccountPopupVisible}
+                toggle={toggleCreateStripeAccountPopup}
+            />
+            <VerifyStripeAccountPopup
+                visible={isVerifyStripeAccountPopupVisible}
+                toggle={toggleVerifyStripeAccountPopup}
+            />
         </MainWrapper>
     );
 }

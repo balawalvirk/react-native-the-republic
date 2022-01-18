@@ -18,12 +18,13 @@ export const withdrawAmount = async ({ user_id, amount, transfer_type }) => {
         amount,
         transfer_type
     }
-    console.log('withdrawAmount Params', params);
+    const uri = `${baseURL + endPoints.withdraw.withdraw_amount}`
+    console.log('withdrawAmount Params', params, '\nUri', uri);
     await axios
         .post(`${baseURL + endPoints.withdraw.withdraw_amount}`, params)
         .then(async responseJson => {
             const tempResponseData = responseJson.data
-            console.log('Response', tempResponseData);
+            console.log('withdrawAmount Response', tempResponseData);
             if (tempResponseData.success) {
                 response = tempResponseData
             } else {
@@ -33,7 +34,7 @@ export const withdrawAmount = async ({ user_id, amount, transfer_type }) => {
         })
         .catch(error => {
             Toasts.error(error.response.data.message)
-            console.error(error);
+            console.error('withdrawAmount Error', error);
         });
     return response
 };

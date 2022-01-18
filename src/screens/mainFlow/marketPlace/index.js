@@ -72,6 +72,7 @@ function MarketPlace(props) {
         await Backend.get_product_calibers()
         await Backend.get_product_actions()
         await Backend.get_product_conditions()
+        userDetail.seller_stripe_account_id && Backend.getStripeAccountDetail({stripe_account_id:userDetail.seller_stripe_account_id})
 
     }
 

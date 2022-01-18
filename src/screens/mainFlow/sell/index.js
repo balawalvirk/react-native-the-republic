@@ -2,7 +2,7 @@ import React, { Component, useEffect, useState } from 'react';
 import { View, Text, Platform, TouchableOpacity, Image, Animated } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
 import { Icon } from 'react-native-elements';
-import { AbsoluteWrapper, ArmerInfo, BackIcon, ButtonGradient, ComponentWrapper, ErrorText, GoogleAutoComplete, IconButton, IconWithText, ImagePickerPopup, InputTitle, KeyboardAvoidingScrollView, LargeText, LoaderAbsolute, MainWrapper, MediumText, MediumTitle, PickerPrimary, PickerSearchable, PopupPrimary, ProductCardPrimary, RegularText, RenderTags, RowWrapper, Spacer, SwitchPrimary, TextInputUnderlined, Toasts, Wrapper } from '../../../components';
+import { AbsoluteWrapper, ArmerInfo, BackIcon, ButtonGradient, ComponentWrapper, CreateStripeAccountPopup, ErrorText, GoogleAutoComplete, IconButton, IconWithText, ImagePickerPopup, InputTitle, KeyboardAvoidingScrollView, LargeText, LoaderAbsolute, MainWrapper, MediumText, MediumTitle, PickerPrimary, PickerSearchable, PopupPrimary, ProductCardPrimary, RegularText, RenderTags, RowWrapper, Spacer, SwitchPrimary, TextInputUnderlined, Toasts, VerifyStripeAccountPopup, Wrapper } from '../../../components';
 import { appStyles, Backend, colors, DummyData, HelpingMethods, routes, sizes } from '../../../services';
 import styles from './styles'
 import * as ImagePicker from 'react-native-image-picker';
@@ -41,13 +41,14 @@ function Sell(props) {
     const product = useSelector(state => state.product)
     const user = useSelector(state => state.user)
     const { categories, items, actions, manufacturers, conditions, calibers } = product
-    const { userDetail } = user
+    const { userDetail, stripeAccountDetail } = user
     const { seller_stripe_account_id } = userDetail
     //local states
     const [step, setStep] = useState(1)
     const [isCreateStripeAccountPopupVisible, setCreateStripeAccountPopupVisibility] = useState(false)
     const toggleCreateStripeAccountPopup = () => setCreateStripeAccountPopupVisibility(!isCreateStripeAccountPopupVisible)
-
+    const [isVerifyStripeAccountPopupVisible, setVerifyStripeAccountPopupVisibility] = useState(false)
+    const toggleVerifyStripeAccountPopup = () => setVerifyStripeAccountPopupVisibility(!isVerifyStripeAccountPopupVisible)
     const headerTitle = step === 1 ? productDetail ? "Update Item" : "Post an Item" : step === 2 ? "Add Product Details" : step === 3 ? "Add Location Details" : step === 4 ? "Price" : step === 5 ? "Finish" : ""
     const handleBackPress = () => {
         step === 1 ?
@@ -103,11 +104,15 @@ function Sell(props) {
                 }
             }
         } else {
-            !seller_stripe_account_id ?
-                toggleCreateStripeAccountPopup() :
-                productDetail ?
-                    handleEditProduct() :
-                    handleAddNewProduct()
+            seller_stripe_account_id ?
+                stripeAccountDetail?.payouts_enabled ?
+                    productDetail ?
+                        handleEditProduct() :
+                        handleAddNewProduct()
+                    :
+                    toggleVerifyStripeAccountPopup()
+                :
+                toggleCreateStripeAccountPopup()
         }
 
     }
@@ -679,28 +684,13 @@ function Sell(props) {
                 onPressTakePhoto={launchCamera}
                 onPressSelectFromGalary={launchImagePicker}
             />
-            <PopupPrimary
-                visible={!isCreateStripeAccountPopupVisible}
+            <CreateStripeAccountPopup
+                visible={isCreateStripeAccountPopupVisible}
                 toggle={toggleCreateStripeAccountPopup}
-                title={'Create Stripe Account'}
-                info={'To get the payment of your products and withdraw to your bank account, you have to create stripe express account'}
-                onPressButton1={() => {
-                    toggleCreateStripeAccountPopup()
-                    navigate(routes.seller.withdrawEarnings)
-                }}
-                buttonText1={'Continue'}
-                icon={
-                    <Wrapper
-                        style={{ marginBottom: sizes.baseMargin }}
-                    >
-                        <Icon
-                            name={'cc-stripe'}
-                            type={'font-awesome'}
-                            color={colors.appColor1}
-                            size={totalSize(7.5)}
-                        />
-                    </Wrapper>
-                }
+            />
+            <VerifyStripeAccountPopup
+                visible={isVerifyStripeAccountPopupVisible}
+                toggle={toggleVerifyStripeAccountPopup}
             />
             <LoaderAbsolute
                 isVisible={isLoading}

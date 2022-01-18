@@ -21,7 +21,10 @@ const config = {
             path: routes.app,
             screens: {
                 withdrawEarnings: {
-                    path: `${routes.seller.withdrawEarnings}`
+                    path: `${routes.seller.withdrawEarnings}/:refresh`,
+                    parse: {
+                        id: (id) => `${id}`,
+                    },
                 },
             },
 
@@ -30,7 +33,7 @@ const config = {
 };
 
 const linking = {
-    prefixes: ["republic://",],
+    prefixes: ["republicapp://"],
     config,
 };
 

@@ -10,6 +10,7 @@ export const stripeKeys = {
     publishable_key: 'pk_test_51Jb6KVLAATci74dLLsZkauglGDRsOx377wrbAm69Q8jyZIRf95BvebllW2hYopF65KH1hBf5BGd1MTaZsXgIZYK200IHqAYJUa',
     secret_key: 'sk_test_51Jb6KVLAATci74dLGLOUlvIjucfhcHvHZHdgiLlXedshWcvr3efJDhwdkLfMxHKnZxzuONFWjuvBRdjEjOTVLS4S00YmPfQOaB',
     authorization_key: 'Bearer sk_test_51Jb6KVLAATci74dLGLOUlvIjucfhcHvHZHdgiLlXedshWcvr3efJDhwdkLfMxHKnZxzuONFWjuvBRdjEjOTVLS4S00YmPfQOaB',
+    authorization_key_basic:'Basic c2tfdGVzdF80ZUMzOUhxTHlqV0Rhcmp0VDF6ZHA3ZGM6',
     //Products
     subscription_dealerPro_price: 'price_1JfK9bLAATci74dLgFEnBC7F',
     subscription_premium_price: 'price_1JfK93LAATci74dLdguEUbWK'
@@ -227,8 +228,8 @@ export const endPoints = {
         sendCsrfToken: 'https://republic-backend.herokuapp.com/get-csrf',
     },
     withdraw: {
-        withdraw_amount: '/withdraw-amount',
-        withdraw_history: '/withdraw-history'
+        withdraw_amount: 'withdraw-amount',
+        withdraw_history: 'withdraw-history'
     },
     contact_us: 'contact-us',
     add_card: 'add-card',
@@ -321,7 +322,8 @@ export const routes = {
         withdrawEarnings: 'withdrawEarnings',
         createTrainin: 'createTrainin',
         selectDateTime: 'sellcerSelectDateTime',
-        services: 'services'
+        services: 'services',
+        withdraw:'withdraw'
     },
     dealer: {
         fulfillments: 'fulfillments',
@@ -445,8 +447,9 @@ export const tabs = {
     }
 }
 export const appDeeplinks = {
-    app: 'https://republic://app',
-    auth: 'https://republic://auth'
+    auth: 'republicapp://auth',
+    app: `republicapp://app`,
+    withdrawEarnings: `republicapp://app/${routes.seller.withdrawEarnings}`,
 }
 export const SHOW_TOAST_MESSAGE = 'SHOW_TOAST_MESSAGE';
 export const SHOW_PUSH_NOTIFICATION = 'SHOW_PUSH_NOTIFICATION';

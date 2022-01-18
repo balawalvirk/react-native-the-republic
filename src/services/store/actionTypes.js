@@ -9,11 +9,15 @@ export const SET_CREDIT_CARDS = 'SET_CREDIT_CARDS'
 export const SET_REPORTS = 'SET_REPORTS'
 export const SET_CURRENT_LOCATION = 'SET_CURRENT_LOCATION'
 
+
 //orders
 export const SET_ALL_ORDERS = 'SET_ALL_ORDERS'
 
 //groups
 export const SET_MY_GROUPS = 'SET_MY_GROUPS'
 export const SET_MY_JOINED_GROUPS = 'SET_MY_JOINED_GROUPS'
+
+//stripe
+export const SET_STRIPE_ACCOUNT_DETAIL = 'SET_STRIPE_ACCOUNT_DETAIL'
 
 
