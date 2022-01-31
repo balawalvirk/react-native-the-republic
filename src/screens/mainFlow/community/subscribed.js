@@ -36,7 +36,8 @@ export default function Subscribed({ tab }) {
         await Backend.getSubscribedPosts({ page: myPostsCurrentPage }).
             then(res => {
                 if (res) {
-                    setMyPosts([...myPosts, ...res.data.group_posts.data,...res.data.following_posts.data])
+                    // setMyPosts([...myPosts, ...res.data.group_posts.data, ...res.data.following_posts.data])
+                    setMyPosts([...myPosts,...res.data.data])
                     !res.data.next_page_url && setMyAllPostsLoaded(true)
                 }
             })

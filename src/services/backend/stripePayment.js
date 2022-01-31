@@ -77,7 +77,8 @@ export const charge = async (id, amount) => {
             // Use the correct Content Type to send data in request body
             'Content-Type': 'application/x-www-form-urlencoded',
             // Use the Stripe publishable key as Bearer
-            Authorization: stripeKeys.authorization_key,
+            //Authorization: stripeKeys.authorization_key,
+            Authorization: stripeKeys.authorization_key_basic,
             // Authorization: `Bearer sk_test_jbVThMJnytG859dT7o8AvBc500oeMZcOo0`
         },
         // Use a proper HTTP method

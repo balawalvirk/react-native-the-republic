@@ -8,10 +8,10 @@ import styles from './styles';
 import CountryPicker from 'react-native-country-picker-modal'
 import auth from '@react-native-firebase/auth';
 
-function VerifyPhone(props) { 
+function VerifyPhone(props) {
     const { navigate } = props.navigation
     const { params } = props.route
-    const { credentials, profileDetails, confirmPhoneNumber,userSocialData } = params
+    const { credentials, profileDetails, confirmPhoneNumber, userSocialData } = params
     console.log('credentials', credentials, '\nProfile Details', profileDetails)
     console.log('\nuserSocialData', userSocialData,)
 
@@ -45,43 +45,57 @@ function VerifyPhone(props) {
         console.log('Phone number: ', mobileNumber)
         // console.log('confirmPhoneNumber: ',confirmPhoneNumber)
         setPhoneNumberWithCode(mobileNumber)
-        setConfirmation(confirmPhoneNumber)
+        //setConfirmation(confirmPhoneNumber)
     }
 
     const handleVerifyCode = async (code) => {
         setLoading(true)
         console.log(`Code is ${code}`)
         if (code.length === 6) {
-            await confirmation
-                .confirm(code)
-                .then(res => {
-                    console.log('Verfication Response', res)
+            // await confirmation
+            //     .confirm(code)
+            //     .then(res => {
+            //         console.log('Verfication Response', res)
+            //         Toasts.success('Phone number has been verified')
+            //         navigate(routes.verifyIdentity, { credentials, profileDetails, phoneNumber, countryPhoneCode, countryCode })
+            //         // registerNewAccount()
+            //     })
+            //     .catch(async (error) => {
+            //         console.log(error)
+            //         setTimeout(() => {
+            //             Toasts.error(error.message)
+            //         }, 100);
+            //     })
+            await Backend.verifyPhoneCode({number:phoneNumberWithCode,code}).
+            then(res=>{
+                if(res){
                     Toasts.success('Phone number has been verified')
-                    navigate(routes.verifyIdentity, { credentials, profileDetails,phoneNumber,countryPhoneCode,countryCode })
-                    // registerNewAccount()
-                })
-                .catch(async (error) => {
-                    console.log(error)
-                    setTimeout(() => {
-                        Toasts.error(error.message)
-                    }, 100);
-                })
+                    navigate(routes.verifyIdentity, { credentials, profileDetails, phoneNumber, countryPhoneCode, countryCode })
+                }
+            })
         }
         setLoading(false)
     }
 
     const sendCodeToPhoneNumber = async (phoneNumber) => {
         setLoading(true)
-        await auth()
-            .signInWithPhoneNumber(phoneNumber)
-            .then(confirmResult => {
-                console.log('confirmResult: ', confirmResult)
-                setConfirmation(confirmResult)
-                toggleVerificationCodeSendModal()
-            })
-            .catch(error => {
-                Toasts.error(error.message)
-                console.log(error)
+        // await auth()
+        //     .signInWithPhoneNumber(phoneNumber)
+        //     .then(confirmResult => {
+        //         console.log('confirmResult: ', confirmResult)
+        //         setConfirmation(confirmResult)
+        //         toggleVerificationCodeSendModal()
+        //     })
+        //     .catch(error => {
+        //         Toasts.error(error.message)
+        //         console.log(error)
+        //     })
+        await Backend.sendPhoneCode({ number: phoneNumber }).
+            then(res => {
+                if (res) {
+                    //setConfirmPhoneNumber(confirmResult)
+                    toggleVerificationCodeSendModal()
+                }
             })
         setLoading(false)
     }
@@ -225,7 +239,7 @@ function VerifyPhone(props) {
             <LoaderAbsolute
                 isVisible={loading}
                 title="Please Wait"
-               // info="Please wait..."
+            // info="Please wait..."
             />
         </MainWrapper>
     );

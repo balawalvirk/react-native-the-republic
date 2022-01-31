@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, Text } from 'react-native';
 import { MainWrapper, IconButton, Wrapper, Spacer, ImageProfile, RowWrapperBasic, RowWrapper, TextInputUnderlined, KeyboardAvoidingScrollView, ComponentWrapper, ButtonColored, PickerPrimary, IconWithText, EditProfileComp, ButtonGradient, PopupPrimary, MediumText, VerificationCodeSentPopup, Toasts } from '../../../../components';
 import { height, totalSize, width } from 'react-native-dimension';
-import { colors, appStyles, sizes, HelpingMethods, appIcons, routes } from '../../../../services';
+import { colors, appStyles, sizes, HelpingMethods, appIcons, routes, Backend } from '../../../../services';
 import auth from '@react-native-firebase/auth';
 function CompleteYourProfile(props) {
     const { navigate } = props.navigation
@@ -22,10 +22,10 @@ function CompleteYourProfile(props) {
 
     let socicalCredentials = {}
     if (userSocialData) {
-        const { email, firstName, lastName,userName, googleToken, appleToken, instagramToken,instagramUserId } = userSocialData
+        const { email, firstName, lastName, userName, googleToken, appleToken, instagramToken, instagramUserId } = userSocialData
         tempSocialCredentials = {
             email,
-            googleToken, 
+            googleToken,
             appleToken,
             instagramToken,
             instagramUserId
@@ -37,17 +37,24 @@ function CompleteYourProfile(props) {
     const toggleVerificationCodeSendModal = () => setVerificationCodeSendModalVisibility(!isVerificationCodeSendModalVisible)
 
     const sendCodeToPhoneNumber = async (phoneNumber) => {
-        await auth()
-            .signInWithPhoneNumber(phoneNumber)
-            .then(confirmResult => {
-                console.log('confirmResult: ', confirmResult)
-                setConfirmPhoneNumber(confirmResult)
-                toggleVerificationCodeSendModal()
-            })
-            .catch(error => {
-                //alert(error.message)
-                Toasts.error(error.message)
-                console.log(error)
+        // await auth()
+        //     .signInWithPhoneNumber(phoneNumber)
+        //     .then(confirmResult => {
+        //         console.log('confirmResult: ', confirmResult)
+        //         setConfirmPhoneNumber(confirmResult)
+        //         toggleVerificationCodeSendModal()
+        //     })
+        //     .catch(error => {
+        //         //alert(error.message)
+        //         Toasts.error(error.message)
+        //         console.log(error)
+        //     })
+        await Backend.sendPhoneCode({ number: phoneNumber }).
+            then(res => {
+                if (res) {
+                    //setConfirmPhoneNumber(confirmResult)
+                    toggleVerificationCodeSendModal()
+                }
             })
 
     }
@@ -92,7 +99,7 @@ function CompleteYourProfile(props) {
                     navigate(routes.verifyPhone, {
                         credentials: userSocialData ? socicalCredentials : credentials,
                         profileDetails: EditProfileRef.current.getAllData(),
-                        confirmPhoneNumber,
+                        //confirmPhoneNumber,
                         userSocialData
                     })
                 }}

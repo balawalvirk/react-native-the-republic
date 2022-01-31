@@ -32,7 +32,9 @@ export const endPoints = {
         update_delivery_address: 'update-delivery-address',
         show_user_profile: 'show-user-profile',
         change_password: 'change-password',
-        save_fcm_token: 'save-fcm-token'
+        save_fcm_token: 'save-fcm-token',
+        send_phone_code:'send-phone-code',
+        verify_phone_code:'verify-phone-code',
     },
     sociaAuth: {
         register_google: 'google-register',
@@ -61,7 +63,6 @@ export const endPoints = {
         unfollow_follower: 'unfollow-follower',
         show_followings: 'show-followings',
         unfollow_following: 'unfollow-following'
-
     },
     training: {
         show_trainings: 'show-trainings',
@@ -119,7 +120,6 @@ export const endPoints = {
         get_all_products: 'get-all-products',
         get_map_products: 'get-map-products',
         get_product_detail: 'single-product',
-
     },
     post: {
         add_post: 'add-post',
@@ -140,7 +140,6 @@ export const endPoints = {
         get_joined_groups_posts: 'get-joined-group-posts',
         get_subscribed_posts: 'get-subscribed-posts',
         get_user_posts: 'get-user-posts'
-
     },
     chat: {
         show_conversations: 'show-conversations',
@@ -184,7 +183,6 @@ export const endPoints = {
         weekly_reports: 'weekly-reports',
         advance_reports: 'advance-reports',
         user_orders: 'user-orders',
-
     },
     dealer: {
         get_dealers: 'get-dealers',
@@ -231,6 +229,7 @@ export const endPoints = {
         withdraw_amount: 'withdraw-amount',
         withdraw_history: 'withdraw-history'
     },
+
     contact_us: 'contact-us',
     add_card: 'add-card',
     submit_app_feedback: 'submit-app-feedback'

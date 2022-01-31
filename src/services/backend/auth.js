@@ -76,14 +76,14 @@ export const handleContinueWithGoogle = async () => {
                                     }
                                 })
                         } else {
-                             let params = {
-                                 googleToken: googleData.idToken,
-                                 email: googleData.user.email,
-                                 firstName: googleData.user.givenName,
-                                 lastName: googleData.user.familyName,
-                                 //profileImage:googleData.user.photo
-                             }
-                             console.log('Params', params);
+                            let params = {
+                                googleToken: googleData.idToken,
+                                email: googleData.user.email,
+                                firstName: googleData.user.givenName,
+                                lastName: googleData.user.familyName,
+                                //profileImage:googleData.user.photo
+                            }
+                            console.log('Params', params);
                             navigate(routes.completeYourProfil, { userSocialData: params })
                         }
                     }
@@ -385,3 +385,53 @@ export const autoLoginWithInstagram = async ({ access_token, user_id }) => {
     return response
 };
 
+export const sendPhoneCode = async ({ number }) => {
+    let response = null
+    let params = {
+        phone:number,
+    }
+    console.log('sendPhoneCode Params', params);
+    await axios
+        .post(`${baseURL + endPoints.user.send_phone_code}`, params)
+        .then(async responseJson => {
+            console.log('sendPhoneCode Response', responseJson.data);
+            if (responseJson.data) {
+                if (responseJson.data.success) {
+                    response = responseJson.data
+                } else {
+                    Toasts.error(responseJson.data.message)
+                }
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};
+
+export const verifyPhoneCode = async ({ number, code }) => {
+    let response = null
+    let params = {
+        phone:number,
+        code
+    }
+    console.log('verifyPhoneCode Params', params);
+    await axios
+        .post(`${baseURL + endPoints.user.verify_phone_code}`, params)
+        .then(async responseJson => {
+            console.log('verifyPhoneCode Response', responseJson.data);
+            if (responseJson.data) {
+                if (responseJson.data.success) {
+                    response = responseJson.data
+                } else {
+                    Toasts.error(responseJson.data.message)
+                }
+            }
+        })
+        .catch(error => {
+            Toasts.error(error.response.data.message)
+            console.error(error);
+        });
+    return response
+};
