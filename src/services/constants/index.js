@@ -397,6 +397,7 @@ export const searchTypes = {
     dealer: 'dealer',
     product: 'product',
     group: 'group',
+    service_provider: 'serviceProvider',
 }
 export const headers = {
     screenOptionsPrimary: {

@@ -23,6 +23,10 @@ const topTabs = [
     {
         title: 'Products',
         value: searchTypes.product
+    },
+    {
+        title: 'Service Providers',
+        value: searchTypes.service_provider
     }
 ]
 // const productResults = [...DummyData.products, ...DummyData.products]
