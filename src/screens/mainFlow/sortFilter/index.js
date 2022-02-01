@@ -43,7 +43,7 @@ const options = [
 function SortFilter(props) {
     const { navigation, route } = props
     const { navigate, goBack } = navigation
-    const { clearFilter, applyFilter } = route.params
+    const { clearFilter, applyFilter,onPressSortByOption } = route.params
     const filterData = route.params?.filterData || null
     const sortBy = route.params?.sortBy || null
     //redux states
@@ -144,7 +144,9 @@ function SortFilter(props) {
                 text='title'
                 onPressButton={(item, index) => {
                     setSelectedSortTabIndex(index)
-                    navigate(routes.find, { sortBy: item.value })
+                    //navigate(routes.find, { sortBy: item.value })
+                    onPressSortByOption(item.value)
+                    goBack()
                 }}
                 inActiveButtonStyle={{ paddingVertical: sizes.marginVertical / 3, paddingHorizontal: sizes.marginHorizontalSmall, backgroundColor: 'transparent', borderWidth: 1.5, borderColor: colors.error }}
                 inActiveTextStyle={{ color: colors.error }}

@@ -43,7 +43,7 @@ const topTabs = [
 function Find({ navigation, route }) {
     const { navigate, setParams } = navigation
     const filterData = route.params?.filterData || null
-    const sortBy = route.params?.sortBy || sortingOptions.topRated
+    //const sortBy = route.params?.sortBy || sortingOptions.topRated
 
 
     //Refs
@@ -60,7 +60,7 @@ function Find({ navigation, route }) {
     //local states
     const [myLocation, setMyLocation] = useState(null)
     const [allProducts, setAllProducts] = useState([])
-    //const [sortBy, setSortBy] = useState('')
+    const [sortBy, setSortBy] = useState(sortingOptions.topRated)
     const [filteredProducts, setFilteredProducts] = useState(null)
     const [currentPage, setCurrentPage] = useState(1)
     const [filteredProductsCurrentPage, setFilteredProductsCurrentPage] = useState(1)
@@ -92,7 +92,7 @@ function Find({ navigation, route }) {
         !loading && setLoading(true)
         currentPage > 1 && setCurrentPage(1)
         allItemsLoaded && setAllItemsLoaded(false)
-       await getSetAllProducts({ initialData: true, page: 1 })
+        await getSetAllProducts({ initialData: true, page: 1 })
         setLoading(false)
     }
     const getInitialData = async () => {
@@ -353,6 +353,9 @@ function Find({ navigation, route }) {
                                 applyFilter: (data, filterData) => {
                                     setFilteredProducts(data)
                                     setParams({ filterData })
+                                },
+                                onPressSortByOption: (sortByOption) => {
+                                    setSortBy(sortByOption)
                                 },
                                 filterData,
                                 sortBy,

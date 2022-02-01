@@ -43,6 +43,7 @@ function Search(props) {
     const [productResults, setproductResults] = useState(null)
     const [dealerResults, setdealerResults] = useState(null)
     const [groupResults, setgroupResults] = useState(null)
+    const [serviceProviderResults, setServiceProviderResults] = useState(null)
     const [selectedTabIndex, setSelectedTabIndex] = useState(0)
     const [loadingSearch, setLoadingSearch] = useState(false)
     const [loadingmore, setLoadingMore] = useState(false)
@@ -54,6 +55,7 @@ function Search(props) {
     const isSearchingProducts = topTabs[selectedTabIndex].value === searchTypes.product
     const isSearchingDealer = topTabs[selectedTabIndex].value === searchTypes.dealer
     const isSearchingGroups = topTabs[selectedTabIndex].value === searchTypes.group
+    const isSearchingServiceProviders = topTabs[selectedTabIndex].value === searchTypes.service_provider
     //top tab buttons
     const mainScrollRef = useRef(null)
     let scroll_y = new Animated.Value(0)
@@ -103,9 +105,10 @@ function Search(props) {
     const handleSearchContent = async (search_query, selected_type) => {
         const query = search_query ? search_query : searchQuery
         const searchingAll = selected_type ? selected_type === 'all' : isSearchingAll
-        const searchingDealers = selected_type ? selected_type === 'dealer' : isSearchingDealer
-        const searchingGroups = selected_type ? selected_type === 'group' : isSearchingGroups
-        const searchingProducts = selected_type ? selected_type === 'product' : isSearchingProducts
+        const searchingDealers = selected_type ? selected_type === searchTypes.dealer : isSearchingDealer
+        const searchingGroups = selected_type ? selected_type === searchTypes.group : isSearchingGroups
+        const searchingProducts = selected_type ? selected_type === searchTypes.product : isSearchingProducts
+        const searchingServiceProviders = selected_type ? selected_type === searchTypes.service_provider : isSearchingServiceProviders
         const selectedType = selected_type ? selected_type != 'all' ? selected_type : '' :
             !searchingAll ? topTabs[selectedTabIndex].value : ''
         console.log('searchingAll -->', searchingAll)
@@ -119,10 +122,11 @@ function Search(props) {
                 then(res => {
                     if (res) {
                         if (searchingAll) {
-                            const { dealers, groups, products } = res.data
-                            setdealerResults(dealers.data?dealers.data:[])
+                            const { dealers, groups, products, serviceProvider } = res.data
+                            setdealerResults(dealers.data ? dealers.data : [])
                             setgroupResults(groups.data)
                             setproductResults(products.data)
+                            setServiceProviderResults(serviceProvider.data)
                         } else {
                             const { data } = res.data
                             console.log('handleSearchContent --> ', res)
@@ -136,6 +140,9 @@ function Search(props) {
                             } else if (searchingProducts) {
                                 // setproductResults(res.data.data)
                                 data ? setproductResults(data) : setproductResults([])
+                            } else if (searchingServiceProviders) {
+                                // setServiceProviderResults(res.data.data)
+                                data ? setServiceProviderResults(data) : setServiceProviderResults([])
                             }
                             !res.data.next_page_url && setAllItemLoaded(true)
                             //setCurrentPage(currentPage+1)
@@ -157,11 +164,13 @@ function Search(props) {
                         const oldDealerResults = dealerResults ? dealerResults : []
                         const oldGroupResults = groupResults ? groupResults : []
                         const oldProductResults = productResults ? productResults : []
+                        const oldServiceProviderResults = serviceProviderResults ? serviceProviderResults : []
                         if (isSearchingAll) {
-                            const { dealers, groups, products } = res.data
+                            const { dealers, groups, products, serviceProvider } = res.data
                             setdealerResults([...oldDealerResults, ...dealers.data])
                             setgroupResults([...oldGroupResults, ...groups.data])
                             setproductResults([...oldProductResults, ...products.data])
+                            setServiceProviderResults([...oldServiceProviderResults, ...serviceProvider.data])
                         } else {
                             if (isSearchingDealer) {
                                 setdealerResults([...oldDealerResults, ...res.data.data])
@@ -169,6 +178,8 @@ function Search(props) {
                                 setgroupResults([...oldGroupResults, ...res.data.data])
                             } else if (isSearchingProducts) {
                                 setproductResults([...oldProductResults, ...res.data.data])
+                            } else if (isSearchingServiceProviders) {
+                                setServiceProviderResults([...oldServiceProviderResults, ...res.data.data])
                             }
                             !res.data.next_page_url && setAllItemLoaded(true)
                             setCurrentPage(currentPage + 1)
@@ -245,7 +256,7 @@ function Search(props) {
                                     <Wrapper flex={1}>
                                         {
                                             !loadingSearch ?
-                                                dealerResults.length || groupResults.length || productResults.length ?
+                                                dealerResults.length || groupResults.length || productResults.length || serviceProviderResults.length ?
                                                     <Wrapper flex={1}>
                                                         <Wrapper>
                                                             <Dealers
@@ -297,6 +308,23 @@ function Search(props) {
                                                                 // isLoading={loadingSearch}
                                                                 disableNoDataView
                                                                 scrollEnabled={false}
+                                                            />
+                                                        </Wrapper>
+                                                        <Wrapper>
+                                                            <Dealers
+                                                                data={serviceProviderResults ? serviceProviderResults.length > 3 ? serviceProviderResults.slice(0, 3) : serviceProviderResults : []}
+                                                                onPress={(item, index) => navigate(routes.userProfile, { user: item })}
+                                                                onPressHeart={(item, index) => { }}
+                                                                ListHeaderComponent={() => {
+                                                                    return <TitleInfoPrimary
+                                                                        title={'Service Providers'}
+                                                                    />
+                                                                }}
+                                                                ListFooterComponent={() => {
+                                                                    return <ViewAllListButton onPress={() => { setSelectedTabIndex(4), handleSearchContent() }} />
+                                                                }}
+                                                                // isLoading={loadingSearch}
+                                                                disableNoDataView
                                                             />
                                                         </Wrapper>
                                                         <Spacer height={sizes.doubleBaseMargin} />
@@ -406,7 +434,42 @@ function Search(props) {
                                                     </Wrapper>
                                                 </Wrapper>
                                                 :
-                                                null
+                                                isSearchingServiceProviders ?
+                                                    <Wrapper flex={1}>
+                                                        {
+                                                            !loadingSearch ?
+                                                                <TitleInfoPrimary
+                                                                    title={serviceProviderResults ? serviceProviderResults.length + ' results found' : ''}
+                                                                />
+                                                                :
+                                                                null
+                                                        }
+                                                        <Dealers
+                                                            data={serviceProviderResults}
+                                                            onPress={(item, index) => navigate(routes.userProfile, { user: item })}
+                                                            viewType={'list'}
+                                                            ListHeaderComponent={() => {
+                                                                return <Spacer height={sizes.smallMargin} />
+                                                            }}
+                                                            ListFooterComponent={() => {
+                                                                return <>
+                                                                    {
+                                                                        loadingmore ?
+                                                                            <>
+                                                                                <UserSkeletons />
+                                                                                <Spacer height={sizes.baseMargin} />
+                                                                            </>
+                                                                            :
+                                                                            <Spacer height={sizes.baseMargin} />
+                                                                    }
+                                                                </>
+                                                            }}
+                                                            isLoading={loadingSearch}
+                                                        // isLoadingMore={loadingmore}
+                                                        />
+                                                    </Wrapper>
+                                                    :
+                                                    null
                             }
                         </Animated.ScrollView>
                         <AbsoluteWrapper style={{ top: 0, right: 0, left: 0 }}>

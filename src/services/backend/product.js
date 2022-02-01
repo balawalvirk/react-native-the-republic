@@ -190,7 +190,7 @@ export const getAllProducts = async ({ sort_by, page }) => {
         sort_by
     }
     const uri = `${baseURL + endPoints.product.get_all_products}?page=${defaultPage}`
-    console.log('\ngetAllProducts \nparams: ', params, '\n uri: ',uri);
+    console.log('\ngetAllProducts \nparams: ', params, '\n uri: ', uri);
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios
@@ -844,10 +844,11 @@ export const handleAddRemoveFavouriteProduct = async (product_id) => {
 export const filterProducts = async ({ sortBy, make, action, caliber, minPrice, maxPrice, barel_length, page }) => {
     let response = null
     const defaultPage = page ? page : 1
-    // const state = store.getState()
-    // const { userDetail } = state.user
-    // const user_id = userDetail.id
+    const state = store.getState()
+    const { userDetail } = state.user
+    const user_id = userDetail.id
     let params = new FormData()
+    params.append('user_id', user_id)
     sortBy && params.append('sort_by', sortBy)
     make && params.append('make[]', make)
     action && params.append('action[]', action)
