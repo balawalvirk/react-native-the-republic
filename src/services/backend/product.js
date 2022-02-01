@@ -184,15 +184,17 @@ export const getAllProducts = async ({ sort_by, page }) => {
     let response = null
     const defaultPage = page ? page : 1
     const state = store.getState()
-    const user_id= state.user.userDetail.id
+    const user_id = state.user.userDetail.id
     const params = {
         user_id,
         sort_by
     }
+    const uri = `${baseURL + endPoints.product.get_all_products}?page=${defaultPage}`
+    console.log('\ngetAllProducts \nparams: ', params, '\n uri: ',uri);
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios
-            .post(`${baseURL + endPoints.product.get_all_products}?page=${defaultPage}`, params)
+            .post(uri, params)
             .then(async responseJson => {
                 const tempResponseData = responseJson.data
                 console.log('getAllProducts Response', tempResponseData);
@@ -211,7 +213,7 @@ export const getAllProducts = async ({ sort_by, page }) => {
 };
 export const getMapProducts = async () => {
     let response = null
-     const state = store.getState()
+    const state = store.getState()
     const user_id = state.user.userDetail.id
     const params = {
         user_id
@@ -303,8 +305,8 @@ export const getNearByProducts = async (page) => {
     //const { coords } = currentLocation
     // const latitude = userDetail.latitude ? userDetail.latitude : coords ? coords.latitude : ''
     // const longitude = userDetail.longitude ? userDetail.longitude : coords ? coords.longitude : ''
-    const userLocation=HelpingMethods.getMyLocation()
-    const {latitude,longitude}=userLocation
+    const userLocation = HelpingMethods.getMyLocation()
+    const { latitude, longitude } = userLocation
     const { id } = userDetail
     const params = {
         user_id: id,

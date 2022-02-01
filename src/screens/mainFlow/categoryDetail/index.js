@@ -1,5 +1,6 @@
 import React, { Component, useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { ButtonColoredSmall, ComponentWrapper, FilterButton, MainWrapper, NoDataViewPrimary, Products, Spacer, Toasts } from '../../../components';
 import { appStyles, Backend, DummyData, routes, sizes } from '../../../services';
 
@@ -20,7 +21,12 @@ function CategoryDetail(props) {
     const [loading, setLoading] = useState(true)
     const [allItemsLoaded, setAllItemsLoaded] = useState(false)
 
-
+    //redux states
+    const dispatch = useDispatch()
+    const product = useSelector(state => state.product)
+    const user = useSelector(state => state.user)
+    const { categories } = product
+    const { currentLocation, userDetail } = user
 
     //configure Header
     React.useLayoutEffect(() => {

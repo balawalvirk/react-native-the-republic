@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -40,6 +40,16 @@ export default function AnimatedGroupButton({
   const [activeTabHeight] = useState(new Animated.Value(0))
   const [selectedTabIndex, setTabIndex] = useState(0)
 
+
+  useEffect(() => {
+    if (initalIndex >= 0) {
+      if (!disableAutoSwipe && selectedTabIndex != initalIndex && data[initalIndex].x >= 0) {
+        handleOnPress(data[initalIndex], initalIndex)
+      }
+    }
+  }, [initalIndex])
+
+
   const handleTabSlide = (x, height, width) => {
     console.log(x, height, width);
     Animated.timing(activeTabTranslateX, {
@@ -63,9 +73,7 @@ export default function AnimatedGroupButton({
     handleTabSlide(item.x, item.tabHeight, item.tabWidth)
   }
 
-  if (!disableAutoSwipe&&selectedTabIndex != initalIndex && data[initalIndex].x>=0) {
-    handleOnPress(data[initalIndex], initalIndex)
-  }
+
 
 
   return (
@@ -83,14 +91,14 @@ export default function AnimatedGroupButton({
                   (item.x = event.nativeEvent.layout.x),
                     (item.tabHeight = event.nativeEvent.layout.height),
                     (item.tabWidth = event.nativeEvent.layout.width)
-                    // key === 0
-                    //   ? handleTabSlide(
-                    //     item.x,
-                    //     item.tabHeight,
-                    //     item.tabWidth,
-                    //   )
-                    //   : null;
-                    key === selectedTabIndex
+                  // key === 0
+                  //   ? handleTabSlide(
+                  //     item.x,
+                  //     item.tabHeight,
+                  //     item.tabWidth,
+                  //   )
+                  //   : null;
+                  key === selectedTabIndex
                     ? handleOnPress(data[initalIndex], initalIndex)
                     : null;
                 }}
@@ -108,7 +116,7 @@ export default function AnimatedGroupButton({
                   handleOnPress(item, key);
                   onPressButton && setTimeout(() => {
                     onPressButton(item, key,)
-                  }, disableAutoSwipe?250:0);
+                  }, disableAutoSwipe ? 250 : 0);
                 }
 
                 }>
@@ -133,7 +141,9 @@ export default function AnimatedGroupButton({
               </TouchableHighlight>
             );
           })}
-          <Animated.View
+          {
+            selectedTabIndex>=0?
+            <Animated.View
             style={[
               !activeButtonForceStyle && styles.animatedGroupButtonActivatedButton,
               {
@@ -168,6 +178,9 @@ export default function AnimatedGroupButton({
             }
 
           </Animated.View>
+          :
+          null
+          }
         </ScrollView>
       </View>
     </View>

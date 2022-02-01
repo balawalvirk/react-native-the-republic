@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { width } from 'react-native-dimension';
 import { useSelector } from 'react-redux';
 import { ButtonColoredSmall, ButtonGradient, ButtonGroupAnimated, ComponentWrapper, InputTitle, MainWrapper, MultiSliderPrimary, PickerPrimary, RegularText, RowWrapper, RowWrapperBasic, Spacer, TextInputUnderlined, Wrapper } from '../../../components';
-import { appStyles, Backend, colors, orderStatuses, sizes, sortingOptions } from '../../../services';
+import { appStyles, Backend, colors, orderStatuses, routes, sizes, sortingOptions } from '../../../services';
 const defaultSortingOptions = [
     {
         title: 'Top Rated',
@@ -44,7 +44,8 @@ function SortFilter(props) {
     const { navigation, route } = props
     const { navigate, goBack } = navigation
     const { clearFilter, applyFilter } = route.params
-    const filterData = route.params ? route.params.filterData ? route.params.filterData : null : null
+    const filterData = route.params?.filterData || null
+    const sortBy = route.params?.sortBy || null
     //redux states
     const product = useSelector(state => state.product)
     const { categories, items, actions, manufacturers, conditions, calibers } = product
@@ -79,44 +80,56 @@ function SortFilter(props) {
 
 
 
-    useEffect(()=>{
+    useEffect(() => {
         getSetFilterData()
-    },[])
+    }, [])
 
-    const getSetFilterData=()=>{
-        console.log('filterData  --> ',filterData)
-        if(filterData){
-            const {sortBy,make,action,caliber,minPrice,maxPrice,barel_length}=filterData
-            const tempSortByObj=defaultSortingOptions.find(item=>item.value===sortBy)
-            const tempSortByIndex=defaultSortingOptions.indexOf(tempSortByObj)
-            console.log('tempSortByIndex  --> ',tempSortByIndex)
+    const getSetFilterData = () => {
+        console.log('filterData  --> ', filterData)
+        console.log('sortBy  --> ', sortBy)
+        if (sortBy) {
+            const tempSortBy = defaultSortingOptions.find(ite => ite.value === sortBy)
+            console.log('tempSortBy: ',tempSortBy)
+            if (tempSortBy) {
+                const tempSortByIndex = defaultSortingOptions.indexOf(tempSortBy)
+                console.log('tempSortByIndex: ',tempSortByIndex)
+                if (tempSortByIndex >= 0) {
+                    setSelectedSortTabIndex(tempSortByIndex)
+                }
+            }
+        }
+        if (filterData) {
+            const { sortBy, make, action, caliber, minPrice, maxPrice, barel_length } = filterData
+            const tempSortByObj = defaultSortingOptions.find(item => item.value === sortBy)
+            const tempSortByIndex = defaultSortingOptions.indexOf(tempSortByObj)
+            console.log('tempSortByIndex  --> ', tempSortByIndex)
             setSelectedSortTabIndex(tempSortByIndex)
             setActionType(action)
             setMake(make)
             setCalibre(caliber)
-            setPriceRange([minPrice,maxPrice])
+            setPriceRange([minPrice, maxPrice])
             setBarrelLength(barel_length)
         }
     }
     const handleApplyFilter = async () => {
         setLoading(true)
-        const filteredProductsData={
+        const filteredProductsData = {
             sortBy: defaultSortingOptions[selectedSortTabIndex].value,
-            make: make!='placeholder'?make:'',
-            action: actionType!='placeholder'?actionType:'',
-            caliber: caliber!='placeholder'?caliber:'',
+            make: make != 'placeholder' ? make : '',
+            action: actionType != 'placeholder' ? actionType : '',
+            caliber: caliber != 'placeholder' ? caliber : '',
             minPrice: priceRange[0],
             maxPrice: priceRange[1],
-            barel_length: barrelLength!='placeholder'?barrelLength:''
+            barel_length: barrelLength != 'placeholder' ? barrelLength : ''
         }
         await Backend.filterProducts(filteredProductsData).
-        then(res => {
-            setLoading(false)
-            if (res) {
-                applyFilter(res.data.data,filteredProductsData);
-                goBack()
-            }
-        })
+            then(res => {
+                setLoading(false)
+                if (res) {
+                    applyFilter(res.data.data, filteredProductsData);
+                    goBack()
+                }
+            })
     }
     return (
         <MainWrapper>
@@ -129,7 +142,10 @@ function SortFilter(props) {
                 data={defaultSortingOptions}
                 initalIndex={selectedSortTabIndex}
                 text='title'
-                onPressButton={(item, index) => setSelectedSortTabIndex(index)}
+                onPressButton={(item, index) => {
+                    setSelectedSortTabIndex(index)
+                    navigate(routes.find, { sortBy: item.value })
+                }}
                 inActiveButtonStyle={{ paddingVertical: sizes.marginVertical / 3, paddingHorizontal: sizes.marginHorizontalSmall, backgroundColor: 'transparent', borderWidth: 1.5, borderColor: colors.error }}
                 inActiveTextStyle={{ color: colors.error }}
                 activeButtonStyle={{ backgroundColor: colors.error }}

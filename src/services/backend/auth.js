@@ -388,7 +388,7 @@ export const autoLoginWithInstagram = async ({ access_token, user_id }) => {
 export const sendPhoneCode = async ({ number }) => {
     let response = null
     let params = {
-        phone:number,
+        phone_number:number,
     }
     console.log('sendPhoneCode Params', params);
     await axios
@@ -413,7 +413,7 @@ export const sendPhoneCode = async ({ number }) => {
 export const verifyPhoneCode = async ({ number, code }) => {
     let response = null
     let params = {
-        phone:number,
+        phone_number:number,
         code
     }
     console.log('verifyPhoneCode Params', params);

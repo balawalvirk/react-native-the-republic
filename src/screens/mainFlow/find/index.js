@@ -42,7 +42,8 @@ const topTabs = [
 
 function Find({ navigation, route }) {
     const { navigate, setParams } = navigation
-    const filterData = route.params ? route.params.filterData ? route.params.filterData : null : null
+    const filterData = route.params?.filterData || null
+    const sortBy = route.params?.sortBy || sortingOptions.topRated
 
 
     //Refs
@@ -59,7 +60,7 @@ function Find({ navigation, route }) {
     //local states
     const [myLocation, setMyLocation] = useState(null)
     const [allProducts, setAllProducts] = useState([])
-    const [sortBy, setSortBy] = useState(sortingOptions.topRated)
+    //const [sortBy, setSortBy] = useState('')
     const [filteredProducts, setFilteredProducts] = useState(null)
     const [currentPage, setCurrentPage] = useState(1)
     const [filteredProductsCurrentPage, setFilteredProductsCurrentPage] = useState(1)
@@ -76,16 +77,29 @@ function Find({ navigation, route }) {
     const [markers, setMarkers] = useState(DummyData.products)
     const [selectedProduct, setProduct] = useState(null)
 
+
+    useEffect(() => {
+        getSetProductsData()
+    }, [sortBy])
+
     useEffect(() => {
         getInitialData()
     }, [])
 
 
-    const getInitialData = async () => {
-        await getSetAllProducts()
-        getSetMapProducts()
-        getSetMyLocation()
+    const getSetProductsData = async () => {
+        console.log('sortBy: ', sortBy)
+        !loading && setLoading(true)
+        currentPage > 1 && setCurrentPage(1)
+        allItemsLoaded && setAllItemsLoaded(false)
+       await getSetAllProducts({ initialData: true, page: 1 })
         setLoading(false)
+    }
+    const getInitialData = async () => {
+        //await getSetAllProducts(true)
+        getSetMyLocation()
+        getSetMapProducts()
+        //setLoading(false)
     }
     const getSetMyLocation = () => {
         const tempMyLocation = HelpingMethods.getMyLocation()
@@ -111,22 +125,28 @@ function Find({ navigation, route }) {
             setFilteredProductsLoadingMore(false)
         }
     }
-    const getSetAllProducts = async () => {
-        await Backend.getAllProducts({sort_by:sortBy,page:currentPage}).
+    const getSetAllProducts = async (data) => {
+        // const { isinitialData, page } = data
+        const tempPage = data?.page || currentPage
+        const tempInitialData = data?.initialData || null
+        await Backend.getAllProducts({ sort_by: sortBy, page: tempPage }).
             then(res => {
                 if (res) {
-                    setAllProducts([...allProducts, ...res.data.data])
+                    const pre_data = !tempInitialData ? allProducts : []
+                    setAllProducts([...pre_data, ...res.data.data,])
                     !res.data.next_page_url ?
                         setAllItemsLoaded(true) :
-                        setCurrentPage(currentPage + 1)
+                        setCurrentPage(tempPage + 1)
                 }
             })
     }
-    const getSetFilteredProducts = async () => {
+    const getSetFilteredProducts = async (initialData) => {
+
         await Backend.filterProducts({ ...filterData, page: filteredProductsCurrentPage }).
             then(res => {
                 if (res) {
-                    setFilteredProducts([...filteredProducts, ...res.data.data])
+                    const pre_data = !initialData ? filteredProducts : []
+                    setFilteredProducts([...pre_data, ...res.data.data])
                     !res.data.next_page_url ?
                         setAllFilteredProductsLoaded(true) :
                         setFilteredProductsCurrentPage(filteredProductsCurrentPage + 1)
@@ -259,7 +279,7 @@ function Find({ navigation, route }) {
                             </>
                         }}
                         isLoading={loading}
-                        isLoadingMore={loadingMore}
+                        isLoadingMore={!filteredProducts ? loadingMore : filteredProductsLoadingMore}
                         onEndReached={(data) => {
                             console.log('onEndReached Data --->', data)
                             !filteredProducts ?
@@ -327,14 +347,16 @@ function Find({ navigation, route }) {
 
                     </Wrapper>
                     <FilterButton
-                        onPress={() => navigate(routes.sortFilter, {
-                            clearFilter: handleClearFilter,
-                            applyFilter: (data, filterData) => {
-                                setFilteredProducts(data)
-                                setParams({ filterData })
-                            },
-                            filterData
-                        })}
+                        onPress={
+                            () => navigate(routes.sortFilter, {
+                                clearFilter: handleClearFilter,
+                                applyFilter: (data, filterData) => {
+                                    setFilteredProducts(data)
+                                    setParams({ filterData })
+                                },
+                                filterData,
+                                sortBy,
+                            })}
                         buttonStyle={{ marginHorizontal: 0 }}
                     />
                 </RowWrapper>

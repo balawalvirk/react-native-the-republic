@@ -33,7 +33,7 @@ export const endPoints = {
         show_user_profile: 'show-user-profile',
         change_password: 'change-password',
         save_fcm_token: 'save-fcm-token',
-        send_phone_code:'send-phone-code',
+        send_phone_code:'send-verification-code',
         verify_phone_code:'verify-phone-code',
     },
     sociaAuth: {
