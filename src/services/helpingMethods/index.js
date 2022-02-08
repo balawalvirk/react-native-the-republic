@@ -405,7 +405,7 @@ export const handleRemovePost = (allPosts, post) => {
 
 
 export const getUserLocation = async () => {
-    await Geolocation.requestAuthorization('always')
+    //await Geolocation.requestAuthorization('always')
     Geolocation.getCurrentPosition(
         (position) => {
             // setTimeout(() => {

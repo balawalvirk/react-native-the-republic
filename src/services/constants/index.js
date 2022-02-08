@@ -10,7 +10,7 @@ export const stripeKeys = {
     publishable_key: 'pk_test_51Jb6KVLAATci74dLLsZkauglGDRsOx377wrbAm69Q8jyZIRf95BvebllW2hYopF65KH1hBf5BGd1MTaZsXgIZYK200IHqAYJUa',
     secret_key: 'sk_test_51Jb6KVLAATci74dLGLOUlvIjucfhcHvHZHdgiLlXedshWcvr3efJDhwdkLfMxHKnZxzuONFWjuvBRdjEjOTVLS4S00YmPfQOaB',
     authorization_key: 'Bearer sk_test_51Jb6KVLAATci74dLGLOUlvIjucfhcHvHZHdgiLlXedshWcvr3efJDhwdkLfMxHKnZxzuONFWjuvBRdjEjOTVLS4S00YmPfQOaB',
-    authorization_key_basic:'Basic c2tfdGVzdF80ZUMzOUhxTHlqV0Rhcmp0VDF6ZHA3ZGM6',
+    authorization_key_basic: 'Basic c2tfdGVzdF80ZUMzOUhxTHlqV0Rhcmp0VDF6ZHA3ZGM6',
     //Products
     subscription_dealerPro_price: 'price_1JfK9bLAATci74dLgFEnBC7F',
     subscription_premium_price: 'price_1JfK93LAATci74dLdguEUbWK'
@@ -33,8 +33,8 @@ export const endPoints = {
         show_user_profile: 'show-user-profile',
         change_password: 'change-password',
         save_fcm_token: 'save-fcm-token',
-        send_phone_code:'send-verification-code',
-        verify_phone_code:'verify-phone-code',
+        send_phone_code: 'send-verification-code',
+        verify_phone_code: 'verify-phone-code',
     },
     sociaAuth: {
         register_google: 'google-register',
@@ -189,7 +189,8 @@ export const endPoints = {
         search_dealers: 'search-dealers',
         add_favorite_dealer: 'add-favorite-dealer',
         remove_favorite_dealer: 'remove-favorite-dealer',
-        show_favorite_dealers: 'show-favorite-dealers'
+        show_favorite_dealers: 'show-favorite-dealers',
+        filters_dealers: 'filters-dealers'
     },
     bank: {
         add_bank_account: 'add-bank-account',
@@ -322,7 +323,7 @@ export const routes = {
         createTrainin: 'createTrainin',
         selectDateTime: 'sellcerSelectDateTime',
         services: 'services',
-        withdraw:'withdraw'
+        withdraw: 'withdraw'
     },
     dealer: {
         fulfillments: 'fulfillments',

@@ -167,3 +167,46 @@ export const getFavouriteDealers = async () => {
         });
     return response
 };
+
+export const filterDealers = async ({ sort_by, latitude, longitude, distance, local_pickup, selected_services, page }) => {
+    let response = null
+    const defaultPage = page ? page : 1
+    const state = store.getState()
+    const { userDetail } = state.user
+    //const user_id = userDetail.id
+    const user_id = 11
+    let params = new FormData()
+    params.append('user_id', user_id)
+    params.append('sort_by', sort_by)
+    latitude && params.append('latitude', latitude)
+    longitude && params.append('longitude', longitude)
+    distance && params.append('distance', distance)
+    params.append('local_pickup', local_pickup)
+    if (selected_services?.length) {
+        for (const item of selected_services) {
+            params.append('service[]', item.id)
+        }
+    } 
+    const uri = `${baseURL + endPoints.dealer.filters_dealers}?page=${defaultPage}`
+    console.log('\nfilterDealers \nparams: ', params, '\nuri: ', uri);
+
+    const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    if (isInternetAvailable) {
+        await axios
+            .post(uri, params)
+            .then(async responseJson => {
+                const tempResponseData = responseJson.data
+                console.log('filterDealers Response', tempResponseData);
+                if (tempResponseData.success) {
+                    response = tempResponseData
+                } else {
+                    Toasts.error(tempResponseData.message)
+                }
+            })
+            .catch(error => {
+                Toasts.error(error.response.data.message)
+                console.error(error);
+            });
+    }
+    return response
+};

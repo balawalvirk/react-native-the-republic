@@ -28,7 +28,7 @@ export function Products({
 
 
                                 <>
-                                    {()=>ListHeaderComponent}
+                                    {ListHeaderComponent()}
                                     {
                                         isGridView ?
                                             <SkeletonProductsGrid />

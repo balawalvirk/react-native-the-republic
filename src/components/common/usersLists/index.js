@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FlatList } from 'react-native'
 import { height, totalSize } from 'react-native-dimension'
-import { RowWrapperBasic, SkeletonListVerticalPrimary, NoDataViewPrimary, UserSkeletons, Wrapper } from '../..'
+import { RowWrapperBasic, SkeletonListVerticalPrimary, NoDataViewPrimary, UserSkeletons, Wrapper, SkeletonPrimary } from '../..'
 import { appImages, appStyles, Backend, colors, HelpingMethods, sizes } from '../../../services'
 import { ButtonColoredSmall } from '../../buttons'
 import { UserCardPrimary } from '../../cards'
@@ -10,7 +10,9 @@ import { Spacer } from '../../spacers'
 import styles from './styles'
 
 
-export const Dealers = ({ data, onPress, onPressHeart, ListHeaderComponent, ListFooterComponent, isLoading,disableNoDataView }) => {
+export const Dealers = ({ data, onPress, onPressHeart, ListHeaderComponent, ListFooterComponent, isLoading, disableNoDataView, onEndReached, isLoadingMore }) => {
+    //local states
+    const [onEndReachedCalledDuringMomentum, setOnEndReachedCalledDuringMomentum] = useState(false)
     return (
         <>
             {
@@ -26,7 +28,17 @@ export const Dealers = ({ data, onPress, onPressHeart, ListHeaderComponent, List
                             key={'key'}
                             keyExtractor={(item, index) => index.toString()}
                             ListHeaderComponent={ListHeaderComponent}
-                            ListFooterComponent={ListFooterComponent}
+                            // ListFooterComponent={ListFooterComponent}
+                            onEndReached={(data) => {
+                                if (!onEndReachedCalledDuringMomentum) {
+                                    if (onEndReached) {
+                                        onEndReached(data)
+                                        setOnEndReachedCalledDuringMomentum(true)
+                                    }
+                                }
+                            }}
+                            onEndReachedThreshold={0.5}
+                            onMomentumScrollBegin={() => { setOnEndReachedCalledDuringMomentum(false) }}
                             renderItem={({ item, index }) => {
                                 return (
                                     <UserCardPrimary
@@ -48,6 +60,22 @@ export const Dealers = ({ data, onPress, onPressHeart, ListHeaderComponent, List
                                     />
                                 )
                             }}
+                            ListFooterComponent={ListFooterComponent ? ListFooterComponent : () => {
+                                return (
+                                    <>
+                                        {isLoadingMore ?
+                                            <>
+                                                <Spacer height={sizes.baseMargin} />
+                                                <UserSkeletons />
+                                                <Spacer height={sizes.baseMargin} />
+
+                                            </>
+                                            :
+                                            null
+                                        }
+                                    </>
+                                )
+                            }}
                         />
                         :
                         !disableNoDataView ?
@@ -61,7 +89,7 @@ export const Dealers = ({ data, onPress, onPressHeart, ListHeaderComponent, List
 
     )
 }
-export const Groups = ({ data, onPress, handleJoin, ListHeaderComponent, ListFooterComponent, right, isLoading,disableNoDataView }) => {
+export const Groups = ({ data, onPress, handleJoin, ListHeaderComponent, ListFooterComponent, right, isLoading, disableNoDataView }) => {
     return (
         <>
             {
@@ -81,7 +109,7 @@ export const Groups = ({ data, onPress, handleJoin, ListHeaderComponent, ListFoo
                             renderItem={({ item, index }) => {
                                 const isJoined = HelpingMethods.checkIfGroupJoined(item.id)
                                 const isJoinRequested = HelpingMethods.checkIfGroupJoinRequested(item.id)
-                                const joinBtnText = HelpingMethods.checkIfGroupJoinRequested(item.id)?'Join Request Sent':HelpingMethods.checkIfGroupJoined()?'Joined':'Join'
+                                const joinBtnText = HelpingMethods.checkIfGroupJoinRequested(item.id) ? 'Join Request Sent' : HelpingMethods.checkIfGroupJoined() ? 'Joined' : 'Join'
                                 return (
                                     <UserCardPrimary
                                         containerStyle={{ backgroundColor: colors.appBgColor1, borderWidth: 1, borderColor: colors.appBgColor3, marginBottom: sizes.marginVertical / 2 }}
@@ -91,13 +119,13 @@ export const Groups = ({ data, onPress, handleJoin, ListHeaderComponent, ListFoo
                                         subTitle={item.users ? item.users.length + ' ' + 'member' + (item.users.length <= 1 ? '' : 's') : ''}
                                         right={
                                             right ? right(item, index) :
-                                                    <ButtonColoredSmall
-                                                        text={joinBtnText}
-                                                        onPress={() => {}}
-                                                        buttonStyle={[styles.joinButton, { backgroundColor: isJoined?(colors.appColor1 + '40'):isJoinRequested?colors.appBgColor4:colors.appColor1 }]}
-                                                        textStyle={[appStyles.textRegular, isJoinRequested?appStyles.textGray:isJoined?appStyles.textPrimaryColor:{color:colors.appTextColor6}]}
-                                                    />
-                                                   
+                                                <ButtonColoredSmall
+                                                    text={joinBtnText}
+                                                    onPress={() => { }}
+                                                    buttonStyle={[styles.joinButton, { backgroundColor: isJoined ? (colors.appColor1 + '40') : isJoinRequested ? colors.appBgColor4 : colors.appColor1 }]}
+                                                    textStyle={[appStyles.textRegular, isJoinRequested ? appStyles.textGray : isJoined ? appStyles.textPrimaryColor : { color: colors.appTextColor6 }]}
+                                                />
+
                                         }
                                     />
                                 )

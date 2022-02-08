@@ -80,7 +80,7 @@ function Find({ navigation, route }) {
 
     useEffect(() => {
         getSetProductsData()
-    }, [sortBy])
+    }, [sortBy, filterData])
 
     useEffect(() => {
         getInitialData()
@@ -90,9 +90,15 @@ function Find({ navigation, route }) {
     const getSetProductsData = async () => {
         console.log('sortBy: ', sortBy)
         !loading && setLoading(true)
-        currentPage > 1 && setCurrentPage(1)
-        allItemsLoaded && setAllItemsLoaded(false)
-        await getSetAllProducts({ initialData: true, page: 1 })
+        if (!filterData) {
+            currentPage > 1 && setCurrentPage(1)
+            allItemsLoaded && setAllItemsLoaded(false)
+            await getSetAllProducts({ initialData: true, page: 1 })
+        } else if (filterData) {
+            filteredProductsCurrentPage > 1 && setFilteredProductsCurrentPage(1)
+            allFilteredProductsLoaded && setAllFilteredProductsLoaded(false)
+            await getSetFilteredProducts({ initialData: true, page: 1 })
+        }
         setLoading(false)
     }
     const getInitialData = async () => {
@@ -140,16 +146,20 @@ function Find({ navigation, route }) {
                 }
             })
     }
-    const getSetFilteredProducts = async (initialData) => {
-
-        await Backend.filterProducts({ ...filterData, page: filteredProductsCurrentPage }).
+    const getSetFilteredProducts = async (data) => {
+        const tempPage = data?.page || filteredProductsCurrentPage
+        const tempInitialData = data?.initialData || null
+        await Backend.filterProducts({ ...filterData, sortBy, page: tempPage }).
             then(res => {
                 if (res) {
-                    const pre_data = !initialData ? filteredProducts : []
+                    const pre_data = !tempInitialData ? filteredProducts : []
+                    // console.log('pre_data: ', pre_data)
+                    // console.log('new Data: ', res.data.data)
                     setFilteredProducts([...pre_data, ...res.data.data])
+                    //setFilteredProducts(res.data.data)
                     !res.data.next_page_url ?
                         setAllFilteredProductsLoaded(true) :
-                        setFilteredProductsCurrentPage(filteredProductsCurrentPage + 1)
+                        setFilteredProductsCurrentPage(tempPage + 1)
                 }
             })
     }
@@ -351,7 +361,7 @@ function Find({ navigation, route }) {
                             () => navigate(routes.sortFilter, {
                                 clearFilter: handleClearFilter,
                                 applyFilter: (data, filterData) => {
-                                    setFilteredProducts(data)
+                                    //setFilteredProducts(data)
                                     setParams({ filterData })
                                 },
                                 onPressSortByOption: (sortByOption) => {

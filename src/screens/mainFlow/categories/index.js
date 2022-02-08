@@ -8,43 +8,7 @@ import { useSelector } from 'react-redux';
 import { MainWrapper, SearchTextinput, Spacer, TextInputColored, TinyTitle, Wrapper } from '../../../components';
 import { appStyles, colors, DummyData, routes, sizes } from '../../../services';
 
-function RenderAllCategories({ data, onPressCategory }) {
 
-
-
-    return (
-        <Wrapper flex={1}>
-            <FlatList
-                data={data}
-                key="key"
-                numColumns={2}
-                showsVerticalScrollIndicator={false}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item, index }) => {
-                    return (
-                        <TouchableOpacity
-                            activeOpacity={1}
-                            onPress={() => onPressCategory(item, index)}
-                            style={{ flex: 1, marginHorizontal: sizes.marginHorizontal, borderRadius: sizes.cardRadius, borderWidth: 1, borderColor: colors.appBgColor3, marginBottom: sizes.marginVertical / 2, ...{ marginRight: (index + 1) % 2 ? 0 : null, marginleft: !(index + 1) % 2 ? 0 : null } }}>
-                            <Image
-                                source={{ uri: item.image }}
-                                style={{ flex: 1, height: height(20), width: null, borderTopRightRadius: sizes.cardRadius, borderTopLeftRadius: sizes.cardRadius }}
-                            />
-                            <Wrapper style={[appStyles.center, { paddingHorizontal: sizes.marginHorizontalSmall, paddingVertical: sizes.marginVertical / 2, }]}>
-                                <TinyTitle style={[appStyles.textCenter]}>{item.name}</TinyTitle>
-                            </Wrapper>
-                        </TouchableOpacity>
-                    )
-                }}
-                ListFooterComponent={() => {
-                    return (
-                        <Spacer height={sizes.doubleBaseMargin} />
-                    )
-                }}
-            />
-        </Wrapper>
-    )
-}
 
 function Categories(props) {
     const { navigate } = props.navigation
@@ -95,3 +59,42 @@ function Categories(props) {
 }
 
 export default Categories;
+
+
+function RenderAllCategories({ data, onPressCategory }) {
+
+
+
+    return (
+        <Wrapper flex={1}>
+            <FlatList
+                data={data}
+                key="key"
+                numColumns={2}
+                showsVerticalScrollIndicator={false}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item, index }) => {
+                    return (
+                        <TouchableOpacity
+                            activeOpacity={1}
+                            onPress={() => onPressCategory(item, index)}
+                            style={{ flex: 1, marginHorizontal: sizes.marginHorizontal, borderRadius: sizes.cardRadius, borderWidth: 1, borderColor: colors.appBgColor3, marginBottom: sizes.marginVertical / 2, ...{ marginRight: (index + 1) % 2 ? 0 : null, marginleft: !(index + 1) % 2 ? 0 : null } }}>
+                            <Image
+                                source={{ uri: item.image }}
+                                style={{ flex: 1, height: height(20), width: null, borderTopRightRadius: sizes.cardRadius, borderTopLeftRadius: sizes.cardRadius }}
+                            />
+                            <Wrapper style={[appStyles.center, { paddingHorizontal: sizes.marginHorizontalSmall, paddingVertical: sizes.marginVertical / 2, }]}>
+                                <TinyTitle style={[appStyles.textCenter]}>{item.name}</TinyTitle>
+                            </Wrapper>
+                        </TouchableOpacity>
+                    )
+                }}
+                ListFooterComponent={() => {
+                    return (
+                        <Spacer height={sizes.doubleBaseMargin} />
+                    )
+                }}
+            />
+        </Wrapper>
+    )
+}

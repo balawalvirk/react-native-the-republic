@@ -597,16 +597,19 @@ export const get_product_conditions = async () => {
 };
 
 
-export const getProductsByCategory = async ({ page, category }) => {
+export const getProductsByCategory = async ({ page, category, sort_by }) => {
     let response = null
     const defaultPage = page ? page : 1
     const params = {
-        category
+        category,
+        sort_by
     }
+    const uri = `${baseURL + endPoints.product.category_products}?page=${defaultPage}`
+    console.log('\ngetProductsByCategory \nparams: ', params, '\nuri: ', uri)
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios
-            .post(`${baseURL + endPoints.product.category_products}?page=${defaultPage}`, params)
+            .post(uri, params)
             .then(async responseJson => {
                 const tempResponseData = responseJson.data
                 console.log('Response', tempResponseData);
@@ -846,7 +849,8 @@ export const filterProducts = async ({ sortBy, make, action, caliber, minPrice, 
     const defaultPage = page ? page : 1
     const state = store.getState()
     const { userDetail } = state.user
-    const user_id = userDetail.id
+    //const user_id = userDetail.id
+    const user_id = 11
     let params = new FormData()
     params.append('user_id', user_id)
     sortBy && params.append('sort_by', sortBy)
@@ -864,8 +868,9 @@ export const filterProducts = async ({ sortBy, make, action, caliber, minPrice, 
     //     params['price[]'] = item
     // }
     //barel_length && [params['barel_length[]'] = barel_length]
+    const uri = `${baseURL + endPoints.product.filter_products}?page=${defaultPage}`
+    console.log('\nfilterProducts \nparams: ', params, '\nuri: ', uri);
 
-    console.log('filterProducts params', params);
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios

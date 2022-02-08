@@ -43,7 +43,7 @@ const options = [
 function SortFilter(props) {
     const { navigation, route } = props
     const { navigate, goBack } = navigation
-    const { clearFilter, applyFilter,onPressSortByOption } = route.params
+    const { clearFilter, applyFilter, onPressSortByOption } = route.params
     const filterData = route.params?.filterData || null
     const sortBy = route.params?.sortBy || null
     //redux states
@@ -89,21 +89,21 @@ function SortFilter(props) {
         console.log('sortBy  --> ', sortBy)
         if (sortBy) {
             const tempSortBy = defaultSortingOptions.find(ite => ite.value === sortBy)
-            console.log('tempSortBy: ',tempSortBy)
+            console.log('tempSortBy: ', tempSortBy)
             if (tempSortBy) {
                 const tempSortByIndex = defaultSortingOptions.indexOf(tempSortBy)
-                console.log('tempSortByIndex: ',tempSortByIndex)
+                console.log('tempSortByIndex: ', tempSortByIndex)
                 if (tempSortByIndex >= 0) {
                     setSelectedSortTabIndex(tempSortByIndex)
                 }
             }
         }
         if (filterData) {
-            const { sortBy, make, action, caliber, minPrice, maxPrice, barel_length } = filterData
-            const tempSortByObj = defaultSortingOptions.find(item => item.value === sortBy)
-            const tempSortByIndex = defaultSortingOptions.indexOf(tempSortByObj)
-            console.log('tempSortByIndex  --> ', tempSortByIndex)
-            setSelectedSortTabIndex(tempSortByIndex)
+            const {  make, action, caliber, minPrice, maxPrice, barel_length } = filterData
+            // const tempSortByObj = defaultSortingOptions.find(item => item.value === sortBy)
+            // const tempSortByIndex = defaultSortingOptions.indexOf(tempSortByObj)
+            // console.log('tempSortByIndex  --> ', tempSortByIndex)
+            // setSelectedSortTabIndex(tempSortByIndex)
             setActionType(action)
             setMake(make)
             setCalibre(caliber)
@@ -112,9 +112,9 @@ function SortFilter(props) {
         }
     }
     const handleApplyFilter = async () => {
-        setLoading(true)
+        // setLoading(true)
         const filteredProductsData = {
-            sortBy: defaultSortingOptions[selectedSortTabIndex].value,
+            //sortBy: defaultSortingOptions[selectedSortTabIndex].value,
             make: make != 'placeholder' ? make : '',
             action: actionType != 'placeholder' ? actionType : '',
             caliber: caliber != 'placeholder' ? caliber : '',
@@ -122,14 +122,19 @@ function SortFilter(props) {
             maxPrice: priceRange[1],
             barel_length: barrelLength != 'placeholder' ? barrelLength : ''
         }
-        await Backend.filterProducts(filteredProductsData).
-            then(res => {
-                setLoading(false)
-                if (res) {
-                    applyFilter(res.data.data, filteredProductsData);
-                    goBack()
-                }
-            })
+
+         applyFilter(null, filteredProductsData);
+         goBack()
+        
+        //  await Backend.filterProducts(filteredProductsData).
+        //      then(res => {
+        //          setLoading(false)
+        //          if (res) {
+        //              console.log('filtered products: ',res.data.data)
+        //              applyFilter(res.data.data, filteredProductsData);
+        //              goBack()
+        //          }
+        //      })
     }
     return (
         <MainWrapper>

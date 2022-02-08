@@ -17,7 +17,11 @@ const defaultSortingOptions = [
 
 export default function SortFilterDealers({ navigation, route }) {
     const { goBack, navigate } = navigation
-    const { clearFilter, applyFilter } = route.params
+    const { clearFilter, applyFilter, onPressSortByOption } = route.params
+    const filterData = route.params?.filterData || null
+    const sortBy = route.params?.sortBy || null
+    //console.log('filterData: ', filterData)
+    //console.log('sortBy: ', sortBy)
 
     const [selectedSortTabIndex, setSelectedSortTabIndex] = useState(0)
     const [acceptsLocalPickup, setAccptsLocalPickup] = useState(false)
@@ -47,22 +51,73 @@ export default function SortFilterDealers({ navigation, route }) {
     }, [navigation]);
 
     useEffect(() => {
-        getSetServices()
+        getSetInitialData()
     }, [])
+    const getSetInitialData = async () => {
+        await getSetServices()
+        getSetSortFilterData()
+    }
 
-    const getSetServices = () => {
-        // let tempData = []
-        // for (let i = 0; i < 20; i++) {
-        //     const tempObj = {
-        //         name: 'Service Number ' + i,
-        //         isSelected: i === 2 || i === 3 ? true : false
-        //     }
-        //     tempData.push(tempObj)
-        // }
-        // setServices(tempData)
-        Backend.getAllServices().
+    const getSetSortFilterData = () => {
+        console.log('filterData  --> ', filterData)
+        console.log('sortBy  --> ', sortBy)
+        if (sortBy) {
+            const tempSortBy = defaultSortingOptions.find(ite => ite.value === sortBy)
+            //console.log('tempSortBy: ', tempSortBy)
+            if (tempSortBy) {
+                const tempSortByIndex = defaultSortingOptions.indexOf(tempSortBy)
+                //console.log('tempSortByIndex: ', tempSortByIndex)
+                if (tempSortByIndex >= 0) {
+                    setSelectedSortTabIndex(tempSortByIndex)
+                }
+            }
+        }
+        if (filterData) {
+            const { latitude, longitude, address, distance, local_pickup, selected_services, } = filterData
+            setLatitude(latitude)
+            setLongitude(longitude)
+            setDistance(distance)
+            setAccptsLocalPickup(local_pickup)
+            setAddress(address)
+            // if (selected_services?.length) {
+            //     let tempServices = services.slice()
+            //     console.log('tempServices: ',tempServices)
+            //     for (const ss of selected_services) {
+            //         const matchedService = tempServices.find(s => s.id === ss.id)
+            //         if (matchedService) {
+            //             const tempServiceIndex = tempServices.indexOf(matchedService)
+            //             if (tempServiceIndex >= 0) {
+            //                 tempServices[tempServiceIndex].isSelected = true
+            //             }
+            //         }
+            //     }
+            //     setServices(tempServices)
+            // }
+        }
+    }
+    const getSetServices = async () => {
+        await Backend.getAllServices().
             then(res => {
-                if (res) setServices(res.data)
+                if (res) {
+                    setServices(res.data)
+                    if(filterData?.selected_services){
+                        const {selected_services}=filterData
+                        if (selected_services?.length) {
+                            let tempServices = res.data.slice()
+                            console.log('tempServices: ',tempServices)
+                            for (const ss of selected_services) {
+                                const matchedService = tempServices.find(s => s.id === ss.id)
+                                if (matchedService) {
+                                    const tempServiceIndex = tempServices.indexOf(matchedService)
+                                    if (tempServiceIndex >= 0) {
+                                        tempServices[tempServiceIndex].isSelected = true
+                                    }
+                                }
+                            }
+                            setServices(tempServices)
+                        }
+                    }
+                }
             })
     }
     const handlePressServices = (item, index) => {
@@ -91,7 +146,28 @@ export default function SortFilterDealers({ navigation, route }) {
             setLongitude(longitude)
         }
     }
-    const searchArea = address && distance ? `${address.length>15?(address.slice(0,15)+'...'):address} ~ within ${distance} miles` : ''
+    const handleApplyFilter = async () => {
+        // setLoading(true)
+        const filteredDealersData = {
+            //sortBy: defaultSortingOptions[selectedSortTabIndex].value,
+            latitude, longitude, distance, address, local_pickup: acceptsLocalPickup, selected_services: getSelectedServices(),
+        }
+
+        console.log('filteredDealersData: ', filteredDealersData)
+        applyFilter(filteredDealersData);
+        goBack()
+
+        //  await Backend.filterProducts(filteredDealersData).
+        //      then(res => {
+        //          setLoading(false)
+        //          if (res) {
+        //              console.log('filtered products: ',res.data.data)
+        //              applyFilter(res.data.data, filteredDealersData);
+        //              goBack()
+        //          }
+        //      })
+    }
+    const searchArea = address && distance ? `${address.length > 15 ? (address.slice(0, 15) + '...') : address} ~ within ${distance} miles` : ''
     return (
         <MainWrapper>
             <Wrapper flex={1}>
@@ -104,7 +180,12 @@ export default function SortFilterDealers({ navigation, route }) {
                     data={defaultSortingOptions}
                     initalIndex={selectedSortTabIndex}
                     text='title'
-                    onPressButton={(item, index) => setSelectedSortTabIndex(index)}
+                    onPressButton={(item, index) => {
+                        onPressSortByOption(item.value)
+                        goBack()
+                        setSelectedSortTabIndex(index)
+                    }
+                    }
                     inActiveButtonStyle={{ paddingVertical: sizes.marginVertical / 3, paddingHorizontal: sizes.marginHorizontalSmall, backgroundColor: 'transparent', borderWidth: 1.5, borderColor: colors.error }}
                     inActiveTextStyle={{ color: colors.error }}
                     activeButtonStyle={{ backgroundColor: colors.error }}
@@ -176,6 +257,7 @@ export default function SortFilterDealers({ navigation, route }) {
                 <ButtonGradient
                     text={'Apply Filters'}
                     shadow
+                    onPress={handleApplyFilter}
                 />
                 <Spacer height={sizes.baseMargin} />
             </Wrapper>
