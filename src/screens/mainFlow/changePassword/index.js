@@ -65,13 +65,13 @@ function ChangePassword(props) {
                         }
                         await AsyncStorage.setItem(asyncConsts.user_credentials, JSON.stringify(NewUserCredentials))
                         goBack()
-                        Toasts.success('Password changed successfuly')
+                        Toasts.success('Password changed successfully')
                     }
                 }
             })
             // setTimeout(() => {
             //     goBack()
-            //     Toasts.success('Password changed successfuly')
+            //     Toasts.success('Password changed successfully')
             //     setLoading(false)
             // }, 1000);
         }

@@ -52,11 +52,13 @@ function Find({ navigation, route }) {
 
     //Redux states
     const user = useSelector(state => state.user)
-    const { coords } = user.currentLocation
-    const currentLocation = {
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-    }
+    const {userDetail}=user
+    // const { coords } = user.currentLocation
+    // const currentLocation = {
+    //     latitude: coords.latitude,
+    //     longitude: coords.longitude,
+    // }
+
     //local states
     const [myLocation, setMyLocation] = useState(null)
     const [allProducts, setAllProducts] = useState([])
@@ -80,11 +82,11 @@ function Find({ navigation, route }) {
 
     useEffect(() => {
         getSetProductsData()
-    }, [sortBy, filterData])
+    }, [sortBy, filterData,userDetail])
 
     useEffect(() => {
         getInitialData()
-    }, [])
+    }, [userDetail])
 
 
     const getSetProductsData = async () => {
@@ -111,8 +113,10 @@ function Find({ navigation, route }) {
         const tempMyLocation = HelpingMethods.getMyLocation()
         console.log('tempMyLocation -->', tempMyLocation)
         if (tempMyLocation) {
-            console.log('setMyLocation -->', { ...tempMyLocation, ...locationDelta })
-            setMyLocation({ ...tempMyLocation, ...locationDelta })
+            const tempLoc={ ...tempMyLocation, ...locationDelta }
+            console.log('tempLoc -->',tempLoc)
+            setMyLocation(tempLoc)
+            mapRef?.current?.animateToRegion(tempLoc, 2000);
         }
     }
     const handleLoadingMore = async () => {
@@ -121,6 +125,7 @@ function Find({ navigation, route }) {
             await getSetAllProducts()
             // setCurrentPage(currentPage + 1)
             setLoadingMore(false)
+           
         }
     }
     const handleLoadingMoreFilteredProducts = async () => {

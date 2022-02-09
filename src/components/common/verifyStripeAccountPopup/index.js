@@ -1,6 +1,6 @@
 import React from 'react'
 import { totalSize } from 'react-native-dimension'
-import { PopupPrimary } from '..'
+import { PopupPrimary } from '../index'
 import { colors, routes } from '../../../services'
 import { navigate } from '../../../services/navigation/rootNavigation'
 

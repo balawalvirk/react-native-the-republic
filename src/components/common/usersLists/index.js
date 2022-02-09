@@ -46,7 +46,8 @@ export const Dealers = ({ data, onPress, onPressHeart, ListHeaderComponent, List
                                         onPress={() => onPress(item, index)}
                                         title={item.first_name + ' ' + item.last_name}
                                         imageUri={item.profile_image ? item.profile_image : appImages.noUser}
-                                        subTitle={(index % 2 ? (index + 1) * 9 : (index + 1) * 7) + ' miles away'}
+                                        // subTitle={(index % 2 ? (index + 1) * 9 : (index + 1) * 7) + ' miles away'}
+                                        subTitle={item.distance_round >= 0 ? HelpingMethods.getRoundedValue(item.distance_round) + ' miles away' : ''}
                                         right={
                                             <IconHeart
                                                 size={totalSize(2)}

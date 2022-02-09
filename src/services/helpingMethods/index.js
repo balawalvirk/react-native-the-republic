@@ -335,7 +335,7 @@ export const getMyLocation = () => {
     latitude = userDetail.latitude ? userDetail.latitude : userCurrentLocation ? userCurrentLocation.latitude : ''
     longitude = userDetail.longitude ? userDetail.longitude : userCurrentLocation ? userCurrentLocation.longitude : ''
     if (latitude && longitude) {
-        return { latitude, longitude }
+        return { latitude:Number(latitude), longitude:Number(longitude) }
     } else {
         return null
     }

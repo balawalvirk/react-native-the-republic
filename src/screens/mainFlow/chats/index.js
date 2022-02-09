@@ -29,6 +29,8 @@ function Chats(props) {
                          tempData = removeDuplications(res.data)
                     }
                     setConversations(tempData)
+                }else{
+                    setConversations([])
                 }
             })
     }

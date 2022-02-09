@@ -16,6 +16,8 @@ function VerifyPhone(props) {
     console.log('\nuserSocialData', userSocialData,)
 
     //local states
+    const [code, setCode] = useState('')
+    const [clearCode, setClearCode] = useState('')
     const [confirmation, setConfirmation] = useState(null)
     const [phoneNumberWithCode, setPhoneNumberWithCode] = useState('')
     const [phoneNumber, setPhoneNumber] = useState(profileDetails.phoneNumber)
@@ -43,9 +45,9 @@ function VerifyPhone(props) {
         const { phoneNumber, countryPhoneCode } = profileDetails
         const mobileNumber = '+' + countryPhoneCode + phoneNumber
         console.log('Phone number: ', mobileNumber)
-        // console.log('confirmPhoneNumber: ',confirmPhoneNumber)
+        console.log('confirmPhoneNumber: ', confirmPhoneNumber)
         setPhoneNumberWithCode(mobileNumber)
-        //setConfirmation(confirmPhoneNumber)
+        setConfirmation(confirmPhoneNumber)
     }
 
     const handleVerifyCode = async (code) => {
@@ -66,37 +68,47 @@ function VerifyPhone(props) {
             //             Toasts.error(error.message)
             //         }, 100);
             //     })
-            await Backend.verifyPhoneCode({number:phoneNumberWithCode,code}).
-            then(res=>{
-                if(res){
-                    Toasts.success('Phone number has been verified')
-                    navigate(routes.verifyIdentity, { credentials, profileDetails, phoneNumber, countryPhoneCode, countryCode })
-                }
-            })
+            // await Backend.verifyPhoneCode({ number: phoneNumberWithCode, code }).
+            //     then(res => {
+            //         if (res) {
+            //             Toasts.success('Phone number has been verified')
+            //             navigate(routes.verifyIdentity, { credentials, profileDetails, phoneNumber, countryPhoneCode, countryCode })
+            //         }
+            //     })
+            await Backend.verifyPhoneUsingFirebase({ confirmation, code }).
+                then(async res => {
+                    if (res) {
+                        Toasts.success('Phone number has been verified')
+                        navigate(routes.verifyIdentity, { credentials, profileDetails, phoneNumber, countryPhoneCode, countryCode })
+                    } else {
+                        setCode('')
+                        setClearCode(true)
+                    }
+                })
         }
         setLoading(false)
     }
 
     const sendCodeToPhoneNumber = async (phoneNumber) => {
         setLoading(true)
-        // await auth()
-        //     .signInWithPhoneNumber(phoneNumber)
-        //     .then(confirmResult => {
-        //         console.log('confirmResult: ', confirmResult)
-        //         setConfirmation(confirmResult)
-        //         toggleVerificationCodeSendModal()
-        //     })
-        //     .catch(error => {
-        //         Toasts.error(error.message)
-        //         console.log(error)
-        //     })
-        await Backend.sendPhoneCode({ number: phoneNumber }).
-            then(res => {
-                if (res) {
-                    //setConfirmPhoneNumber(confirmResult)
-                    toggleVerificationCodeSendModal()
-                }
+        await auth()
+            .verifyPhoneNumber(phoneNumber)
+            .then(confirmResult => {
+                console.log('confirmResult: ', confirmResult)
+                setConfirmation(confirmResult)
+                toggleVerificationCodeSendModal()
             })
+            .catch(error => {
+                Toasts.error(error.message)
+                console.log(error)
+            })
+        // await Backend.sendPhoneCode({ number: phoneNumber }).
+        //     then(res => {
+        //         if (res) {
+        //             //setConfirmPhoneNumber(confirmResult)
+        //             toggleVerificationCodeSendModal()
+        //         }
+        //     })
         setLoading(false)
     }
 
@@ -130,17 +142,21 @@ function VerifyPhone(props) {
                 </Wrapper>
                 <Spacer height={sizes.baseMargin} />
                 <ComponentWrapper>
-                    <TinyTitle style={[appStyles.textCenter]}> Enter the 6 digit code sent to your phone number</TinyTitle>
+                    <TinyTitle style={[appStyles.textCenter]}> Enter the 6 digit code sent to your phone number {phoneNumberWithCode}</TinyTitle>
                 </ComponentWrapper>
                 <OTPInputView
                     style={{ width: '90%', height: height(10), alignSelf: 'center' }}
                     pinCount={6}
-                    // code={this.state.code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
-                    // onCodeChanged = {code => { this.setState({code})}}
+                    code={code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
+                    onCodeChanged={v => {
+                        clearCode && setClearCode(false)
+                        setCode(v)
+                    }}
                     autoFocusOnLoad
                     codeInputFieldStyle={styles.underlineStyleBase}
                     codeInputHighlightStyle={styles.borderStyleHighLighted}
                     onCodeFilled={handleVerifyCode}
+                    clearInputs={clearCode}
                 />
                 <Spacer height={sizes.doubleBaseMargin} />
                 {/* <ComponentWrapper>

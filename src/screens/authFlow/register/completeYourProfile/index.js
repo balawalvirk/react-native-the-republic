@@ -37,25 +37,25 @@ function CompleteYourProfile(props) {
     const toggleVerificationCodeSendModal = () => setVerificationCodeSendModalVisibility(!isVerificationCodeSendModalVisible)
 
     const sendCodeToPhoneNumber = async (phoneNumber) => {
-        // await auth()
-        //     .signInWithPhoneNumber(phoneNumber)
-        //     .then(confirmResult => {
-        //         console.log('confirmResult: ', confirmResult)
-        //         setConfirmPhoneNumber(confirmResult)
-        //         toggleVerificationCodeSendModal()
-        //     })
-        //     .catch(error => {
-        //         //alert(error.message)
-        //         Toasts.error(error.message)
-        //         console.log(error)
-        //     })
-        await Backend.sendPhoneCode({ number: phoneNumber }).
-            then(res => {
-                if (res) {
-                    //setConfirmPhoneNumber(confirmResult)
-                    toggleVerificationCodeSendModal()
-                }
+        await auth()
+            .verifyPhoneNumber(phoneNumber)
+            .then(confirmResult => {
+                console.log('confirmResult: ', confirmResult)
+                setConfirmPhoneNumber(confirmResult)
+                toggleVerificationCodeSendModal()
             })
+            .catch(error => {
+                //alert(error.message)
+                Toasts.error(error.message)
+                console.log(error)
+            })
+        // await Backend.sendPhoneCode({ number: phoneNumber }).
+        //     then(res => {
+        //         if (res) {
+        //             //setConfirmPhoneNumber(confirmResult)
+        //             toggleVerificationCodeSendModal()
+        //         }
+        //     })
 
     }
     const handleContinue = async () => {
@@ -99,7 +99,7 @@ function CompleteYourProfile(props) {
                     navigate(routes.verifyPhone, {
                         credentials: userSocialData ? socicalCredentials : credentials,
                         profileDetails: EditProfileRef.current.getAllData(),
-                        //confirmPhoneNumber,
+                        confirmPhoneNumber,
                         userSocialData
                     })
                 }}

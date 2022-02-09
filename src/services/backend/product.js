@@ -58,17 +58,21 @@ export const add_Product = async ({
     return response
 };
 
-export const get_user_products = async (userId) => {
+export const get_user_products = async ({userId,page}) => {
     let response = null
     const state = store.getState()
+    const tempPage=page?page:1
     const user_id = userId ? userId : state.user.userDetail.id
+    const params = { user_id }
+    const uri = `${baseURL + endPoints.product.user_products}?page=${tempPage}`
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
+    console.log('\nget_user_products \nparams: ', params, '\nuri: ', uri)
     if (isInternetAvailable) {
         await axios
-            .post(`${baseURL + endPoints.product.user_products}`, { user_id })
+            .post(uri,params)
             .then(async responseJson => {
                 const tempResponseData = responseJson.data
-                console.log('Response', tempResponseData);
+                console.log('get_user_products Response', tempResponseData);
                 if (tempResponseData.success) {
                     response = tempResponseData
                 } else {
@@ -849,8 +853,8 @@ export const filterProducts = async ({ sortBy, make, action, caliber, minPrice, 
     const defaultPage = page ? page : 1
     const state = store.getState()
     const { userDetail } = state.user
-    //const user_id = userDetail.id
-    const user_id = 11
+    const user_id = userDetail.id
+    //const user_id = 11
     let params = new FormData()
     params.append('user_id', user_id)
     sortBy && params.append('sort_by', sortBy)

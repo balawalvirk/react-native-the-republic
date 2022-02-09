@@ -7,6 +7,7 @@ import store from "../store";
 import { Backend, routes } from "..";
 import { setUserDetail } from "../store/actions";
 import { navigate } from "../navigation/rootNavigation";
+import auth from '@react-native-firebase/auth';
 const { dispatch } = store
 
 
@@ -435,3 +436,26 @@ export const verifyPhoneCode = async ({ number, code }) => {
         });
     return response
 };
+
+export const verifyPhoneUsingFirebase = async ({ confirmation, code }) => {
+    let respons = null
+    try {
+        const credential = auth.PhoneAuthProvider.credential(confirmation.verificationId, code);
+        console.log('credential ', credential)
+        let signInWithCredential = await auth().signInWithCredential(credential);
+        console.log('signInWithCredential ', signInWithCredential)
+        if (signInWithCredential) {
+            respons = signInWithCredential
+        }
+    } catch (error) {
+        console.log('error', error);
+        if (error.code == 'auth/invalid-verification-code') {
+            //console.log('Invalid code.');
+            Toasts.error('Invalid code.')
+        } else {
+            //console.log('Account linking error');
+            Toasts.error(error.message)
+        }
+    }
+    return respons
+}

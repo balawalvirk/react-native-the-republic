@@ -4,7 +4,7 @@ import { Icon } from "react-native-elements"
 import { Wrapper } from "../../wrappers"
 import { colors, routes, sizes } from "../../../services"
 import { navigate } from "../../../services/navigation/rootNavigation"
-import { PopupPrimary } from '..'
+import { PopupPrimary } from '../index'
 
 export default function createStripeAccountPopup({ visible, toggle }) {
     return (

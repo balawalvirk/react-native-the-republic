@@ -110,8 +110,9 @@ function VerifyIdentity(props) {
                         phone: phoneNumber,
                         country_phone_code: countryPhoneCode,
                         country_code: countryCode,
-                        image: imageFile
-
+                        image: imageFile,
+                        is_phone_verified:true,
+                        is_email_verified:true
                     }
                     await Backend.complete_profile(completeProfileParams).
                         then(async res => {
@@ -145,7 +146,11 @@ function VerifyIdentity(props) {
             await Backend.userRegisterGoogle({ email, google_token: googleToken }).
                 then(res => {
                     if (res) {
-                        response = res
+                        const tempRes = {
+                            ...res,
+                            user_id: res.data.id
+                        }
+                        response = tempRes
                     }
                 })
         } else if (instagramToken && instagramUserId) {
@@ -163,7 +168,12 @@ function VerifyIdentity(props) {
             await Backend.userRegisterApple({ email, apple_token: appleToken }).
                 then(res => {
                     if (res) {
-                        response = res
+                        const tempRes = {
+                            ...res,
+                            //user_id: res.user.id
+                            user_id: res.data.id
+                        }
+                        response = tempRes
                     }
                 })
         } else if (email && password) {
@@ -173,7 +183,8 @@ function VerifyIdentity(props) {
                         if (res) {
                             const tempRes = {
                                 ...res,
-                                user_id: res.user.id
+                                //user_id: res.user.id
+                                user_id: res.data.id
                             }
                             response = tempRes
                         }

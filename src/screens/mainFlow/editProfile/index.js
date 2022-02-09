@@ -65,7 +65,7 @@ function EditProfile(props) {
                 country_code: countryCode,
             }).then(res => {
                 if (res) {
-                    Toasts.success('Profile updated successfuly')
+                    Toasts.success('Profile updated successfully')
                     goBack()
                 }
             })

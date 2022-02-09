@@ -14,29 +14,42 @@ function YourProducts(props) {
   const { navigate } = navigation
 
   //local states
-  //const [products, setProducts] = useState(dummyData.products)
   const [products, setProducts] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [allItemsLoaded, setAllItemsLoaded] = useState(false)
   const [seletedProduct, setSeletedProduct] = useState(null)
   const [loadingDelete, setLoadingDelete] = useState(false)
   const [isDeleteProductPopupVisible, setDeleteProductPopupVisibility] = useState(false)
+  const [onEndReachedCalledDuringMomentum, setOnEndReachedCalledDuringMomentum] = useState(false)
 
   const toggleDeleteProductPopup = () => setDeleteProductPopupVisibility(!isDeleteProductPopupVisible)
 
   useFocusEffect(
     React.useCallback(() => {
-      GetSetMyProducts()
+      GetSetMyProducts(true)
     }, [])
   )
 
-  const GetSetMyProducts = () => {
-    Backend.get_user_products().
+  const GetSetMyProducts = async (isInitialData) => {
+    const tempPage = isInitialData ? 1 : currentPage
+    await Backend.get_user_products({ page: tempPage }).
       then(async res => {
         if (res) {
-          setProducts(res.data.data)
+          const pre_data = !isInitialData ? products : []
+          setProducts([...pre_data, ...res.data.data])
+          !res.data.next_page_url ? setAllItemsLoaded(true) :
+            setCurrentPage(tempPage + 1)
         }
       })
   }
-
+  const handleLoadingMore = async () => {
+    if (!allItemsLoaded) {
+      setLoadingMore(true)
+      await GetSetMyProducts()
+      setLoadingMore(false)
+    }
+  }
   const handleDeleteProduct = async () => {
     setLoadingDelete(true)
     await Backend.delete_product(seletedProduct.id).
@@ -50,7 +63,7 @@ function YourProducts(props) {
           Toasts.success('Product deleted')
         }
       })
-    
+
   }
 
   if (!products) {
@@ -68,8 +81,32 @@ function YourProducts(props) {
             key={'key'}
             //numColumns={isGridView && 2}
             ListHeaderComponent={() => <Spacer height={sizes.baseMargin} />}
-            ListFooterComponent={() => <Spacer height={sizes.baseMargin} />}
+           // ListFooterComponent={() => <Spacer height={sizes.baseMargin} />}
+            ListFooterComponent={ () => {
+              return (
+                  <>
+                      {loadingMore ?
+                          <>
+                              <Spacer height={sizes.baseMargin} />
+                              <SkeletonListVerticalPrimary />
+                              <Spacer height={sizes.baseMargin} />
+
+                          </>
+                          :
+                          <Spacer height={sizes.baseMargin} />
+                      }
+                  </>
+              )
+          }}
             keyExtractor={(item, index) => (index + 1).toString()}
+            onEndReached={(data) => {
+              if (!onEndReachedCalledDuringMomentum) {
+                handleLoadingMore()
+                setOnEndReachedCalledDuringMomentum(true)
+              }
+            }}
+            onEndReachedThreshold={0.5}
+            onMomentumScrollBegin={() => { setOnEndReachedCalledDuringMomentum(false) }}
             renderItem={({ item, index }) => {
               const { user } = item
               const isActive = item.status === 'active'

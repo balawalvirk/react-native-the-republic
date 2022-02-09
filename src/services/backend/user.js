@@ -146,7 +146,11 @@ export const user_register = async ({ email, password, password_confirmation }) 
     return response
 };
 
-export const complete_profile = async ({ user_id, first_name, last_name, username, gender, birthday, phone, image, country_code, country_phone_code }) => {
+export const complete_profile = async ({
+     user_id, first_name, last_name, username, gender,
+      birthday, phone, image, country_code, 
+      country_phone_code,
+      is_phone_verified,is_email_verified }) => {
     let response = null
 
     const uri = `${baseURL + endPoints.user.complete_profile}`
@@ -158,11 +162,13 @@ export const complete_profile = async ({ user_id, first_name, last_name, usernam
     formDataObject.append("gender", gender)
     formDataObject.append("birthday", birthday)
     formDataObject.append("phone", phone)
-    image && formDataObject.append("image", image)
     formDataObject.append("country_code", country_code)
     formDataObject.append("country_phone_code", country_phone_code)
     formDataObject.append("user_type", 'basic')
     formDataObject.append("subscription_plan", 'Basic')
+    formDataObject.append("is_phone_verified", is_phone_verified)
+    formDataObject.append("is_email_verified", is_email_verified)
+    image && formDataObject.append("image", image)
 
     console.log('complete_profile\nuri', uri, '\nparams', formDataObject);
     await axios

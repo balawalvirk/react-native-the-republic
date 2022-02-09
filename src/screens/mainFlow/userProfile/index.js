@@ -112,7 +112,7 @@ function UserProfile(props) {
     }
 
     const handleGetUserProducts = async () => {
-        await Backend.get_user_products(user_id).
+        await Backend.get_user_products({ userId: user_id, page: 1 }).
             then(res => {
                 if (res) {
                     setUserProducts(res.data.data)
@@ -169,7 +169,7 @@ function UserProfile(props) {
                             <IconButtonPrimary
                                 iconName="message-circle"
                                 iconType="feather"
-                                onPress={()=>navigate(routes.chatScreen,{userId:user_id})}
+                                onPress={() => navigate(routes.chatScreen, { userId: user_id })}
                             />
                             <Spacer width={sizes.smallMargin} />
                             <IconButtonPrimary
@@ -220,7 +220,7 @@ function UserProfile(props) {
                             isLoading={isLoadingUserPosts}
                             isLoadingMore={isLoadingMoreUserPosts}
                             onEndReached={handleLoadMoreUserPosts}
-                            updateData={data=>setUserPosts(data)}
+                            updateData={data => setUserPosts(data)}
                             onPressPost={(item, index) => navigate(routes.postDetail, {
                                 post: item,
                                 postId: item.id,
@@ -229,7 +229,7 @@ function UserProfile(props) {
                                         setUserPosts(HelpingMethods.handleReplacePost(userPosts, updatedPost))
                                         :
                                         deletePost ?
-                                        setUserPosts(HelpingMethods.handleRemovePost(userPosts, deletePost))
+                                            setUserPosts(HelpingMethods.handleRemovePost(userPosts, deletePost))
                                             :
                                             null
 

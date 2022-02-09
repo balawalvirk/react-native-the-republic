@@ -159,7 +159,8 @@ function ProductDetail(props) {
                 <UserCardPrimary
                     imageUri={user ? user.profile_image ? user.profile_image : appImages.noUser : appImages.noUser}
                     title={user ? user.first_name + ' ' + user.last_name : 'Anonynous'}
-                    subTitle={'3 miles away'}
+                    //subTitle={'miles away'}
+                    subTitle={user.distance_round >= 0 ? HelpingMethods.getRoundedValue(user.distance_round) + ' miles away' : ''}
                     gradiant
                     onPressViewProfile={() => navigate(routes.userProfile, { user })}
                 />

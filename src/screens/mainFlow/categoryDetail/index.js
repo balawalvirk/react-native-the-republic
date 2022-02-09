@@ -23,8 +23,8 @@ function CategoryDetail(props) {
     const [products, setProducts] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [loadingMore, setLoadingMore] = useState(false)
-    const [loading, setLoading] = useState(true)
     const [allItemsLoaded, setAllItemsLoaded] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     const [sortBy, setSortBy] = useState(sortingOptions.topRated)
     //filter items states

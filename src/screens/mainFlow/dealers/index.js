@@ -92,7 +92,7 @@ function Dealer({ navigation, route }) {
             then(res => {
                 if (res) {
                     const pre_data = !isInitialData ? dealers : []
-                    setDealers([...pre_data, ...res.data])
+                    setDealers([...pre_data, ...res.data.data])
                     !res.data.next_page_url ? setAllDealersLoaded(true):
                     setDealersCurrentPage(tempPage + 1)
                 }
@@ -107,8 +107,9 @@ function Dealer({ navigation, route }) {
     }
     const getValidMarkers = () => {
         let tempMarkers = []
-        dealers.length && [
-            tempMarkers = dealers.filter(item => item.latitude && item.longitude)
+       
+        showDealers.length && [
+            tempMarkers = showDealers.filter(item => item.latitude && item.longitude)
         ]
         return tempMarkers
     }
@@ -143,6 +144,7 @@ function Dealer({ navigation, route }) {
 
         // Toasts.success('Filter cleared')
     }
+    const showDealers=!filteredDealers?dealers:filteredDealers
     return (
         <MainWrapper>
             {
@@ -170,7 +172,7 @@ function Dealer({ navigation, route }) {
                                 </>
                         }
                         <Dealers
-                            data={dealers}
+                            data={showDealers}
                             onPress={(item, index) => navigate(routes.userProfile, { user: item })}
                             //  ListHeaderComponent={() => {
                             //      return <Spacer height={sizes.TinyMargin} />

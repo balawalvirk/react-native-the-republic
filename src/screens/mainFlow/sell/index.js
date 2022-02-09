@@ -644,8 +644,8 @@ function Sell(props) {
                                                 discountedPrice={isDiscountedPriceVisible && discountedPrice ? discountedPrice : ''}
                                                 price={price}
                                                 location={city}
-                                                rating={selectedProduct.rating}
-                                                reviewCount={selectedProduct.review_count}
+                                                rating={userDetail.avg_rating}
+                                                reviewCount={userDetail.reviews_count}
                                                 userImage={userDetail.profile_image}
                                                 userName={userDetail.first_name + ' ' + userDetail.last_name}
                                             // onPress={(item, index) => {

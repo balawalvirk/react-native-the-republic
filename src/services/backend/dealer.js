@@ -121,16 +121,19 @@ export const removeFavouriteDealer = async (dealer_id) => {
 };
 
 export const handleAddRemoveFavouriteDealer = async (dealer_id) => {
+    console.log('dealer_id: ',dealer_id)
     let response = null
     const state = store.getState()
     const { userDetail } = state.user
     if (HelpingMethods.checkIfDealerFavourite(dealer_id)) {
         const newFavDealers = userDetail.favorite_dealers.filter(favDealerId => favDealerId != dealer_id)
+        console.log('newFavDealers: ',newFavDealers)
         dispatch(setUserDetail({ ...userDetail, favorite_dealers: newFavDealers }))
         await removeFavouriteDealer(dealer_id).
             then(res => res && [response = res])
     } else {
         const newFavDealers = [...userDetail.favorite_dealers, dealer_id]
+        console.log('newFavDealers: ',newFavDealers)
         dispatch(setUserDetail({ ...userDetail, favorite_dealers: newFavDealers }))
         await addFavouriteDealer(dealer_id).
             then(res => res && [response = res])
@@ -173,8 +176,8 @@ export const filterDealers = async ({ sort_by, latitude, longitude, distance, lo
     const defaultPage = page ? page : 1
     const state = store.getState()
     const { userDetail } = state.user
-    //const user_id = userDetail.id
-    const user_id = 11
+    const user_id = userDetail.id
+    //const user_id = 11
     let params = new FormData()
     params.append('user_id', user_id)
     params.append('sort_by', sort_by)
