@@ -125,7 +125,7 @@ function Signin(props) {
           <Wrapper style={[appStyles.center]}>
             <Animated.View style={{ height: logoTopMargin }} />
             <LogoMain
-              size={totalSize(20)}
+             // size={totalSize(20)}
             />
           </Wrapper>
           {
