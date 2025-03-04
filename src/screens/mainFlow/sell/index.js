@@ -6,8 +6,6 @@ import { AbsoluteWrapper, ArmerInfo, BackIcon, ButtonGradient, ComponentWrapper,
 import { appStyles, Backend, colors, DummyData, HelpingMethods, routes, sizes } from '../../../services';
 import styles from './styles'
 import * as ImagePicker from 'react-native-image-picker';
-import { check, PERMISSIONS, RESULTS, request } from 'react-native-permissions';
-import { TextInput } from 'react-native';
 import { useSelector } from 'react-redux';
 import { MaterialIndicator } from 'react-native-indicators';
 const options = {

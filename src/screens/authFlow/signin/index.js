@@ -8,7 +8,6 @@ import { ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import Instagram from './instagram';
 import InstagramLogin from 'react-native-instagram-login';
-import CookieManager from '@react-native-community/cookies';
 
 function Signin(props) {
   const { navigate, goBack } = props.navigation

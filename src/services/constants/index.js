@@ -427,7 +427,7 @@ export const tabs = {
         //showLabel: false,
         activeTintColor: colors.appColor1,
         inactiveTintColor: colors.appTextColor5,
-        allowFontScaling: true,
+        //allowFontScaling: true,
         style: appStyles.tabBarStyle,
         labelStyle: { fontSize: totalSize(1.1), fontFamily: fontFamily.appTextBold }
         //activeBackgroundColor: '#FFFFFF40',
@@ -437,7 +437,7 @@ export const tabs = {
         //showLabel: false,
         activeTintColor: colors.appColor1,
         inactiveTintColor: colors.appColor1,
-        allowFontScaling: true,
+        //allowFontScaling: true,
         style: appStyles.searchTopTabBarStyle,
         showIcon: true,
         indicatorStyle: { backgroundColor: colors.appColor1 },

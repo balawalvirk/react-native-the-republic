@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>The Republic</string>
+	<string>Republic</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -27,14 +27,14 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.1013721507878-dhhjb5t1p2lsji217jaslbordlnsr2qk</string>
+				<string>com.googleusercontent.apps.731737878048-8vm5hpdqdpobv8b4uvk5508nbg14rauj</string>
 			</array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.Republic</string>
+			<string>com.republic.app</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>republicapp</string>
@@ -42,63 +42,18 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>whatsapp</string>
-		<string>facebook</string>
-		<string>instagram</string>
-	</array>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+		<key>NSAllowsLocalNetworking</key>
 		<true/>
-		<key>NSExceptionDomains</key>
-		<dict>
-			<key>localhost</key>
-			<dict>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-			</dict>
-		</dict>
 	</dict>
-	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like access to your camera to take photo</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like to use your location services to get nearby products, dealers and trainings</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like to use your location services to get nearby products, dealers and trainings</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like to use your location services to get nearby products, dealers and trainings</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like to save photos to your photo gallery</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like access to your photo gallery to take photo</string>
-	<key>UIAppFonts</key>
-	<array>
-		<string>Roboto-Bold.ttf</string>
-		<string>Roboto-Light.ttf</string>
-		<string>Roboto-Medium.ttf</string>
-		<string>Roboto-Regular.ttf</string>
-		<string>AntDesign.ttf</string>
-		<string>Entypo.ttf</string>
-		<string>EvilIcons.ttf</string>
-		<string>Feather.ttf</string>
-		<string>FontAwesome.ttf</string>
-		<string>FontAwesome5_Brands.ttf</string>
-		<string>FontAwesome5_Regular.ttf</string>
-		<string>FontAwesome5_Solid.ttf</string>
-		<string>Fontisto.ttf</string>
-		<string>Foundation.ttf</string>
-		<string>Ionicons.ttf</string>
-		<string>MaterialCommunityIcons.ttf</string>
-		<string>MaterialIcons.ttf</string>
-		<string>Octicons.ttf</string>
-		<string>SimpleLineIcons.ttf</string>
-		<string>Zocial.ttf</string>
-	</array>
+	<string/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -108,7 +63,7 @@
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
-		<string>armv7</string>
+		<string>arm64</string>
 	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
@@ -118,5 +73,31 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Roboto-Bold.ttf</string>
+		<string>Roboto-Light.ttf</string>
+		<string>Roboto-Medium.ttf</string>
+		<string>Roboto-Regular.ttf</string>
+		 <string>AntDesign.ttf</string>
+  <string>Entypo.ttf</string>
+  <string>EvilIcons.ttf</string>
+  <string>Feather.ttf</string>
+  <string>FontAwesome.ttf</string>
+  <string>FontAwesome5_Brands.ttf</string>
+  <string>FontAwesome5_Regular.ttf</string>
+  <string>FontAwesome5_Solid.ttf</string>
+  <string>FontAwesome6_Brands.ttf</string>
+  <string>FontAwesome6_Regular.ttf</string>
+  <string>FontAwesome6_Solid.ttf</string>
+  <string>Foundation.ttf</string>
+  <string>Ionicons.ttf</string>
+  <string>MaterialIcons.ttf</string>
+  <string>MaterialCommunityIcons.ttf</string>
+  <string>SimpleLineIcons.ttf</string>
+  <string>Octicons.ttf</string>
+  <string>Zocial.ttf</string>
+  <string>Fontisto.ttf</string>
+	</array>
 </dict>
 </plist>

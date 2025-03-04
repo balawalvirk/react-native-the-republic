@@ -7,4 +7,4 @@ export { Validations,HelpingMethods ,MyToast,PushNotification}
 export * from './constants'
 import * as Backend from './backend/index'
 export {Backend}
-export * from './navigation'
+// export * from './navigation'

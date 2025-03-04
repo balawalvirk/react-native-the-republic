@@ -1,0 +1,38 @@
+diff --git a/node_modules/react-native-button/Button.js b/node_modules/react-native-button/Button.js
+index fb7cf46..b3de7e5 100644
+--- a/node_modules/react-native-button/Button.js
++++ b/node_modules/react-native-button/Button.js
+@@ -6,6 +6,7 @@ import {
+   TouchableOpacity,
+   View,
+   ViewPropTypes,
++  TextStyle
+ } from 'react-native';
+ 
+ import coalesceNonElementChildren from './coalesceNonElementChildren';
+@@ -16,13 +17,19 @@ export default class Button extends Component {
+   static propTypes = {
+     ...TouchableOpacity.propTypes,
+     accessibilityLabel: PropTypes.string,
+-    allowFontScaling: Text.propTypes.allowFontScaling,
+-    containerStyle: ViewPropTypes.style,
+-    disabledContainerStyle: ViewPropTypes.style,
++    // allowFontScaling: Text.propTypes.allowFontScaling,
++    allowFontScaling: PropTypes.bool,
++    // containerStyle: ViewPropTypes.style,
++    // disabledContainerStyle: ViewPropTypes.style,
++    containerStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
++    disabledContainerStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+     disabled: PropTypes.bool,
+-    style: Text.propTypes.style,
+-    styleDisabled: Text.propTypes.style,
+-    childGroupStyle: ViewPropTypes.style,
++    // style: Text.propTypes.style,
++    // styleDisabled: Text.propTypes.style,
++    style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
++    styleDisabled: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
++    // childGroupStyle: ViewPropTypes.style,
++    childGroupStyle:PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+   };
+ 
+   render() {

@@ -474,13 +474,13 @@ function Search(props) {
                         </Animated.ScrollView>
                         <AbsoluteWrapper style={{ top: 0, right: 0, left: 0 }}>
                             <Animated.View
-                                style={{
+                                style={[{
                                 }, {
                                     // height: header_height,
                                     transform: [{ translateY: header_translate_y }],
                                     opacity: header_opacity,
                                     // backgroundColor: colors.appBgColor1
-                                }}
+                                }]}
                             >
                                 <ButtonGroupAnimated
                                     data={topTabs}

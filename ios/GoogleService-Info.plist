@@ -3,21 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>1013721507878-dhhjb5t1p2lsji217jaslbordlnsr2qk.apps.googleusercontent.com</string>
+	<string>731737878048-8vm5hpdqdpobv8b4uvk5508nbg14rauj.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.1013721507878-dhhjb5t1p2lsji217jaslbordlnsr2qk</string>
+	<string>com.googleusercontent.apps.731737878048-8vm5hpdqdpobv8b4uvk5508nbg14rauj</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>731737878048-pe99bkg579qhsl1gtthfgbfgg6e9df4p.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyD2fXVMT4SEvf0dK3yTcBUoMUody4Zro2E</string>
+	<string>AIzaSyBGWLFUGQBrAW9IDvlwjt33FfTK-R_WYVo</string>
 	<key>GCM_SENDER_ID</key>
-	<string>1013721507878</string>
+	<string>731737878048</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.Republic</string>
+	<string>com.republic.app</string>
 	<key>PROJECT_ID</key>
-	<string>republic-bd42a</string>
+	<string>republic-e885c</string>
 	<key>STORAGE_BUCKET</key>
-	<string>republic-bd42a.appspot.com</string>
+	<string>republic-e885c.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1013721507878:ios:49e429c48af1c3fc43dee7</string>
+	<string>1:731737878048:ios:bf1a4fb48f45f281565645</string>
 </dict>
 </plist>

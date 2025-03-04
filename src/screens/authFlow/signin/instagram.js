@@ -1,6 +1,5 @@
 import React, { useRef } from 'react'
 import InstagramLogin from 'react-native-instagram-login';
-import CookieManager from '@react-native-community/cookies';
 
 export default Instagram=({instagramRef,onLoginSuccess})=>{
 

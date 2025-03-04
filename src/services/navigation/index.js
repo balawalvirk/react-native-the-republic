@@ -19,6 +19,10 @@ export function Navigation() {
     const { userDetail } = user
     return (
         <>
+         {/* <View
+            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            <Text>Navigation</Text>
+          </View>  */}
             <Toast />
             <PushNotification />
             <NavigationContainer
@@ -29,6 +33,7 @@ export function Navigation() {
                     screenOptions={{ headerShown: false }}
                     initialRouteName={routes.auth}
                 >
+                    
                     {
                         !userDetail ?
                             <MainStack.Screen

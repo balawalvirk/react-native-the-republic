@@ -6,7 +6,7 @@ import { MaterialIndicator } from 'react-native-indicators';
 import { useSelector } from 'react-redux';
 import { ButtonGradient, ComponentWrapper, LineHorizontal, MainWrapper, MediumText, PopupPrimary, RegularText, RowWrapperBasic, SmallTitle, Spacer, TextInputUnderlined, TimeSlotCard, TitleValue, TraningCard, Wrapper, TinyTitle, KeyboardAvoidingScrollView, SmallText, Toasts } from '../../../components';
 import { appStyles, Backend, colors, HelpingMethods, routes, sizes, stripeKeys } from '../../../services';
-import Stripe from 'tipsi-stripe';
+// import Stripe from 'tipsi-stripe';
 import TrainingDetailTiming from './trainingDetailTiming'
 function Payment(props) {
     const { navigate, goBack } = props.navigation
@@ -32,18 +32,18 @@ function Payment(props) {
 
 
     useEffect(() => {
-        initializStripeOptions()
+        // initializStripeOptions()
         getSetSellerCopuns()
         getSetDefaultCard()
     }, [userDetail])
 
-    const initializStripeOptions = async () => {
-        await Stripe.setOptions({
-            publishableKey: stripeKeys.publishable_key,
-            //  merchantId: 'MERCHANT_ID', // Optional
-            androidPayMode: 'test', // Android only
-        })
-    }
+    // const initializStripeOptions = async () => {
+    //     await Stripe.setOptions({
+    //         publishableKey: stripeKeys.publishable_key,
+    //         //  merchantId: 'MERCHANT_ID', // Optional
+    //         androidPayMode: 'test', // Android only
+    //     })
+    // }
     const getSetSellerCopuns = () => {
         Backend.getUserCoupons(trainer.id).
             then(res => {

@@ -8,8 +8,6 @@ import CountryPicker from 'react-native-country-picker-modal'
 import { Icon } from 'react-native-elements';
 import moment from 'moment';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import { check, PERMISSIONS, RESULTS, request } from 'react-native-permissions';
-import { Platform } from 'react-native';
 const options = {
     title: 'Select Photo',
     quality: 1,

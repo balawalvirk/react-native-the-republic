@@ -7,7 +7,7 @@ import { MaterialIndicator } from 'react-native-indicators';
 import { useSelector } from 'react-redux';
 import { ButtonGradient, ComponentWrapper, IconButton, KeyboardAvoidingScrollView, LineHorizontal, MainWrapper, MediumText, PopupPrimary, ProductCardSecondary, RegularText, RowWrapper, RowWrapperBasic, SmallTitle, Spacer, SwitchPrimary, TextInputUnderlined, TinyTitle, TitleInfoPrimary, TitlePrimary, UserCardPrimary, Wrapper, TitleValue, Toasts, SmallText } from '../../../components';
 import { appImages, appStyles, Backend, colors, fulfillmentStatuses, fulfillmentTypes, HelpingMethods, routes, sizes, stripeKeys } from '../../../services';
-import Stripe from 'tipsi-stripe';
+// import Stripe from 'tipsi-stripe';
 
 
 
@@ -38,7 +38,7 @@ function BuyNow(props) {
     const toggleOrderPlacedPopup = () => setOrderPlacedPopupVisible(!isOrderPlacedPopupVisible)
 
     useEffect(() => {
-        initializStripeOptions()
+        // initializStripeOptions()
         getSetSellerCopuns()
         const default_card_id = userDetail.default_card_id
         console.log(default_card_id)
@@ -51,13 +51,13 @@ function BuyNow(props) {
         }
     }, [userDetail])
 
-    const initializStripeOptions = async () => {
-        await Stripe.setOptions({
-            publishableKey: stripeKeys.publishable_key,
-            //  merchantId: 'MERCHANT_ID', // Optional
-            androidPayMode: 'test', // Android only
-        })
-    }
+    // const initializStripeOptions = async () => {
+    //     await Stripe.setOptions({
+    //         publishableKey: stripeKeys.publishable_key,
+    //         //  merchantId: 'MERCHANT_ID', // Optional
+    //         androidPayMode: 'test', // Android only
+    //     })
+    // }
 
     const getSetSellerCopuns = () => {
         Backend.getUserCoupons(user.id).

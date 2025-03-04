@@ -207,7 +207,7 @@ export const ButtonSocial = ({ text, onPress, logo, iconName, iconType, iconColo
             iconType={iconType}
             tintColor={iconColor}
             customIcon={logo}
-            onPress={() => { }}
+            //onPress={() => { }}
             textStyle={[appStyles.ButtonTextMedium]}
             iconStyle={{ marginRight: sizes.marginHorizontalSmall }}
             onPress={onPress}
