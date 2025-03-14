@@ -70,8 +70,8 @@ function BottomTabScreens() {
             <MainBottomTab.Navigator
                 tabBarOptions={{
                     ...tabs.tabBarOptions,
-
                 }}
+                screenOptions={{headerShown:false}}
             >
                 <MainBottomTab.Screen
                     name={routes.marketPlace}
@@ -230,17 +230,20 @@ const CustomDrawerContent = props => {
 const MainSideDrawer = () => {
     return (
         <MainDrawer.Navigator
-            initialRouteName="Home"
+            initialRouteName={routes.mainBottomTab}
             drawerContent={props => <CustomDrawerContent {...props} />}
             drawerContentOptions={{
                 activeTintColor: colors.appColor1,
                 inactiveTintColor: colors.appTextColor4,
-            }}>
+                
+            }}
+            >
             <MainDrawer.Screen
                 name={routes.mainBottomTab}
                 component={BottomTabStackScreens}
                 options={{
                     title: 'Main Tab',
+                   headerShown:false
                     // drawerIcon: ({ color, size }) => (
                     //     <Icon
                     //         name="home-outline"
@@ -337,7 +340,7 @@ function AppNavigation() {
     return (
         <AppStack.Navigator
             screenOptions={headers.screenOptionsSecondary}
-            initialRouteName={routes.mainBottomTab}
+            initialRouteName={routes.mainDrawer}
         >
             <AppStack.Screen name={routes.mainDrawer} component={MainSideDrawer}
                 options={{
