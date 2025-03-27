@@ -3,15 +3,6 @@ import {View, Text, SafeAreaView} from 'react-native';
 import {appStyles, google_places_api_key} from './src/services';
 
 import {Navigation} from './src/services/navigation';
-import {
-  MainWrapper,
-  ButtonColored,
-  ButtonBordered,
-  RowWrapper,
-  ButtonColoredSmall,
-  ButtonBorderedSmall,
-  Wrapper,
-} from './src/components';
 import {StatusBar} from 'react-native';
 import {Provider} from 'react-redux';
 import Store from './src/services/store';
@@ -22,6 +13,11 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
+import BottomSheet, {
+  BottomSheetView,
+  BottomSheetModal,
+  BottomSheetModalProvider
+} from '@gorhom/bottom-sheet';
 
 function App() {
   useEffect(() => {
@@ -38,6 +34,7 @@ function App() {
     });
   };
   return (
+    <BottomSheetModalProvider>
     <Provider store={Store}>
       <RootSiblingParent>
         <View style={{flex: 1}}>
@@ -54,6 +51,7 @@ function App() {
         </View>
       </RootSiblingParent>
     </Provider>
+    </BottomSheetModalProvider>
   );
 }
 
