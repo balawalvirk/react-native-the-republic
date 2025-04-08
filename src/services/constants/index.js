@@ -453,6 +453,19 @@ export const appDeeplinks = {
     app: `republicapp://app`,
     withdrawEarnings: `republicapp://app/${routes.seller.withdrawEarnings}`,
 }
+export const imagePickerOptions = {
+    title: 'Select Photo',
+    quality: 0.7,
+    maxWidth: 800,
+    maxHeight: 800,
+    // maxWidth: 1500,
+    // maxHeight: 1500,
+    // customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+    storageOptions: {
+        skipBackup: true,
+        path: 'images',
+    },
+};
 export const SHOW_TOAST_MESSAGE = 'SHOW_TOAST_MESSAGE';
 export const SHOW_PUSH_NOTIFICATION = 'SHOW_PUSH_NOTIFICATION';
 export { DummyData }

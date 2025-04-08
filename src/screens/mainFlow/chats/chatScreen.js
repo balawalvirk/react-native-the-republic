@@ -6,7 +6,7 @@ import { View, Text } from 'react-native';
 import { height, totalSize } from 'react-native-dimension';
 import { useSelector } from 'react-redux';
 import { AbsoluteWrapper, ChatBubbule, ComponentWrapper, IconWithText, ImagePickerPopup, ImageRound, ImageSqareRound, KeyboardAvoidingScrollView, LoaderPrimary, MainWrapper, MediumText, NoDataViewPrimary, RowWrapper, RowWrapperBasic, Spacer, TextInputChat, TinyTitle, Wrapper } from '../../../components';
-import { appImages, appStyles, Backend, colors, HelpingMethods, sizes } from '../../../services';
+import { appImages, appStyles, Backend, colors, HelpingMethods, sizes, useImagePicker } from '../../../services';
 import * as ImagePicker from 'react-native-image-picker';
 const options = {
     title: 'Select Photo',
@@ -72,6 +72,7 @@ function ChatScreen(props) {
     //refs
     const messagesList = useRef(null)
 
+    const {openCamera, openLibrary} = useImagePicker();
     //redux States
     const userData = useSelector(state => state.user)
     const { userDetail } = userData
@@ -214,44 +215,57 @@ function ChatScreen(props) {
             // }, 2000);
         }
     }
-    const launchImagePicker = () => {
-        ImagePicker.launchImageLibrary(options, (response) => {
-            if (response.didCancel) {
-                //console.log('User cancelled image picker');
-            } else if (response.error) {
-                //console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
-                //console.log('User tapped custom button: ', response.customButton);
-            } else {
-                if (!response.fileName) response.fileName = 'profile_image';
-                const tempFile = {
-                    uri: response.uri,
-                    name: response.fileName,
-                    type: response.type
-                }
-                setMessageImage(tempFile)
-            }
-        });
+    const launchImagePicker = async() => {
+        const tempFile = await openLibrary();
+        if (tempFile) {
+            setMessageImage(tempFile)
+        }
+
+        // ImagePicker.launchImageLibrary(options, (response) => {
+        //     if (response.didCancel) {
+        //         //console.log('User cancelled image picker');
+        //     } else if (response.error) {
+        //         //console.log('ImagePicker Error: ', response.error);
+        //     } else if (response.customButton) {
+        //         //console.log('User tapped custom button: ', response.customButton);
+        //     } else {
+        //         if (!response.fileName) response.fileName = 'profile_image';
+        //         const tempFile = {
+        //             uri: response.uri,
+        //             name: response.fileName,
+        //             type: response.type
+        //         }
+        //         setMessageImage(tempFile)
+        //     }
+        // });
     }
-    const launchCamera = () => {
-        ImagePicker.launchCamera(options, (response) => {
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
-            } else {
-                if (!response.fileName) response.fileName = 'profile_image';
-                const tempFile = {
-                    uri: response.uri,
-                    name: response.fileName,
-                    type: response.type
-                }
-                setMessageImage(tempFile)
-            }
-        });
+
+    const launchCamera =async () => {
+        const tempFile = await openCamera();
+        
+        if (tempFile) {
+            setMessageImage(tempFile)
+        }
+
+        // ImagePicker.launchCamera(options, (response) => {
+        //     if (response.didCancel) {
+        //         console.log('User cancelled image picker');
+        //     } else if (response.error) {
+        //         console.log('ImagePicker Error: ', response.error);
+        //     } else if (response.customButton) {
+        //         console.log('User tapped custom button: ', response.customButton);
+        //     } else {
+        //         if (!response.fileName) response.fileName = 'profile_image';
+        //         const tempFile = {
+        //             uri: response.uri,
+        //             name: response.fileName,
+        //             type: response.type
+        //         }
+        //         setMessageImage(tempFile)
+        //     }
+        // });
     }
+
     if (!messages) {
         return (
             <LoaderPrimary

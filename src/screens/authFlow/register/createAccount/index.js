@@ -4,6 +4,7 @@ import { MainWrapper, XXLTitle, Spacer, ComponentWrapper, BackIcon, BackgroundEl
 import { appStyles, sizes, HelpingMethods, Validations, routes, Backend } from '../../../../services';
 import { totalSize, height } from 'react-native-dimension';
 import { TermsCondition } from '../../../docs';
+import Toast from 'react-native-root-toast';
 
 function CreateAccount(props) {
   const { navigate, goBack } = props.navigation

@@ -2,7 +2,7 @@ import React, { Component, useState } from 'react';
 import { View, Text } from 'react-native';
 import { ButtonColored, ButtonGradient, ComponentWrapper, IconButton, ImagePickerPopup, ImageProfile, LoaderAbsolute, MainWrapper, PopupPrimary, Spacer, TinyTitle, Toasts, Wrapper } from '../../../../components';
 import * as ImagePicker from 'react-native-image-picker';
-import { appStyles, asyncConsts, Backend, colors, routes, sizes } from '../../../../services';
+import { appStyles, asyncConsts, Backend, colors, routes, sizes, useImagePicker } from '../../../../services';
 import { height, totalSize } from 'react-native-dimension';
 import { Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native';
@@ -27,6 +27,7 @@ function VerifyIdentity(props) {
     const { credentials, profileDetails, phoneNumber, countryPhoneCode, countryCode } = params
     console.log('credentials', credentials, '\nProfile Details', profileDetails, '\nphoneNumber: ', phoneNumber, '\ncountryPhoneCode: ', countryPhoneCode, '\ncountryCode: ', countryCode)
 
+    const {openCamera, openLibrary} = useImagePicker();
     //local states
     const [identityFile, setIdentityFile] = useState(null)
     const [isImagePickerPopupVisible, setImagePickerPopupVisibility] = useState(false);
@@ -38,44 +39,52 @@ function VerifyIdentity(props) {
 
 
 
-    const launchImagePicker = () => {
-        ImagePicker.launchImageLibrary(options, (response) => {
-            if (response.didCancel) {
-                //console.log('User cancelled image picker');
-            } else if (response.error) {
-                //console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
-                //console.log('User tapped custom button: ', response.customButton);
-            } else {
-                if (!response.fileName) response.fileName = 'profile_image';
-                const tempFile = {
-                    uri: response.uri,
-                    name: response.fileName,
-                    type: response.type
-                }
-                setIdentityFile(tempFile)
-            }
-        });
+    const launchImagePicker = async() => {
+        const tempFile = await openLibrary();
+        if (tempFile) {
+            setIdentityFile(tempFile)
+        }
+        // ImagePicker.launchImageLibrary(options, (response) => {
+        //     if (response.didCancel) {
+        //         //console.log('User cancelled image picker');
+        //     } else if (response.error) {
+        //         //console.log('ImagePicker Error: ', response.error);
+        //     } else if (response.customButton) {
+        //         //console.log('User tapped custom button: ', response.customButton);
+        //     } else {
+        //         if (!response.fileName) response.fileName = 'profile_image';
+        //         const tempFile = {
+        //             uri: response.uri,
+        //             name: response.fileName,
+        //             type: response.type
+        //         }
+        //         setIdentityFile(tempFile)
+        //     }
+        // });
     }
-    const launchCamera = () => {
+    const launchCamera = async() => {
+        const tempFile = await openCamera();
+        if (tempFile) {
+            setIdentityFile(tempFile)
+        }
 
-        ImagePicker.launchCamera(options, (response) => {
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
-            } else {
-                if (!response.fileName) response.fileName = 'profile_image';
-                const tempFile = {
-                    uri: response.uri,
-                    name: response.fileName,
-                    type: response.type
-                }
-                setIdentityFile(tempFile)
-            }
-        });
+        // ImagePicker.launchCamera(options, (response) => {
+        //     if (response.didCancel) {
+        //         console.log('User cancelled image picker');
+        //     } else if (response.error) {
+        //         console.log('ImagePicker Error: ', response.error);
+        //     } else if (response.customButton) {
+        //         console.log('User tapped custom button: ', response.customButton);
+        //     } else {
+        //         if (!response.fileName) response.fileName = 'profile_image';
+        //         const tempFile = {
+        //             uri: response.uri,
+        //             name: response.fileName,
+        //             type: response.type
+        //         }
+        //         setIdentityFile(tempFile)
+        //     }
+        // });
     }
 
     const registerNewAccount = async () => {

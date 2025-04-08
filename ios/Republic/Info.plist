@@ -27,22 +27,30 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.731737878048-8vm5hpdqdpobv8b4uvk5508nbg14rauj</string>
+				<string>com.googleusercontent.apps.731737878048-22t4ab56jeto22jjaubu4ifdag73675e</string>
 			</array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.republic.app</string>
+			<string>com.Republic</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>republicapp</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>1:731737878048:ios:644c5a1f2ce537e7565645</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>3</string>
+	<string>4</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>

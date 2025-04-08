@@ -1,6 +1,6 @@
 import React, { Component, useImperativeHandle, useRef, useState } from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
-import { appIcons, appImages, appStyles, Backend, HelpingMethods, routes, sizes } from '../../../services';
+import { appIcons, appImages, appStyles, Backend, HelpingMethods, routes, sizes, useImagePicker } from '../../../services';
 import { ImageRound } from '../../images';
 import { LineHorizontal } from '../../lines';
 import { Spacer } from '../../spacers';
@@ -24,6 +24,7 @@ import { MaterialIndicator } from 'react-native-indicators';
 import * as ImagePicker from 'react-native-image-picker';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserDetail } from '../../../services/store/actions';
+import { openCamera } from 'react-native-image-crop-picker';
 
 
 
@@ -378,7 +379,7 @@ export const PostCard = React.forwardRef(({
 
     const cameraMenuRef = useRef(null)
     const commentInputRef = useRef(null)
-
+    const {openCamera, openLibrary} = useImagePicker();
     //local states
     const [commentText, setCommentText] = useState('')
     const [commentImage, setCommentImage] = useState('')
@@ -395,43 +396,51 @@ export const PostCard = React.forwardRef(({
             path: 'images',
         },
     };
-    const launchImagePicker = () => {
-        ImagePicker.launchImageLibrary(options, (response) => {
-            if (response.didCancel) {
-                //console.log('User cancelled image picker');
-            } else if (response.error) {
-                //console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
-                //console.log('User tapped custom button: ', response.customButton);
-            } else {
-                if (!response.fileName) response.fileName = 'profile_image';
-                const tempFile = {
-                    uri: response.uri,
-                    name: response.fileName,
-                    type: response.type
-                }
-                setCommentImage(tempFile)
-            }
-        });
+    const launchImagePicker = async() => {
+        const tempFile = await openLibrary();
+        if (tempFile) {
+            setCommentImage(tempFile)
+        }
+        // ImagePicker.launchImageLibrary(options, (response) => {
+        //     if (response.didCancel) {
+        //         //console.log('User cancelled image picker');
+        //     } else if (response.error) {
+        //         //console.log('ImagePicker Error: ', response.error);
+        //     } else if (response.customButton) {
+        //         //console.log('User tapped custom button: ', response.customButton);
+        //     } else {
+        //         if (!response.fileName) response.fileName = 'profile_image';
+        //         const tempFile = {
+        //             uri: response.uri,
+        //             name: response.fileName,
+        //             type: response.type
+        //         }
+        //         setCommentImage(tempFile)
+        //     }
+        // });
     }
-    const launchCamera = () => {
-        ImagePicker.launchCamera(options, (response) => {
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
-            } else {
-                if (!response.fileName) response.fileName = 'profile_image';
-                const tempFile = {
-                    uri: response.uri,
-                    name: response.fileName,
-                    type: response.type
-                }
-                setCommentImage(tempFile)
-            }
-        });
+    const launchCamera = async() => {
+        const tempFile = await openCamera();
+        if (tempFile) {
+            setCommentImage(tempFile)
+        }
+        // ImagePicker.launchCamera(options, (response) => {
+        //     if (response.didCancel) {
+        //         console.log('User cancelled image picker');
+        //     } else if (response.error) {
+        //         console.log('ImagePicker Error: ', response.error);
+        //     } else if (response.customButton) {
+        //         console.log('User tapped custom button: ', response.customButton);
+        //     } else {
+        //         if (!response.fileName) response.fileName = 'profile_image';
+        //         const tempFile = {
+        //             uri: response.uri,
+        //             name: response.fileName,
+        //             type: response.type
+        //         }
+        //         setCommentImage(tempFile)
+        //     }
+        // });
     }
     const { user, product, group, images, comments } = item
     const postImages = images ? JSON.parse(images) : null

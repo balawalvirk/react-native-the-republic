@@ -5,7 +5,7 @@ import { height, totalSize } from 'react-native-dimension';
 import { Icon } from 'react-native-elements';
 import * as ImagePicker from 'react-native-image-picker';
 import { ButtonGradient, ErrorText, IconButton, ImagePickerPopup, ImageProfile, KeyboardAvoidingScrollView, MainWrapper, MediumText, PopupPrimary, RegularText, RowWrapperBasic, Spacer, TextInputUnderlined, Wrapper } from '../../../components';
-import { appStyles, Backend, colors, DummyData, groupJoinPrivacies, HelpingMethods, routes, sizes } from '../../../services';
+import { appStyles, Backend, colors, DummyData, groupJoinPrivacies, HelpingMethods, routes, sizes, useImagePicker } from '../../../services';
 const options = {
     title: 'Select Photo',
     quality: 1,
@@ -23,6 +23,7 @@ function CreateGroup(props) {
     const { navigate, replace, goBack } = navigation
     const groupData = route.params ? route.params.groupData ? route.params.groupData : null : null
 
+    const {openCamera, openLibrary} = useImagePicker();
     //local states
     const [imageUri, setImageUri] = useState('')
     const [imageFile, setImageFile] = useState(null)
@@ -56,47 +57,58 @@ function CreateGroup(props) {
     const toggleGroupCreatedPopup = () => setGroupCreatedPopupVisible(!isGroupCreatedPopupVisible)
     const toggleGroupUpdatedPopup = () => setGroupUpdatedPopupVisible(!isGroupUpdatedPopupVisible)
 
-    const launchImagePicker = () => {
-        ImagePicker.launchImageLibrary(options, (response) => {
-            if (response.didCancel) {
-                //console.log('User cancelled image picker');
-            } else if (response.error) {
-                //console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
-                //console.log('User tapped custom button: ', response.customButton);
-            } else {
-                if (!response.fileName) response.fileName = 'profile_image';
-                const tempFile = {
-                    uri: response.uri,
-                    name: response.fileName,
-                    type: response.type
-                }
-                setImageFile(tempFile)
-                imageFileError && [HelpingMethods.handleAnimation(), setImageFileError('')]
-            }
-        });
+    const launchImagePicker = async() => {
+        const tempFile = await openLibrary();
+        if (tempFile) {
+            setImageFile(tempFile)
+            imageFileError && [HelpingMethods.handleAnimation(), setImageFileError('')]
+        }
+
+        // ImagePicker.launchImageLibrary(options, (response) => {
+        //     if (response.didCancel) {
+        //         //console.log('User cancelled image picker');
+        //     } else if (response.error) {
+        //         //console.log('ImagePicker Error: ', response.error);
+        //     } else if (response.customButton) {
+        //         //console.log('User tapped custom button: ', response.customButton);
+        //     } else {
+        //         if (!response.fileName) response.fileName = 'profile_image';
+        //         const tempFile = {
+        //             uri: response.uri,
+        //             name: response.fileName,
+        //             type: response.type
+        //         }
+        //         setImageFile(tempFile)
+        //         imageFileError && [HelpingMethods.handleAnimation(), setImageFileError('')]
+        //     }
+        // });
     }
-    const launchCamera = () => {
+    const launchCamera = async() => {
+        const tempFile = await openCamera();
+        if (tempFile) {
+            setImageFile(tempFile)
+            imageFileError && [HelpingMethods.handleAnimation(), setImageFileError('')]
+        }
 
-        ImagePicker.launchCamera(options, (response) => {
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
-            } else {
-                if (!response.fileName) response.fileName = 'profile_image';
-                const tempFile = {
-                    uri: response.uri,
-                    name: response.fileName,
-                    type: response.type
-                }
-                setImageFile(tempFile)
-                imageFileError && [HelpingMethods.handleAnimation(), setImageFileError('')]
+        // ImagePicker.launchCamera(options, (response) => {
+        //     if (response.didCancel) {
+        //         console.log('User cancelled image picker');
+        //     } else if (response.error) {
+        //         console.log('ImagePicker Error: ', response.error);
+        //     } else if (response.customButton) {
+        //         console.log('User tapped custom button: ', response.customButton);
+        //     } else {
+        //         if (!response.fileName) response.fileName = 'profile_image';
+        //         const tempFile = {
+        //             uri: response.uri,
+        //             name: response.fileName,
+        //             type: response.type
+        //         }
+        //         setImageFile(tempFile)
+        //         imageFileError && [HelpingMethods.handleAnimation(), setImageFileError('')]
 
-            }
-        });
+        //     }
+        // });
     }
     const getSetGroupData = () => {
         if (groupData) {

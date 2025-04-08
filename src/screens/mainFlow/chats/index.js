@@ -121,7 +121,7 @@ function Chats(props) {
                     <NoDataViewPrimary
                         showIcon
                         title="Messages"
-                        iconName="md-chatbubbles-outline"
+                        iconName="chatbubbles-outline"
                         iconType="ionicon"
                     />
             }

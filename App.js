@@ -16,8 +16,9 @@ import {
 import BottomSheet, {
   BottomSheetView,
   BottomSheetModal,
-  BottomSheetModalProvider
+  BottomSheetModalProvider,
 } from '@gorhom/bottom-sheet';
+import Toast from 'react-native-toast-message';
 
 function App() {
   useEffect(() => {
@@ -35,8 +36,7 @@ function App() {
   };
   return (
     <BottomSheetModalProvider>
-    <Provider store={Store}>
-      <RootSiblingParent>
+      <Provider store={Store}>
         <View style={{flex: 1}}>
           <StatusBar
             translucent
@@ -47,10 +47,12 @@ function App() {
             style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
             <Text>App</Text>
           </View> */}
-          <Navigation />
+          {/* <RootSiblingParent> */}
+            <Navigation />
+            <Toast />
+          {/* </RootSiblingParent> */}
         </View>
-      </RootSiblingParent>
-    </Provider>
+      </Provider>
     </BottomSheetModalProvider>
   );
 }

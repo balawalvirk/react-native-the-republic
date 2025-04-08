@@ -25,7 +25,7 @@ export const getAllConversations = async () => {
             if (tempResponseData.success) {
                 response = tempResponseData
             } else {
-                Toasts.error(tempResponseData.message)
+               // Toasts.error(tempResponseData.message)
             }
         })
         .catch(error => {

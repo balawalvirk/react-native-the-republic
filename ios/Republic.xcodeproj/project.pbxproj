@@ -17,7 +17,7 @@
 		534C978D2C53A5D4268B234B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8247E243265C4CFAACD94BCA /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0AC1A3B46C8B4EA395370EF5 /* Roboto-Regular.ttf */; };
-		A78593C82D769BBD0019FABD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A78593C72D769BBD0019FABD /* GoogleService-Info.plist */; };
+		A74486552DA544050064D0CB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A74486542DA544050064D0CB /* GoogleService-Info.plist */; };
 		B8F5A3FC05C240EE84BB29C6 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FAA8F6B86A554E7EA272D759 /* Roboto-Light.ttf */; };
 		D037E009D329F1661F6CF0D4 /* Pods_Republic_RepublicTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E8FAB0C516C055A0F7DB3EA /* Pods_Republic_RepublicTests.framework */; };
 /* End PBXBuildFile section */
@@ -52,8 +52,8 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Republic/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-Republic-RepublicTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Republic-RepublicTests.release.xcconfig"; path = "Target Support Files/Pods-Republic-RepublicTests/Pods-Republic-RepublicTests.release.xcconfig"; sourceTree = "<group>"; };
 		8E8FAB0C516C055A0F7DB3EA /* Pods_Republic_RepublicTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Republic_RepublicTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A74486542DA544050064D0CB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A78593C62D7699E10019FABD /* Republic.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Republic.entitlements; path = Republic/Republic.entitlements; sourceTree = "<group>"; };
-		A78593C72D769BBD0019FABD /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F8A28533E6599FF8244AB1A6 /* Pods_Republic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Republic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAA8F6B86A554E7EA272D759 /* Roboto-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Light.ttf"; path = "../src/assets/fonts/Roboto-Light.ttf"; sourceTree = "<group>"; };
@@ -131,7 +131,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				A78593C72D769BBD0019FABD /* GoogleService-Info.plist */,
+				A74486542DA544050064D0CB /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* Republic */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* RepublicTests */,
@@ -271,7 +271,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				A78593C82D769BBD0019FABD /* GoogleService-Info.plist in Resources */,
+				A74486552DA544050064D0CB /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				534C978D2C53A5D4268B234B /* PrivacyInfo.xcprivacy in Resources */,
 				259CEFD7002B4C65AC0A4732 /* Roboto-Bold.ttf in Resources */,

@@ -2,12 +2,13 @@ import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { View, Text } from 'react-native';
 import { MainWrapper, IconButton, Wrapper, Spacer, ImageProfile, RowWrapperBasic, RowWrapper, TextInputUnderlined, KeyboardAvoidingScrollView, ComponentWrapper, ButtonColored, PickerPrimary, IconWithText, ImagePickerPopup, RegularText, MediumText } from '../..';
 import { height, totalSize, width } from 'react-native-dimension';
-import { colors, appStyles, sizes, HelpingMethods, appIcons, routes } from '../../../services';
+import { colors, appStyles, sizes, HelpingMethods, appIcons, routes, useImagePicker } from '../../../services';
 import * as ImagePicker from 'react-native-image-picker';
 import CountryPicker from 'react-native-country-picker-modal'
 import { Icon } from 'react-native-elements';
 import moment from 'moment';
 import DateTimePicker from 'react-native-modal-datetime-picker';
+import { openCamera } from 'react-native-image-crop-picker';
 const options = {
     title: 'Select Photo',
     quality: 1,
@@ -41,7 +42,7 @@ const EditProfile = React.forwardRef((props, ref) => {
         validate
     }));
     const BirthdayInputRef = useRef(null)
-
+    const {openCamera, openLibrary} = useImagePicker();
     const [imageUri, setImageUri] = useState('')
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
@@ -95,44 +96,54 @@ const EditProfile = React.forwardRef((props, ref) => {
             gender && setGender(data.gender)
         }
     }
-    const launchImagePicker = () => {
-        ImagePicker.launchImageLibrary(options, (response) => {
-            if (response.didCancel) {
-                //console.log('User cancelled image picker');
-            } else if (response.error) {
-                //console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
-                //console.log('User tapped custom button: ', response.customButton);
-            } else {
-                if (!response.fileName) response.fileName = 'profile_image';
-                const tempFile = {
-                    uri: response.uri,
-                    name: response.fileName,
-                    type: response.type
-                }
-                setImageFile(tempFile)
-            }
-        });
+    const launchImagePicker = async() => {
+        const tempFile = await openLibrary();
+        if (tempFile) {
+          setImageFile(tempFile);
+          imageError && setImageError('');
+        }
+        // ImagePicker.launchImageLibrary(options, (response) => {
+        //     if (response.didCancel) {
+        //         //console.log('User cancelled image picker');
+        //     } else if (response.error) {
+        //         //console.log('ImagePicker Error: ', response.error);
+        //     } else if (response.customButton) {
+        //         //console.log('User tapped custom button: ', response.customButton);
+        //     } else {
+        //         if (!response.fileName) response.fileName = 'profile_image';
+        //         const tempFile = {
+        //             uri: response.uri,
+        //             name: response.fileName,
+        //             type: response.type
+        //         }
+        //         setImageFile(tempFile)
+        //     }
+        // });
     }
-    const launchCamera = () => {
-
-        ImagePicker.launchCamera(options, (response) => {
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
-            } else {
-                if (!response.fileName) response.fileName = 'profile_image';
-                const tempFile = {
-                    uri: response.uri,
-                    name: response.fileName,
-                    type: response.type
-                }
-                setImageFile(tempFile)
-            }
-        });
+    const launchCamera = async() => {
+        const tempFile = await openCamera();
+        if (tempFile) {
+          setImageFile(tempFile);
+          imageError && setImageError('');
+        }
+// ImagePicker.launchCamera
+//         ImagePicker.launchCamera(options, (response) => {
+//             if (response.didCancel) {
+//                 console.log('User cancelled image picker');
+//             } else if (response.error) {
+//                 console.log('ImagePicker Error: ', response.error);
+//             } else if (response.customButton) {
+//                 console.log('User tapped custom button: ', response.customButton);
+//             } else {
+//                 if (!response.fileName) response.fileName = 'profile_image';
+//                 const tempFile = {
+//                     uri: response.uri,
+//                     name: response.fileName,
+//                     type: response.type
+//                 }
+//                 setImageFile(tempFile)
+//             }
+//         });
     }
 
     const validate = () => {

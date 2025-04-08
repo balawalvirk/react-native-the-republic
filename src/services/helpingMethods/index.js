@@ -505,3 +505,25 @@ export const isEndReached = ({ layoutMeasurement, contentOffset, contentSize }) 
     return layoutMeasurement.height + contentOffset.y >=
         contentSize.height - paddingToBottom;
 }
+
+export const handleCameraPermissions = async () => {
+    if (Platform.OS == 'android') {
+      const permissionAndroid = await PermissionsAndroid.check(
+        'android.permission.CAMERA',
+      );
+      if (permissionAndroid != PermissionsAndroid.RESULTS.granted) {
+        const reqPer = await PermissionsAndroid.request(
+          'android.permission.CAMERA',
+        );
+        if (reqPer != 'granted') {
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+  };

@@ -97,11 +97,13 @@ export const PickerPrimary = ({
                         style={{
                             width: width(100),
                             ...PickerPrimaryStyles,
+                            //inputIOSContainer: { pointerEvents: "none" },
                             iconContainer: {
                                 top: height(3.5),
                                 right: 0,
                             },
                         }}
+                        textInputProps={{ pointerEvents: "none" }}
                         Icon={() =>
                             <Icon name="caret-down-sharp" type="ionicon" size={totalSize(1.5)} color={colors.appTextColor3} />
                             // <CustomIcon
