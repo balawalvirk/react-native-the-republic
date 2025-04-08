@@ -150,9 +150,9 @@ function BottomTabStackScreens() {
     return (
         <MainBottomTabStack.Navigator
             screenOptions={headers.screenOptionsSecondary}
-            initialRouteName={routes.mainBottomTab}
+            initialRouteName={'mainBottomTabScreens'}
         >
-            <MainBottomTabStack.Screen name={routes.mainBottomTab} component={BottomTabScreens}
+            <MainBottomTabStack.Screen name={'mainBottomTabScreens'} component={BottomTabScreens}
                 options={({ navigation, route }) => ({
                     title: '',
                     headerTitle: () => <Wrapper style={{ alignItems: 'flex-start', }}>
@@ -340,7 +340,7 @@ function AppNavigation() {
     return (
         <AppStack.Navigator
             screenOptions={headers.screenOptionsSecondary}
-            initialRouteName={routes.mainDrawer}
+          initialRouteName={routes.mainDrawer}
         >
             <AppStack.Screen name={routes.mainDrawer} component={MainSideDrawer}
                 options={{

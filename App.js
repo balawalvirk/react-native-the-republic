@@ -49,7 +49,7 @@ function App() {
           </View> */}
           {/* <RootSiblingParent> */}
             <Navigation />
-            <Toast />
+            <Toast /> 
           {/* </RootSiblingParent> */}
         </View>
       </Provider>

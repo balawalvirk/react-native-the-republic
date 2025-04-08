@@ -8,7 +8,7 @@ const INITIAL_STATE = {
     myJoinedGroups: [],
 };
 
-export default groupReducers = (state = INITIAL_STATE, action) => {
+const groupReducers = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case SET_MY_GROUPS:
             return {
@@ -25,3 +25,4 @@ export default groupReducers = (state = INITIAL_STATE, action) => {
     }
 };
 
+export default groupReducers
