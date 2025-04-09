@@ -438,7 +438,7 @@ export const get_product_categories = async () => {
             .get(`${baseURL + endPoints.product.show_categories}`)
             .then(async responseJson => {
                 const tempResponseData = responseJson.data
-                console.log('Response', tempResponseData);
+                console.log('get_product_categories Response', tempResponseData);
                 if (tempResponseData.success) {
                     response = tempResponseData
                     const tempData = HelpingMethods.getPickerData(tempResponseData.data)

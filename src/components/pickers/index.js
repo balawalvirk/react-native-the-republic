@@ -18,7 +18,7 @@ export const PickerPrimary = ({
     iconStyleLeft, iconNameLeft, mainContainerStyle
 }) => {
     const placeholderObject = {
-        label: placeholder, value: 'placeholder', color: '#909090',
+        label: placeholder||'', value: 'placeholder', 
     }
     const [titleMarginBottom] = useState(new Animated.Value(value ? height(6) : 0))
     //const [titleSize] = useState(new Animated.Value(fontSize.regular))
@@ -102,6 +102,7 @@ export const PickerPrimary = ({
                                 top: height(3.5),
                                 right: 0,
                             },
+                            placeholder:{color: '#909090',}
                         }}
                         textInputProps={{ pointerEvents: "none" }}
                         Icon={() =>

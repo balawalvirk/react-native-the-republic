@@ -426,11 +426,11 @@ export const headers = {
 export const tabs = {
     tabBarOptions: {
         //showLabel: false,
-        activeTintColor: colors.appColor1,
-        inactiveTintColor: colors.appTextColor5,
+        tabBarActiveTintColor: colors.appColor1,
+        tabBarInactiveTintColor: colors.appTextColor5,
         //allowFontScaling: true,
-        style: appStyles.tabBarStyle,
-        labelStyle: { fontSize: totalSize(1.1), fontFamily: fontFamily.appTextBold }
+        tabBarStyle: appStyles.tabBarStyle,
+        tabBarLabelStyle: { fontSize: totalSize(1.1), fontFamily: fontFamily.appTextBold }
         //activeBackgroundColor: '#FFFFFF40',
         //tabStyle: { borderRadius: 20, marginHorizontal: 7.5, marginVertical: 2 }
     },

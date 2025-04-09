@@ -92,6 +92,7 @@ function Sell(props) {
   const user = useSelector(state => state.user);
   const {categories, items, actions, manufacturers, conditions, calibers} =
     product;
+    console.log('product categories: ',categories)
   const {userDetail, stripeAccountDetail} = user;
   const {seller_stripe_account_id} = userDetail;
 

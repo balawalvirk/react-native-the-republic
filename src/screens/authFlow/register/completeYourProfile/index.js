@@ -77,9 +77,9 @@ function CompleteYourProfile(props) {
     setVerificationCodeSendModalVisibility(!isVerificationCodeSendModalVisible);
 
   const sendCodeToPhoneNumber = async phoneNumber => {
-    //const _phoneNumber='+923450144778'
+    const _testPhoneNumber='+923450144778'
     await auth()
-      .verifyPhoneNumber(phoneNumber)
+      .verifyPhoneNumber(_testPhoneNumber)
       .then(confirmResult => {
         console.log('confirmResult: ', confirmResult);
         setConfirmPhoneNumber(confirmResult);

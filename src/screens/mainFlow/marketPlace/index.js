@@ -17,7 +17,6 @@ function MarketPlace(props) {
 
 
     //redux states
-    const dispatch = useDispatch()
     const product = useSelector(state => state.product)
     const user = useSelector(state => state.user)
     const { categories } = product
@@ -43,9 +42,11 @@ function MarketPlace(props) {
     }, [currentLocation])
 
     const getSetData = async () => {
-        await HelpingMethods.requestLocationPermissions()
+     await HelpingMethods.requestLocationPermissions()
         //await HelpingMethods.requestLocationAccess()
+        
         await Backend.get_product_categories()
+        
         await Backend.getFeaturedProducts().
             then(res => {
                 if (res) {
