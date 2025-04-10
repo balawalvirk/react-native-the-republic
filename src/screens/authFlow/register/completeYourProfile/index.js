@@ -99,8 +99,9 @@ function CompleteYourProfile(props) {
     //     })
   };
   const handleContinue = async () => {
+    //toggleVerificationCodeSendModal();
     // sendCodeToPhoneNumber()
-    // return null
+     //return null
     const profileDetails = EditProfileRef.current.getAllData();
     const validateProfileData = EditProfileRef.current.validate();
     console.log('Profile Data:   ', profileDetails);
