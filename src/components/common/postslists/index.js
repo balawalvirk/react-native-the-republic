@@ -463,7 +463,7 @@ export const PostCard = React.forwardRef(({
                         >
                             <RowWrapperBasic>
                                 <ImageRound
-                                    source={{ uri: user.profile_image ? user.profile_image : appImages.noUser }}
+                                    source={{ uri: user.profile_photo_path ? user.profile_photo_path : appImages.noUser }}
                                     size={totalSize(5)}
                                 />
                                 <Spacer width={sizes.marginHorizontalSmall} />

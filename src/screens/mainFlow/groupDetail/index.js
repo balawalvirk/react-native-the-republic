@@ -163,7 +163,7 @@ function GroupDetail(props) {
                         <>
                             <Spacer height={sizes.smallMargin} />
                             <ShareSomethingButton
-                                imageUri={userDetail.profile_image}
+                                imageUri={userDetail.profile_photo_path}
                                 onPress={() => navigate(routes.shareApost, {
                                     group,
                                     updateData: (updatedPost) => setMyGroups([...groupPosts, updatedPost]),

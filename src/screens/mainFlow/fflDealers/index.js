@@ -175,7 +175,7 @@ function FflDealers({ navigation }) {
                                                         style={[{ borderRadius: 100, borderWidth: 2, borderColor: isSelected ? colors.appColor1 : colors.appBgColor1 }, appStyles.shadowColored,appStyles.center]}
                                                     >
                                                         <ImageRound
-                                                            source={{ uri: item.profile_image }}
+                                                            source={{ uri: item.profile_photo_path }}
                                                         />
                                                         {isLoading ?
                                                             <AbsoluteWrapper >
@@ -236,7 +236,7 @@ function FflDealers({ navigation }) {
                                     onPress={() => selectDefaultDealer(item, index)}
                                     containerStyle={{ marginBottom: sizes.marginVertical / 2, backgroundColor: 'transparent', borderWidth: 1, borderColor: colors.appBgColor3 }}
                                     title={item.first_name + ' ' + item.last_name}
-                                    imageUri={item.profile_image}
+                                    imageUri={item.profile_photo_path}
                                     subTitle={7 * (index + 1) + ' miles away'}
                                     right={
                                         <ButtonColoredSmall

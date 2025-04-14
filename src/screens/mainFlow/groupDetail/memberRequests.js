@@ -91,7 +91,7 @@ export default function MemberRequests({ navigation, route }) {
                                     subContainerStyle={{ marginHorizontal: sizes.marginHorizontal }}
                                     //onPress={() => onPress(item, index)}
                                     title={userName}
-                                    imageUri={item.user.profile_image}
+                                    imageUri={item.user.profile_photo_path}
                                     imageSize={totalSize(4.5)}
                                     subTitle={'Follows you'}
                                     bottom={

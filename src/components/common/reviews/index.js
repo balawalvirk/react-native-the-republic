@@ -23,7 +23,7 @@ export default function Reviews({ data, ListHeaderComponent, ListFooterComponent
                                 <ReviewCardPrimary
                                     containerStyle={{ marginBottom: sizes.smallMargin }}
                                     title={fullname}
-                                    imageUrl={user ? user.profile_image : appImages.noUser}
+                                    imageUrl={user ? user.profile_photo_path : appImages.noUser}
                                     date={HelpingMethods.formateDateFromNow(item.created_at)}
                                     rating={item.rating}
                                     //reviewCount={item.review_count}

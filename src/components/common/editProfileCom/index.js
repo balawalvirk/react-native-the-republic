@@ -41,7 +41,7 @@ const EditProfile = React.forwardRef((props, ref) => {
         getAllData,
         validate
     }));
-    const BirthdayInputRef = useRef(null)
+    
     const {openCamera, openLibrary} = useImagePicker();
     const [imageUri, setImageUri] = useState('')
     const [firstName, setFirstName] = useState('')

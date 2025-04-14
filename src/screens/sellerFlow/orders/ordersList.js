@@ -51,7 +51,7 @@ export function OrdersList({ data, onPressOrder, onpressAccept, onpressCancel, L
 
 
                 //user info
-                const userImage = item.user.profile_image ? item.user.profile_image : appImages.noUser
+                const userImage = item.user.profile_photo_path ? item.user.profile_photo_path : appImages.noUser
                 const userName = item.user.first_name + ' ' + item.user.last_name
                 return (
                     <ProductCardSecondary
@@ -137,7 +137,7 @@ export function OrdersList({ data, onPressOrder, onpressAccept, onpressCancel, L
                                                                 <UserCardPrimary
                                                                     containerStyle={{ marginHorizontal: 0 }}
                                                                     imageSize={totalSize(4.5)}
-                                                                    imageUri={default_dealer_id?default_dealer?default_dealer.profile_image:appImages.noUser:appImages.noUser}
+                                                                    imageUri={default_dealer_id?default_dealer?default_dealer.profile_photo_path:appImages.noUser:appImages.noUser}
                                                                     title={default_dealer_id?default_dealer?default_dealer.first_name+' '+default_dealer.last_name:'':''}
                                                                     subTitle={default_dealer_id?'3 miles away':''}
                                                                     right={

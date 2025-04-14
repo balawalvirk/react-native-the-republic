@@ -92,7 +92,7 @@ export function Products({
                                         location={item.address}
                                         rating={item.avg_rating}
                                         reviewCount={item.reviews_count}
-                                        userImage={user ? user.profile_image : appImages.noUser}
+                                        userImage={user ? user.profile_photo_path : appImages.noUser}
                                         userName={user ? (user.first_name + ' ' + user.last_name) : 'Anonymouse'}
                                     />
                                 )
@@ -215,7 +215,7 @@ export function ProductsHorizontalyPrimary({ data, ListHeaderComponent, ListFoot
                         rating={item.avg_rating}
                         reviewCount={item.reviews_count}
                         userName={user ? (user.first_name + ' ' + user.last_name) : 'Anonymous'}
-                        userImage={user ? user.profile_image : appImages.noUser}
+                        userImage={user ? user.profile_photo_path : appImages.noUser}
                         isSponsered={item.isSponsered}
                     />
                 )

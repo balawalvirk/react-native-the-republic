@@ -94,7 +94,7 @@ function ChatScreen(props) {
             headerTitle: () => (
                 <RowWrapperBasic>
                     <ImageRound
-                        source={{ uri: userDetails ? userDetails.profile_image ? userDetails.profile_image : appImages.noUser : appImages.noUser }}
+                        source={{ uri: userDetails ? userDetails.profile_photo_path ? userDetails.profile_photo_path : appImages.noUser : appImages.noUser }}
                     />
                     <Spacer width={sizes.marginHorizontalSmall} />
                     <Wrapper>

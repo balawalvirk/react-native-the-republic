@@ -133,7 +133,7 @@ function UserProfile(props) {
                 <Wrapper>
                     <Wrapper style={[appStyles.center]}>
                         <ImageProfile
-                            source={{ uri: userDetail.profile_image ? userDetail.profile_image : appImages.noUser }}
+                            source={{ uri: userDetail.profile_photo_path ? userDetail.profile_photo_path : appImages.noUser }}
                             shadow
                         />
                         <Spacer height={sizes.baseMargin} />

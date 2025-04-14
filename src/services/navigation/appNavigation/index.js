@@ -190,8 +190,8 @@ function BottomTabScreens() {
                 <ImageRound
                   source={{
                     uri: userDetail
-                      ? userDetail.profile_image
-                        ? userDetail.profile_image
+                      ? userDetail.profile_photo_path
+                        ? userDetail.profile_photo_path
                         : appImages.noUser
                       : appImages.noUser,
                   }}
@@ -271,7 +271,7 @@ function BottomTabStackScreens() {
                 //onPress={() => MyToast.success({ message: 'asdasd' })}
                 //  onPress={() => {
                 //      const data = JSON.parse(notificationData)
-                //      PushNotification.show({ image: data.profile_image, message: data.data, data: data.content,notificationType:'postReaction' })
+                //      PushNotification.show({ image: data.profile_photo_path, message: data.data, data: data.content,notificationType:'postReaction' })
                 //  }}
                 icon={appIcons.menu}
                 size={sizes.icons.medium}
@@ -418,7 +418,7 @@ function AppNavigation() {
           const {data} = remoteMessage;
           const content = JSON.parse(data.content);
           PushNotification.show({
-            image: data.profile_image,
+            image: data.profile_photo_path,
             message: data.body,
             data: content,
             notificationType: data.type,

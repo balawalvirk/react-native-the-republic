@@ -86,7 +86,7 @@ function Profile(props) {
                 showsVerticalScrollIndicator={false}
             >
                 <ProfileTop
-                    imageUri={userDetail.profile_image}
+                    imageUri={userDetail.profile_photo_path}
                     title={userDetail.first_name + ' ' + userDetail.last_name}
                     subTitle={'@' + userDetail.username}
                     content={
@@ -121,7 +121,7 @@ function Profile(props) {
                     selectedTabIndex === 0 ?
                         <Wrapper flex={1}>
                             <ShareSomethingButton
-                                imageUri={userDetail.profile_image}
+                                imageUri={userDetail.profile_photo_path}
                                 onPress={() => navigate(routes.shareApost, {
                                     updateData: (updatedPost) => setMyPosts([...myPosts, updatedPost]),
                                 })}

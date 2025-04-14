@@ -120,7 +120,7 @@ function Notifications(props) {
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item, index }) => {
                     const itemData = JSON.parse(item.data)
-                    index === 0 && console.log('itemData --> ', itemData.profile_image)
+                    index === 0 && console.log('itemData --> ', itemData.profile_photo_path)
                     index === 0 && console.log('type --> ', itemData.type)
                     let refsArray = []
                     return (
@@ -143,7 +143,7 @@ function Notifications(props) {
                                 //containerStyle={{ backgroundColor: !item.isView ? index === notifications.length - 1 ? colors.appColor2 + '20' : colors.rating + '20' : 'transparent' }}
                                 containerStyle={{ backgroundColor: colors.appBgColor1 }}
                                 text={itemData.data}
-                                image={itemData.profile_image}
+                                image={itemData.profile_photo_path}
                                 type={itemData.type}
                                 time={moment(item.created_at).fromNow()}
                                 onPress={() => handlePressNotification(itemData, index)}

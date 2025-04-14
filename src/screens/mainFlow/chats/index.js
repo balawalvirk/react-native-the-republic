@@ -101,7 +101,7 @@ function Chats(props) {
                                             <MessageCardPrimary
                                                 containerStyle={{}}
                                                 name={fullname}
-                                                image={item.profile_image}
+                                                image={item.profile_photo_path}
                                                 message={lastMessage}
                                                 time={HelpingMethods.formateDateFromNow(lastMessageTime)}
                                                 onPress={() => navigate(routes.chatScreen, { conversation: item })}

@@ -79,11 +79,11 @@ function FulfillmentDetail(props) {
                     description={product.title}
                     discountedPrice={product.discounted_price}
                     price={product.price}
-                    sellerImage={seller.profile_image}
+                    sellerImage={seller.profile_photo_path}
                     sellerName={seller.first_name + ' ' + seller.last_name}
                     sellerPhone={'+' + seller.country_phone_code + seller.phone}
                     orderNumber={order && order.order_no}
-                    buyerImage={buyer.profile_image}
+                    buyerImage={buyer.profile_photo_path}
                     buyerName={buyer.first_name + ' ' + buyer.last_name}
                     buyerPhone={'+' + buyer.country_phone_code + buyer.phone}
                     // buyerAddress={'14 Wall Street, New York City, NY, USA'}
@@ -97,7 +97,7 @@ function FulfillmentDetail(props) {
                             <Wrapper>
                                 <UserCardPrimary
                                     // containerStyle={{ marginHorizontal: sizes.marginHorizontalSmall, marginBottom: sizes.marginVertical / 2 }}
-                                    imageUri={buyer_dealer.profile_image}
+                                    imageUri={buyer_dealer.profile_photo_path}
                                     title={buyer_dealer.first_name + ' ' + buyer_dealer.last_name}
                                     subTitle={'FFL Dealer'}
                                     top={
@@ -148,7 +148,7 @@ function FulfillmentDetail(props) {
                                seller_dealer?
                                <UserCardPrimary
                                // containerStyle={{ marginHorizontal: sizes.marginHorizontalSmall, marginBottom: sizes.marginVertical / 2 }}
-                               imageUri={seller_dealer.profile_image ? seller_dealer.profile_image : appImages.noUser}
+                               imageUri={seller_dealer.profile_photo_path ? seller_dealer.profile_photo_path : appImages.noUser}
                                title={seller_dealer.first_name + ' ' + seller_dealer.last_name}
                                subTitle={'FFL Dealer'}
                                top={

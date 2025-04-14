@@ -88,7 +88,7 @@ function VerifyIdentity(props) {
     }
 
     const registerNewAccount = async () => {
-        setLoadingCreateAccount(true)
+       // setLoadingCreateAccount(true)
         const {
             imageFile,
             firstName,
@@ -103,6 +103,7 @@ function VerifyIdentity(props) {
         console.log('profileDetails-->', profileDetails)
         // let fcmToken = await AsyncStorage.getItem(asyncConsts.fcm_token);
         // console.log('fcmToken-->', fcmToken)
+        //return null
         setLoadingCreateAccount(true)
         await handleCreateAccount()
             .then(async res => {

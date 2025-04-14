@@ -45,7 +45,7 @@ export const Dealers = ({ data, onPress, onPressHeart, ListHeaderComponent, List
                                         containerStyle={{ backgroundColor: colors.appBgColor1, borderWidth: 1, borderColor: colors.appBgColor3, marginBottom: sizes.marginVertical / 2 }}
                                         onPress={() => onPress(item, index)}
                                         title={item.first_name + ' ' + item.last_name}
-                                        imageUri={item.profile_image ? item.profile_image : appImages.noUser}
+                                        imageUri={item.profile_photo_path ? item.profile_photo_path : appImages.noUser}
                                         // subTitle={(index % 2 ? (index + 1) * 9 : (index + 1) * 7) + ' miles away'}
                                         subTitle={item.distance_round >= 0 ? HelpingMethods.getRoundedValue(item.distance_round) + ' miles away' : ''}
                                         right={
@@ -165,7 +165,7 @@ export const FollowRequestsList = ({ data, onPress, loading, ListHeaderComponent
                             renderItem={({ item, index }) => {
                                 const { user } = item
                                 const userName = user.first_name + ' ' + user.last_name
-                                const userImage = user.profile_image ? user.profile_image : appImages.noUser
+                                const userImage = user.profile_photo_path ? user.profile_photo_path : appImages.noUser
                                 return (
                                     <UserCardPrimary
                                         containerStyle={{ backgroundColor: colors.appBgColor1, borderWidth: 0, borderColor: colors.appBgColor3, marginBottom: sizes.marginVertical / 2, borderBottomWidth: 1, marginHorizontal: 0 }}

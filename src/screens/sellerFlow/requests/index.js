@@ -108,7 +108,7 @@ function Requests() {
                   title={item.training.title}
                   startDate={Date()}
                   endDate={Date()}
-                  userImage={item.user.profile_image}
+                  userImage={item.user.profile_photo_path}
                   userName={item.user.first_name + ' ' + item.user.last_name}
                 />
               )
@@ -141,7 +141,7 @@ function Requests() {
                 title={selectedTrainingRequest.training.title}
                 startDate={Date()}
                 endDate={Date()}
-                userImage={selectedTrainingRequest.user.profile_image}
+                userImage={selectedTrainingRequest.user.profile_photo_path}
                 userName={selectedTrainingRequest.user.first_name + ' ' + selectedTrainingRequest.user.last_name}
               />
               :

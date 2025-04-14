@@ -50,7 +50,7 @@ export default function PurchasesList({ data, ListHeaderComponent, ListFooterCom
 
 
                 //user info
-                const userImage = item.user.profile_image ? item.user.profile_image : appImages.noUser
+                const userImage = item.user.profile_photo_path ? item.user.profile_photo_path : appImages.noUser
                 const userName = item.user.first_name + ' ' + item.user.last_name
                 return (
                     <ProductCardSecondary

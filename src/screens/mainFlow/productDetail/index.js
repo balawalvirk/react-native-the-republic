@@ -157,7 +157,7 @@ function ProductDetail(props) {
                 </ComponentWrapper>
                 <Spacer height={sizes.baseMargin} />
                 <UserCardPrimary
-                    imageUri={user ? user.profile_image ? user.profile_image : appImages.noUser : appImages.noUser}
+                    imageUri={user ? user.profile_photo_path ? user.profile_photo_path : appImages.noUser : appImages.noUser}
                     title={user ? user.first_name + ' ' + user.last_name : 'Anonynous'}
                     //subTitle={'miles away'}
                     subTitle={user.distance_round >= 0 ? HelpingMethods.getRoundedValue(user.distance_round) + ' miles away' : ''}

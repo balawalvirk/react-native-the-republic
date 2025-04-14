@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TextInput } from 'react-native';
 import { height } from 'react-native-dimension';
 import { ButtonGradient, KeyboardAvoidingScrollView, MainWrapper, Spacer, TextInputUnderlined, Toasts, Wrapper } from '../../../components';
 import { appStyles, Backend, HelpingMethods, sizes } from '../../../services';
@@ -8,7 +8,7 @@ function ContactUs({ navigation }) {
     const { goBack } = navigation
     const [comment, setComment] = useState('')
     const [commentError, setCommentError] = useState('')
-    const [loading, setLoading] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const validation = () => {
         HelpingMethods.handleAnimation()

@@ -14,7 +14,7 @@ function RenderComments({ data, onPress }) {
                 ItemSeparatorComponent={() => <Spacer height={sizes.smallMargin} />}
                 renderItem={({ item, index }) => {
                     const user = item.user ? item.user : null
-                    const userImage = user ? user.profile_image ? user.profile_image : appImages.noUser : appImages.noUser
+                    const userImage = user ? user.profile_photo_path ? user.profile_photo_path : appImages.noUser : appImages.noUser
                     const fullname = user ? user.first_name + ' ' + user.last_name : 'Anonymouse'
                     return (
                         <TouchableOpacity activeOpacity={1} onPress={() => onPress(item, index)} style={[styles.commentContainer]}>

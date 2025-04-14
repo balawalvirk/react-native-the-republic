@@ -81,7 +81,7 @@ function TagFriends({ visible, toggle, onPressFriend,friends }) {
                                                    }
                                                 }
                                                 title={item.first_name + ' ' + item.last_name}
-                                                imageUri={item.profile_image ? item.profile_image : appImages.noUser}
+                                                imageUri={item.profile_photo_path ? item.profile_photo_path : appImages.noUser}
                                                 imageSize={totalSize(4.5)}
                                                 // subTitle={'Follows you'}
                                                 right={

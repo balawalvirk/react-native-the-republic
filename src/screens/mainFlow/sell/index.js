@@ -782,7 +782,7 @@ function Sell(props) {
               location={city}
               rating={userDetail.avg_rating}
               reviewCount={userDetail.reviews_count}
-              userImage={userDetail.profile_image}
+              userImage={userDetail.profile_photo_path}
               userName={userDetail.first_name + ' ' + userDetail.last_name}
               // onPress={(item, index) => {
               //     sheetRef.current.snapTo(0);

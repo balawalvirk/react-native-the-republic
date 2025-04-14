@@ -39,7 +39,7 @@ export const ChatBubbule = ({ containerStyle, myMessage, message, time, image, l
                             location={product.address}
                             rating={product.avg_rating}
                             reviewCount={product.reviews_count}
-                            userImage={product.user.profile_image}
+                            userImage={product.user.profile_photo_path}
                             userName={product.user.first_name}
                             onPress={(item, index) => {
                                 // sheetRef.current.snapTo(0);

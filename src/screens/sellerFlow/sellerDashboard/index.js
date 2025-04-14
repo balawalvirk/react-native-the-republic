@@ -49,7 +49,7 @@ function SellerDashboard(props) {
     <MainWrapper>
       <ScrollView showsVerticalScrollIndicator={false}>
         <ProfileTop
-          imageUri={userDetail.profile_image}
+          imageUri={userDetail.profile_photo_path}
           title={userDetail.first_name + ' ' + userDetail.last_name}
           content={
             <Wrapper style={{ alignItems: 'flex-start', }}>

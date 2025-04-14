@@ -222,7 +222,7 @@ function ShareAPost({ navigation, route }) {
                 <Spacer height={sizes.baseMargin} />
                 <RowWrapper style={{ alignItems: 'flex-start', }}>
                     <ImageRound
-                        source={{ uri: userDetail.profile_image ? userDetail.profile_image : appImages.noUser }}
+                        source={{ uri: userDetail.profile_photo_path ? userDetail.profile_photo_path : appImages.noUser }}
                     />
                     <Wrapper flex={1} style={{ alignItems: 'flex-end', }}>
                         <ButtonColoredSmall

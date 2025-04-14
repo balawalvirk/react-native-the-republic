@@ -67,7 +67,7 @@ function ShareOnPopup({ visible, toggle, onPressItem, selectedGroupId }) {
   const getSetData = () => {
     let tempGroups = []
     const topItem = {
-      image: userDetail.profile_image ? userDetail.profile_image : appImages.noUser,
+      image: userDetail.profile_photo_path ? userDetail.profile_photo_path : appImages.noUser,
       title: 'Share on my profile',
       subTitle: 'Your followers will be able to see this post.',
       id: null

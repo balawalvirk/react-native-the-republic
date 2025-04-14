@@ -175,11 +175,11 @@ export function FulfillmentsList({ data, onPressOrder, ListHeaderComponent, List
                         description={product.title}
                         discountedPrice={product.discounted_price}
                         price={product.price}
-                        sellerImage={seller.profile_image}
+                        sellerImage={seller.profile_photo_path}
                         sellerName={seller.first_name + ' ' + seller.last_name}
                         //sellerPhone={'+' + seller.country_phone_code + seller.phone}
                         orderNumber={order&&order.order_no}
-                        buyerImage={buyer.profile_image}
+                        buyerImage={buyer.profile_photo_path}
                         buyerName={buyer.first_name + ' ' + buyer.last_name}
                         //buyerPhone={'+' + buyer.country_phone_code + buyer.phone}
                         buyerAddress={order&&order.address}

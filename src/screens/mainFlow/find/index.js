@@ -291,7 +291,7 @@ function Find({navigation, route}) {
                   location={selectedProduct.address}
                   rating={selectedProduct.avg_rating}
                   reviewCount={selectedProduct.reviews_count}
-                  userImage={selectedProduct.user.profile_image}
+                  userImage={selectedProduct.user.profile_photo_path}
                   userName={selectedProduct.user.first_name}
                   onPress={(item, index) => {
                     //sheetRef.current.snapTo(0);

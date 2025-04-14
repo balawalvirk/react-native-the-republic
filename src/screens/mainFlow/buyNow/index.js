@@ -198,7 +198,7 @@ function BuyNow(props) {
                     rating={product.avg_rating}
                     reviewCount={product.reviews_count}
                     moreInfo
-                    moreInfoImage={user ? user.profile_image ? user.profile_image : appImages.noUser : appImages.noUser}
+                    moreInfoImage={user ? user.profile_photo_path ? user.profile_photo_path : appImages.noUser : appImages.noUser}
                     moreInfoTitle={user ? user.first_name + ' ' + user.last_name : 'Anonymouse'}
                     moreInfoSubTitle={'Seller'}
                     moreInfoRight={
@@ -348,7 +348,7 @@ function BuyNow(props) {
                                 <UserCardPrimary
                                     containerStyle={{ marginHorizontal: 0 }}
                                     imageSize={totalSize(4.5)}
-                                    imageUri={default_dealer ? default_dealer.profile_image : appImages.noUser}
+                                    imageUri={default_dealer ? default_dealer.profile_photo_path : appImages.noUser}
                                     title={default_dealer ? (default_dealer.first_name + ' ' + default_dealer.last_name) : 'Dealer'}
                                     subTitle={default_dealer_id ? '3 miles away' : ''}
                                     right={
