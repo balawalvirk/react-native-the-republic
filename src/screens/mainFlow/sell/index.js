@@ -586,7 +586,7 @@ function Sell(props) {
           </Wrapper>
         ) : step === 2 ? (
           <Wrapper flex={1}>
-            <PickerSearchable
+            {/* <PickerSearchable
               title="Item"
               // placeholder="No Selected"
               data={items}
@@ -602,8 +602,8 @@ function Sell(props) {
               onPressAdd={()=>{
                 console.log('new value added')
               }}
-            />
-            {/* <PickerPrimary
+            /> */}
+            <PickerPrimary
               title="Item"
               // placeholder="No Selected"
               data={items}
@@ -613,7 +613,7 @@ function Sell(props) {
                 setitem(value);
               }}
               error={itemError}
-            /> */}
+            />
             <Spacer height={sizes.baseMargin} />
             <PickerPrimary
               title="Type"
