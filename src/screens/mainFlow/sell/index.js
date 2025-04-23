@@ -92,7 +92,7 @@ function Sell(props) {
   const user = useSelector(state => state.user);
   const {categories, items, actions, manufacturers, conditions, calibers} =
     product;
-    console.log('product categories: ',categories)
+  console.log('product categories: ', categories);
   const {userDetail, stripeAccountDetail} = user;
   const {seller_stripe_account_id} = userDetail;
 
@@ -199,13 +199,14 @@ function Sell(props) {
         }
       }
     } else {
-      seller_stripe_account_id
-        ? stripeAccountDetail?.payouts_enabled
-          ? productDetail
-            ? handleEditProduct()
-            : handleAddNewProduct()
-          : toggleVerifyStripeAccountPopup()
-        : toggleCreateStripeAccountPopup();
+      // seller_stripe_account_id
+      //   ? stripeAccountDetail?.payouts_enabled
+      //     ? productDetail
+      //       ? handleEditProduct()
+      //       : handleAddNewProduct()
+      //     : toggleVerifyStripeAccountPopup()
+      //   : toggleCreateStripeAccountPopup();
+      productDetail ? handleEditProduct() : handleAddNewProduct();
     }
   };
   //configure Header
@@ -376,7 +377,7 @@ function Sell(props) {
     //     }
     // });
   };
-  const launchCamera = async() => {
+  const launchCamera = async () => {
     const tempFile = await openCamera();
     if (tempFile) {
       setImageFile(tempFile);
@@ -585,7 +586,24 @@ function Sell(props) {
           </Wrapper>
         ) : step === 2 ? (
           <Wrapper flex={1}>
-            <PickerPrimary
+            <PickerSearchable
+              title="Item"
+              // placeholder="No Selected"
+              data={items}
+              value={item}
+              onPressItem={(item, index) => {
+                setitem(item?.value);
+                itemError && setitemError('');
+              }}
+              onChangeText={() => {
+                item && setitem('');
+              }}
+              error={itemError}
+              onPressAdd={()=>{
+                console.log('new value added')
+              }}
+            />
+            {/* <PickerPrimary
               title="Item"
               // placeholder="No Selected"
               data={items}
@@ -595,7 +613,7 @@ function Sell(props) {
                 setitem(value);
               }}
               error={itemError}
-            />
+            /> */}
             <Spacer height={sizes.baseMargin} />
             <PickerPrimary
               title="Type"

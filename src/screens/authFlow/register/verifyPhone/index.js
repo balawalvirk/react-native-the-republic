@@ -1,5 +1,5 @@
-import React, {Component, useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import React, {Component, useEffect, useRef, useState} from 'react';
+import {View, Text, TouchableOpacity, Keyboard} from 'react-native';
 import {height, totalSize, width} from 'react-native-dimension';
 import {
   ButtonColored,
@@ -17,6 +17,8 @@ import {
   VerificationCodeSentPopup,
   Toasts,
   LoaderAbsolute,
+  RowWrapperBasic,
+  MediumText,
 } from '../../../../components';
 import {
   appImages,
@@ -28,7 +30,8 @@ import {
   sizes,
 } from '../../../../services';
 //import OTPInputView from '@twotalltotems/react-native-otp-input'
-import OtpInputs from 'react-native-otp-inputs';
+// import OtpInputs from 'react-native-otp-inputs';
+import OTPTextInput from 'react-native-otp-textinput';
 import styles from './styles';
 import CountryPicker from 'react-native-country-picker-modal';
 import auth from '@react-native-firebase/auth';
@@ -41,6 +44,7 @@ function VerifyPhone(props) {
   console.log('credentials', credentials, '\nProfile Details', profileDetails);
   console.log('\nuserSocialData', userSocialData);
 
+  const otpInputRef=useRef(null)
   //local states
   const [code, setCode] = useState('');
   const [clearCode, setClearCode] = useState('');
@@ -59,6 +63,11 @@ function VerifyPhone(props) {
   const [isUpdatePhoneNumberPopupVisible, setUpdatePhoneNumberPopupVisibility] =
     useState(false);
   const [loading, setLoading] = useState(false);
+
+  const handleClearOtpInput = () => {
+    otpInputRef?.current?.clear();
+    setCode('');
+  };
 
   useEffect(() => {
     getSetData();
@@ -115,11 +124,14 @@ function VerifyPhone(props) {
               countryCode,
             });
           } else {
-            setCode('');
-            setClearCode(true);
+            handleClearOtpInput()
+            // setCode('');
+            // setClearCode(true);
           }
         },
       );
+    }else{
+      Toasts.error('Code should be of 6 digits')
     }
     setLoading(false);
   };
@@ -131,6 +143,7 @@ function VerifyPhone(props) {
       .then(confirmResult => {
         console.log('confirmResult: ', confirmResult);
         setConfirmation(confirmResult);
+        handleClearOtpInput()
         toggleVerificationCodeSendModal();
       })
       .catch(error => {
@@ -182,7 +195,38 @@ function VerifyPhone(props) {
             {phoneNumberWithCode}
           </TinyTitle>
         </ComponentWrapper>
-        <OtpInputs
+        <OTPTextInput
+        defaultValue={code}
+        ref={otpInputRef}
+        inputCount={6}
+        handleTextChange={cv => {
+          // cv?.length === 6 && Keyboard.dismiss();
+          // console.log('handleTextChange cv: ', cv);
+          // setCode(cv);
+          if(cv.length===6){
+            Keyboard.dismiss();
+            handleVerifyCode(cv)
+          }
+       
+        }}
+        containerStyle={{
+          marginHorizontal: sizes.marginHorizontal / 2,
+          //width: responsiveWidth(90),
+          height: width(25),
+          justifyContent: 'space-between',
+          //alignSelf: 'center',
+          alignItems: 'center',
+        }}
+        autoFocus
+        tintColor={colors.appColor1}
+        textInputStyle={{
+          margin: 0,
+          borderBottomWidth:0.5,
+         ...styles.underlineStyleBase,
+          textAlign: 'center',
+        }}
+      />
+        {/* <OtpInputs
           style={{
             flexDirection: 'row',
             width: width(90),
@@ -200,7 +244,7 @@ function VerifyPhone(props) {
           focusStyles={styles.borderStyleHighLighted}
           handleChange={handleVerifyCode}
           autoFocus
-        />
+        /> */}
         {/* <OTPInputView
           style={{width: '90%', height: height(10), alignSelf: 'center'}}
           pinCount={6}
@@ -293,26 +337,43 @@ function VerifyPhone(props) {
           error={phoneNumberError}
           inputStyle={{backgroundColor: 'transparent'}}
           left={
-            <Wrapper
-              style={{
-                marginRight: sizes.marginHorizontal / 2,
-                backgroundColor: 'transparent',
-              }}>
-              <CountryPicker
+            <RowWrapperBasic style={{ marginRight: sizes.marginHorizontalSmall / 2, backgroundColor: colors.transparent, }}>
+            <CountryPicker
                 {...{
-                  countryCode,
-                  withFilter: true,
-                  withFlag: true,
-                  withCountryNameButton: false,
-                  withCallingCodeButton: true,
-                  withAlphaFilter: true,
-                  withCallingCode: true,
-                  withEmoji: true,
-                  onSelect,
+                    countryCode,
+                    withFilter: true,
+                    withFlag: true,
+                    withCountryNameButton: false,
+                    withCallingCodeButton: false,
+                    withAlphaFilter: true,
+                    withCallingCode: true,
+                    withEmoji: true,
+                    onSelect,
                 }}
-                // visible
-              />
-            </Wrapper>
+            // visible
+            />
+            <MediumText>+{countryPhoneCode}</MediumText>
+        </RowWrapperBasic>
+            // <Wrapper
+            //   style={{
+            //     marginRight: sizes.marginHorizontal / 2,
+            //     backgroundColor: 'transparent',
+            //   }}>
+            //   <CountryPicker
+            //     {...{
+            //       countryCode,
+            //       withFilter: true,
+            //       withFlag: true,
+            //       withCountryNameButton: false,
+            //       withCallingCodeButton: true,
+            //       withAlphaFilter: true,
+            //       withCallingCode: true,
+            //       withEmoji: true,
+            //       onSelect,
+            //     }}
+            //     // visible
+            //   />
+            // </Wrapper>
           }
         />
       </PopupPrimary>

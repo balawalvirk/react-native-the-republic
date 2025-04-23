@@ -41,7 +41,11 @@ export const add_Product = async ({
 
     console.log('add_Product\nuri', uri, '\nparams', formDataObject);
     await axios
-        .post(uri, formDataObject)
+        .post(uri, formDataObject,{
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Accept: 'application/json',
+            }})
         .then(async responseJson => {
             const tempResponseData = responseJson.data
             console.log('response', tempResponseData);
@@ -122,7 +126,11 @@ export const edit_Product = async ({
 
     console.log('edit_Product\nuri', uri, '\nparams', formDataObject);
     await axios
-        .post(uri, formDataObject)
+        .post(uri, formDataObject,{
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Accept: 'application/json',
+            }})
         .then(async responseJson => {
             const tempResponseData = responseJson.data
             console.log('response', tempResponseData);
@@ -878,7 +886,11 @@ export const filterProducts = async ({ sortBy, make, action, caliber, minPrice, 
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios
-            .post(`${baseURL + endPoints.product.filter_products}?page=${defaultPage}`, params)
+            .post(`${baseURL + endPoints.product.filter_products}?page=${defaultPage}`, params,{
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                  Accept: 'application/json',
+                }})
             .then(async responseJson => {
                 const tempResponseData = responseJson.data
                 console.log('filterProducts Response', tempResponseData);

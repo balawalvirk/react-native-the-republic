@@ -194,7 +194,11 @@ export const complete_profile = async ({
 
   console.log('complete_profile\nuri', uri, '\nparams', formDataObject);
   await axios
-    .post(uri, formDataObject)
+    .post(uri, formDataObject,{
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Accept: 'application/json',
+      }})
     .then(async responseJson => {
       const tempResponseData = responseJson.data;
       console.log('complete_profile Response', tempResponseData);
@@ -225,7 +229,11 @@ export const submit_identity = async ({user_id, attachment}) => {
   console.log('submit_identity\nuri', uri, '\nparams', formDataObject);
 
   await axios
-    .post(uri, formDataObject)
+    .post(uri, formDataObject,{
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Accept: 'application/json',
+      }})
     .then(async responseJson => {
       const tempResponseData = responseJson.data;
       console.log('submit_identity Response', tempResponseData);
@@ -308,7 +316,11 @@ export const update_profile = async ({
 
   console.log('update_profile\nuri: ', uri, '\nParams: ', formDataObject);
   await axios
-    .post(uri, formDataObject)
+    .post(uri, formDataObject,{
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Accept: 'application/json',
+      }})
     .then(async responseJson => {
       const tempResponseData = responseJson.data;
       console.log('response', tempResponseData);
@@ -368,10 +380,13 @@ export const submitAppFeedback = async ({feature, comment, images}) => {
   const state = store.getState();
   const {id} = state.user.userDetail;
   const uri = `${baseURL + endPoints.submit_app_feedback}`;
+
   const formDataObject = new FormData();
   formDataObject.append('user_id', id);
   formDataObject.append('feature', feature);
   formDataObject.append('comment', comment);
+
+  
   if (images) {
     if (images.length) {
       for (const item of images) {
@@ -381,7 +396,12 @@ export const submitAppFeedback = async ({feature, comment, images}) => {
   }
   console.log('submitAppFeedback \nuri', uri, '\nParams', formDataObject);
   await axios
-    .post(uri, formDataObject)
+    .post(uri, formDataObject,{
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Accept: 'application/json',
+      },
+    })
     .then(async responseJson => {
       const tempResponseData = responseJson.data;
       console.log('Response', tempResponseData);
@@ -561,36 +581,37 @@ export const saveFcmToken = async fcm_token => {
   return response;
 };
 
-export const uploadFile = async (file, userToken) => {
-  let response = null;
-  const formData = new FormData();
-  formData.append('file', file);
-  const uri = `http://34.238.26.44:5000/v1/file/create`;
-  const config = {
-    headers: {
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJvbmUiLCJzdWIiOiI2NDRhMDg5YmFmMjMyZmM5ZjAwMGRiOTgiLCJpYXQiOjE3NDQ2NTIxNjcsImV4cCI6MTc0NTk0ODE2N30.z6TcGViGWDqcmj1p7RBH2B-ahzEWwihyVXl6TdFPtqw`,
-      'Content-Type': 'multipart/form-data',
-    },
-  };
-  __DEV__ &&
-    console.log('uploadFile \n\n uri===>', uri, '\n\n params', formData);
-  await axios
-    .post(uri, formData, config)
-    .then(async responseJson => {
-      __DEV__ && console.log('uploadFile Response', responseJson.data);
-      if (responseJson.data) {
-        if (responseJson.data.statusCode === 200) {
-          response = responseJson.data;
-        } else {
-          Toasts.error(responseJson.data.message);
-        }
-      }
-    })
-    .catch(error => {
-      Toasts.error(error.response.data.message);
-      // Toasts.Error(error.response)
-      console.error(error);
-      __DEV__ && console.log('uploadFile error', error);
-    });
-  return response;
-};
+// export const uploadFile = async (file, userToken) => {
+//   let response = null;
+//   const formData = new FormData();
+//   formData.append('file', file);
+//   const uri = `http://34.238.26.44:5000/v1/file/create`;
+//   const config = {
+//     headers: {
+//       Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJvbmUiLCJzdWIiOiI2NDRhMDg5YmFmMjMyZmM5ZjAwMGRiOTgiLCJpYXQiOjE3NDQ2NTIxNjcsImV4cCI6MTc0NTk0ODE2N30.z6TcGViGWDqcmj1p7RBH2B-ahzEWwihyVXl6TdFPtqw`,
+//       'Content-Type': 'multipart/form-data',
+//       Accept: 'application/json',
+//     },
+//   };
+//   __DEV__ &&
+//     console.log('uploadFile \n\n uri===>', uri, '\n\n params', formData);
+//   await axios
+//     .post(uri, formData, config)
+//     .then(async responseJson => {
+//       __DEV__ && console.log('uploadFile Response', responseJson.data);
+//       if (responseJson.data) {
+//         if (responseJson.data.statusCode === 200) {
+//           response = responseJson.data;
+//         } else {
+//           Toasts.error(responseJson.data.message);
+//         }
+//       }
+//     })
+//     .catch(error => {
+//       Toasts.error(error.response.data.message);
+//       // Toasts.Error(error.response)
+//       console.error(error);
+//       __DEV__ && console.log('uploadFile error', error);
+//     });
+//   return response;
+// };

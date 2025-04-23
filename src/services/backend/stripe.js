@@ -8,62 +8,104 @@ import * as HelpingMethods from "../helpingMethods";
 import { setCreditCards, setStripeAccountDetail, setUserDetail } from "../store/actions";
 import { stripeKeys, stripe_endpoints, stripe_base_url } from '../constants'
 const { dispatch } = store
-
+import qs from 'qs';
 
 
 
 
 export const createStripeAccount = async ({
-    email,
-    country,
-    default_currency,
-    type,
-    business_type,
-    account_number,
-    currency,
-    account_holder_name,
-    routing_number
+  email,
+  account_number,
+  account_holder_name,
+  routing_number
 }) => {
-    let main_response = null
-    var axios = require('axios');
-    var qs = require('qs');
-    var data = qs.stringify({
-        'type': 'express',
-        'country': 'US',
-        'email': email,
-        'business_type': 'individual',
-        'capabilities[transfers][requested]': 'true',
-        'external_account[object]': 'bank_account',
-        'external_account[account_number]': account_number,
-        'external_account[country]': 'US',
-        'external_account[currency]': 'usd',
-        'external_account[account_holder_name]': account_holder_name,
-        'external_account[routing_number]': routing_number,
-        'settings[payouts][schedule][interval]': 'manual'
+  const data = qs.stringify({
+    type: 'express',
+    country: 'US',
+    email,
+    business_type: 'individual',
+    'capabilities[transfers][requested]': 'true',
+    'external_account[object]': 'bank_account',
+    'external_account[account_number]': account_number,
+    'external_account[country]': 'US',
+    'external_account[currency]': 'usd',
+    'external_account[account_holder_name]': account_holder_name,
+    'external_account[routing_number]': routing_number,
+    'settings[payouts][schedule][interval]': 'manual'
+  });
+
+  try {
+    const response = await axios.post('https://api.stripe.com/v1/accounts', data, {
+      headers: {
+        Authorization: stripeKeys.authorization_key, // Make sure it includes "Bearer ..."
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
     });
-    var config = {
-        method: 'post',
-        url: 'https://api.stripe.com/v1/accounts',
-        headers: {
-            'Authorization': stripeKeys.authorization_key_basic,
-            //'Authorization': stripeKeys.authorization_key,
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        data: data
-    };
 
-    await axios(config)
-        .then(function (jsonResponse) {
-            const tempResponse = jsonResponse.data
-            console.log('createStripeAccount response: ', tempResponse);
-            main_response = tempResponse
+    console.log('✅ Stripe Account Created:', response.data);
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      console.error('❌ Stripe Error:', error.response.data);
+    } else {
+      console.error('❌ Unexpected Error:', error.message);
+    }
+    return null;
+  }
+};
 
-        })
-        .catch(function (error) {
-            console.log('createStripeAccount error: ', error);
-        });
-    return main_response
-}
+// export const createStripeAccount = async ({
+//     email,
+//     country,
+//     default_currency,
+//     type,
+//     business_type,
+//     account_number,
+//     currency,
+//     account_holder_name,
+//     routing_number
+// }) => {
+//     let main_response = null
+//     var axios = require('axios');
+//     var qs = require('qs');
+//     var data = qs.stringify({
+//         'type': 'express',
+//         'country': 'US',
+//         'email': email,
+//         'business_type': 'individual',
+//         'capabilities[transfers][requested]': 'true',
+//         'external_account[object]': 'bank_account',
+//         'external_account[account_number]': account_number,
+//         'external_account[country]': 'US',
+//         'external_account[currency]': 'usd',
+//         'external_account[account_holder_name]': account_holder_name,
+//         'external_account[routing_number]': routing_number,
+//         'settings[payouts][schedule][interval]': 'manual'
+//     });
+//     console.log('createStripeAccount data: ',data)
+//     var config = {
+//         method: 'post',
+//         url: 'https://api.stripe.com/v1/accounts',
+//         headers: {
+//             'Authorization': stripeKeys.authorization_key,
+//             //'Authorization': stripeKeys.authorization_key,
+//             'Content-Type': 'application/x-www-form-urlencoded'
+//         },
+//         data: data
+//     };
+
+//     await axios(config)
+//         .then(function (jsonResponse) {
+//             const tempResponse = jsonResponse.data
+//             console.log('createStripeAccount response: ', tempResponse);
+//             main_response = tempResponse
+
+//         })
+//         .catch(function (error) {
+//             console.log('createStripeAccount error: ', error);
+//         });
+//     return main_response
+// }
 export const updateStripeAccount = ({ email, country, type, business_type, stripe_account_id, default_currency }) => {
     let response = null
     let body = {}

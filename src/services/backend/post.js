@@ -40,7 +40,11 @@ export const addPost = async ({ title, images, tags, group_id, product_id, }) =>
 
     console.log('addPost Params', formDataObject);
     await axios
-        .post(`${baseURL + endPoints.post.add_post}`, formDataObject)
+        .post(`${baseURL + endPoints.post.add_post}`, formDataObject,{
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Accept: 'application/json',
+            }})
         .then(async responseJson => {
             const tempResponseData = responseJson.data
             console.log('addPost Response', tempResponseData);
@@ -377,7 +381,11 @@ export const addCommentToPost = async ({ post_id, comment, image }) => {
 
     console.log('addCommentToPost Params', formDataObject);
     await axios
-        .post(`${baseURL + endPoints.post.add_comment}`, formDataObject)
+        .post(`${baseURL + endPoints.post.add_comment}`, formDataObject,{
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Accept: 'application/json',
+            }})
         .then(async responseJson => {
             const tempResponseData = responseJson.data
             console.log('addCommentToPost response', tempResponseData);
@@ -431,7 +439,11 @@ export const editCommentOfPost = async ({ comment_id, comment, image }) => {
 
     console.log('editCommentOfPost Params', formDataObject);
     await axios
-        .post(`${baseURL + endPoints.post.edit_comment}`, formDataObject)
+        .post(`${baseURL + endPoints.post.edit_comment}`, formDataObject,{
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Accept: 'application/json',
+            }})
         .then(async responseJson => {
             const tempResponseData = responseJson.data
             console.log('editCommentOfPost response', tempResponseData);

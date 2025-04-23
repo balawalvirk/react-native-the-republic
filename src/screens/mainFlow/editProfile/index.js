@@ -34,7 +34,7 @@ import {
 } from '../../../services';
 import {useSelector} from 'react-redux';
 import moment from 'moment';
-import {uploadFile} from '../../../services/backend';
+//import {uploadFile} from '../../../services/backend';
 
 function EditProfile(props) {
   const {navigate, goBack} = props.navigation;

@@ -261,6 +261,7 @@ const EditProfile = React.forwardRef((props, ref) => {
                             onChange={(value, index) => setGender(value)}
                             error={genderError}
                             mainContainerStyle={{ marginHorizontal: 0 }}
+                            disableSearch
                         />
                     </Wrapper>
                     <Spacer width={sizes.marginHorizontal} />

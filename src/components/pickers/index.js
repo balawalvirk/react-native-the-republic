@@ -54,7 +54,8 @@ export function PickerSearchable({ placeholder, error, data, value, inputStyle, 
             <TextInputUnderlined
                 title={title}
                 inputRef={searchInputRef}
-                placeholder={isFocused ? "Type Here" : placeholder}
+                placeholder={isFocused ? `Search ${title}` : placeholder}
+                //placeholder={isFocused ? "Type Here" : placeholder}
                 placeholderTextColor={tintColor}
                 value={searchQuery ? searchQuery : value}
                 onFocus={() => {
@@ -66,8 +67,9 @@ export function PickerSearchable({ placeholder, error, data, value, inputStyle, 
                     onBlur && onBlur()
                 }}
                 onChangeText={text => {
-                    setSearchQuery(text);
-                    onChangeText ? onChangeText(text) : null
+                    const v=value?'':text
+                    setSearchQuery(v);
+                    onChangeText ? onChangeText(v) : null
                 }}
                 inputStyle={inputStyle}
                 error={error}
@@ -79,7 +81,7 @@ export function PickerSearchable({ placeholder, error, data, value, inputStyle, 
             />
             {
                 isFocused &&
-                <ComponentWrapper style={{ height: height(20), backgroundColor: colors.appBgColor2, marginBottom: sizes.smallMargin }}>
+                <ComponentWrapper style={{ height: height(20), backgroundColor: colors.appBgColor2+'50', marginBottom: sizes.smallMargin,marginHorizontal:sizes.marginHorizontalLarge }}>
                     {
                         getData().length ?
                             <FlatList
@@ -95,17 +97,32 @@ export function PickerSearchable({ placeholder, error, data, value, inputStyle, 
                                 }}
                                 renderItem={({ item, index }) => {
                                     return (
-                                        <ComponentWrapper style={{}}>
-                                            <TouchableOpacity onPress={() => onPressItem(item, index, handleOnPressItem())} activeOpacity={1} style={{ paddingVertical: sizes.TinyMargin }}>
+                                        <Wrapper style={{backgroundColor:item.value===value?colors.appBgColor2:colors.transparent}}>
+                                            <TouchableOpacity onPress={() => onPressItem(item, index, handleOnPressItem())} activeOpacity={1} style={{ paddingVertical: sizes.smallMargin,paddingHorizontal:sizes.marginHorizontalSmall }}>
                                                 <MediumText style={[appStyles.textMedium]}>{item.label}</MediumText>
                                             </TouchableOpacity>
-                                        </ComponentWrapper>
+                                        </Wrapper>
                                     )
                                 }}
                             />
                             :
                             <Wrapper style={{ flex: 1, ...appStyles.center }}>
+                                {
+                                    onPressAdd?
+                                    <IconWithText
+                                    iconName={'plus-circle'}
+                                    iconType={''}
+                                    text={`Add new ${title} '${searchQuery}'`}
+                                    tintColor={colors.appColor1}
+                                    onPress={()=>{
+                                        handleOnPressItem()
+                                        onPressAdd()
+                                    }}
+                                    />
+                                    :
                                 <RegularText style={[appStyles.textGray]}>No Data Available</RegularText>
+
+                                }
                             </Wrapper>
                     }
 

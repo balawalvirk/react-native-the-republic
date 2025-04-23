@@ -58,12 +58,20 @@ export default function WithdrawEarnings({ navigation, route }) {
     // }, [userDetail, refresh])
 
     useEffect(() => {
-        AppState.addEventListener('change', handleAppStates);
+        const subscription = AppState.addEventListener('change', handleAppStates);
+      
         return () => {
-            // unsubscribe event
-            AppState.removeEventListener('change', handleAppStates);
+          subscription.remove(); // ✅ correct way to unsubscribe
         };
-    }, [])
+      }, []);
+      
+    // useEffect(() => {
+    //     AppState.addEventListener('change', handleAppStates);
+    //     return () => {
+    //         // unsubscribe event
+    //         AppState.removeEventListener('change', handleAppStates);
+    //     };
+    // }, [])
 
     useEffect(() => {
         Backend.getSellerReports()

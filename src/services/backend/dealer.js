@@ -196,7 +196,11 @@ export const filterDealers = async ({ sort_by, latitude, longitude, distance, lo
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()
     if (isInternetAvailable) {
         await axios
-            .post(uri, params)
+            .post(uri, params,{
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                  Accept: 'application/json',
+                }})
             .then(async responseJson => {
                 const tempResponseData = responseJson.data
                 console.log('filterDealers Response', tempResponseData);

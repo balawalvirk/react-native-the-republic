@@ -22,7 +22,11 @@ export const createGroup = async ({ name, description, join_privacy, post_privac
     image && params.append('icon', image)
     console.log('createGroup Params', params);
     await axios
-        .post(`${baseURL + endPoints.group.create_group}`, params)
+        .post(`${baseURL + endPoints.group.create_group}`, params,{
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Accept: 'application/json',
+            }})
         .then(async responseJson => {
             const tempResponseData = responseJson.data
             console.log('createGroup Response', tempResponseData);
@@ -53,7 +57,11 @@ export const editGroup = async ({ group_id, name, description, join_privacy, pos
     image && params.append('icon', image)
     console.log('editGroup Params', params);
     await axios
-        .post(`${baseURL + endPoints.group.edit_group}`, params)
+        .post(`${baseURL + endPoints.group.edit_group}`, params,{
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Accept: 'application/json',
+            }})
         .then(async responseJson => {
             const tempResponseData = responseJson.data
             console.log('editGroup Response', tempResponseData);

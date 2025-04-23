@@ -77,9 +77,9 @@ function CompleteYourProfile(props) {
     setVerificationCodeSendModalVisibility(!isVerificationCodeSendModalVisible);
 
   const sendCodeToPhoneNumber = async phoneNumber => {
-    //const _testPhoneNumber='+923450144778'
+    const _testPhoneNumber = '+923450144778';
     await auth()
-      .verifyPhoneNumber(phoneNumber)
+      .verifyPhoneNumber(_testPhoneNumber)
       .then(confirmResult => {
         console.log('confirmResult: ', confirmResult);
         setConfirmPhoneNumber(confirmResult);
@@ -100,8 +100,8 @@ function CompleteYourProfile(props) {
   };
   const handleContinue = async () => {
     //toggleVerificationCodeSendModal();
-    // sendCodeToPhoneNumber()
-     //return null
+    //sendCodeToPhoneNumber()
+    //return null
     const profileDetails = EditProfileRef.current.getAllData();
     const validateProfileData = EditProfileRef.current.validate();
     console.log('Profile Data:   ', profileDetails);

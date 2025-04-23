@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { appIcons, colors, fontSize, sizes } from '../../../services';
+import { appIcons, colors, fontSize, google_map_api_key, sizes } from '../../../services';
 import { IconTitleCrossCard } from '../../cards';
 import { Input } from 'react-native-elements';
 import { height, totalSize } from 'react-native-dimension';
@@ -58,6 +58,7 @@ const GooglePlacesInput = ({ onPressItem, value, textInputContainer, leftIcon,pl
                     size: totalSize(2.5),
                     color: colors.appTextColor4,
                 },
+                autoCorrect:false,
                 errorStyle: { color: 'red' },
                 inputContainerStyle: {
                     borderBottomWidth: 0,
@@ -67,9 +68,10 @@ const GooglePlacesInput = ({ onPressItem, value, textInputContainer, leftIcon,pl
                 containerStyle: { height: height(100) < 600 ? height(8) : height(6), borderWidth: 0 ,},
                 style: { height: height(100) < 600 ? height(8) : height(6) ,}
             }}
-            nearbyPlacesAPI="GoogleReverseGeocoding"
+            //nearbyPlacesAPI="GoogleReverseGeocoding"
             query={{
-                key: 'AIzaSyAyItdXh8Zmxa7iCAyDVPH_UAJ5iUTGtEA',
+                key: google_map_api_key,
+                //key: 'AIzaSyAyItdXh8Zmxa7iCAyDVPH_UAJ5iUTGtEA',
                 language: 'en',
                // type:'geocode'
             }}

@@ -1,6 +1,6 @@
 import React, {Component, useEffect} from 'react';
 import {View, Text, SafeAreaView} from 'react-native';
-import {appStyles, google_places_api_key} from './src/services';
+import {appStyles, google_map_api_key} from './src/services';
 
 import {Navigation} from './src/services/navigation';
 import {StatusBar} from 'react-native';
@@ -22,7 +22,7 @@ import Toast from 'react-native-toast-message';
 
 function App() {
   useEffect(() => {
-    Geocoder.init(google_places_api_key, {language: 'en'});
+    Geocoder.init(google_map_api_key, {language: 'en'});
     googleConfigure();
   }, []);
   const googleConfigure = async () => {

@@ -12,7 +12,7 @@
    if ([FIRApp defaultApp] == nil) {
     [FIRApp configure];
    }
-   [GMSServices provideAPIKey:@"AIzaSyCj0Zzlc98ZvAVWi0MsErvoAXM39W6xz-A"]; // add this line using the api key obtained from Google Console
+   [GMSServices provideAPIKey:@"AIzaSyCBeIkxjhOMaklxxrenNdBq-0KTUlQj9H0"]; // add this line using the api key obtained from Google Console
   self.moduleName = @"Republic";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.

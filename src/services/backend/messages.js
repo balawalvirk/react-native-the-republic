@@ -49,7 +49,11 @@ export const sendChatMessage = async ({ receiver_id, message, image, product_id 
     //product_id && params.append('product_id', product_id)
     console.log('sendMessage Params', params);
     await axios
-        .post(`${baseURL + endPoints.chat.send_message}`, params)
+        .post(`${baseURL + endPoints.chat.send_message}`, params,{
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Accept: 'application/json',
+            }})
         .then(async responseJson => {
             const tempResponseData = responseJson.data
             console.log('sendMessage response', tempResponseData);

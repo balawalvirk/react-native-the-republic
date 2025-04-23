@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -53,6 +53,7 @@ export default ({
   iconNameLeft,
   iconTypeLeft,
   mainContainerStyle,
+  disableSearch,
 }) => {
   const placeholderObject = {
     label: placeholder || '',
@@ -84,6 +85,12 @@ export default ({
   const onChangeValue = value => {
     value === 'placeholder' ? moveTitleDown() : moveTitleUp();
   };
+
+  useEffect(()=>{
+if(value){
+  onChangeValue(value)
+}
+  },[value])
   return (
     <Wrapper
       style={[
@@ -174,12 +181,14 @@ export default ({
                     /> */}
           <Dropdown
             style={styles.dropdown}
+            // mode='modal'
+            //dropdownPosition='top'
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
             iconStyle={styles.iconStyle}
             data={data}
-            search
+            search={!disableSearch}
             maxHeight={300}
             labelField="label"
             valueField="value"
