@@ -54,8 +54,22 @@ import {
 } from '../../../services';
 import styles from './styles';
 import * as ImagePicker from 'react-native-image-picker';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {MaterialIndicator} from 'react-native-indicators';
+import {
+  addAction,
+  addCaliber,
+  addCategory,
+  addItem,
+  addManufacturer,
+} from '../../../services/backend';
+import {
+  setProductActions,
+  setProductCalibers,
+  setProductCategories,
+  setProductItems,
+  setProductManufacturers,
+} from '../../../services/store/actions';
 const options = {
   title: 'Select Photo',
   quality: 1,
@@ -88,6 +102,7 @@ function Sell(props) {
     : null;
 
   //redux states
+  const dispatch = useDispatch();
   const product = useSelector(state => state.product);
   const user = useSelector(state => state.user);
   const {categories, items, actions, manufacturers, conditions, calibers} =
@@ -99,6 +114,7 @@ function Sell(props) {
   const {openCamera, openLibrary} = useImagePicker();
   //local states
   const [step, setStep] = useState(1);
+  const [loadingAddNew, setLoadingAddNew] = useState(false);
   const [
     isCreateStripeAccountPopupVisible,
     setCreateStripeAccountPopupVisibility,
@@ -507,6 +523,100 @@ function Sell(props) {
       </>
     );
   };
+
+  const handleAddNew = async (value, attribute) => {
+    const configMap = {
+      item: {
+        setter: setitem,
+        apiCall: addItem,
+        selectorData: items,
+        dispatcher: updated => dispatch(setProductItems(updated)),
+        error:itemError,
+        errorSetter:setitemError
+      },
+      category: {
+        setter: settype,
+        apiCall: addCategory,
+        selectorData: categories,
+        dispatcher: updated => dispatch(setProductCategories(updated)),
+        error:typeError,
+        errorSetter:settypeError
+      },
+      manufacturer: {
+        setter: setmanufacturer,
+        apiCall: addManufacturer,
+        selectorData: manufacturers,
+        dispatcher: updated => dispatch(setProductManufacturers(updated)),
+        error:manufacturerError,
+        errorSetter:setmanufacturerError
+      },
+      caliber: {
+        setter: setCalibre,
+        apiCall: addCaliber,
+        selectorData: calibers,
+        dispatcher: updated => dispatch(setProductCalibers(updated)),
+        error:caliberError,
+        errorSetter:setCalibreError
+      },
+      action: {
+        setter: setaction,
+        apiCall: addAction,
+        selectorData: actions,
+        dispatcher: updated => dispatch(setProductActions(updated)),
+        error:actionError,
+        errorSetter:setactionError
+      },
+    };
+
+    try {
+      setLoadingAddNew(true);
+
+      const attr = configMap[attribute];
+      if (!attr) throw new Error(`Attribute "${attribute}" is not supported.`);
+
+      const response = await attr.apiCall({name: value});
+
+      if (response?.data?.name) {
+        const {name} = response.data;
+        attr.setter(name);
+        attr.error&&attr.errorSetter('')
+        const newOption = {label: name, value: name};
+        const updatedOptions = [newOption,...attr.selectorData,];
+        attr.dispatcher(updatedOptions);
+      }
+    } catch (error) {
+      console.error('handleAddNew error:', error);
+    } finally {
+      setLoadingAddNew(false);
+    }
+  };
+  // const handleAddNew = async (value, attribute) => {
+  //   try {
+  //     setLoadingAddNew(true);
+  //     if (attribute === 'item') {
+  //       setitem(v);
+  //       const addItemRes = await addItem({name: value});
+  //       if (addItemRes) {
+  //         const {name} = addItemRes?.data;
+  //         const newOption = {label: name, value: name};
+  //         const updatedOptions = [...items, newOption];
+  //         dispatch(setProductItems(updatedOptions));
+  //       }
+  //     } else if (attribute === 'manufacturer') {
+  //       setmanufacturer(v);
+  //       const addManufacturerRes = await addManufacturer({name: value});
+  //       if (addManufacturerRes) {
+  //         const {name} = addManufacturerRes?.data;
+  //         const newOption = {label: name, value: name};
+  //         const updatedOptions = [...manufacturers, newOption];
+  //         dispatch(setProductManufacturers(updatedOptions));
+  //       }
+  //     }
+  //   } catch (error) {
+  //   } finally {
+  //     setLoadingAddNew(false);
+  //   }
+  // };
   return (
     <MainWrapper>
       <Animated.View
@@ -586,7 +696,7 @@ function Sell(props) {
           </Wrapper>
         ) : step === 2 ? (
           <Wrapper flex={1}>
-            {/* <PickerSearchable
+            <PickerSearchable
               title="Item"
               // placeholder="No Selected"
               data={items}
@@ -599,11 +709,12 @@ function Sell(props) {
                 item && setitem('');
               }}
               error={itemError}
-              onPressAdd={()=>{
-                console.log('new value added')
+              onPressAdd={v => {
+                console.log('new value added: ', v);
+                handleAddNew(v, 'item');
               }}
-            /> */}
-            <PickerPrimary
+            />
+            {/* <PickerPrimary
               title="Item"
               // placeholder="No Selected"
               data={items}
@@ -613,9 +724,27 @@ function Sell(props) {
                 setitem(value);
               }}
               error={itemError}
-            />
+            /> */}
             <Spacer height={sizes.baseMargin} />
-            <PickerPrimary
+            <PickerSearchable
+               title="Type"
+               // placeholder="No Selected"
+               data={categories}
+               value={type}
+              onPressItem={(item, index) => {
+                settype(item?.value);
+                typeError && settypeError('');
+              }}
+              onChangeText={() => {
+                type && settype('');
+              }}
+              error={typeError}
+              // onPressAdd={v => {
+              //   console.log('new value added: ', v);
+              //   handleAddNew(v, 'category');
+              // }}
+            />
+            {/* <PickerPrimary
               title="Type"
               // placeholder="No Selected"
               data={categories}
@@ -625,9 +754,27 @@ function Sell(props) {
                 settype(value);
               }}
               error={typeError}
-            />
+            /> */}
             <Spacer height={sizes.baseMargin} />
-            <PickerPrimary
+            <PickerSearchable
+            title="Manufacturer"
+            // placeholder="No Selected"
+            data={manufacturers}
+            value={manufacturer}
+              onPressItem={(item, index) => {
+                setmanufacturer(item?.value);
+                manufacturerError && setmanufacturerError('');
+              }}
+              onChangeText={() => {
+                manufacturer && setmanufacturer('');
+              }}
+              error={manufacturerError}
+              onPressAdd={v => {
+                console.log('new value added: ', v);
+                handleAddNew(v, 'manufacturer');
+              }}
+            />
+            {/* <PickerPrimary
               title="Manufacturer"
               // placeholder="No Selected"
               data={manufacturers}
@@ -637,9 +784,27 @@ function Sell(props) {
                 setmanufacturer(value);
               }}
               error={manufacturerError}
-            />
+            /> */}
             <Spacer height={sizes.baseMargin} />
-            <PickerPrimary
+            <PickerSearchable
+              title="Caliber"
+              // placeholder="No Selected"
+              data={calibers}
+              value={caliber}
+              onPressItem={(item, index) => {
+                setCalibre(item?.value);
+                caliberError && setCalibreError('');
+              }}
+              onChangeText={() => {
+                caliber && setCalibre('');
+              }}
+              error={caliberError}
+              onPressAdd={v => {
+                console.log('onPressAdd v: ', v);
+                handleAddNew(v, 'caliber');
+              }}
+            />
+            {/* <PickerPrimary
               title="Caliber"
               // placeholder="No Selected"
               data={calibers}
@@ -649,9 +814,27 @@ function Sell(props) {
                 setCalibre(value);
               }}
               error={caliberError}
-            />
+            /> */}
             <Spacer height={sizes.baseMargin} />
-            <PickerPrimary
+            <PickerSearchable
+              title="Action"
+              // placeholder="No Selected"
+              data={actions}
+              value={action}
+              onPressItem={(item, index) => {
+                setaction(item?.value);
+                actionError && setactionError('');
+              }}
+              error={actionError}
+              onChangeText={() => {
+                action && setaction('');
+              }}
+              onPressAdd={v => {
+                console.log('onPressAdd v: ', v);
+                handleAddNew(v, 'action');
+              }}
+            />
+            {/* <PickerPrimary
               title="Action"
               // placeholder="No Selected"
               data={actions}
@@ -661,9 +844,24 @@ function Sell(props) {
                 setaction(value);
               }}
               error={actionError}
-            />
+            /> */}
             <Spacer height={sizes.baseMargin} />
-            <PickerPrimary
+            <PickerSearchable
+              title="Condition"
+              // placeholder="No Selected"
+              data={conditions}
+              value={condition}
+              error={conditionError}
+              onPressItem={(item, index) => {
+                setCondition(item.value);
+                conditionError && setConditionError('');
+              }}
+              onChangeText={() => {
+                condition && setCondition('');
+              }}
+             
+            />
+            {/* <PickerPrimary
               title="Condition"
               // placeholder="No Selected"
               data={conditions}
@@ -673,7 +871,7 @@ function Sell(props) {
                 setCondition(value);
               }}
               error={conditionError}
-            />
+            /> */}
             <Spacer height={sizes.baseMargin} />
             <TextInputUnderlined
               titleStatic="Description"
@@ -843,8 +1041,12 @@ function Sell(props) {
         toggle={toggleVerifyStripeAccountPopup}
       />
       <LoaderAbsolute
-        isVisible={isLoading}
-        title={(productDetail ? 'Updating' : 'Adding') + ' Your Product'}
+        isVisible={isLoading || loadingAddNew}
+        title={
+          loadingAddNew
+            ? 'Adding'
+            : (productDetail ? 'Updating' : 'Adding') + ' Your Product'
+        }
         info="Please wait..."
       />
     </MainWrapper>

@@ -6,6 +6,7 @@ import * as Backend from './index'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as HelpingMethods from "../helpingMethods";
 import { setProductActions, setProductCalibers, setProductCategories, setProductConditions, setProductItems, setProductManufacturers, setUserDetail } from "../store/actions";
+import api from "../utilities/api";
 const { dispatch } = store
 
 export const add_Product = async ({
@@ -472,6 +473,115 @@ export const get_product_categories = async () => {
     return response
 };
 
+export const addCategory = async ({name,image}) => {
+    let response = null;
+    // let data = {
+    //     name
+    // };
+    const data=new FormData()
+    data.append('name',name)
+    image&& data.append('image',image)
+   const config= {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Accept: 'application/json',
+        }}
+    const url = endPoints.product.add_category;
+    __DEV__ &&
+      console.log('addCategory \n\n url: ', url, 'data: ', data);
+    await api
+      .post(url, data,config)
+      .then(async responseJson => {
+        __DEV__ &&
+          console.log('addCategory response', responseJson.data);
+        if (responseJson.data) {
+          response = responseJson.data;
+        }
+      })
+      .catch(error => {});
+    return response;
+  };
+  export const addItem = async ({name}) => {
+    let response = null;
+    let data = {
+        name
+    };
+    const url = endPoints.product.add_item;
+    __DEV__ &&
+      console.log('addItem \n\n url: ', url, 'data: ', data);
+    await api
+      .post(url, data)
+      .then(async responseJson => {
+        __DEV__ &&
+          console.log('addItem response', responseJson.data);
+        if (responseJson.data) {
+          response = responseJson.data;
+        }
+      })
+      .catch(error => {});
+    return response;
+  };
+
+  export const addManufacturer = async ({name}) => {
+    let response = null;
+    let data = {
+        name
+    };
+    const url = endPoints.product.add_manufacturer;
+    __DEV__ &&
+      console.log('addManufacturer \n\n url: ', url, 'data: ', data);
+    await api
+      .post(url, data)
+      .then(async responseJson => {
+        __DEV__ &&
+          console.log('addManufacturer response', responseJson.data);
+        if (responseJson.data) {
+          response = responseJson.data;
+        }
+      })
+      .catch(error => {});
+    return response;
+  };
+  export const addCaliber = async ({name}) => {
+    let response = null;
+    let data = {
+        name
+    };
+    const url = endPoints.product.add_caliber;
+    __DEV__ &&
+      console.log('addCaliber \n\n url: ', url, 'data: ', data);
+    await api
+      .post(url, data)
+      .then(async responseJson => {
+        __DEV__ &&
+          console.log('addCaliber response', responseJson.data);
+        if (responseJson.data) {
+          response = responseJson.data;
+        }
+      })
+      .catch(error => {});
+    return response;
+  };
+  export const addAction = async ({name}) => {
+    let response = null;
+    let data = {
+        name
+    };
+    const url = endPoints.product.add_action;
+    __DEV__ &&
+      console.log('addAction \n\n url: ', url, 'data: ', data);
+    await api
+      .post(url, data)
+      .then(async responseJson => {
+        __DEV__ &&
+          console.log('addAction response', responseJson.data);
+        if (responseJson.data) {
+          response = responseJson.data;
+        }
+      })
+      .catch(error => {});
+    return response;
+  };
 export const get_product_manufacturers = async () => {
     let response = null
     const isInternetAvailable = await HelpingMethods.checkInternetConnectivity()

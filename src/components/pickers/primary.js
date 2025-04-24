@@ -21,7 +21,7 @@ import {
   appStyles,
   HelpingMethods,
 } from '../../services';
-import RNPickerSelect from 'react-native-picker-select';
+// import RNPickerSelect from 'react-native-picker-select';
 import {
   AbsoluteWrapper,
   Wrapper,

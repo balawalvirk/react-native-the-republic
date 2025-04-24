@@ -278,19 +278,33 @@ export const logout = async () => {
   ]);
 };
 export const getPickerData = data => {
-  let tempData = [];
-  if (data.length) {
-    for (const item of data) {
-      const tempObj = {
-        ...item,
-        label: item.name,
-        value: item.name,
-      };
-      tempData.push(tempObj);
-    }
-  }
+  if (!Array.isArray(data) || !data.length) return [];
+
+  const tempData = data.map(item => ({
+    ...item,
+    label: item.name,
+    value: item.name,
+  }));
+
+  // Sort alphabetically by label (i.e., item.name)
+  tempData.sort((a, b) => a.label.localeCompare(b.label));
+
   return tempData;
 };
+// export const getPickerData = data => {
+//   let tempData = [];
+//   if (data.length) {
+//     for (const item of data) {
+//       const tempObj = {
+//         ...item,
+//         label: item.name,
+//         value: item.name,
+//       };
+//       tempData.push(tempObj);
+//     }
+//   }
+//   return tempData;
+// };
 export const getHiddenCardNumber = cardNumber => {
   return `**** **** **** ${cardNumber.slice(12, 16)}`;
   // return cardNumber

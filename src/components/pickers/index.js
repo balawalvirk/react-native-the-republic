@@ -112,11 +112,11 @@ export function PickerSearchable({ placeholder, error, data, value, inputStyle, 
                                     <IconWithText
                                     iconName={'plus-circle'}
                                     iconType={''}
-                                    text={`Add new ${title} '${searchQuery}'`}
+                                    text={`Add ${title} '${searchQuery}'`}
                                     tintColor={colors.appColor1}
                                     onPress={()=>{
+                                        onPressAdd(searchQuery)
                                         handleOnPressItem()
-                                        onPressAdd()
                                     }}
                                     />
                                     :
