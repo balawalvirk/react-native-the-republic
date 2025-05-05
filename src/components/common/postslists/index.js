@@ -19,7 +19,8 @@ import { PopupPrimary } from '../..'
 import MenuPopup from '../menuPopup';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import { PostSkeletons, Toasts } from '../..';
-import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
+//import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
+import {Menu} from 'react-native-material-menu';
 import { MaterialIndicator } from 'react-native-indicators';
 import * as ImagePicker from 'react-native-image-picker';
 import { useDispatch, useSelector } from 'react-redux';
@@ -381,10 +382,15 @@ export const PostCard = React.forwardRef(({
     const commentInputRef = useRef(null)
     const {openCamera, openLibrary} = useImagePicker();
     //local states
+    const [isCameraMenuVisible, setCameraMenuVisible] = useState(false)
     const [commentText, setCommentText] = useState('')
     const [commentImage, setCommentImage] = useState('')
     const [loadingSendComment, setLoadingSendComment] = useState(false)
 
+    const hideCameraMenu = () => setCameraMenuVisible(false);
+
+  const showCameraMenu = () => setCameraMenuVisible(true);
+  
     const options = {
         title: 'Select Photo',
         quality: 1,
@@ -445,6 +451,7 @@ export const PostCard = React.forwardRef(({
     const { user, product, group, images, comments } = item
     const postImages = images ? JSON.parse(images) : null
     const postComments = showAllComments ? comments : comments.length ? [comments[comments.length - 1]] : []
+
     return (
         <Wrapper>
             {
@@ -455,7 +462,7 @@ export const PostCard = React.forwardRef(({
             }
 
             <Spacer height={sizes.smallMargin} />
-            <ComponentWrapper style={[styles.smallMarginHorizontal]}>
+         <ComponentWrapper style={[styles.smallMarginHorizontal]}>
                 <RowWrapperBasic style={{ alignItems: null, }}>
                     <Wrapper flex={1}>
                         <TouchableOpacity activeOpacity={1}
@@ -559,7 +566,7 @@ export const PostCard = React.forwardRef(({
                     null
             }
 
-            {
+             {
                 postImages ?
                     postImages.length ?
                         <Wrapper>
@@ -606,7 +613,7 @@ export const PostCard = React.forwardRef(({
             }
 
             <Spacer height={sizes.smallMargin} />
-            <RowWrapper style={{ marginHorizontal: sizes.marginHorizontalXLarge }}>
+              <RowWrapper style={{ marginHorizontal: sizes.marginHorizontalXLarge }}>
                 <IconWithText
                     iconName="thumb-up"
                     text={item.reactions.length}
@@ -626,10 +633,10 @@ export const PostCard = React.forwardRef(({
                     onPress={onPressShare}
                 />
             </RowWrapper>
-            <Spacer height={sizes.smallMargin} />
+         <Spacer height={sizes.smallMargin} />
             <LineHorizontal height={0.5} />
             <Spacer height={sizes.smallMargin} />
-            <TextInputColored
+          <TextInputColored
                 inputRef={commentInputRef}
                 onPress={!enableComment && onPressPost}
                 placeholder="Write a comment..."
@@ -664,9 +671,72 @@ export const PostCard = React.forwardRef(({
                 }}
                 left={
                     <Wrapper>
+                        {/* <Menu
+                            visible={isCameraMenuVisible}
+                            anchor={
+                                <Wrapper
+                                    style={{ marginLeft: sizes.marginHorizontalSmall }}
+                                >
+                                    <AbsoluteWrapper style={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+                                        {
+                                            commentImage ?
+                                                <ImageRound
+                                                    source={{ uri: commentImage.uri }}
+                                                    size={totalSize(4)}
+                                                />
+                                                :
+                                                null
+                                        }
+                                    </AbsoluteWrapper>
+                                    <IconButton
+                                        iconName="camera"
+                                        iconType="feather"
+                                        iconSize={totalSize(2)}
+                                        buttonSize={totalSize(4)}
+                                        buttonColor={colors.appColor1 + '20'}
+                                        iconColor={commentImage ? colors.appTextColor6 : colors.appColor1}
+                                        // buttonStyle={{ marginLeft: sizes.marginHorizontalSmall }}
+                                        onPress={() => {
+                                            enableComment && showCameraMenu()
+                                        }}
+                                    />
+                                </Wrapper>
+                            }
+                            style={appStyles.menuMainContainer}
+                        >
+                            <Wrapper style={[appStyles.menuContainer, {}]}>
+                                <IconWithText
+                                    iconName="camera-outline"
+                                    text={'Take Photo'}
+                                    tintColor={colors.appColor1}
+                                    textStyle={[appStyles.textRegular, appStyles.textPrimaryColor, appStyles.fontBold]}
+                                    textContainer={{ marginHorizontal: sizes.marginHorizontalSmall }}
+                                    onPress={() => {
+                                        hideCameraMenu()
+                                        setTimeout(() => {
+                                            launchCamera()
+                                        }, 500);
+                                    }}
+                                />
+                                <Spacer height={sizes.smallMargin} />
+                                <IconWithText
+                                    iconName="image-multiple-outline"
+                                    text={'Choose from gallery'}
+                                    tintColor={colors.appColor1}
+                                    textStyle={[appStyles.textRegular, appStyles.textPrimaryColor, appStyles.fontBold]}
+                                    textContainer={{ marginHorizontal: sizes.marginHorizontalSmall }}
+                                    onPress={() => {
+                                        hideCameraMenu()
+                                        setTimeout(() => {
+                                            launchImagePicker()
+                                        }, 500);
+                                    }}
+                                />
+                            </Wrapper>
+                        </Menu> */}
                         <Menu
                             ref={cameraMenuRef}
-                            button={
+                            anchor={
                                 <Wrapper
                                     style={{ marginLeft: sizes.marginHorizontalSmall }}
                                 >
@@ -736,7 +806,7 @@ export const PostCard = React.forwardRef(({
                 data={postComments}
                 onPress={(item, index) => onPressComment(item, index)}
             />
-            <Spacer height={sizes.smallMargin} />
+            <Spacer height={sizes.smallMargin} /> 
 
 
         </Wrapper>

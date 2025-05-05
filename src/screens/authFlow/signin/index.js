@@ -187,7 +187,7 @@ function Signin(props) {
                 />
                 <Spacer height={sizes.baseMargin} />
 
-                <ButtonSocial
+                {/* <ButtonSocial
                   text="Continue with Google"
                   logo={appImages.google_logo}
                   onPress={async () => {
@@ -224,7 +224,7 @@ function Signin(props) {
                     </>
                     :
                     null
-                }
+                } */}
                 <Spacer height={sizes.baseMargin} />
                 <ComponentWrapper>
                   <RegularText style={[appStyles.textCenter]}>

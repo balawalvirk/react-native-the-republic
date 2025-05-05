@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Animated } from 'react-native';
 import { IconWithText, HeaderPrimary, Spacer, RowWrapperBasic, Wrapper, TextInputColored, MediumText,ButtonGroupAnimated } from '../../../../components';
 import { height, width, totalSize } from 'react-native-dimension';
@@ -47,6 +47,10 @@ export default function CommunityCustomTopTab(props) {
     //console.log("state==>", state)
     const { index } = state;
     const activeIndex = index
+
+    useEffect(()=>{
+        setSelectedTabIndex(activeIndex)
+    },[activeIndex])
     //console.log('Tab screen index --> ',activeIndex)
     if (activeIndex === 2) {
        // navigation.setOptions({ tabBarVisible: false })

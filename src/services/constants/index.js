@@ -23,6 +23,7 @@ export const baseURL =
 //export const baseURL = 'https://republic-backend.herokuapp.com/api/'
 
 //google api key
+//export const google_map_api_key ='AIzaSyBGnP2k1QjnaJO0yg3yJEJe7mhsArepIKA'
 //export const google_map_api_key = 'AIzaSyCBeIkxjhOMaklxxrenNdBq-0KTUlQj9H0'
 export const google_map_api_key = 'AIzaSyDh3bJDOn0A3M5rnpxg0Uxr03ATL-NvOUE'; //U-Plumner key
 

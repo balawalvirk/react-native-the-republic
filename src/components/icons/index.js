@@ -76,14 +76,14 @@ export const IconButton = ({ buttonStyle, onPress, shadow, text, textStyle, shad
     );
 }
 export const CustomIcon = ({ icon, size, animation, duration, color, iterationCount, onPress, value, containerStyle }) => {
-    const defaulSize = totalSize(5)
+    const defaulSize = size ||totalSize(5)
     return (
         <Animatable.View animation={animation} duration={duration} iterationCount={iterationCount}>
             <TouchableOpacity activeOpacity={1} disabled={!onPress} onPress={onPress} style={containerStyle}>
                 <Image
                     source={icon}
                     resizeMode="contain"
-                    style={{ height: size ? size : defaulSize, width: size ? size : defaulSize, tintColor: color }}
+                    style={{ height: defaulSize, width:  defaulSize, tintColor: color }}
                 />
                 {
                 value ?

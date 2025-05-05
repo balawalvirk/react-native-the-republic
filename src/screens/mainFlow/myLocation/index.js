@@ -35,6 +35,7 @@ function MyLocation({ navigation, route }) {
     const [latitude, setLatitude] = useState('')
     const [longitude, setLongitude] = useState('')
     const [distance, setDistance] = useState(10)
+    const [distancee, setDistancee] = useState(10)
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
@@ -53,7 +54,7 @@ function MyLocation({ navigation, route }) {
             setLongitude(longitude)
         }
         address && setAddress(address)
-        distance && setDistance(Number(distance))
+        distance && [setDistance(Number(distance)),setDistancee(Number(distance))]
     }
 
     const handleSetAddress = (details, location) => {
@@ -102,6 +103,7 @@ function MyLocation({ navigation, route }) {
                                 latitude,
                                 longitude,
                             }}
+                            //style={{height: totalSize(6), width: totalSize(6)}}
                         // coordinate={tempCooards}
                         //coordinate={dummyCooards}
                         //title={item.name}
@@ -116,7 +118,7 @@ function MyLocation({ navigation, route }) {
                         >
                             <CustomIcon
                                 icon={appIcons.map_pin}
-                                size={totalSize(6)}
+                                size={totalSize(5)}
                             //color={waterDamage && colors.error}
                             // onPress={() => {
                             //   setServiceRequestItem(item);
@@ -174,13 +176,18 @@ function MyLocation({ navigation, route }) {
                 <Wrapper style={[appStyles.center]}>
                     <Slider
                         style={{ width: width(90), height: height(2.5) }}
-                        value={distance}
+                        value={distancee}
                         onValueChange={value => setDistance(value)}
+                        onSlidingComplete={value => {
+                            setDistancee(value)
+                            setDistance(value)
+                        }}
                         step={1}
                         minimumValue={0}
                         maximumValue={100}
                         minimumTrackTintColor={colors.appColor1}
                         maximumTrackTintColor={colors.appBgColor3}
+                        //thumbTintColor={colors.appColor1}
                     />
                 </Wrapper>
                 <Spacer height={sizes.marginVertical} />

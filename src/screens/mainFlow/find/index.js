@@ -376,6 +376,7 @@ function Find({navigation, route}) {
             myLocation
           }
           showsUserLocation={true}
+          showsMyLocationButton={false}
           animationEnabled={false}>
           {getMarkers().map((item, key) => {
             const markerCoords = {

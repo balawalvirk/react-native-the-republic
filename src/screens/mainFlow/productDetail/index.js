@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Text, View, Image } from 'react-native';
 import { height, totalSize, width } from 'react-native-dimension';
 import { AbsoluteWrapper, RenderTags, MainWrapper, Spacer, ButtonGradient, Wrapper, IconHeart, ComponentWrapper, SmallTitle, RowWrapperBasic, MediumText, RegularText, TinyText, SmallText, TinyTitle, RenderKeyPoints, UserCardPrimary, ArmerInfo, KeyboardAvoidingScrollView, Reviews, Products, TitlePrimary, IconButton, BackIconAbsolute, RowWrapper, SkeletonProductDetails } from '../../../components';
@@ -19,8 +19,16 @@ function ProductDetail(props) {
     const product_id = productId ? productId : product ? product.id : ''
 
     //redux states
-    const userData = useSelector(state => state.user)
-    const { userDetail } = userData
+    const userDetail = useSelector(state => state.user.userDetail)
+
+    // console.log('userDetail --->', userDetail)
+    const isMyProduct = useMemo(() => {
+        if (userDetail && userDetail.id) {
+            return product && product.user.id == userDetail.id
+        }
+        return false
+    }
+        , [userDetail, product])
 
     //local states
     const [isLoading, setLoading] = useState(true)
@@ -28,6 +36,8 @@ function ProductDetail(props) {
     const [productReviews, setProductReviews] = useState([])
     const [relatedProducts, setRelatedProducts] = useState([])
 
+    // console.log('productDetail --->', productDetail)
+    // console.log('productDetail.user --->', productDetail.user)
     //constants
     let user = {}
     let productInfo = {}
@@ -209,9 +219,11 @@ function ProductDetail(props) {
                     }}
                 />
             </KeyboardAvoidingScrollView>
-            <AbsoluteWrapper style={{ bottom: 0, right: 0, left: 0, backgroundColor: colors.appBgColor1, ...appStyles.shadow, paddingVertical: sizes.baseMargin }}>
+            {
+                !isMyProduct?
+                <AbsoluteWrapper style={{ bottom: 0, right: 0, left: 0, backgroundColor: colors.appBgColor1, ...appStyles.shadow, paddingVertical: sizes.baseMargin }}>
                 <RowWrapper style={[{}]}>
-                    <FooterButton
+                   <FooterButton
                         text="Enquire"
                         onPress={() => {
                             navigate(routes.chatScreen, { enquire: productDetail, userId: user.id })
@@ -227,6 +239,10 @@ function ProductDetail(props) {
                     />
                 </RowWrapper>
             </AbsoluteWrapper>
+            :
+            null
+            }
+           
             <BackIconAbsolute
                 onPress={goBack}
             />
@@ -238,10 +254,10 @@ export default ProductDetail;
 
 const FooterButton = ({ text, onPress }) => {
     return (
-        <ButtonGradient
+            <ButtonGradient
             text={text}
             buttonStyle={{ flex: 1, marginHorizontal: 0, }}
-            gradiantContainerStyle={{ paddingHorizontal: sizes.marginHorizontal }}
+           // gradiantContainerStyle={{ paddingHorizontal: sizes.marginHorizontal }}
             onPress={onPress}
         />
     )

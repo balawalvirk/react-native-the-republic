@@ -39,7 +39,7 @@
       </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity"/>
-    <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCBeIkxjhOMaklxxrenNdBq-0KTUlQj9H0"/>
+    <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDh3bJDOn0A3M5rnpxg0Uxr03ATL-NvOUE"/>
     <uses-library android:name="org.apache.http.legacy" android:required="false"/>
     </application>
 </manifest>
